@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension String{
+    var doubleString: Double?{
+        return Double(self)
+    }
+}

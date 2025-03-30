@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 class CalculatorVC: UIViewController {
@@ -15,6 +16,10 @@ class CalculatorVC: UIViewController {
     private let billInputView = BillInputView()
     private let tipInputView = TipInputView()
     private let splitInputView = SplitInputView()
+    
+    private let vm = CalculatorVM()
+    private var cancellables = Set<AnyCancellable>()
+    
     
     private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
@@ -30,13 +35,7 @@ class CalculatorVC: UIViewController {
         return stackView
         
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layout()
-        // Do any additional setup after loading the view.
-    }
-
+    
     private func layout(){
         view.backgroundColor = ThemeColor.bg
         view.addSubview(vStackView)
@@ -63,6 +62,25 @@ class CalculatorVC: UIViewController {
             make.height.equalTo(56)
         }
     }
+    
+    func bind(){
+        let input = CalculatorVM.Input(billPublisher: billInputView.valuePublisher,
+                                       tipPublisher: tipInputView.valuePublusher,
+                                       splitPublisher: Just(5).eraseToAnyPublisher())
+        let output = vm.tranform(input: input)
+       output.updateViewPublisher.sink { result in
+            print(result)
+       }.store(in: &cancellables)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layout()
+        bind()
+        // Do any additional setup after loading the view.
+    }
+
+   
 
 }
 

@@ -6,8 +6,20 @@
 //
 
 import UIKit
+import Combine
+import CombineCocoa
 
 class BillInputView: UIView {
+    
+    private var cancellables = Set<AnyCancellable>()
+    private let billSubject:PassthroughSubject<Double,Never> = .init()
+    var valuePublisher:AnyPublisher<Double,Never>{
+        return billSubject.eraseToAnyPublisher()
+    }
+    private var privateText:String?
+    var publicText:String?{
+        return privateText
+    }
     
     private let headerView:HeaderView = {
         let view = HeaderView()
@@ -59,7 +71,7 @@ class BillInputView: UIView {
     }()
     
     @objc private func doneButtonTapped(){
-        
+        textField.endEditing(true)
     }
     
     
@@ -93,9 +105,17 @@ class BillInputView: UIView {
         }
     }
     
+    private func observe(){
+        textField.textPublisher.sink { [unowned self] text in
+            billSubject.send(text?.doubleString ?? 0)
+            print("Text: \(text)")
+        }.store(in: &cancellables)
+    }
+    
     init(){
         super.init(frame: .zero)
         layout()
+        observe()
     }
     
     required init?(coder: NSCoder) {
