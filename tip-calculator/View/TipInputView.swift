@@ -39,7 +39,7 @@ class TipInputView: UIView {
     }
     
     private lazy var tenPercentTipButton:UIButton = {
-      let button = buildTipButton(tip: .tenPercent)
+        let button = buildTipButton(tip: .tenPercent)
         //tabPublisher: CombineCocoa
         button.tapPublisher.flatMap {
             Just(Tip.tenPercent)
@@ -85,8 +85,34 @@ class TipInputView: UIView {
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
         button.backgroundColor = ThemeColor.primary
         button.addCornerRadius(radius: 8.0)
+        button.tapPublisher.sink { [weak self]_ in
+            self?.handleCustomTipButton()
+        }.store(in: &cancellables)
         return button
     }()
+    
+    private func handleCustomTipButton(){
+        let alertController:UIAlertController = {
+            let controller = UIAlertController(
+                title: "Enter Custom Tip",
+                message: nil,
+                preferredStyle: .alert)
+            controller.addTextField { textField in
+                textField.placeholder = "Make it gorgeous!"
+                textField.keyboardType = .decimalPad
+                textField.autocorrectionType = .no
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            let comfirmAction = UIAlertAction(title: "Comfirm", style: .default){ [weak self] _ in
+                guard let text = controller.textFields?.first?.text,
+                      let value = Int(text) else { return }
+                self?.tipSubject.send(.custom(value: value))
+            }
+            [cancelAction,comfirmAction].forEach(controller.addAction(_:))
+            return controller
+        }()
+        parentViewController?.present(alertController, animated: true)
+    }
     
     private lazy var buttonVStackView:UIStackView = {
         let vStackView = UIStackView(arrangedSubviews: [
