@@ -20,7 +20,6 @@ class CalculatorVC: UIViewController {
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
     
-    
     private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             logoView,
@@ -33,8 +32,17 @@ class CalculatorVC: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 36
         return stackView
-        
     }()
+    
+    func bind(){
+        let input = CalculatorVM.Input(billPublisher: billInputView.valuePublisher,
+                                       tipPublisher: tipInputView.valuePublusher,
+                                       splitPublisher: splitInputView.valuePublisher)
+        let output = vm.tranform(input: input)
+        output.updateViewPublisher.sink { [unowned self] result in
+            resultView.configure(result: result)
+       }.store(in: &cancellables)
+    }
     
     private func layout(){
         view.backgroundColor = ThemeColor.bg
@@ -61,16 +69,6 @@ class CalculatorVC: UIViewController {
         splitInputView.snp.makeConstraints { make in
             make.height.equalTo(56)
         }
-    }
-    
-    func bind(){
-        let input = CalculatorVM.Input(billPublisher: billInputView.valuePublisher,
-                                       tipPublisher: tipInputView.valuePublusher,
-                                       splitPublisher: Just(5).eraseToAnyPublisher())
-        let output = vm.tranform(input: input)
-       output.updateViewPublisher.sink { result in
-            print(result)
-       }.store(in: &cancellables)
     }
 
     override func viewDidLoad() {

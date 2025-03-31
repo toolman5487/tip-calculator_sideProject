@@ -17,6 +17,16 @@ class AmountView: UIView{
         LabelFactory.build(text: title, font: ThemeFont.regular(Ofsize: 18), textColor: ThemeColor.text, textAlignment: textAlignment)
     }()
     
+    func configure(amount:Double){
+        let text = NSMutableAttributedString(
+            string: amount.currencyFormatted,
+            attributes: [.font: ThemeFont.bold(Ofsize: 24)])
+        text.addAttributes([
+            .font:ThemeFont.bold(Ofsize: 26)],
+                           range: NSMakeRange(0, 1))
+        amountLabel.attributedText = text
+    }
+    
     private lazy var amountLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = textAlignment
@@ -43,7 +53,7 @@ class AmountView: UIView{
         }
     }
     
-   init(title:String, textAlignment:NSTextAlignment){
+    init(title:String, textAlignment:NSTextAlignment){
         self.title = title
         self.textAlignment = textAlignment
         super.init(frame: .zero)
@@ -54,5 +64,5 @@ class AmountView: UIView{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

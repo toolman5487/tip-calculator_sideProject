@@ -11,7 +11,7 @@ import CombineCocoa
 
 class TipInputView: UIView {
     
-    private var tipSubject = CurrentValueSubject<Tip, Never>(.none)
+    private var tipSubject:CurrentValueSubject<Tip, Never> = .init(.none)
     var valuePublusher:AnyPublisher<Tip,Never>{
         return tipSubject.eraseToAnyPublisher()
     }
@@ -65,6 +65,41 @@ class TipInputView: UIView {
             .store(in: &cancellables)
         return button
     }()
+    
+    private func resetView(){
+        [tenPercentTipButton,
+         fifteenPercentTipButton,
+         twentyPercentTipButton,
+         customButton
+        ].forEach { button in
+            button.backgroundColor = ThemeColor.primary
+        }
+        let text = NSMutableAttributedString(
+            string: "Custom Tip",
+            attributes: [.font: ThemeFont.bold(Ofsize: 20)])
+        customButton.setAttributedTitle(text, for: .normal)
+    }
+    
+    private func observe(){
+        tipSubject.sink { [unowned self] tip in
+            resetView()
+            switch tip {
+            case .none:
+                break
+            case .tenPercent:
+                tenPercentTipButton.backgroundColor = ThemeColor.secondary
+            case .fifteenPercent:
+                fifteenPercentTipButton.backgroundColor = ThemeColor.secondary
+            case .twentyPercent:
+                twentyPercentTipButton.backgroundColor = ThemeColor.secondary
+            case .custom(value: let value):
+                customButton.backgroundColor = ThemeColor.secondary
+                let text  = NSMutableAttributedString(string: "$\(value)", attributes: [.font:ThemeFont.bold(Ofsize: 20)])
+                text.setAttributes([.font:ThemeFont.bold(Ofsize: 14)], range: NSMakeRange(0, 1))
+                customButton.setAttributedTitle(text, for: .normal)
+            }
+        }.store(in: &cancellables)
+    }
     
     private lazy var buttonHStackView:UIStackView = {
         let hStackView = UIStackView(arrangedSubviews: [
@@ -142,6 +177,7 @@ class TipInputView: UIView {
     init(){
         super.init(frame: .zero)
         layout()
+        observe()
     }
     
     required init?(coder: NSCoder) {
