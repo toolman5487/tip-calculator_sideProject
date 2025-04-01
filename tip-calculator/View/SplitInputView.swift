@@ -67,6 +67,10 @@ class SplitInputView: UIView {
         }.store(in: &cancellables)
     }
     
+    func splitReset(){
+        splitSubject.send(1)
+    }
+    
     private func layout(){
         [headerView, stackView].forEach(addSubview(_:))
         

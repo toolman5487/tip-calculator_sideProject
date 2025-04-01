@@ -26,7 +26,7 @@ class CalculatorVM{
     
     struct Output{
         let updateViewPublisher:AnyPublisher<Result, Never>
-        let resultCalculatorPublisher:AnyPublisher<Void, Never>
+        let resetCalculatorPublisher:AnyPublisher<Void, Never>
     }
     
     private func getTipAmount(bill:Double, tip:Tip)->Double{
@@ -68,7 +68,7 @@ class CalculatorVM{
         
         return Output(
             updateViewPublisher: updateViewPublisher,
-            resultCalculatorPublisher: resultCalculatorPublisher )
+            resetCalculatorPublisher: resultCalculatorPublisher )
     }
     
     

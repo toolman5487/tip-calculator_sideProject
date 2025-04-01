@@ -74,6 +74,18 @@ class BillInputView: UIView {
         textField.endEditing(true)
     }
     
+    private func observe(){
+        textField.textPublisher.sink { [unowned self] text in
+            billSubject.send(text?.doubleString ?? 0)
+            print("Text: \(text)")
+        }.store(in: &cancellables)
+    }
+    
+    func billReset(){
+        textField.text = nil
+        billSubject.send(0)
+    }
+    
     
     private func layout(){
         [headerView, textFieldContainView].forEach(addSubview(_:))
@@ -103,13 +115,6 @@ class BillInputView: UIView {
             make.leading.equalTo(currencyDenominationLabel.snp.trailing).offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
-    }
-    
-    private func observe(){
-        textField.textPublisher.sink { [unowned self] text in
-            billSubject.send(text?.doubleString ?? 0)
-            print("Text: \(text)")
-        }.store(in: &cancellables)
     }
     
     init(){

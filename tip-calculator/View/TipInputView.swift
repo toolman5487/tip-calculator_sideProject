@@ -101,6 +101,10 @@ class TipInputView: UIView {
         }.store(in: &cancellables)
     }
     
+    func tipReset(){
+        tipSubject.send(.none)
+    }
+    
     private lazy var buttonHStackView:UIStackView = {
         let hStackView = UIStackView(arrangedSubviews: [
             tenPercentTipButton,
