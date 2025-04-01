@@ -16,7 +16,7 @@ class ResultView: UIView {
     private let amountPerPersonLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        let text = NSMutableAttributedString(string: "$0", attributes: [.font:ThemeFont.bold(Ofsize: 48), .foregroundColor:ThemeColor.primary])
+        let text = NSMutableAttributedString(string: "$0", attributes: [.font:ThemeFont.bold(Ofsize: 48), .foregroundColor:UIColor.black])
         text.addAttributes([.font: ThemeFont.bold(Ofsize: 24)], range: NSMakeRange(0, 1))
         label.attributedText = text
         return label
@@ -31,7 +31,8 @@ class ResultView: UIView {
     func configure(result:Result){
         let text = NSMutableAttributedString(
             string: result.amountPerPerson.currencyFormatted,
-            attributes: [.font:ThemeFont.bold(Ofsize: 48)])
+            attributes: [.font:ThemeFont.bold(Ofsize: 48),
+                         .foregroundColor:UIColor.black])
         text.addAttributes(
             [.font: ThemeFont.bold(Ofsize: 24)],
             range: NSMakeRange(0, 1))

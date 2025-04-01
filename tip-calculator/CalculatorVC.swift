@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import CombineCocoa
 import SnapKit
 
 class CalculatorVC: UIViewController {
@@ -19,6 +20,22 @@ class CalculatorVC: UIViewController {
     
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
+    private lazy var viewTapPublisher: AnyPublisher<Void,Never> = {
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture.tapPublisher.flatMap { _ in
+            Just(())
+        }.eraseToAnyPublisher()
+    }()
+    
+    private lazy var logoViewTapPublisher: AnyPublisher<Void,Never> = {
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
+        tapGesture.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture.tapPublisher.flatMap { _ in
+            Just(())
+        }.eraseToAnyPublisher()
+    }()
     
     private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
@@ -34,14 +51,32 @@ class CalculatorVC: UIViewController {
         return stackView
     }()
     
+    private func observe(){
+        viewTapPublisher.sink { [unowned self] _ in
+            view.endEditing(true)
+        }.store(in: &cancellables)
+        
+        logoViewTapPublisher.sink { _ in
+            print("Logo is tapped")
+        }.store(in: &cancellables)
+    }
+    
     func bind(){
-        let input = CalculatorVM.Input(billPublisher: billInputView.valuePublisher,
-                                       tipPublisher: tipInputView.valuePublusher,
-                                       splitPublisher: splitInputView.valuePublisher)
+        let input = CalculatorVM.Input(
+            billPublisher: billInputView.valuePublisher,
+            tipPublisher: tipInputView.valuePublusher,
+            splitPublisher: splitInputView.valuePublisher,
+            logoViewTapPulisher: logoViewTapPublisher)
+        
         let output = vm.tranform(input: input)
         output.updateViewPublisher.sink { [unowned self] result in
             resultView.configure(result: result)
-       }.store(in: &cancellables)
+        }.store(in: &cancellables)
+        output.updateViewPublisher.sink { _ in
+            print("Reset the form!")
+        }.store(in: &cancellables)
+        
+        
     }
     
     private func layout(){
@@ -70,15 +105,16 @@ class CalculatorVC: UIViewController {
             make.height.equalTo(56)
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
         bind()
+        observe()
         // Do any additional setup after loading the view.
     }
-
-   
-
+    
+    
+    
 }
 
