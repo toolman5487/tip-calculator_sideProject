@@ -98,6 +98,18 @@ class CalculatorScreen {
         }
     }
     
+    func selectIncrementButton(numberOfTaps: Int) {
+      incrementButton.tap(withNumberOfTaps: numberOfTaps, numberOfTouches: 1)
+    }
+    
+    func selectDecrementButton(numberOfTaps: Int) {
+      decrementButton.tap(withNumberOfTaps: numberOfTaps, numberOfTouches: 1)
+    }
+    
+    func doubleTapLogoView() {
+      logoView.tap(withNumberOfTaps: 2, numberOfTouches: 1)
+    }
+    
     
     init(app: XCUIApplication) {
         self.app = app
