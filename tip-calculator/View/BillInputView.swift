@@ -49,6 +49,7 @@ class BillInputView: UIView {
         textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textField.tintColor = ThemeColor.text
         textField.textColor = ThemeColor.text
+        textField.accessibilityIdentifier = ScreenIdentifier1.BillInputView.textField.rawValue
         
         //add toolbar
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 36))

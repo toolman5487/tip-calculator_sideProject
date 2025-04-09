@@ -41,6 +41,7 @@ class TipInputView: UIView {
     private lazy var tenPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .tenPercent)
         //tabPublisher: CombineCocoa
+        button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.tenPercentButton.rawValue
         button.tapPublisher.flatMap {
             Just(Tip.tenPercent)
         }.assign(to: \.value, on: tipSubject) // tipSubject.value
@@ -50,6 +51,7 @@ class TipInputView: UIView {
     
     private lazy var fifteenPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .fifteenPercent)
+        button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.fifteenPercentButton.rawValue
         button.tapPublisher.flatMap {
             Just(Tip.fifteenPercent)
         }.assign(to: \.value, on: tipSubject)
@@ -59,10 +61,25 @@ class TipInputView: UIView {
     
     private lazy var twentyPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .twentyPercent)
+        button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.twentyPercentButton.rawValue
         button.tapPublisher.flatMap {
             Just(Tip.twentyPercent)
         }.assign(to: \.value, on: tipSubject)
             .store(in: &cancellables)
+        return button
+    }()
+    
+    private lazy var customButton:UIButton = {
+        let button = UIButton()
+        button.tintColor = .white
+        button.setTitle("Custom Tip", for: .normal)
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
+        button.backgroundColor = ThemeColor.primary
+        button.addCornerRadius(radius: 8.0)
+        button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.customTipButton.rawValue
+        button.tapPublisher.sink { [weak self]_ in
+            self?.handleCustomTipButton()
+        }.store(in: &cancellables)
         return button
     }()
     
@@ -115,19 +132,6 @@ class TipInputView: UIView {
         hStackView.distribution = .fillEqually
         hStackView.spacing = 16
         return hStackView
-    }()
-    
-    private lazy var customButton:UIButton = {
-        let button = UIButton()
-        button.tintColor = .white
-        button.setTitle("Custom Tip", for: .normal)
-        button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
-        button.backgroundColor = ThemeColor.primary
-        button.addCornerRadius(radius: 8.0)
-        button.tapPublisher.sink { [weak self]_ in
-            self?.handleCustomTipButton()
-        }.store(in: &cancellables)
-        return button
     }()
     
     private func handleCustomTipButton(){
