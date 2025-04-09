@@ -144,6 +144,7 @@ class TipInputView: UIView {
                 textField.placeholder = "Make it gorgeous!"
                 textField.keyboardType = .decimalPad
                 textField.autocorrectionType = .no
+                textField.accessibilityIdentifier = ScreenIdentifier1.TipInputView.customTipAlertTextField.rawValue
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
             let comfirmAction = UIAlertAction(title: "Comfirm", style: .default){ [weak self] _ in

@@ -32,7 +32,7 @@ final class tip_calculatorUITests: XCTestCase {
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$100")
         XCTAssertEqual(screen.totalBillValueLabel.label, "$100")
         XCTAssertEqual(screen.totalTipValueLabel.label, "$0")
-//        
+        
         // User Select 15% Tip
         screen.selectTip(tip: .fifteenPercent)
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$115")
@@ -42,15 +42,33 @@ final class tip_calculatorUITests: XCTestCase {
         //User split the bill by 2
         screen.selectIncrementButton(numberOfTaps: 2)
         screen.selectTip(tip: .twentyPercent)
-        XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$60")
+        XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$40")
         XCTAssertEqual(screen.totalBillValueLabel.label, "$120")
         XCTAssertEqual(screen.totalTipValueLabel.label, "$20")
         
     }
     
-   
+    func testCustomTip_SplitBy2(){
+        screen.enterBill(amount: 300)
+        screen.selectTip(tip: .custom(value: 200))
+        screen.selectIncrementButton(numberOfTaps: 1)
+        XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$250")
+        XCTAssertEqual(screen.totalBillValueLabel.label, "$500")
+        XCTAssertEqual(screen.totalTipValueLabel.label, "$200")
+    }
     
-    
+    func testResetButton(){
+        screen.enterBill(amount: 400)
+        screen.selectTip(tip: .custom(value: 200))
+        screen.selectIncrementButton(numberOfTaps: 1)
+        screen.doubleTapLogoView()
+        XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$0")
+        XCTAssertEqual(screen.totalBillValueLabel.label, "$0")
+        XCTAssertEqual(screen.totalTipValueLabel.label, "$0")
+        XCTAssertEqual(screen.billInputViewTextField.label, "")
+        XCTAssertEqual(screen.splitValueLabel.label, "1")
+        XCTAssertEqual(screen.customTipButton.label, "Custom Tip")
+    }
     
     override func tearDown() {
         super.tearDown()
