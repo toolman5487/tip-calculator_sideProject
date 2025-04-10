@@ -42,19 +42,6 @@ class ResultView: UIView {
         totalTipView.configure(amount: result.totalTip)
     }
     
-    private lazy var vStackView:UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [
-            headerLabel,
-            amountPerPersonLabel,
-            horizentalLine,
-            buildSpaceView(height: 0),
-            hStackView
-        ])
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        return stackView
-    }()
-    
     private let totalBillView:AmountView = {
         let view = AmountView(
             title: "Total Bill",
@@ -79,6 +66,19 @@ class ResultView: UIView {
         ])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private lazy var vStackView:UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            headerLabel,
+            amountPerPersonLabel,
+            horizentalLine,
+            buildSpaceView(height: 0),
+            hStackView
+        ])
+        stackView.axis = .vertical
+        stackView.spacing = 8
         return stackView
     }()
 

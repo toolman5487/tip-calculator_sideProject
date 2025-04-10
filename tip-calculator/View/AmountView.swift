@@ -17,6 +17,17 @@ class AmountView: UIView{
     private lazy var titleLabel:UILabel = {
         LabelFactory.build(text: title, font: ThemeFont.regular(Ofsize: 18), textColor: ThemeColor.text, textAlignment: textAlignment)
     }()
+
+    private lazy var amountLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = textAlignment
+        label.textColor = ThemeColor.primary
+        let text  = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
+        text.addAttributes( [.font: ThemeFont.bold(Ofsize: 16)], range: NSRange(location: 0, length: 1))
+        label.attributedText = text
+        label.accessibilityIdentifier = amountLabelIdentifier
+        return label
+    }()
     
     func configure(amount:Double){
         let text = NSMutableAttributedString(
@@ -27,17 +38,6 @@ class AmountView: UIView{
                            range: NSMakeRange(0, 1))
         amountLabel.attributedText = text
     }
-    
-    private lazy var amountLabel:UILabel = {
-        let label = UILabel()
-        label.textAlignment = textAlignment
-        label.textColor = ThemeColor.primary
-        let text  = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
-        text.addAttributes( [.font: ThemeFont.bold(Ofsize: 24)], range: NSRange(location: 0, length: 1))
-        label.attributedText = text
-        label.accessibilityIdentifier = amountLabelIdentifier
-        return label
-    }()
     
     private lazy var vStackView:UIStackView = {
         let stack = UIStackView(arrangedSubviews: [

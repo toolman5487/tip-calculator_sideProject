@@ -59,6 +59,7 @@ class CalculatorVM{
                 totalTip: totalTip)
             return Just(result)
         }.eraseToAnyPublisher()
+        
         let resultCalculatorPublisher = input.logoViewTapPulisher
             .handleEvents(receiveSubscription: { [unowned self] _ in
             audioPlayerServer.playSound()
