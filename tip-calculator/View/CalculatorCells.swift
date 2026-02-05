@@ -15,6 +15,11 @@ private var cellContentInsets: UIEdgeInsets {
 // MARK: - ResultCell
 final class ResultCell: UITableViewCell {
     static let reuseId = "ResultCell"
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
     private(set) lazy var resultView = ResultView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -22,22 +27,24 @@ final class ResultCell: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         backgroundColor = .clear
+        setupView()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(resultView)
-        resultView.snp.makeConstraints { make in
+    private func setupView() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(resultView)
+        containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
+        resultView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(8)
+            make.right.left.bottom.equalToSuperview()
+        }
     }
+
+    func configure() {}
 }
 
 // MARK: - BillInputCell
@@ -50,22 +57,19 @@ final class BillInputCell: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         backgroundColor = .clear
+        setupView()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
+    private func setupView() {
         contentView.addSubview(billInputView)
         billInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
+
+    func configure() {}
 }
 
 // MARK: - TipInputCell
@@ -78,22 +82,19 @@ final class TipInputCell: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         backgroundColor = .clear
+        setupView()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
+    private func setupView() {
         contentView.addSubview(tipInputView)
         tipInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
+
+    func configure() {}
 }
 
 // MARK: - SplitInputCell
@@ -106,20 +107,51 @@ final class SplitInputCell: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         backgroundColor = .clear
+        setupView()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
+    private func setupView() {
         contentView.addSubview(splitInputView)
         splitInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
+
+    func configure() {}
 }
+
+// MARK: - ConfirmButtonCell
+final class ConfirmButtonCell: UITableViewCell {
+    static let reuseId = "ConfirmButtonCell"
+    private(set) lazy var confirmButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Confirm", for: .normal)
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 18)
+        button.backgroundColor = ThemeColor.secondary
+        button.setTitleColor(.white, for: .normal)
+        button.addCornerRadius(radius: 8)
+        return button
+    }()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        setupView()
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    private func setupView() {
+        contentView.addSubview(confirmButton)
+        confirmButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(cellContentInsets)
+        }
+    }
+
+    func configure() {}
+}
+

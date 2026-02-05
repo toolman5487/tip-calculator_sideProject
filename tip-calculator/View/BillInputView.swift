@@ -52,12 +52,10 @@ class BillInputView: UIView {
         textField.textColor = ThemeColor.text
         textField.accessibilityIdentifier = ScreenIdentifier1.BillInputView.textField.rawValue
         
-        //add toolbar
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 36))
         toolbar.barStyle = .default
         toolbar.sizeToFit()
         
-        //add button
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTapped))
         toolbar.items = [
             UIBarButtonItem(
@@ -77,7 +75,8 @@ class BillInputView: UIView {
     }
     
     private func observe(){
-        textField.textPublisher.sink { [unowned self] text in
+        textField.textPublisher.sink { [weak self] text in
+            guard let self else { return }
             billSubject.send(text?.doubleString ?? 0)
         }.store(in: &cancellables)
     }

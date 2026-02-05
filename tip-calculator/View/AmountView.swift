@@ -22,8 +22,8 @@ class AmountView: UIView{
         let label = UILabel()
         label.textAlignment = textAlignment
         label.textColor = ThemeColor.primary
-        let text  = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
-        text.addAttributes( [.font: ThemeFont.bold(Ofsize: 16)], range: NSRange(location: 0, length: 1))
+        let text = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
+        text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSRange(location: 0, length: 1))
         label.attributedText = text
         label.accessibilityIdentifier = amountLabelIdentifier
         return label
@@ -33,9 +33,7 @@ class AmountView: UIView{
         let text = NSMutableAttributedString(
             string: amount.currencyFormatted,
             attributes: [.font: ThemeFont.bold(Ofsize: 24)])
-        text.addAttributes([
-            .font:ThemeFont.bold(Ofsize: 26)],
-                           range: NSMakeRange(0, 1))
+        text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSMakeRange(0, 1))
         amountLabel.attributedText = text
     }
     

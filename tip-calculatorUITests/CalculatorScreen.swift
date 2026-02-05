@@ -19,12 +19,10 @@ class CalculatorScreen {
         case custom(value:Int)
     }
     
-    // 導覽列刷新按鈕
     var refreshButton: XCUIElement {
         app.buttons["refreshButton"]
     }
 
-    //ResultView
     var totalAmountPerPersonValueLabel:XCUIElement{
         return app.staticTexts[ScreenIdentifier1.ResultView.totalAmountPerPersonValueLabel.rawValue]
     }
@@ -37,12 +35,10 @@ class CalculatorScreen {
         return app.staticTexts[ScreenIdentifier1.ResultView.totalTipValueLabel.rawValue]
     }
     
-    //BillInputView
     var billInputViewTextField:XCUIElement{
         app.textFields[ScreenIdentifier1.BillInputView.textField.rawValue]
     }
     
-    //TipInputView
     var tenPercentTipInputView:XCUIElement{
         app.buttons[ScreenIdentifier1.TipInputView.tenPercentButton.rawValue]
     }
@@ -63,7 +59,6 @@ class CalculatorScreen {
         app.textFields[ScreenIdentifier1.TipInputView.customTipAlertTextField.rawValue]
     }
     
-    //SplitInputView
     var decrementButton:XCUIElement{
         app.buttons[ScreenIdentifier1.SplitInputView.decreaseButton.rawValue]
     }
@@ -75,8 +70,7 @@ class CalculatorScreen {
     var splitValueLabel:XCUIElement{
         app.staticTexts[ScreenIdentifier1.SplitInputView.quantityValueLabel.rawValue]
     }
-    
-    //Actions
+
     func enterBill(amount:Double){
         billInputViewTextField.tap()
         billInputViewTextField.typeText("\(amount)\n")

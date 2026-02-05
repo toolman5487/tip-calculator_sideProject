@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Result {
+struct Result: Sendable {
     let amountPerPerson: Double
     let totalBill: Double
     let totalTip:Double

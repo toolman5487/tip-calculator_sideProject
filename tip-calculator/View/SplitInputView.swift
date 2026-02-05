@@ -7,8 +7,11 @@
 
 import UIKit
 import Combine
+import SnapKit
 
 class SplitInputView: UIView {
+    
+    private let controlHeight: CGFloat = 48
     
     private let splitSubject:CurrentValueSubject<Int,Never> = .init(1)
     var valuePublisher:AnyPublisher<Int,Never> {
@@ -34,8 +37,9 @@ class SplitInputView: UIView {
     private lazy var decrementButton:UIButton = {
         let button = buildButton(text: "-", corners: [.layerMinXMaxYCorner, .layerMinXMinYCorner])
         button.accessibilityIdentifier = ScreenIdentifier1.SplitInputView.decreaseButton.rawValue
-        button.tapPublisher.flatMap { [unowned self]_ in
-            Just(splitSubject.value == 1 ? 1 : splitSubject.value - 1)
+        button.tapPublisher.flatMap { [weak self] _ in
+            guard let self else { return Empty<Int, Never>().eraseToAnyPublisher() }
+            return Just(self.splitSubject.value == 1 ? 1 : self.splitSubject.value - 1).eraseToAnyPublisher()
         }.assign(to: \.value, on: splitSubject)
             .store(in: &cancellables)
         return button
@@ -44,8 +48,9 @@ class SplitInputView: UIView {
     private lazy var incrementButton:UIButton = {
         let button = buildButton(text: "+", corners: [.layerMaxXMinYCorner, .layerMaxXMaxYCorner])
         button.accessibilityIdentifier = ScreenIdentifier1.SplitInputView.increaseButton.rawValue
-        button.tapPublisher.flatMap { [unowned self]_ in
-            Just(splitSubject.value + 1)
+        button.tapPublisher.flatMap { [weak self] _ in
+            guard let self else { return Empty<Int, Never>().eraseToAnyPublisher() }
+            return Just(self.splitSubject.value + 1).eraseToAnyPublisher()
         }.assign(to: \.value, on: splitSubject)
             .store(in: &cancellables)
         return button
@@ -61,12 +66,13 @@ class SplitInputView: UIView {
         let stackView = UIStackView(arrangedSubviews: [decrementButton,quantityLabel,incrementButton])
         stackView.axis = .horizontal
         stackView.spacing = 0
+        stackView.alignment = .center
         return stackView
     }()
     
     private func observe(){
-        splitSubject.sink { [unowned self] quantity in
-            quantityLabel.text = quantity.stringValue
+        splitSubject.sink { [weak self] quantity in
+            self?.quantityLabel.text = quantity.stringValue
         }.store(in: &cancellables)
     }
     
@@ -78,11 +84,16 @@ class SplitInputView: UIView {
         [headerView, stackView].forEach(addSubview(_:))
         
         stackView.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
+            make.centerY.trailing.equalToSuperview()
+            make.height.equalTo(controlHeight)
+        }
+        quantityLabel.snp.makeConstraints { make in
+            make.height.equalTo(controlHeight)
         }
         [decrementButton,incrementButton].forEach { button in
             button.snp.makeConstraints { make in
-                make.width.equalTo(button.snp.height)
+                make.height.equalTo(controlHeight)
+                make.width.equalTo(controlHeight)
             }
         }
         headerView.snp.makeConstraints { make in

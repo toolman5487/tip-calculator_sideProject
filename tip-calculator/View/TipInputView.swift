@@ -13,7 +13,7 @@ import SnapKit
 class TipInputView: UIView {
     
     private var tipSubject:CurrentValueSubject<Tip, Never> = .init(.none)
-    var valuePublusher:AnyPublisher<Tip,Never>{
+    var valuePublisher: AnyPublisher<Tip, Never> {
         return tipSubject.eraseToAnyPublisher()
     }
     private var cancellables = Set<AnyCancellable>()
@@ -98,7 +98,8 @@ class TipInputView: UIView {
     }
     
     private func observe(){
-        tipSubject.sink { [unowned self] tip in
+        tipSubject.sink { [weak self] tip in
+            guard let self else { return }
             resetView()
             switch tip {
             case .none:

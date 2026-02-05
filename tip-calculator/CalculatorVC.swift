@@ -10,10 +10,12 @@ import Combine
 import CombineCocoa
 import SnapKit
 
-class CalculatorVC: UIViewController {
+@MainActor
+final class CalculatorVC: UIViewController {
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
+    private var hasBoundCells = false
     private lazy var viewTapPublisher: AnyPublisher<Void, Never> = {
         let tapGesture = UITapGestureRecognizer(target: self, action: nil)
         view.addGestureRecognizer(tapGesture)
@@ -28,11 +30,13 @@ class CalculatorVC: UIViewController {
         return item.tapPublisher.map { _ in () }.eraseToAnyPublisher()
     }()
 
+    @MainActor
     private enum Row: Int, CaseIterable {
         case result
         case billInput
         case tipInput
         case splitInput
+        case confirmButton
 
         var reuseId: String {
             switch self {
@@ -40,6 +44,7 @@ class CalculatorVC: UIViewController {
             case .billInput: return BillInputCell.reuseId
             case .tipInput: return TipInputCell.reuseId
             case .splitInput: return SplitInputCell.reuseId
+            case .confirmButton: return ConfirmButtonCell.reuseId
             }
         }
 
@@ -47,10 +52,11 @@ class CalculatorVC: UIViewController {
 
         var rowHeight: CGFloat {
             switch self {
-            case .result: return 224 + Self.rowSpacing
-            case .billInput: return 56 + Self.rowSpacing
-            case .tipInput: return 56 + 44 + 15 + Self.rowSpacing  // 上排 56 + customButton 44 + 間距 15
-            case .splitInput: return 56
+            case .result: return 260
+            case .billInput: return 92
+            case .tipInput: return 151
+            case .splitInput: return 92
+            case .confirmButton: return 68
             }
         }
     }
@@ -65,50 +71,60 @@ class CalculatorVC: UIViewController {
         table.register(BillInputCell.self, forCellReuseIdentifier: BillInputCell.reuseId)
         table.register(TipInputCell.self, forCellReuseIdentifier: TipInputCell.reuseId)
         table.register(SplitInputCell.self, forCellReuseIdentifier: SplitInputCell.reuseId)
+        table.register(ConfirmButtonCell.self, forCellReuseIdentifier: ConfirmButtonCell.reuseId)
         table.dataSource = self
         table.delegate = self
         return table
     }()
 
-    func bind() {
-        viewTapPublisher.sink { [unowned self] _ in
-            view.endEditing(true)
+    func bindingVM() {
+        viewTapPublisher.sink { [weak self] _ in
+            self?.view.endEditing(true)
         }.store(in: &cancellables)
+    }
+
+    private func bindCellsIfNeeded() {
+        guard !hasBoundCells else { return }
+        hasBoundCells = true
 
         tableView.reloadData()
         tableView.layoutIfNeeded()
         guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
               let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
               let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,
-              let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell
+              let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell,
+              let confirmCell = tableView.cellForRow(at: IndexPath(row: Row.confirmButton.rawValue, section: 0)) as? ConfirmButtonCell
         else { return }
+
+        confirmCell.confirmButton.tapPublisher.sink { _ in print("tap") }.store(in: &cancellables)
 
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
-            tipPublisher: tipInputCell.tipInputView.valuePublusher,
+            tipPublisher: tipInputCell.tipInputView.valuePublisher,
             splitPublisher: splitInputCell.splitInputView.valuePublisher,
-            logoViewTapPulisher: refreshButtonTapPublisher)
+            logoViewTapPublisher: refreshButtonTapPublisher)
+        vm.bind(input: input)
 
-        let output = vm.tranform(input: input)
-        output.updateViewPublisher.sink { result in
+        vm.$result.sink { result in
             resultCell.resultView.configure(result: result)
         }.store(in: &cancellables)
 
-        output.resetCalculatorPublisher.sink { [unowned self] _ in
-            (tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell)?.billInputView.billReset()
-            (tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell)?.tipInputView.tipReset()
-            (tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell)?.splitInputView.splitReset()
+        vm.resetPublisher.sink { [weak self] _ in
+            guard let self else { return }
+            (self.tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell)?.billInputView.billReset()
+            (self.tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell)?.tipInputView.tipReset()
+            (self.tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell)?.splitInputView.splitReset()
         }.store(in: &cancellables)
     }
 
-    private func layout(){
+    private func layout() {
         title = "Calculator"
         view.backgroundColor = ThemeColor.bg
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
             make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
-            make.top.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalToSuperview()
         }
     }
@@ -117,7 +133,12 @@ class CalculatorVC: UIViewController {
         super.viewDidLoad()
         layout()
         view.layoutIfNeeded()
-        bind()
+        bindingVM()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        bindCellsIfNeeded()
     }
 }
 
@@ -144,6 +165,10 @@ extension CalculatorVC: UITableViewDataSource {
             return cell
         case .splitInput:
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! SplitInputCell
+            cell.configure()
+            return cell
+        case .confirmButton:
+            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ConfirmButtonCell
             cell.configure()
             return cell
         }

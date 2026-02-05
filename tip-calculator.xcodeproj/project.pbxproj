@@ -13,6 +13,9 @@
 		157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
+		157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
+		157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
+		157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA02D95A2B300270813 /* CombineCocoa */; };
 		15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA32D95A2CE00270813 /* SnapKit */; };
 		15C22DA72D95A2E700270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA62D95A2E700270813 /* CombineCocoa */; };
@@ -40,6 +43,7 @@
 /* Begin PBXFileReference section */
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
+		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
 		15C22D6B2D95A29900270813 /* tip-calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tip-calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,9 +142,26 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		157A6E582F346FD8005D8554 /* TotalResult */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E592F346FFE005D8554 /* ViewController */,
+			);
+			path = TotalResult;
+			sourceTree = "<group>";
+		};
+		157A6E592F346FFE005D8554 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E5A2F347015005D8554 /* TotalResultViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				157A6E582F346FD8005D8554 /* TotalResult */,
 				157A6E4C2F343634005D8554 /* MainUserInfo */,
 				157A6E472F343483005D8554 /* MainTabBar */,
 				15C22D6D2D95A29900270813 /* tip-calculator */,
@@ -252,7 +273,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					15C22D6A2D95A29900270813 = {
 						CreatedOnToolsVersion = 16.2;
@@ -324,6 +345,7 @@
 			files = (
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 			);
@@ -340,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 			);
@@ -368,13 +392,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tip-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -395,13 +419,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tip-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -450,6 +474,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -473,6 +498,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -513,6 +539,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -529,6 +556,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -540,7 +568,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -559,7 +586,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -577,7 +603,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.willyhsu.tip-calculatorUITests";
@@ -594,7 +619,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.willyhsu.tip-calculatorUITests";

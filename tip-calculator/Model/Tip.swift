@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Tip{
+enum Tip: Sendable {
     case none
     case tenPercent
     case fifteenPercent

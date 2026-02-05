@@ -32,14 +32,10 @@ final class tip_calculatorUITests: XCTestCase {
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$100")
         XCTAssertEqual(screen.totalBillValueLabel.label, "$100")
         XCTAssertEqual(screen.totalTipValueLabel.label, "$0")
-        
-        // User Select 15% Tip
         screen.selectTip(tip: .fifteenPercent)
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$115")
         XCTAssertEqual(screen.totalBillValueLabel.label, "$115")
         XCTAssertEqual(screen.totalTipValueLabel.label, "$15")
-        
-        //User split the bill by 2
         screen.selectIncrementButton(numberOfTaps: 2)
         screen.selectTip(tip: .twentyPercent)
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$40")
