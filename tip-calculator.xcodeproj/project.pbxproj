@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		156C1AE72F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */; };
+		156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */; };
+		156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */; };
+		156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */; };
+		156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */; };
+		156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */; };
+		156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */; };
+		156C1AF02F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */; };
+		156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */; };
 		157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
@@ -47,6 +56,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
+		156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataClass.swift"; sourceTree = "<group>"; };
+		156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +208,9 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */,
+				156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */,
+				156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */,
 				157A6E582F346FD8005D8554 /* TotalResult */,
 				157A6E4C2F343634005D8554 /* MainUserInfo */,
 				157A6E472F343483005D8554 /* MainTabBar */,
@@ -378,10 +393,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				156C1AE72F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
+				156C1AF02F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,9 +409,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
+				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +423,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
+				156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
@@ -766,6 +790,19 @@
 			productName = CombineCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */,
+			);
+			currentVersion = 156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */;
+			path = TipCalculator.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 15C22D632D95A29900270813 /* Project object */;
 }
