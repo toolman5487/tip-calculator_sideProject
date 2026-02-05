@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
+		157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
+		157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
+		157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
+		157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
+		157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA02D95A2B300270813 /* CombineCocoa */; };
 		15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA32D95A2CE00270813 /* SnapKit */; };
 		15C22DA72D95A2E700270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA62D95A2E700270813 /* CombineCocoa */; };
@@ -32,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		15C22D6B2D95A29900270813 /* tip-calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tip-calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,9 +114,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		157A6E472F343483005D8554 /* MainTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E482F343524005D8554 /* MainTabBarViewController.swift */,
+			);
+			path = MainTabBar;
+			sourceTree = "<group>";
+		};
+		157A6E4C2F343634005D8554 /* MainUserInfo */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E4D2F343644005D8554 /* ViewController */,
+			);
+			path = MainUserInfo;
+			sourceTree = "<group>";
+		};
+		157A6E4D2F343644005D8554 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				157A6E4C2F343634005D8554 /* MainUserInfo */,
+				157A6E472F343483005D8554 /* MainTabBar */,
 				15C22D6D2D95A29900270813 /* tip-calculator */,
 				15C22D842D95A29A00270813 /* tip-calculatorTests */,
 				15C22D8E2D95A29A00270813 /* tip-calculatorUITests */,
@@ -288,6 +322,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
+				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +331,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
+				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +340,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
+				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,7 @@ private var cellContentInsets: UIEdgeInsets {
 // MARK: - LogoCell
 final class LogoCell: UITableViewCell {
     static let reuseId = "LogoCell"
+    private(set) lazy var logoView = LogoView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,10 +31,10 @@ final class LogoCell: UITableViewCell {
         contentView.subviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configure(with view: LogoView) {
+    func configure() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
+        contentView.addSubview(logoView)
+        logoView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
@@ -42,6 +43,7 @@ final class LogoCell: UITableViewCell {
 // MARK: - ResultCell
 final class ResultCell: UITableViewCell {
     static let reuseId = "ResultCell"
+    private(set) lazy var resultView = ResultView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,10 +59,10 @@ final class ResultCell: UITableViewCell {
         contentView.subviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configure(with view: ResultView) {
+    func configure() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
+        contentView.addSubview(resultView)
+        resultView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
@@ -69,6 +71,7 @@ final class ResultCell: UITableViewCell {
 // MARK: - BillInputCell
 final class BillInputCell: UITableViewCell {
     static let reuseId = "BillInputCell"
+    private(set) lazy var billInputView = BillInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -84,10 +87,10 @@ final class BillInputCell: UITableViewCell {
         contentView.subviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configure(with view: BillInputView) {
+    func configure() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
+        contentView.addSubview(billInputView)
+        billInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
@@ -96,6 +99,7 @@ final class BillInputCell: UITableViewCell {
 // MARK: - TipInputCell
 final class TipInputCell: UITableViewCell {
     static let reuseId = "TipInputCell"
+    private(set) lazy var tipInputView = TipInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -111,10 +115,10 @@ final class TipInputCell: UITableViewCell {
         contentView.subviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configure(with view: TipInputView) {
+    func configure() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
+        contentView.addSubview(tipInputView)
+        tipInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
@@ -123,6 +127,7 @@ final class TipInputCell: UITableViewCell {
 // MARK: - SplitInputCell
 final class SplitInputCell: UITableViewCell {
     static let reuseId = "SplitInputCell"
+    private(set) lazy var splitInputView = SplitInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -138,10 +143,10 @@ final class SplitInputCell: UITableViewCell {
         contentView.subviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configure(with view: SplitInputView) {
+    func configure() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
+        contentView.addSubview(splitInputView)
+        splitInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
     }
