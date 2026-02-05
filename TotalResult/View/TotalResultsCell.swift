@@ -124,3 +124,44 @@ final class SplitCell: BaseResultInfoCell {
         valueLabel.textColor = ThemeColor.text
     }
 }
+
+// MARK: - Save Button Cell
+
+final class SaveRecordCell: UICollectionViewCell {
+    static let reuseId = "SaveRecordCell"
+
+    private let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Save consumption record", for: .normal)
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
+        button.backgroundColor = ThemeColor.primary
+        button.tintColor = .white
+        button.layer.cornerRadius = 12
+        button.layer.masksToBounds = true
+        return button
+    }()
+
+    var onTap: (() -> Void)?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.backgroundColor = .clear
+
+        contentView.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
+    }
+}
+

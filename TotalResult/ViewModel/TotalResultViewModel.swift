@@ -15,6 +15,7 @@ enum TotalResultRow: Int, CaseIterable {
     case bill
     case tip
     case split
+    case save
 
     var title: String {
         switch self {
@@ -24,6 +25,7 @@ enum TotalResultRow: Int, CaseIterable {
         case .bill:            return "Bill"
         case .tip:             return "Tip"
         case .split:           return "Split"
+        case .save:            return "Save record"
         }
     }
 
@@ -41,6 +43,8 @@ enum TotalResultRow: Int, CaseIterable {
             return result.tip.stringValue.isEmpty ? "None" : result.tip.stringValue
         case .split:
             return "\(result.split)"
+        case .save:
+            return ""
         }
     }
 }
@@ -50,9 +54,17 @@ final class TotalResultViewModel {
 
     let result: Result
     let rows: [TotalResultRow] = TotalResultRow.allCases
+    private let store: ConsumptionRecordStoring
 
-    init(result: Result) {
+    init(result: Result, store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
         self.result = result
+        self.store = store
+    }
+
+    func saveRecord() {
+        if store.save(result: result) {
+            print("Saved ConsumptionRecord")
+        }
     }
 }
 

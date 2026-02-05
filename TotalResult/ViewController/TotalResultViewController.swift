@@ -31,6 +31,7 @@ final class TotalResultViewController: UIViewController {
         collection.register(BillCell.self, forCellWithReuseIdentifier: BillCell.reuseId)
         collection.register(TipCell.self, forCellWithReuseIdentifier: TipCell.reuseId)
         collection.register(SplitCell.self, forCellWithReuseIdentifier: SplitCell.reuseId)
+        collection.register(SaveRecordCell.self, forCellWithReuseIdentifier: SaveRecordCell.reuseId)
         return collection
     }()
 
@@ -88,6 +89,12 @@ extension TotalResultViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SplitCell.reuseId, for: indexPath) as! SplitCell
             cell.configure(with: viewModel.result)
             return cell
+        case .save:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SaveRecordCell.reuseId, for: indexPath) as! SaveRecordCell
+            cell.onTap = { [weak self] in
+                self?.viewModel.saveRecord()
+            }
+            return cell
         }
     }
 }
@@ -110,6 +117,8 @@ extension TotalResultViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: 100)
         case .split:
             return CGSize(width: width, height: 100)
+        case .save:
+            return CGSize(width: width, height: 64)
         }
     }
 }
