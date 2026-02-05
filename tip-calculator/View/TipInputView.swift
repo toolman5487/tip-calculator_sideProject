@@ -20,7 +20,7 @@ class TipInputView: UIView {
     
     private let headerView:HeaderView = {
         let view = HeaderView()
-        view.configure(topText: "Choose", bottomText: "your tip")
+        view.configure(topText: "選擇", bottomText: "小費")
         return view
     }()
     
@@ -72,7 +72,7 @@ class TipInputView: UIView {
     private lazy var customButton:UIButton = {
         let button = UIButton()
         button.tintColor = .white
-        button.setTitle("Custom Tip", for: .normal)
+        button.setTitle("自訂小費", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
         button.backgroundColor = ThemeColor.primary
         button.addCornerRadius(radius: 8.0)
@@ -92,7 +92,7 @@ class TipInputView: UIView {
             button.backgroundColor = ThemeColor.primary
         }
         let text = NSMutableAttributedString(
-            string: "Custom Tip",
+            string: "自訂小費",
             attributes: [.font: ThemeFont.bold(Ofsize: 20)])
         customButton.setAttributedTitle(text, for: .normal)
     }
@@ -138,17 +138,17 @@ class TipInputView: UIView {
     private func handleCustomTipButton(){
         let alertController:UIAlertController = {
             let controller = UIAlertController(
-                title: "Enter Custom Tip",
+                title: "輸入自訂小費",
                 message: nil,
                 preferredStyle: .alert)
             controller.addTextField { textField in
-                textField.placeholder = "Make it gorgeous!"
+                textField.placeholder = "請輸入小費金額"
                 textField.keyboardType = .decimalPad
                 textField.autocorrectionType = .no
                 textField.accessibilityIdentifier = ScreenIdentifier1.TipInputView.customTipAlertTextField.rawValue
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-            let comfirmAction = UIAlertAction(title: "Comfirm", style: .default){ [weak self] _ in
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel)
+            let comfirmAction = UIAlertAction(title: "確認", style: .default){ [weak self] _ in
                 guard let text = controller.textFields?.first?.text,
                       let value = Int(text) else { return }
                 self?.tipSubject.send(.custom(value: value))

@@ -24,7 +24,7 @@ class LogoView: UIView {
     }()
     
     private let buttomLabel:UILabel = {
-        LabelFactory.build(text: "Calculator", font: ThemeFont.demiBold(Ofsize: 20), textAlignment: .left)
+        LabelFactory.build(text: "消費計算機", font: ThemeFont.demiBold(Ofsize: 20), textAlignment: .left)
     }()
     
     private lazy var vStackView: UIStackView = {

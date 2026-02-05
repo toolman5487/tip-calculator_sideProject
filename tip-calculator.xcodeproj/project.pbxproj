@@ -147,6 +147,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		156C1AF82F349DF600F0C0A9 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */,
+				156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */,
+				156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,9 +218,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
-				156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */,
-				156C1AEB2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift */,
-				156C1AE52F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld */,
+				156C1AF82F349DF600F0C0A9 /* CoreData */,
 				157A6E582F346FD8005D8554 /* TotalResult */,
 				157A6E4C2F343634005D8554 /* MainUserInfo */,
 				157A6E472F343483005D8554 /* MainTabBar */,

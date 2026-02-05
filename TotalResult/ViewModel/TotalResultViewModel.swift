@@ -19,13 +19,13 @@ enum TotalResultRow: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .amountPerPerson: return "Amount per person"
-        case .totalBill:       return "Total bill (with tip)"
-        case .totalTip:        return "Total tip"
-        case .bill:            return "Bill"
-        case .tip:             return "Tip"
-        case .split:           return "Split"
-        case .save:            return "Save record"
+        case .amountPerPerson: return "每人應付金額"
+        case .totalBill:       return "含小費總金額"
+        case .totalTip:        return "小費總額"
+        case .bill:            return "帳單金額"
+        case .tip:             return "小費設定"
+        case .split:           return "分攤人數"
+        case .save:            return "儲存紀錄"
         }
     }
 
@@ -40,7 +40,7 @@ enum TotalResultRow: Int, CaseIterable {
         case .bill:
             return result.bill.currencyFormatted
         case .tip:
-            return result.tip.stringValue.isEmpty ? "None" : result.tip.stringValue
+            return result.tip.stringValue.isEmpty ? "無" : result.tip.stringValue
         case .split:
             return "\(result.split)"
         case .save:

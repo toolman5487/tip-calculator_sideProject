@@ -96,14 +96,24 @@ final class CalculatorVC: UIViewController {
               let confirmCell = tableView.cellForRow(at: IndexPath(row: Row.confirmButton.rawValue, section: 0)) as? ConfirmButtonCell
         else { return }
 
-        confirmCell.confirmButton.tapPublisher.sink { [weak self] _ in
-            guard let self else { return }
-            let totalVC = TotalResultViewController(result: self.vm.result)
-            let nav = UINavigationController(rootViewController: totalVC)
-            nav.modalPresentationStyle = .pageSheet
-            nav.modalTransitionStyle = .coverVertical
-            self.present(nav, animated: true)
-        }.store(in: &cancellables)
+        confirmCell.confirmButton.tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let totalVC = TotalResultViewController(result: self.vm.result)
+
+                totalVC.dismissedPublisher
+                    .prefix(1)
+                    .sink { [weak self] in
+                        self?.vm.reset()
+                    }
+                    .store(in: &self.cancellables)
+
+                let nav = UINavigationController(rootViewController: totalVC)
+                nav.modalPresentationStyle = .pageSheet
+                nav.modalTransitionStyle = .coverVertical
+                self.present(nav, animated: true)
+            }
+            .store(in: &cancellables)
 
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
@@ -125,7 +135,7 @@ final class CalculatorVC: UIViewController {
     }
 
     private func layout() {
-        title = "Calculator"
+        title = "消費計算機"
         navigationItem.backButtonDisplayMode = .minimal
         view.backgroundColor = ThemeColor.bg
         view.addSubview(tableView)

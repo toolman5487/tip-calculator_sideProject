@@ -21,7 +21,7 @@ class SplitInputView: UIView {
     
     private let headerView:HeaderView = {
         let view = HeaderView()
-        view.configure(topText: "Split", bottomText: "the total")
+        view.configure(topText: "分攤", bottomText: "總金額")
         return view
     }()
     

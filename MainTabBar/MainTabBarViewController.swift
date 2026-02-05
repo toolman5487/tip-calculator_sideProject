@@ -18,7 +18,7 @@ final class MainTabBarViewController: UITabBarController {
         tabBar.tintColor = ThemeColor.primary
         let calculator = CalculatorVC()
         calculator.tabBarItem = UITabBarItem(
-            title: "Calculator",
+            title: "消費計算",
             image: UIImage(systemName: "square.grid.3x3.fill"),
             selectedImage: UIImage(systemName: "square.grid.3x3.fill")
         )
@@ -26,7 +26,7 @@ final class MainTabBarViewController: UITabBarController {
 
         let userInfo = MainUserInfoViewController()
         userInfo.tabBarItem = UITabBarItem(
-            title: "Profile",
+            title: "消費紀錄",
             image: UIImage(systemName: "person.circle"),
             selectedImage: UIImage(systemName: "person.circle.fill")
         )

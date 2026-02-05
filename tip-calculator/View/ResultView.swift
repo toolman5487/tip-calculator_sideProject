@@ -10,7 +10,7 @@ import UIKit
 class ResultView: UIView {
     
     private let headerLabel: UILabel = {
-        LabelFactory.build(text: "Total p / Person", font: ThemeFont.demiBold(Ofsize: 18))
+        LabelFactory.build(text: "每人應付金額", font: ThemeFont.demiBold(Ofsize: 18))
     }()
     
     private let amountPerPersonLabel: UILabel = {
@@ -44,7 +44,7 @@ class ResultView: UIView {
     
     private let totalBillView:AmountView = {
         let view = AmountView(
-            title: "Total Bill",
+            title: "總金額",
             textAlignment: .left,
             amountLabelIdentifier: ScreenIdentifier1.ResultView.totalBillValueLabel.rawValue)
         return view
@@ -52,7 +52,7 @@ class ResultView: UIView {
     
     private let totalTipView:AmountView = {
         let view = AmountView(
-            title: "Total Tip",
+            title: "小費總額",
             textAlignment: .left,
             amountLabelIdentifier: ScreenIdentifier1.ResultView.totalTipValueLabel.rawValue)
         return view

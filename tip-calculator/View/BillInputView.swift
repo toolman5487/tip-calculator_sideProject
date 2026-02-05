@@ -24,7 +24,7 @@ class BillInputView: UIView {
     
     private let headerView:HeaderView = {
         let view = HeaderView()
-        view.configure(topText: "Enter", bottomText: "your bill")
+        view.configure(topText: "輸入", bottomText: "帳單金額")
         return view
     }()
     
@@ -56,7 +56,7 @@ class BillInputView: UIView {
         toolbar.barStyle = .default
         toolbar.sizeToFit()
         
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTapped))
+        let doneButton = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(doneButtonTapped))
         toolbar.items = [
             UIBarButtonItem(
                 barButtonSystemItem: .flexibleSpace,

@@ -61,10 +61,9 @@ enum ToastView {
         container.alpha = 0
 
         container.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.leading.greaterThanOrEqualToSuperview().offset(32)
-            make.trailing.lessThanOrEqualToSuperview().inset(32)
+            make.center.equalToSuperview()
+            make.leading.equalToSuperview().offset(32)
+            make.trailing.equalToSuperview().inset(32)
         }
 
         UIView.animate(withDuration: 0.25) {

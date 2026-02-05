@@ -92,4 +92,8 @@ final class CalculatorVM {
             }
             .store(in: &cancellables)
     }
+
+    func reset() {
+        resetSubject.send(())
+    }
 }

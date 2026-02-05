@@ -18,7 +18,7 @@ final class AmountPerPersonCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Amount per person"
+        label.text = "每人應付金額"
         label.font = ThemeFont.demiBold(Ofsize: 16)
         label.textColor = ThemeColor.text
         label.textAlignment = .center
@@ -73,7 +73,7 @@ final class TotalBillCell: BaseResultInfoCell {
     static let reuseId = "TotalBillCell"
 
     func configure(with result: Result) {
-        titleLabel.text = "Total bill (with tip)"
+        titleLabel.text = "含小費總金額"
         valueLabel.text = result.totalBill.currencyFormatted
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
@@ -84,7 +84,7 @@ final class TotalTipCell: BaseResultInfoCell {
     static let reuseId = "TotalTipCell"
 
     func configure(with result: Result) {
-        titleLabel.text = "Total tip"
+        titleLabel.text = "小費總額"
         valueLabel.text = result.totalTip.currencyFormatted
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
@@ -95,7 +95,7 @@ final class BillCell: BaseResultInfoCell {
     static let reuseId = "BillCell"
 
     func configure(with result: Result) {
-        titleLabel.text = "Bill"
+        titleLabel.text = "帳單金額"
         valueLabel.text = result.bill.currencyFormatted
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
@@ -106,8 +106,8 @@ final class TipCell: BaseResultInfoCell {
     static let reuseId = "TipCell"
 
     func configure(with result: Result) {
-        titleLabel.text = "Tip"
-        let text = result.tip.stringValue.isEmpty ? "None" : result.tip.stringValue
+        titleLabel.text = "小費設定"
+        let text = result.tip.stringValue.isEmpty ? "無" : result.tip.stringValue
         valueLabel.text = text
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.secondary
@@ -118,8 +118,8 @@ final class SplitCell: BaseResultInfoCell {
     static let reuseId = "SplitCell"
 
     func configure(with result: Result) {
-        titleLabel.text = "Split"
-        valueLabel.text = "\(result.split) people"
+        titleLabel.text = "分攤人數"
+        valueLabel.text = "\(result.split) 人"
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
     }
@@ -132,7 +132,7 @@ final class SaveRecordCell: UICollectionViewCell {
 
     private let button: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Save consumption record", for: .normal)
+        button.setTitle("儲存這筆消費紀錄", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
         button.backgroundColor = ThemeColor.primary
         button.tintColor = .white

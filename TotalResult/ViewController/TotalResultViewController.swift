@@ -8,11 +8,17 @@
 import Foundation
 import UIKit
 import SnapKit
+import Combine
 
 @MainActor
 final class TotalResultViewController: UIViewController {
 
     private let viewModel: TotalResultViewModel
+    private let dismissedSubject = PassthroughSubject<Void, Never>()
+    var dismissedPublisher: AnyPublisher<Void, Never> {
+        dismissedSubject.eraseToAnyPublisher()
+    }
+    var onDismiss: (() -> Void)?
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -46,13 +52,18 @@ final class TotalResultViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Total Result"
+        title = "消費結果"
         view.backgroundColor = ThemeColor.bg
 
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    private func handleDismiss() {
+        dismissedSubject.send(())
+        dismiss(animated: true)
     }
 }
 
@@ -95,18 +106,22 @@ extension TotalResultViewController: UICollectionViewDataSource {
                 guard let self else { return }
                 let success = self.viewModel.saveRecord()
                 if success {
-                    ToastView.show(message: "Saved successfully", in: self.view, autoDismissAfter: 1) { [weak self] in
-                        self?.dismiss(animated: true)
+                    ToastView.show(
+                        message: "儲存成功",
+                        in: self.view,
+                        autoDismissAfter: 1
+                    ) { [weak self] in
+                        self?.handleDismiss()
                     }
                 } else {
                     ToastView.show(
-                        message: "Failed to save",
+                        message: "儲存失敗",
                         in: self.view,
                         autoDismissAfter: 1,
                         systemImageName: "square.and.arrow.down.badge.xmark",
                         tintColor: .systemRed
                     ) { [weak self] in
-                        self?.dismiss(animated: true)
+                        self?.handleDismiss()
                     }
                 }
             }

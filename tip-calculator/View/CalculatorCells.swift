@@ -127,7 +127,7 @@ final class ConfirmButtonCell: UITableViewCell {
     static let reuseId = "ConfirmButtonCell"
     private(set) lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Confirm", for: .normal)
+        button.setTitle("確認", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 18)
         button.backgroundColor = ThemeColor.secondary
         button.setTitleColor(.white, for: .normal)

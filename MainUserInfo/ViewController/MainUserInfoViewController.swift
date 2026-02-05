@@ -16,7 +16,7 @@ final class MainUserInfoViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "User"
+        title = "消費紀錄"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
