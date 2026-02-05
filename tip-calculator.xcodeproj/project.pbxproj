@@ -145,6 +145,7 @@
 		157A6E582F346FD8005D8554 /* TotalResult */ = {
 			isa = PBXGroup;
 			children = (
+				157A6E5E2F34797D005D8554 /* View */,
 				157A6E592F346FFE005D8554 /* ViewController */,
 			);
 			path = TotalResult;
@@ -156,6 +157,13 @@
 				157A6E5A2F347015005D8554 /* TotalResultViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		157A6E5E2F34797D005D8554 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		15C22D622D95A29900270813 = {

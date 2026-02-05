@@ -14,7 +14,14 @@ final class CalculatorVM {
     private var cancellables: Set<AnyCancellable> = []
     private let audioPlayerServer: AudioPlayerService
 
-    @Published private(set) var result: Result = Result(amountPerPerson: 0, totalBill: 0, totalTip: 0)
+    @Published private(set) var result: Result = Result(
+        amountPerPerson: 0,
+        totalBill: 0,
+        totalTip: 0,
+        bill: 0,
+        tip: .none,
+        split: 1
+    )
 
     private let resetSubject = PassthroughSubject<Void, Never>()
     var resetPublisher: AnyPublisher<Void, Never> { resetSubject.eraseToAnyPublisher() }
@@ -52,11 +59,27 @@ final class CalculatorVM {
             input.splitPublisher
         )
         .map { [weak self] bill, tip, split -> Result in
-            guard let self else { return Result(amountPerPerson: 0, totalBill: 0, totalTip: 0) }
+            guard let self else {
+                return Result(
+                    amountPerPerson: 0,
+                    totalBill: 0,
+                    totalTip: 0,
+                    bill: 0,
+                    tip: .none,
+                    split: 1
+                )
+            }
             let totalTip = self.getTipAmount(bill: bill, tip: tip)
             let totalBill = bill + totalTip
             let amountPerPerson = totalBill / Double(split)
-            return Result(amountPerPerson: amountPerPerson, totalBill: totalBill, totalTip: totalTip)
+            return Result(
+                amountPerPerson: amountPerPerson,
+                totalBill: totalBill,
+                totalTip: totalTip,
+                bill: bill,
+                tip: tip,
+                split: split
+            )
         }
         .assign(to: &$result)
 

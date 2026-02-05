@@ -13,10 +13,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
         NavigationBarAppearance.apply()
-
         let window = UIWindow(windowScene: windowScene)
+        window.overrideUserInterfaceStyle = .light  
         let tabBar = MainTabBarViewController()
         window.rootViewController = tabBar
         self.window = window

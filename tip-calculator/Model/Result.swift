@@ -10,5 +10,8 @@ import Foundation
 struct Result: Sendable {
     let amountPerPerson: Double
     let totalBill: Double
-    let totalTip:Double
+    let totalTip: Double
+    let bill: Double       
+    let tip: Tip          
+    let split: Int      
 }
