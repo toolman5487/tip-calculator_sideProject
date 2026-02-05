@@ -16,6 +16,12 @@
 		157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
+		157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */; };
+		157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */; };
+		157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */; };
+		157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
+		157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
+		157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
 		15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA02D95A2B300270813 /* CombineCocoa */; };
 		15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA32D95A2CE00270813 /* SnapKit */; };
 		15C22DA72D95A2E700270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA62D95A2E700270813 /* CombineCocoa */; };
@@ -44,6 +50,8 @@
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
+		157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultsCell.swift; sourceTree = "<group>"; };
+		157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewModel.swift; sourceTree = "<group>"; };
 		15C22D6B2D95A29900270813 /* tip-calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tip-calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,9 +61,17 @@
 		155DA6262DA5174200ACDC05 /* Exceptions for "tip-calculator" folder in "tip-calculatorUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Factory/BaseResultInfoCell.swift,
 				Model/ScreenIdentifier1.swift,
 			);
 			target = 15C22D8A2D95A29A00270813 /* tip-calculatorUITests */;
+		};
+		157A6E6C2F3483DD005D8554 /* Exceptions for "tip-calculator" folder in "tip-calculatorTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Factory/BaseResultInfoCell.swift,
+			);
+			target = 15C22D802D95A29A00270813 /* tip-calculatorTests */;
 		};
 		15C22D932D95A29A00270813 /* Exceptions for "tip-calculator" folder in "tip-calculator" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -71,6 +87,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				15C22D932D95A29A00270813 /* Exceptions for "tip-calculator" folder in "tip-calculator" target */,
+				157A6E6C2F3483DD005D8554 /* Exceptions for "tip-calculator" folder in "tip-calculatorTests" target */,
 				155DA6262DA5174200ACDC05 /* Exceptions for "tip-calculator" folder in "tip-calculatorUITests" target */,
 			);
 			path = "tip-calculator";
@@ -145,6 +162,7 @@
 		157A6E582F346FD8005D8554 /* TotalResult */ = {
 			isa = PBXGroup;
 			children = (
+				157A6E642F347DDA005D8554 /* ViewModel */,
 				157A6E5E2F34797D005D8554 /* View */,
 				157A6E592F346FFE005D8554 /* ViewController */,
 			);
@@ -162,8 +180,17 @@
 		157A6E5E2F34797D005D8554 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		157A6E642F347DDA005D8554 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		15C22D622D95A29900270813 = {
@@ -353,6 +380,8 @@
 			files = (
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
+				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,9 +390,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +405,8 @@
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
+				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
