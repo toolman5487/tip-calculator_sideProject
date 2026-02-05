@@ -61,10 +61,9 @@ final class TotalResultViewModel {
         self.store = store
     }
 
-    func saveRecord() {
-        if store.save(result: result) {
-            print("Saved ConsumptionRecord")
-        }
+    @discardableResult
+    func saveRecord() -> Bool {
+        store.save(result: result)
     }
 }
 

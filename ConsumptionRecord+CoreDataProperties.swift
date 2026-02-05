@@ -29,6 +29,4 @@ extension ConsumptionRecord {
 
 }
 
-extension ConsumptionRecord : Identifiable {
-
-}
+extension ConsumptionRecord : Identifiable {}
