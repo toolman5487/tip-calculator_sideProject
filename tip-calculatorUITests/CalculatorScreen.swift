@@ -19,12 +19,11 @@ class CalculatorScreen {
         case custom(value:Int)
     }
     
-    //LogoView
-    var logoView:XCUIElement{
-        return app.otherElements[ScreenIdentifier1.logoView.logoView.rawValue]
+    // 導覽列刷新按鈕
+    var refreshButton: XCUIElement {
+        app.buttons["refreshButton"]
     }
-    
-    
+
     //ResultView
     var totalAmountPerPersonValueLabel:XCUIElement{
         return app.staticTexts[ScreenIdentifier1.ResultView.totalAmountPerPersonValueLabel.rawValue]
@@ -106,8 +105,8 @@ class CalculatorScreen {
       decrementButton.tap(withNumberOfTaps: numberOfTaps, numberOfTouches: 1)
     }
     
-    func doubleTapLogoView() {
-      logoView.tap(withNumberOfTaps: 2, numberOfTouches: 1)
+    func tapRefreshButton() {
+        refreshButton.tap()
     }
     
     

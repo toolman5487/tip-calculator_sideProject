@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import CombineCocoa
+import SnapKit
 
 class TipInputView: UIView {
     
@@ -40,11 +41,10 @@ class TipInputView: UIView {
     
     private lazy var tenPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .tenPercent)
-        //tabPublisher: CombineCocoa
         button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.tenPercentButton.rawValue
         button.tapPublisher.flatMap {
             Just(Tip.tenPercent)
-        }.assign(to: \.value, on: tipSubject) // tipSubject.value
+        }.assign(to: \.value, on: tipSubject)
             .store(in: &cancellables)
         return button
     }()
@@ -173,6 +173,10 @@ class TipInputView: UIView {
         
         buttonVStackView.snp.makeConstraints { make in
             make.top.bottom.trailing.equalToSuperview()
+        }
+
+        customButton.snp.makeConstraints { make in
+            make.height.equalTo(44)
         }
         
         headerView.snp.makeConstraints { make in

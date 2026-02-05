@@ -14,15 +14,21 @@ class CalculatorVC: UIViewController {
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
-    private var logoViewTapPublisher: AnyPublisher<Void, Never>?
     private lazy var viewTapPublisher: AnyPublisher<Void, Never> = {
         let tapGesture = UITapGestureRecognizer(target: self, action: nil)
         view.addGestureRecognizer(tapGesture)
         return tapGesture.tapPublisher.flatMap { _ in Just(()) }.eraseToAnyPublisher()
     }()
+    private lazy var refreshButtonTapPublisher: AnyPublisher<Void, Never> = {
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config)
+        let item = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
+        item.accessibilityIdentifier = "refreshButton"
+        navigationItem.rightBarButtonItem = item
+        return item.tapPublisher.map { _ in () }.eraseToAnyPublisher()
+    }()
 
     private enum Row: Int, CaseIterable {
-        case logo
         case result
         case billInput
         case tipInput
@@ -30,7 +36,6 @@ class CalculatorVC: UIViewController {
 
         var reuseId: String {
             switch self {
-            case .logo: return LogoCell.reuseId
             case .result: return ResultCell.reuseId
             case .billInput: return BillInputCell.reuseId
             case .tipInput: return TipInputCell.reuseId
@@ -42,10 +47,9 @@ class CalculatorVC: UIViewController {
 
         var rowHeight: CGFloat {
             switch self {
-            case .logo: return 48 + Self.rowSpacing
             case .result: return 224 + Self.rowSpacing
             case .billInput: return 56 + Self.rowSpacing
-            case .tipInput: return 56 + 56 + 15 + Self.rowSpacing
+            case .tipInput: return 56 + 44 + 15 + Self.rowSpacing  // 上排 56 + customButton 44 + 間距 15
             case .splitInput: return 56
             }
         }
@@ -57,7 +61,6 @@ class CalculatorVC: UIViewController {
         table.backgroundColor = ThemeColor.bg
         table.contentInsetAdjustmentBehavior = .automatic
         table.showsVerticalScrollIndicator = false
-        table.register(LogoCell.self, forCellReuseIdentifier: LogoCell.reuseId)
         table.register(ResultCell.self, forCellReuseIdentifier: ResultCell.reuseId)
         table.register(BillInputCell.self, forCellReuseIdentifier: BillInputCell.reuseId)
         table.register(TipInputCell.self, forCellReuseIdentifier: TipInputCell.reuseId)
@@ -67,36 +70,24 @@ class CalculatorVC: UIViewController {
         return table
     }()
 
-    private func observe() {
+    func bind() {
         viewTapPublisher.sink { [unowned self] _ in
             view.endEditing(true)
         }.store(in: &cancellables)
 
-        logoViewTapPublisher?.sink { _ in
-            print("Logo is tapped")
-        }.store(in: &cancellables)
-    }
-
-    func bind() {
         tableView.reloadData()
         tableView.layoutIfNeeded()
-        guard let logoCell = tableView.cellForRow(at: IndexPath(row: Row.logo.rawValue, section: 0)) as? LogoCell,
-              let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
+        guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
               let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
               let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,
               let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell
         else { return }
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
-        tapGesture.numberOfTapsRequired = 2
-        logoCell.logoView.addGestureRecognizer(tapGesture)
-        logoViewTapPublisher = tapGesture.tapPublisher.flatMap { _ in Just(()) }.eraseToAnyPublisher()
-
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
             tipPublisher: tipInputCell.tipInputView.valuePublusher,
             splitPublisher: splitInputCell.splitInputView.valuePublisher,
-            logoViewTapPulisher: logoViewTapPublisher!)
+            logoViewTapPulisher: refreshButtonTapPublisher)
 
         let output = vm.tranform(input: input)
         output.updateViewPublisher.sink { result in
@@ -104,24 +95,9 @@ class CalculatorVC: UIViewController {
         }.store(in: &cancellables)
 
         output.resetCalculatorPublisher.sink { [unowned self] _ in
-            print("Reset the form!")
             (tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell)?.billInputView.billReset()
             (tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell)?.tipInputView.tipReset()
             (tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell)?.splitInputView.splitReset()
-            guard let logoCell = tableView.cellForRow(at: IndexPath(row: Row.logo.rawValue, section: 0)) as? LogoCell else { return }
-            UIView.animate(
-                withDuration: 0.1,
-                delay: 0,
-                usingSpringWithDamping: 5.0,
-                initialSpringVelocity: 0.5,
-                options: .curveEaseInOut
-            ) {
-                logoCell.logoView.transform = .init(scaleX: 1.5, y: 1.5)
-            } completion: { _ in
-                UIView.animate(withDuration: 0.1) {
-                    logoCell.logoView.transform = .identity
-                }
-            }
         }.store(in: &cancellables)
     }
 
@@ -140,9 +116,8 @@ class CalculatorVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
-        view.layoutIfNeeded() 
+        view.layoutIfNeeded()
         bind()
-        observe()
     }
 }
 
@@ -155,10 +130,6 @@ extension CalculatorVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let row = Row(rawValue: indexPath.row) else { return UITableViewCell() }
         switch row {
-        case .logo:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! LogoCell
-            cell.configure()
-            return cell
         case .result:
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ResultCell
             cell.configure()

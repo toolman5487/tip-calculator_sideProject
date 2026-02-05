@@ -15,11 +15,12 @@ final class MainTabBarViewController: UITabBarController {
     }
 
     private func setupTabs() {
+        tabBar.tintColor = ThemeColor.primary
         let calculator = CalculatorVC()
         calculator.tabBarItem = UITabBarItem(
             title: "Calculator",
-            image: UIImage(systemName: "percent"),
-            selectedImage: UIImage(systemName: "percent")
+            image: UIImage(systemName: "square.grid.3x3.fill"),
+            selectedImage: UIImage(systemName: "square.grid.3x3.fill")
         )
         let calculatorNav = NavigationBarAppearance.wrapInNavigationController(rootViewController: calculator)
 

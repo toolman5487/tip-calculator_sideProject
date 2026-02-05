@@ -12,34 +12,6 @@ private var cellContentInsets: UIEdgeInsets {
     UIEdgeInsets(top: cellInsetVertical, left: cellInsetHorizontal, bottom: cellInsetVertical, right: cellInsetHorizontal)
 }
 
-// MARK: - LogoCell
-final class LogoCell: UITableViewCell {
-    static let reuseId = "LogoCell"
-    private(set) lazy var logoView = LogoView()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        contentView.backgroundColor = .clear
-        backgroundColor = .clear
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.addSubview(logoView)
-        logoView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(cellContentInsets)
-        }
-    }
-}
-
 // MARK: - ResultCell
 final class ResultCell: UITableViewCell {
     static let reuseId = "ResultCell"

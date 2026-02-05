@@ -61,7 +61,7 @@ final class tip_calculatorUITests: XCTestCase {
         screen.enterBill(amount: 400)
         screen.selectTip(tip: .custom(value: 200))
         screen.selectIncrementButton(numberOfTaps: 1)
-        screen.doubleTapLogoView()
+        screen.tapRefreshButton()
         XCTAssertEqual(screen.totalAmountPerPersonValueLabel.label, "$0")
         XCTAssertEqual(screen.totalBillValueLabel.label, "$0")
         XCTAssertEqual(screen.totalTipValueLabel.label, "$0")
