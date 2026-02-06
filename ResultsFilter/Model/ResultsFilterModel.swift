@@ -7,13 +7,15 @@
 
 import Foundation
 
-struct RecordDisplayItem {
+struct RecordDisplayItem: Hashable {
     let dateText: String
     let billText: String
+    let billValue: Double
     let totalTipText: String
     let totalBillText: String
     let totalBillValue: Double
     let amountPerPersonText: String
+    let amountPerPersonValue: Double
     let splitText: String
     let tipDisplayText: String
     let addressText: String

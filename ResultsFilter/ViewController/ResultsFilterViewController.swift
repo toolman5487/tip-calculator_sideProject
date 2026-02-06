@@ -13,11 +13,32 @@ import CombineCocoa
 @MainActor
 final class ResultsFilterViewController: UIViewController {
 
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    
     private let viewModel: ResultsFilterViewModel
     private var cancellables = Set<AnyCancellable>()
+    private var dataSource: UITableViewDiffableDataSource<Section, RecordDisplayItem>!
+    
+    private enum Section {
+        case main
+    }
 
-    private static let cellId = "Cell"
+    private let tableView: UITableView = {
+        let table = UITableView(frame: .zero, style: .plain)
+        table.tableFooterView = UIView()
+        table.backgroundColor = ThemeColor.bg
+        table.separatorStyle = .none
+        table.rowHeight = UITableView.automaticDimension
+        table.estimatedRowHeight = 80
+        table.alwaysBounceVertical = true
+        return table
+    }()
+
+    private let refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = .white
+        control.backgroundColor = .clear
+        return control
+    }()
 
     init(viewModel: ResultsFilterViewModel = ResultsFilterViewModel()) {
         self.viewModel = viewModel
@@ -37,44 +58,58 @@ final class ResultsFilterViewController: UIViewController {
         viewModel.loadRecords()
     }
 
+    func filter(keyword: String) {
+        viewModel.filter(keyword: keyword)
+    }
+
     private func setupTableView() {
-        tableView.dataSource = self
         tableView.delegate = self
-        tableView.tableFooterView = UIView()
-        tableView.backgroundColor = ThemeColor.bg
-        tableView.separatorStyle = .none
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 80
         tableView.register(ResultsFilterCell.self, forCellReuseIdentifier: ResultsFilterCell.reuseId)
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
 
         view.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+
+        dataSource = UITableViewDiffableDataSource<Section, RecordDisplayItem>(
+            tableView: tableView
+        ) { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultsFilterCell.reuseId,
+                for: indexPath
+            ) as! ResultsFilterCell
+            cell.configure(with: item)
+            return cell
+        }
     }
 
     private func bindViewModel() {
         viewModel.$recordDisplayItems
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
+            .sink { [weak self] items in
+                guard let self else { return }
+                var snapshot = NSDiffableDataSourceSnapshot<Section, RecordDisplayItem>()
+                snapshot.appendSections([.main])
+                snapshot.appendItems(items, toSection: .main)
+                dataSource.apply(snapshot, animatingDifferences: false)
+                refreshControl.endRefreshing()
             }
             .store(in: &cancellables)
     }
+
+    @objc
+    private func didPullToRefresh() {
+        viewModel.loadRecords()
+    }
 }
 
-extension ResultsFilterViewController: UITableViewDataSource, UITableViewDelegate {
+extension ResultsFilterViewController: UITableViewDelegate {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.recordDisplayItems.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ResultsFilterCell.reuseId, for: indexPath) as! ResultsFilterCell
-        let item = viewModel.recordDisplayItems[indexPath.row]
-        cell.configure(with: item)
-        return cell
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        viewModel.loadMoreIfNeeded(currentIndex: indexPath.row)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
