@@ -61,7 +61,7 @@ class ResultDeetailTableViewCell: UITableViewCell {
 
         iconContainerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(titleLabel)
             make.width.height.equalTo(32)
         }
 
@@ -71,7 +71,7 @@ class ResultDeetailTableViewCell: UITableViewCell {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(16)
             make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
             make.trailing.lessThanOrEqualToSuperview().offset(-16)
         }
