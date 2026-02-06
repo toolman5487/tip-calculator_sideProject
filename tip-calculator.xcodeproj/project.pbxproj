@@ -85,6 +85,7 @@
 		155DA6262DA5174200ACDC05 /* Exceptions for "tip-calculator" folder in "tip-calculatorUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
 				Model/ScreenIdentifier1.swift,
 			);
@@ -93,6 +94,7 @@
 		157A6E6C2F3483DD005D8554 /* Exceptions for "tip-calculator" folder in "tip-calculatorTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
 			);
 			target = 15C22D802D95A29A00270813 /* tip-calculatorTests */;

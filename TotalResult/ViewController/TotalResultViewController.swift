@@ -9,12 +9,14 @@ import Foundation
 import UIKit
 import SnapKit
 import Combine
+import CoreLocation
 
 @MainActor
 final class TotalResultViewController: UIViewController {
 
     private let viewModel: TotalResultViewModel
     private let dismissedSubject = PassthroughSubject<Void, Never>()
+    private var cancellables = Set<AnyCancellable>()
     var dismissedPublisher: AnyPublisher<Void, Never> {
         dismissedSubject.eraseToAnyPublisher()
     }
@@ -37,12 +39,15 @@ final class TotalResultViewController: UIViewController {
         collection.register(BillCell.self, forCellWithReuseIdentifier: BillCell.reuseId)
         collection.register(TipCell.self, forCellWithReuseIdentifier: TipCell.reuseId)
         collection.register(SplitCell.self, forCellWithReuseIdentifier: SplitCell.reuseId)
+        collection.register(LocationCell.self, forCellWithReuseIdentifier: LocationCell.reuseId)
         collection.register(SaveRecordCell.self, forCellWithReuseIdentifier: SaveRecordCell.reuseId)
         return collection
     }()
 
     init(result: Result) {
-        self.viewModel = TotalResultViewModel(result: result)
+        let apiKey = Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String
+        let googleService = (apiKey?.isEmpty == false) ? GoogleGeocodingService(apiKey: apiKey!) : nil
+        self.viewModel = TotalResultViewModel(result: result, googleGeocodingService: googleService)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,11 +59,41 @@ final class TotalResultViewController: UIViewController {
         super.viewDidLoad()
         title = "消費結果"
         view.backgroundColor = ThemeColor.bg
+        setupNavigation()
+        bindViewModel()
 
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    private func setupNavigation() {
+        let locationItem = UIBarButtonItem(
+            image: UIImage(systemName: "location.fill"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapLocation)
+        )
+        navigationItem.rightBarButtonItem = locationItem
+    }
+
+    private func bindViewModel() {
+        Publishers.CombineLatest(viewModel.$locationDisplayText, viewModel.$isLocationLoading)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _, _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
+    }
+
+    @objc private func didTapLocation() {
+        viewModel.refreshLocation()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.refreshLocation()
     }
 
     private func handleDismiss() {
@@ -100,11 +135,19 @@ extension TotalResultViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SplitCell.reuseId, for: indexPath) as! SplitCell
             cell.configure(with: viewModel.result)
             return cell
+        case .location:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationCell.reuseId, for: indexPath) as! LocationCell
+            cell.configure(locationText: viewModel.locationDisplayText, isLoading: viewModel.isLocationLoading)
+            return cell
         case .save:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SaveRecordCell.reuseId, for: indexPath) as! SaveRecordCell
             cell.onTap = { [weak self] in
                 guard let self else { return }
-                let success = self.viewModel.saveRecord()
+                let loc = LocationService.shared.lastLocation
+                let success = self.viewModel.saveRecord(
+                    latitude: loc?.coordinate.latitude,
+                    longitude: loc?.coordinate.longitude
+                )
                 if success {
                     ToastView.show(
                         message: "儲存成功",
@@ -147,6 +190,8 @@ extension TotalResultViewController: UICollectionViewDelegateFlowLayout {
         case .tip:
             return CGSize(width: width, height: 100)
         case .split:
+            return CGSize(width: width, height: 100)
+        case .location:
             return CGSize(width: width, height: 100)
         case .save:
             return CGSize(width: width, height: 64)

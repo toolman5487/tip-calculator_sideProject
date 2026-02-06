@@ -125,6 +125,42 @@ final class SplitCell: BaseResultInfoCell {
     }
 }
 
+final class LocationCell: BaseResultInfoCell {
+    static let reuseId = "LocationCell"
+
+    private let activityIndicator: UIActivityIndicatorView = {
+        let v = UIActivityIndicatorView(style: .medium)
+        v.hidesWhenStopped = true
+        return v
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { make in
+            make.centerY.equalTo(valueLabel)
+            make.trailing.equalTo(valueLabel.snp.leading).offset(-8)
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(locationText: String, isLoading: Bool = false) {
+        titleLabel.text = "消費地點"
+        valueLabel.font = ThemeFont.bold(Ofsize: 20)
+        valueLabel.textColor = ThemeColor.text
+        if isLoading {
+            valueLabel.text = "取得定位中"
+            activityIndicator.startAnimating()
+        } else {
+            valueLabel.text = locationText
+            activityIndicator.stopAnimating()
+        }
+    }
+}
+
 // MARK: - Save Button Cell
 
 final class SaveRecordCell: UICollectionViewCell {

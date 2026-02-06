@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CoreLocation
+import Combine
 
 @MainActor
 enum TotalResultRow: Int, CaseIterable {
@@ -15,6 +17,7 @@ enum TotalResultRow: Int, CaseIterable {
     case bill
     case tip
     case split
+    case location
     case save
 
     var title: String {
@@ -25,6 +28,7 @@ enum TotalResultRow: Int, CaseIterable {
         case .bill:            return "帳單金額"
         case .tip:             return "小費設定"
         case .split:           return "分攤人數"
+        case .location:        return "消費地點"
         case .save:            return "儲存紀錄"
         }
     }
@@ -43,6 +47,8 @@ enum TotalResultRow: Int, CaseIterable {
             return result.tip.stringValue.isEmpty ? "無" : result.tip.stringValue
         case .split:
             return "\(result.split)"
+        case .location:
+            return ""
         case .save:
             return ""
         }
@@ -55,15 +61,61 @@ final class TotalResultViewModel {
     let result: Result
     let rows: [TotalResultRow] = TotalResultRow.allCases
     private let store: ConsumptionRecordStoring
+    private let googleGeocodingService: GoogleGeocodingService?
 
-    init(result: Result, store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
+    @Published private(set) var locationDisplayText: String = ""
+    @Published private(set) var isLocationLoading = true
+
+    init(result: Result, store: ConsumptionRecordStoring = ConsumptionRecordStore(), googleGeocodingService: GoogleGeocodingService? = nil) {
         self.result = result
         self.store = store
+        self.googleGeocodingService = googleGeocodingService
+    }
+
+    func refreshLocation() {
+        isLocationLoading = true
+        guard let location = LocationService.shared.lastLocation else {
+            locationDisplayText = "無法定位"
+            isLocationLoading = false
+            return
+        }
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        Task { @MainActor in
+            if let google = googleGeocodingService,
+               let addr = await google.reverseGeocode(latitude: lat, longitude: lon) {
+                self.locationDisplayText = addr
+                self.isLocationLoading = false
+                return
+            }
+            self.fallbackToAppleGeocoder(location: location)
+        }
+    }
+
+    private func fallbackToAppleGeocoder(location: CLLocation) {
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "zh_TW")
+        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemarks, _ in
+            Task { @MainActor in
+                guard let self else { return }
+                self.isLocationLoading = false
+                if let place = placemarks?.first {
+                    let area = place.administrativeArea ?? ""
+                    let district = place.subLocality ?? ""
+                    let street = place.thoroughfare ?? ""
+                    let number = place.subThoroughfare ?? ""
+                    let parts = [area, district, street, number].filter { !$0.isEmpty }
+                    self.locationDisplayText = parts.isEmpty ? "無法取得地區" : parts.joined(separator: " ")
+                } else {
+                    self.locationDisplayText = "無法取得地區"
+                }
+            }
+        }
     }
 
     @discardableResult
-    func saveRecord() -> Bool {
-        store.save(result: result)
+    func saveRecord(latitude: Double? = nil, longitude: Double? = nil) -> Bool {
+        store.save(result: result, latitude: latitude, longitude: longitude)
     }
 }
 

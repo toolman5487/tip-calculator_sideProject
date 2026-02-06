@@ -20,6 +20,8 @@ extension ConsumptionRecord {
 
     @NSManaged public var id: UUID?
     @NSManaged public var createdAt: Date?
+    @NSManaged public var latitude: NSNumber?
+    @NSManaged public var longitude: NSNumber?
     @NSManaged public var bill: Double
     @NSManaged public var totalTip: Double
     @NSManaged public var totalBill: Double

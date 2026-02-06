@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>GoogleGeocodingAPIKey</key>
+	<string>$(GOOGLE_GEOCODING_API_KEY)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>紀錄消費地點</string>
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
