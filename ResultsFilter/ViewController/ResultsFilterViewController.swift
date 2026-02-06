@@ -102,6 +102,7 @@ final class ResultsFilterViewController: UIViewController {
 
     @objc
     private func didPullToRefresh() {
+        refreshControl.beginRefreshing()
         viewModel.loadRecords()
     }
 }
