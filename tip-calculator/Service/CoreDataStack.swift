@@ -13,6 +13,10 @@ enum CoreDataStack {
 
     static let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TipCalculator")
+        container.persistentStoreDescriptions.forEach { desc in
+            desc.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+            desc.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+        }
         container.loadPersistentStores { _, error in
             if let error {
                 fatalError("Unresolved Core Data error: \(error)")
@@ -33,7 +37,6 @@ enum CoreDataStack {
             try context.save()
             return true
         } catch {
-            print("Core Data save error: \(error)")
             return false
         }
     }

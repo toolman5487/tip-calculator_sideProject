@@ -39,32 +39,21 @@ final class GoogleGeocodingService {
     }
 
     func reverseGeocode(latitude: Double, longitude: Double) async -> String? {
-        guard let apiKey = apiKey else {
-            print("[GoogleGeocoding] 無 apiKey，略過")
-            return nil
-        }
+        guard let apiKey = apiKey else { return nil }
         let key = cacheKey(lat: latitude, lon: longitude)
-        if let cached = cache[key] {
-            print("[GoogleGeocoding] 快取命中: \(cached)")
-            return cached
-        }
+        if let cached = cache[key] { return cached }
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)&language=zh-TW") else {
-            print("[GoogleGeocoding] URL 建立失敗")
             return nil
         }
         do {
-            print("[GoogleGeocoding] 請求 API...")
             let (data, _) = try await session.data(from: url)
             let decoded = try JSONDecoder().decode(GoogleGeocodingResponse.self, from: data)
-            if decoded.status != "OK" {
-                print("[GoogleGeocoding] API status: \(decoded.status ?? "nil")")
-                return nil
-            }
+            if decoded.status != "OK" { return nil }
             guard let first = decoded.results?.first,
-                  let addr = first.formattedAddress, !addr.isEmpty else {
-                print("[GoogleGeocoding] 無 results 或 formatted_address")
+                  let rawAddr = first.formattedAddress, !rawAddr.isEmpty else {
                 return nil
             }
+            let addr = Self.shortenedAddress(rawAddr)
             if cacheOrder.count >= maxCacheSize, let oldKey = cacheOrder.first {
                 cacheOrder.removeFirst()
                 cache.removeValue(forKey: oldKey)
@@ -73,9 +62,17 @@ final class GoogleGeocodingService {
             cacheOrder.append(key)
             return addr
         } catch {
-            print("[GoogleGeocoding] 請求錯誤: \(error.localizedDescription)")
             return nil
         }
+    }
+
+    private static func shortenedAddress(_ address: String) -> String {
+        let withoutNumber = address.replacingOccurrences(
+            of: #"\d+號$"#,
+            with: "",
+            options: .regularExpression
+        )
+        return withoutNumber.trimmingCharacters(in: .whitespaces)
     }
 
     private func cacheKey(lat: Double, lon: Double) -> String {

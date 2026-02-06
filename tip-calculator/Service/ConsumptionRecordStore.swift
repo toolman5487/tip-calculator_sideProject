@@ -11,7 +11,7 @@ import CoreData
 protocol ConsumptionRecordStoring {
     @MainActor
     @discardableResult
-    func save(result: Result, latitude: Double?, longitude: Double?) -> Bool
+    func save(result: Result, latitude: Double?, longitude: Double?, address: String?) -> Bool
 
     @MainActor
     func fetchAll() -> [ConsumptionRecord]
@@ -21,7 +21,7 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
 
     @MainActor
     @discardableResult
-    func save(result: Result, latitude: Double? = nil, longitude: Double? = nil) -> Bool {
+    func save(result: Result, latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
         let context = CoreDataStack.viewContext
 
         let record = ConsumptionRecord(context: context)
@@ -35,23 +35,9 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         record.tipRawValue = result.tip.stringValue
         record.latitude = latitude.map { NSNumber(value: $0) }
         record.longitude = longitude.map { NSNumber(value: $0) }
+        record.address = address?.isEmpty == true ? nil : address
 
-        let success = CoreDataStack.saveContext()
-        if success {
-            print("[CoreData] 儲存一筆消費紀錄:", [
-                "id: \(record.id?.uuidString ?? "")",
-                "createdAt: \(record.createdAt?.description ?? "")",
-                "bill: \(record.bill)",
-                "totalTip: \(record.totalTip)",
-                "totalBill: \(record.totalBill)",
-                "amountPerPerson: \(record.amountPerPerson)",
-                "split: \(record.split)",
-                "tipRawValue: \(record.tipRawValue ?? "")",
-                "latitude: \(record.latitude?.doubleValue ?? 0)",
-                "longitude: \(record.longitude?.doubleValue ?? 0)"
-            ].joined(separator: ", "))
-        }
-        return success
+        return CoreDataStack.saveContext()
     }
 
     @MainActor
@@ -61,7 +47,6 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         do {
             return try CoreDataStack.viewContext.fetch(request)
         } catch {
-            print("Core Data fetch error: \(error)")
             return []
         }
     }

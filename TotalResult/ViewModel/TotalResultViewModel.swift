@@ -61,20 +61,27 @@ final class TotalResultViewModel {
     let result: Result
     let rows: [TotalResultRow] = TotalResultRow.allCases
     private let store: ConsumptionRecordStoring
+    private let locationProvider: LocationProviding
     private let googleGeocodingService: GoogleGeocodingService?
 
     @Published private(set) var locationDisplayText: String = ""
     @Published private(set) var isLocationLoading = true
 
-    init(result: Result, store: ConsumptionRecordStoring = ConsumptionRecordStore(), googleGeocodingService: GoogleGeocodingService? = nil) {
+    init(
+        result: Result,
+        store: ConsumptionRecordStoring = ConsumptionRecordStore(),
+        locationProvider: LocationProviding = LocationService.shared,
+        googleGeocodingService: GoogleGeocodingService? = nil
+    ) {
         self.result = result
         self.store = store
+        self.locationProvider = locationProvider
         self.googleGeocodingService = googleGeocodingService
     }
 
     func refreshLocation() {
         isLocationLoading = true
-        guard let location = LocationService.shared.lastLocation else {
+        guard let location = locationProvider.lastLocation else {
             locationDisplayText = "無法定位"
             isLocationLoading = false
             return
@@ -103,8 +110,7 @@ final class TotalResultViewModel {
                     let area = place.administrativeArea ?? ""
                     let district = place.subLocality ?? ""
                     let street = place.thoroughfare ?? ""
-                    let number = place.subThoroughfare ?? ""
-                    let parts = [area, district, street, number].filter { !$0.isEmpty }
+                    let parts = [area, district, street].filter { !$0.isEmpty }
                     self.locationDisplayText = parts.isEmpty ? "無法取得地區" : parts.joined(separator: " ")
                 } else {
                     self.locationDisplayText = "無法取得地區"
@@ -114,8 +120,8 @@ final class TotalResultViewModel {
     }
 
     @discardableResult
-    func saveRecord(latitude: Double? = nil, longitude: Double? = nil) -> Bool {
-        store.save(result: result, latitude: latitude, longitude: longitude)
+    func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
+        store.save(result: result, latitude: latitude, longitude: longitude, address: address)
     }
 }
 

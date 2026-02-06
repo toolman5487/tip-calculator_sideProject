@@ -72,13 +72,17 @@ extension ResultsFilterViewController: UITableViewDataSource, UITableViewDelegat
         cell.textLabel?.text = "\(item.dateText) · 總計 \(item.totalBillText)"
         cell.textLabel?.textColor = .label
         cell.textLabel?.numberOfLines = 0
-        cell.detailTextLabel?.text = [
+        var detailParts = [
             "帳單 \(item.billText)",
             "小費 \(item.totalTipText)",
             "每人 \(item.amountPerPersonText)",
             "分攤 \(item.splitText)",
             "小費設定 \(item.tipDisplayText)"
-        ].joined(separator: " · ")
+        ]
+        if !item.addressText.isEmpty {
+            detailParts.append("地點 \(item.addressText)")
+        }
+        cell.detailTextLabel?.text = detailParts.joined(separator: " · ")
         cell.detailTextLabel?.textColor = .secondaryLabel
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear

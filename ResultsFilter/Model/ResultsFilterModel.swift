@@ -15,4 +15,5 @@ struct RecordDisplayItem {
     let amountPerPersonText: String
     let splitText: String
     let tipDisplayText: String
+    let addressText: String
 }

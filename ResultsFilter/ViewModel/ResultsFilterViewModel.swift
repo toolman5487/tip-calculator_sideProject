@@ -32,6 +32,7 @@ final class ResultsFilterViewModel {
         recordDisplayItems = records.map { record in
             let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
             let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
+            let addressText = record.address ?? ""
             return RecordDisplayItem(
                 dateText: dateText,
                 billText: record.bill.currencyFormatted,
@@ -39,7 +40,8 @@ final class ResultsFilterViewModel {
                 totalBillText: record.totalBill.currencyFormatted,
                 amountPerPersonText: record.amountPerPerson.currencyFormatted,
                 splitText: "\(record.split) 人",
-                tipDisplayText: tipDisplay
+                tipDisplayText: tipDisplay,
+                addressText: addressText
             )
         }
     }

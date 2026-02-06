@@ -5,7 +5,11 @@
 
 import CoreLocation
 
-final class LocationService: NSObject {
+protocol LocationProviding: AnyObject {
+    var lastLocation: CLLocation? { get }
+}
+
+final class LocationService: NSObject, LocationProviding {
 
     static let shared = LocationService()
 
@@ -34,12 +38,7 @@ extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         lastLocation = location
-        let lat = location.coordinate.latitude
-        let lon = location.coordinate.longitude
-        print("[LocationService] 收到定位 lat=\(lat), lon=\(lon)")
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("[LocationService] 定位錯誤: \(error.localizedDescription)")
-    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
 }

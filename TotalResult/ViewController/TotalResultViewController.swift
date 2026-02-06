@@ -15,6 +15,7 @@ import CoreLocation
 final class TotalResultViewController: UIViewController {
 
     private let viewModel: TotalResultViewModel
+    private let locationProvider: LocationProviding
     private let dismissedSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     var dismissedPublisher: AnyPublisher<Void, Never> {
@@ -44,10 +45,15 @@ final class TotalResultViewController: UIViewController {
         return collection
     }()
 
-    init(result: Result) {
+    init(result: Result, locationProvider: LocationProviding = LocationService.shared) {
+        self.locationProvider = locationProvider
         let apiKey = Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String
         let googleService = (apiKey?.isEmpty == false) ? GoogleGeocodingService(apiKey: apiKey!) : nil
-        self.viewModel = TotalResultViewModel(result: result, googleGeocodingService: googleService)
+        self.viewModel = TotalResultViewModel(
+            result: result,
+            locationProvider: locationProvider,
+            googleGeocodingService: googleService
+        )
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -143,10 +149,11 @@ extension TotalResultViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SaveRecordCell.reuseId, for: indexPath) as! SaveRecordCell
             cell.onTap = { [weak self] in
                 guard let self else { return }
-                let loc = LocationService.shared.lastLocation
+                let loc = self.locationProvider.lastLocation
                 let success = self.viewModel.saveRecord(
                     latitude: loc?.coordinate.latitude,
-                    longitude: loc?.coordinate.longitude
+                    longitude: loc?.coordinate.longitude,
+                    address: self.viewModel.locationDisplayText.isEmpty ? nil : self.viewModel.locationDisplayText
                 )
                 if success {
                     ToastView.show(

@@ -19,12 +19,8 @@ final class DefaultAudioPlayerService: AudioPlayerService{
     func playSound(){
         let path = Bundle.main.path(forResource: "click", ofType: "m4a")
         let url = URL(fileURLWithPath: path!)
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.play()
-        } catch (let error ){
-            print("Error: \(error.localizedDescription)")
-        }
+        player = try? AVAudioPlayer(contentsOf: url)
+        player?.play()
     }
     
 }
