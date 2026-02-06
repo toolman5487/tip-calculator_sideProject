@@ -12,6 +12,7 @@ struct RecordDisplayItem {
     let billText: String
     let totalTipText: String
     let totalBillText: String
+    let totalBillValue: Double
     let amountPerPersonText: String
     let splitText: String
     let tipDisplayText: String

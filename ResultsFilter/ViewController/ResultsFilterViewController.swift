@@ -41,6 +41,11 @@ final class ResultsFilterViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = ThemeColor.bg
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 80
+        tableView.register(ResultsFilterCell.self, forCellReuseIdentifier: ResultsFilterCell.reuseId)
 
         view.addSubview(tableView)
 
@@ -66,26 +71,24 @@ extension ResultsFilterViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellId)
-            ?? UITableViewCell(style: .subtitle, reuseIdentifier: Self.cellId)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ResultsFilterCell.reuseId, for: indexPath) as! ResultsFilterCell
         let item = viewModel.recordDisplayItems[indexPath.row]
-        cell.textLabel?.text = "\(item.dateText) · 總計 \(item.totalBillText)"
-        cell.textLabel?.textColor = .label
-        cell.textLabel?.numberOfLines = 0
-        var detailParts = [
-            "帳單 \(item.billText)",
-            "小費 \(item.totalTipText)",
-            "每人 \(item.amountPerPersonText)",
-            "分攤 \(item.splitText)",
-            "小費設定 \(item.tipDisplayText)"
-        ]
-        if !item.addressText.isEmpty {
-            detailParts.append("地點 \(item.addressText)")
-        }
-        cell.detailTextLabel?.text = detailParts.joined(separator: " · ")
-        cell.detailTextLabel?.textColor = .secondaryLabel
-        cell.detailTextLabel?.numberOfLines = 0
-        cell.backgroundColor = .clear
+        cell.configure(with: item)
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let item = viewModel.recordDisplayItems[indexPath.row]
+        let detailVC = ResultDetailViewController(item: item)
+        let nav = UINavigationController(rootViewController: detailVC)
+        nav.modalPresentationStyle = .pageSheet
+        nav.modalTransitionStyle = .coverVertical
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 }

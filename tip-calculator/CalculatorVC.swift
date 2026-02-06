@@ -111,6 +111,11 @@ final class CalculatorVC: UIViewController {
                 let nav = UINavigationController(rootViewController: totalVC)
                 nav.modalPresentationStyle = .pageSheet
                 nav.modalTransitionStyle = .coverVertical
+                if let sheet = nav.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.selectedDetentIdentifier = .medium
+                    sheet.prefersGrabberVisible = true
+                }
                 self.present(nav, animated: true)
             }
             .store(in: &cancellables)

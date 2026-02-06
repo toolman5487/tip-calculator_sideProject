@@ -27,6 +27,7 @@ enum ScreenIdentifier1{
         case tenPercentButton
         case fifteenPercentButton
         case twentyPercentButton
+        case freeButton
         case customTipButton
         case customTipAlertTextField
     }

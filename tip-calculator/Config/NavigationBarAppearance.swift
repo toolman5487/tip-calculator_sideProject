@@ -12,14 +12,14 @@ enum NavigationBarAppearance {
     static func apply() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemOrange
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = .label
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().tintColor = .systemBackground
     }
 
     private static var infoReduceEffects: Bool {

@@ -38,6 +38,7 @@ final class ResultsFilterViewModel {
                 billText: record.bill.currencyFormatted,
                 totalTipText: record.totalTip.currencyFormatted,
                 totalBillText: record.totalBill.currencyFormatted,
+                totalBillValue: record.totalBill,
                 amountPerPersonText: record.amountPerPerson.currencyFormatted,
                 splitText: "\(record.split) 人",
                 tipDisplayText: tipDisplay,

@@ -17,6 +17,7 @@ class TipInputView: UIView {
         return tipSubject.eraseToAnyPublisher()
     }
     private var cancellables = Set<AnyCancellable>()
+    private var isFreeSelected = false
     
     private let headerView:HeaderView = {
         let view = HeaderView()
@@ -42,9 +43,17 @@ class TipInputView: UIView {
     private lazy var tenPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .tenPercent)
         button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.tenPercentButton.rawValue
-        button.tapPublisher.flatMap {
-            Just(Tip.tenPercent)
-        }.assign(to: \.value, on: tipSubject)
+        button.tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                isFreeSelected = false
+                switch tipSubject.value {
+                case .tenPercent:
+                    tipSubject.send(.none)
+                default:
+                    tipSubject.send(.tenPercent)
+                }
+            }
             .store(in: &cancellables)
         return button
     }()
@@ -52,9 +61,17 @@ class TipInputView: UIView {
     private lazy var fifteenPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .fifteenPercent)
         button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.fifteenPercentButton.rawValue
-        button.tapPublisher.flatMap {
-            Just(Tip.fifteenPercent)
-        }.assign(to: \.value, on: tipSubject)
+        button.tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                isFreeSelected = false
+                switch tipSubject.value {
+                case .fifteenPercent:
+                    tipSubject.send(.none)
+                default:
+                    tipSubject.send(.fifteenPercent)
+                }
+            }
             .store(in: &cancellables)
         return button
     }()
@@ -62,9 +79,40 @@ class TipInputView: UIView {
     private lazy var twentyPercentTipButton:UIButton = {
         let button = buildTipButton(tip: .twentyPercent)
         button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.twentyPercentButton.rawValue
-        button.tapPublisher.flatMap {
-            Just(Tip.twentyPercent)
-        }.assign(to: \.value, on: tipSubject)
+        button.tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                isFreeSelected = false
+                switch tipSubject.value {
+                case .twentyPercent:
+                    tipSubject.send(.none)
+                default:
+                    tipSubject.send(.twentyPercent)
+                }
+            }
+            .store(in: &cancellables)
+        return button
+    }()
+    
+    private lazy var freeTipButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = ThemeColor.primary
+        button.addCornerRadius(radius: 8.0)
+        button.setTitle("Free", for: .normal)
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
+        button.setTitleColor(.white, for: .normal)
+        button.accessibilityIdentifier = ScreenIdentifier1.TipInputView.freeButton.rawValue
+        button.tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                if case .none = tipSubject.value, isFreeSelected {
+                    isFreeSelected = false
+                    tipSubject.send(.none)
+                } else {
+                    isFreeSelected = true
+                    tipSubject.send(.none)
+                }
+            }
             .store(in: &cancellables)
         return button
     }()
@@ -87,6 +135,7 @@ class TipInputView: UIView {
         [tenPercentTipButton,
          fifteenPercentTipButton,
          twentyPercentTipButton,
+         freeTipButton,
          customButton
         ].forEach { button in
             button.backgroundColor = ThemeColor.primary
@@ -103,14 +152,20 @@ class TipInputView: UIView {
             resetView()
             switch tip {
             case .none:
-                break
+                if isFreeSelected {
+                    freeTipButton.backgroundColor = ThemeColor.secondary
+                }
             case .tenPercent:
+                isFreeSelected = false
                 tenPercentTipButton.backgroundColor = ThemeColor.secondary
             case .fifteenPercent:
+                isFreeSelected = false
                 fifteenPercentTipButton.backgroundColor = ThemeColor.secondary
             case .twentyPercent:
+                isFreeSelected = false
                 twentyPercentTipButton.backgroundColor = ThemeColor.secondary
             case .custom(value: let value):
+                isFreeSelected = false
                 customButton.backgroundColor = ThemeColor.secondary
                 let text  = NSMutableAttributedString(string: "$\(value)", attributes: [.font:ThemeFont.bold(Ofsize: 20)])
                 text.setAttributes([.font:ThemeFont.bold(Ofsize: 14)], range: NSMakeRange(0, 1))
@@ -120,18 +175,20 @@ class TipInputView: UIView {
     }
     
     func tipReset(){
+        isFreeSelected = false
         tipSubject.send(.none)
     }
     
     private lazy var buttonHStackView:UIStackView = {
         let hStackView = UIStackView(arrangedSubviews: [
+            freeTipButton,
             tenPercentTipButton,
             fifteenPercentTipButton,
             twentyPercentTipButton
         ])
         hStackView.axis = .horizontal
         hStackView.distribution = .fillEqually
-        hStackView.spacing = 16
+        hStackView.spacing = 8
         return hStackView
     }()
     
@@ -165,7 +222,7 @@ class TipInputView: UIView {
             customButton
         ])
         vStackView.axis = .vertical
-        vStackView.spacing = 16
+        vStackView.spacing = 8
         return vStackView
     }()
     
@@ -173,7 +230,9 @@ class TipInputView: UIView {
         [headerView, buttonVStackView].forEach(addSubview(_:))
         
         buttonVStackView.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.top.equalToSuperview().inset(8)
+            make.bottom.trailing.equalToSuperview()
         }
 
         customButton.snp.makeConstraints { make in
