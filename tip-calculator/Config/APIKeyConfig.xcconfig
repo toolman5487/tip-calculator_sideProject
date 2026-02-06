@@ -8,4 +8,4 @@
 // Configuration settings file format documentation can be found at:
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
 
-GOOGLE_GEOCODING_API_KEY = AIzaSyALoQi9ceZFtjJflJ5qvMODOYfB6W99M28
+GOOGLE_GEOCODING_API_KEY =
