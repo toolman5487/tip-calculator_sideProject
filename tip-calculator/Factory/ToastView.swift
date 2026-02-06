@@ -28,7 +28,7 @@ enum ToastView {
 
         let container = UIView()
         container.backgroundColor = .white
-        container.layer.cornerRadius = 12
+        container.layer.cornerRadius = 16
         container.layer.masksToBounds = true
 
         let imageView = UIImageView()
@@ -62,8 +62,8 @@ enum ToastView {
 
         container.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.leading.equalToSuperview().offset(32)
-            make.trailing.equalToSuperview().inset(32)
+            make.height.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(container.snp.width)
         }
 
         UIView.animate(withDuration: 0.25) {

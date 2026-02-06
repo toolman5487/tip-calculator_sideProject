@@ -12,6 +12,9 @@ protocol ConsumptionRecordStoring {
     @MainActor
     @discardableResult
     func save(result: Result) -> Bool
+
+    @MainActor
+    func fetchAll() -> [ConsumptionRecord]
 }
 
 struct ConsumptionRecordStore: ConsumptionRecordStoring {
@@ -32,6 +35,18 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         record.tipRawValue = result.tip.stringValue
 
         return CoreDataStack.saveContext()
+    }
+
+    @MainActor
+    func fetchAll() -> [ConsumptionRecord] {
+        let request = ConsumptionRecord.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \ConsumptionRecord.createdAt, ascending: false)]
+        do {
+            return try CoreDataStack.viewContext.fetch(request)
+        } catch {
+            print("Core Data fetch error: \(error)")
+            return []
+        }
     }
 }
 
