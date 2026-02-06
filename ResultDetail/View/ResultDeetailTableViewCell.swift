@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-final class ResultDeetailTableViewCell: UITableViewCell {
+class ResultDeetailTableViewCell: UITableViewCell {
 
     static let reuseId = "ResultDeetailTableViewCell"
 
-    private let iconContainerView: UIView = {
+    let iconContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondarySystemBackground
         view.layer.cornerRadius = 8
@@ -20,23 +20,23 @@ final class ResultDeetailTableViewCell: UITableViewCell {
         return view
     }()
 
-    private let iconImageView: UIImageView = {
+    let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .label
         return imageView
     }()
 
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 14)
+        label.font = ThemeFont.demiBold(Ofsize: 12)
         label.textColor = .secondaryLabel
         return label
     }()
 
-    private let valueLabel: UILabel = {
+    let valueLabel: UILabel = {
         let label = UILabel()
-        label.font = ThemeFont.bold(Ofsize: 18)
+        label.font = ThemeFont.bold(Ofsize: 16)
         label.textColor = ThemeColor.text
         label.numberOfLines = 0
         return label
@@ -52,7 +52,7 @@ final class ResultDeetailTableViewCell: UITableViewCell {
         setupViews()
     }
 
-    private func setupViews() {
+    func setupViews() {
         selectionStyle = .none
         contentView.addSubview(iconContainerView)
         iconContainerView.addSubview(iconImageView)
@@ -67,7 +67,7 @@ final class ResultDeetailTableViewCell: UITableViewCell {
 
         iconImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.height.equalTo(18)
+            make.width.height.equalTo(16)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -80,7 +80,7 @@ final class ResultDeetailTableViewCell: UITableViewCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.leading.equalTo(titleLabel)
             make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview().offset(-10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-8)
         }
     }
 

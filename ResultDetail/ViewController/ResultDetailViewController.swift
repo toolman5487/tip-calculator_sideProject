@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import MapKit
 
 @MainActor
 final class ResultDetailViewController: UIViewController {
@@ -23,6 +24,15 @@ final class ResultDetailViewController: UIViewController {
         case address
     }
 
+    private lazy var sections: [Section] = {
+        var all = Section.allCases
+        if resultDetailItem.addressText.isEmpty,
+           resultDetailItem.latitude == nil,
+           resultDetailItem.longitude == nil {
+            all.removeAll { $0 == .address }
+        }
+        return all
+    }()
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
         table.separatorStyle = .singleLine
@@ -54,9 +64,10 @@ final class ResultDetailViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ResultDeetailTableViewCell.self, forCellReuseIdentifier: ResultDeetailTableViewCell.reuseId)
+        tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
     }
 
@@ -101,65 +112,84 @@ extension ResultDetailViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Section.allCases.count
+        return sections.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.row) else {
-            return UITableViewCell()
-        }
+        let section = sections[indexPath.row]
 
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ResultDeetailTableViewCell.reuseId,
-            for: indexPath
-        ) as! ResultDeetailTableViewCell
-        
         switch section {
         case .time:
-            cell.configure(
-                title: "時間",
-                value: resultDetailItem.dateText,
-                systemImageName: "clock"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "時間",
+                           value: resultDetailItem.dateText,
+                           systemImageName: "clock")
+            return cell
         case .total:
-            cell.configure(
-                title: "總金額",
-                value: resultDetailItem.totalBillText,
-                systemImageName: "dollarsign.circle.fill"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "總金額",
+                           value: resultDetailItem.totalBillText,
+                           systemImageName: "dollarsign.circle.fill")
+            return cell
         case .bill:
-            cell.configure(
-                title: "帳單金額",
-                value: resultDetailItem.billText,
-                systemImageName: "doc.text.fill"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "帳單金額",
+                           value: resultDetailItem.billText,
+                           systemImageName: "doc.text.fill")
+            return cell
         case .tip:
-            cell.configure(
-                title: "小費",
-                value: resultDetailItem.totalTipText,
-                systemImageName: "percent"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "小費",
+                           value: resultDetailItem.totalTipText,
+                           systemImageName: "percent")
+            return cell
         case .split:
-            cell.configure(
-                title: "分攤人數",
-                value: resultDetailItem.splitText,
-                systemImageName: "person.3.fill"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "分攤人數",
+                           value: resultDetailItem.splitText,
+                           systemImageName: "person.3.fill")
+            return cell
         case .tipSetting:
-            cell.configure(
-                title: "小費設定",
-                value: resultDetailItem.tipDisplayText,
-                systemImageName: "slider.horizontal.3"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "小費設定",
+                           value: resultDetailItem.tipDisplayText,
+                           systemImageName: "slider.horizontal.3")
+            return cell
         case .address:
             let text = resultDetailItem.addressText.isEmpty ? "未紀錄" : resultDetailItem.addressText
-            cell.configure(
-                title: "消費地點",
-                value: text,
-                systemImageName: "mappin.and.ellipse"
-            )
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDetailLocationCell.locationReuseId,
+                for: indexPath
+            ) as! ResultDetailLocationCell
+            let coord: CLLocationCoordinate2D?
+            if let lat = resultDetailItem.latitude,
+               let lon = resultDetailItem.longitude {
+                coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            } else {
+                coord = nil
+            }
+            cell.configure(title: "消費地點",
+                           value: text,
+                           coordinate: coord)
+            return cell
         }
-        
-        return cell
     }
 }

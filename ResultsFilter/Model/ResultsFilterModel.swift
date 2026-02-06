@@ -19,4 +19,6 @@ struct RecordDisplayItem: Hashable {
     let splitText: String
     let tipDisplayText: String
     let addressText: String
+    let latitude: Double?
+    let longitude: Double?
 }

@@ -36,6 +36,8 @@ final class ResultsFilterViewModel {
             let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
             let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
             let addressText = record.address ?? ""
+            let latitude = record.latitude?.doubleValue
+            let longitude = record.longitude?.doubleValue
             return RecordDisplayItem(
                 dateText: dateText,
                 billText: record.bill.currencyFormatted,
@@ -47,7 +49,9 @@ final class ResultsFilterViewModel {
                 amountPerPersonValue: record.amountPerPerson,
                 splitText: "\(record.split) 人",
                 tipDisplayText: tipDisplay,
-                addressText: addressText
+                addressText: addressText,
+                latitude: latitude,
+                longitude: longitude
             )
         }
         if currentKeyword.isEmpty {
