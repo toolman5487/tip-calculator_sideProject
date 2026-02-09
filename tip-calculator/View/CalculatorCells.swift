@@ -50,6 +50,13 @@ final class ResultCell: UITableViewCell {
 // MARK: - BillInputCell
 final class BillInputCell: UITableViewCell {
     static let reuseId = "BillInputCell"
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+        return view
+    }()
     private(set) lazy var billInputView = BillInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -63,9 +70,14 @@ final class BillInputCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     private func setupView() {
-        contentView.addSubview(billInputView)
-        billInputView.snp.makeConstraints { make in
+        contentView.addSubview(containerView)
+        containerView.addSubview(billInputView)
+        containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
+        }
+        billInputView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview()
         }
     }
 
@@ -75,6 +87,13 @@ final class BillInputCell: UITableViewCell {
 // MARK: - TipInputCell
 final class TipInputCell: UITableViewCell {
     static let reuseId = "TipInputCell"
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+        return view
+    }()
     private(set) lazy var tipInputView = TipInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -88,9 +107,13 @@ final class TipInputCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     private func setupView() {
-        contentView.addSubview(tipInputView)
-        tipInputView.snp.makeConstraints { make in
+        contentView.addSubview(containerView)
+        containerView.addSubview(tipInputView)
+        containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
+        }
+        tipInputView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(16)
         }
     }
 
@@ -100,6 +123,13 @@ final class TipInputCell: UITableViewCell {
 // MARK: - SplitInputCell
 final class SplitInputCell: UITableViewCell {
     static let reuseId = "SplitInputCell"
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+        return view
+    }()
     private(set) lazy var splitInputView = SplitInputView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -113,9 +143,14 @@ final class SplitInputCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     private func setupView() {
-        contentView.addSubview(splitInputView)
-        splitInputView.snp.makeConstraints { make in
+        contentView.addSubview(containerView)
+        containerView.addSubview(splitInputView)
+        containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
+        }
+        splitInputView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview()
         }
     }
 

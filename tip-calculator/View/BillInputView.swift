@@ -33,7 +33,6 @@ class BillInputView: UIView {
         view.backgroundColor = .white
         view.addCornerRadius(radius: 8.0)
         return view
-        
     }()
     
     private let currencyDenominationLabel:UILabel = {
@@ -89,6 +88,8 @@ class BillInputView: UIView {
     
     private func layout(){
         [headerView, textFieldContainView].forEach(addSubview(_:))
+        textFieldContainView.addSubview(currencyDenominationLabel)
+        textFieldContainView.addSubview(textField)
         
         headerView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
@@ -99,11 +100,9 @@ class BillInputView: UIView {
         }
         
         textFieldContainView.snp.makeConstraints { make in
-            make.top.trailing.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(8)
+            make.right.equalToSuperview()
         }
-        
-        textFieldContainView.addSubview(currencyDenominationLabel)
-        textFieldContainView.addSubview(textField)
         
         currencyDenominationLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()

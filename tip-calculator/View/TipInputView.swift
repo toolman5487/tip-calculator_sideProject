@@ -231,7 +231,7 @@ class TipInputView: UIView {
         
         buttonVStackView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.top.equalToSuperview().inset(8)
+            make.top.equalToSuperview()
             make.bottom.trailing.equalToSuperview()
         }
 
