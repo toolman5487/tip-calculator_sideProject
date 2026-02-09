@@ -91,6 +91,7 @@ final class TotalResultViewModel {
         Task { @MainActor in
             if let google = googleGeocodingService,
                let addr = await google.reverseGeocode(latitude: lat, longitude: lon) {
+                print("GoogleGeocodingService 地址：", addr)
                 self.locationDisplayText = addr
                 self.isLocationLoading = false
                 return

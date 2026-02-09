@@ -11,7 +11,7 @@ import CombineCocoa
 import SnapKit
 
 @MainActor
-final class CalculatorVC: UIViewController {
+final class CalculatorVC: BaseViewController {
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
@@ -88,7 +88,6 @@ final class CalculatorVC: UIViewController {
         hasBoundCells = true
 
         tableView.reloadData()
-        tableView.layoutIfNeeded()
         guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
               let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
               let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,

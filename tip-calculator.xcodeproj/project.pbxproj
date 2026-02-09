@@ -34,6 +34,21 @@
 		156C6FBB2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C6FBA2F35F28700F0C0A9 /* ResultDetailLocationCell.swift */; };
 		156C6FBC2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C6FBA2F35F28700F0C0A9 /* ResultDetailLocationCell.swift */; };
 		156C6FBD2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C6FBA2F35F28700F0C0A9 /* ResultDetailLocationCell.swift */; };
+		156C71222F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */; };
+		156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */; };
+		156C71242F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */; };
+		156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71252F3998E400F0C0A9 /* BaseViewController.swift */; };
+		156C71272F3998E400F0C0A9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71252F3998E400F0C0A9 /* BaseViewController.swift */; };
+		156C71282F3998E400F0C0A9 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C71252F3998E400F0C0A9 /* BaseViewController.swift */; };
+		156C71302F39B90300F0C0A9 /* RecordFilterOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712D2F39B90000F0C0A9 /* RecordFilterOption.swift */; };
+		156C71312F39B90300F0C0A9 /* DateCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */; };
+		156C71322F39B90300F0C0A9 /* RecordFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */; };
+		156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
+		156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
+		156C73F52F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
+		156C73FB2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
+		156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
+		156C73FD2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
 		156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B32F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
@@ -86,6 +101,13 @@
 		156C6FAF2F35CB4C00F0C0A9 /* ResultDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailViewController.swift; sourceTree = "<group>"; };
 		156C6FB62F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDeetailTableViewCell.swift; sourceTree = "<group>"; };
 		156C6FBA2F35F28700F0C0A9 /* ResultDetailLocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailLocationCell.swift; sourceTree = "<group>"; };
+		156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainBaseViewcontroller.swift; sourceTree = "<group>"; };
+		156C71252F3998E400F0C0A9 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		156C712D2F39B90000F0C0A9 /* RecordFilterOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFilterOption.swift; sourceTree = "<group>"; };
+		156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCapsuleCell.swift; sourceTree = "<group>"; };
+		156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFilterHeaderView.swift; sourceTree = "<group>"; };
+		156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerCapitaRecordCell.swift; sourceTree = "<group>"; };
+		156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewModel.swift; sourceTree = "<group>"; };
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -256,6 +278,49 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		156C71202F39988600F0C0A9 /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
+				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
+				156C71252F3998E400F0C0A9 /* BaseViewController.swift */,
+			);
+			path = BaseView;
+			sourceTree = "<group>";
+		};
+		156C712A2F39B86900F0C0A9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				156C712D2F39B90000F0C0A9 /* RecordFilterOption.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		156C712B2F39B87600F0C0A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		156C712C2F39B88A00F0C0A9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */,
+				156C73F12F39CEB300F0C0A9 /* RecordFilterView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		156C73F12F39CEB300F0C0A9 /* RecordFilterView */ = {
+			isa = PBXGroup;
+			children = (
+				156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */,
+				156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */,
+			);
+			path = RecordFilterView;
+			sourceTree = "<group>";
+		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,6 +332,9 @@
 		157A6E4C2F343634005D8554 /* MainUserInfo */ = {
 			isa = PBXGroup;
 			children = (
+				156C712C2F39B88A00F0C0A9 /* View */,
+				156C712B2F39B87600F0C0A9 /* ViewModel */,
+				156C712A2F39B86900F0C0A9 /* Model */,
 				157A6E4D2F343644005D8554 /* ViewController */,
 			);
 			path = MainUserInfo;
@@ -317,11 +385,12 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				157A6E4C2F343634005D8554 /* MainUserInfo */,
+				156C71202F39988600F0C0A9 /* BaseView */,
 				156C6FB32F35CDFD00F0C0A9 /* ResultDetail */,
 				156C1AF92F34A37C00F0C0A9 /* ResultsFilter */,
 				156C1AF82F349DF600F0C0A9 /* CoreData */,
 				157A6E582F346FD8005D8554 /* TotalResult */,
-				157A6E4C2F343634005D8554 /* MainUserInfo */,
 				157A6E472F343483005D8554 /* MainTabBar */,
 				15C22D6D2D95A29900270813 /* tip-calculator */,
 				15C22D842D95A29A00270813 /* tip-calculatorTests */,
@@ -504,6 +573,9 @@
 			files = (
 				156C1AFC2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE72F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
+				156C71302F39B90300F0C0A9 /* RecordFilterOption.swift in Sources */,
+				156C71312F39B90300F0C0A9 /* DateCapsuleCell.swift in Sources */,
+				156C71322F39B90300F0C0A9 /* RecordFilterHeaderView.swift in Sources */,
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				156C6FB12F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				156C6FB82F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift in Sources */,
@@ -511,12 +583,16 @@
 				156C6FAE2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C6F182F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
+				156C73FD2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				156C1AF02F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
+				156C71272F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
+				156C71222F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,15 +605,19 @@
 				156C1AFD2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
+				156C73F52F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
+				156C71282F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
 				156C6FBB2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
 				156C6FB72F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift in Sources */,
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
+				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C6FAC2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
+				156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -551,7 +631,11 @@
 				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C1AFE2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
+				156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
+				156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
+				156C73FB2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
+				156C71242F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
@@ -585,15 +669,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tip-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -601,6 +687,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.willyhsu.tip-calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -612,15 +699,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G5A93Q7SG9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "tip-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -628,6 +717,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.willyhsu.tip-calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
