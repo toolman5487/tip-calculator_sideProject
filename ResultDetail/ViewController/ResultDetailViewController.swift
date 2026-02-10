@@ -61,6 +61,7 @@ final class ResultDetailViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
         title = "消費明細"
+        navigationItem.largeTitleDisplayMode = .never
 
         setupNavigation()
         setupTableViewLayout()

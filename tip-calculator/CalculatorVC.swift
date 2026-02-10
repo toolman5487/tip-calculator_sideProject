@@ -21,7 +21,9 @@ final class CalculatorVC: BaseViewController {
     private lazy var viewTapPublisher: AnyPublisher<Void, Never> = {
         let tapGesture = UITapGestureRecognizer(target: self, action: nil)
         view.addGestureRecognizer(tapGesture)
-        return tapGesture.tapPublisher.flatMap { _ in Just(()) }.eraseToAnyPublisher()
+        return tapGesture.tapPublisher
+            .flatMap { _ in Just(()) }
+            .eraseToAnyPublisher()
     }()
     private lazy var refreshButtonTapPublisher: AnyPublisher<Void, Never> = {
         let config = UIImage.SymbolConfiguration(weight: .bold)
@@ -106,36 +108,13 @@ final class CalculatorVC: BaseViewController {
         hasBoundCells = true
 
         tableView.reloadData()
+        tableView.layoutIfNeeded()
+
         guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
               let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
               let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,
-              let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell,
-              let confirmCell = tableView.cellForRow(at: IndexPath(row: Row.confirmButton.rawValue, section: 0)) as? ConfirmButtonCell
+              let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell
         else { return }
-
-        confirmCell.confirmButton.tapPublisher
-            .sink { [weak self] _ in
-                guard let self else { return }
-                let totalVC = TotalResultViewController(result: self.vm.result)
-
-                totalVC.dismissedPublisher
-                    .prefix(1)
-                    .sink { [weak self] in
-                        self?.vm.reset()
-                    }
-                    .store(in: &self.cancellables)
-
-                let nav = UINavigationController(rootViewController: totalVC)
-                nav.modalPresentationStyle = .pageSheet
-                nav.modalTransitionStyle = .coverVertical
-                if let sheet = nav.sheetPresentationController {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.selectedDetentIdentifier = .medium
-                    sheet.prefersGrabberVisible = true
-                }
-                self.present(nav, animated: true)
-            }
-            .store(in: &cancellables)
 
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
@@ -200,6 +179,27 @@ extension CalculatorVC: UITableViewDataSource {
         case .confirmButton:
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ConfirmButtonCell
             cell.configure()
+            cell.onTap = { [weak self] in
+                guard let self else { return }
+                let totalVC = TotalResultViewController(result: self.vm.result)
+
+                totalVC.dismissedPublisher
+                    .prefix(1)
+                    .sink { [weak self] in
+                        self?.vm.reset()
+                    }
+                    .store(in: &self.cancellables)
+
+                let nav = UINavigationController(rootViewController: totalVC)
+                nav.modalPresentationStyle = .pageSheet
+                nav.modalTransitionStyle = .coverVertical
+                if let sheet = nav.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.selectedDetentIdentifier = .medium
+                    sheet.prefersGrabberVisible = true
+                }
+                self.present(nav, animated: true)
+            }
             return cell
         }
     }

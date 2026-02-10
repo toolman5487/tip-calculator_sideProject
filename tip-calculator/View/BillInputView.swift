@@ -47,6 +47,7 @@ class BillInputView: UIView {
         textField.font = ThemeFont.demiBold(Ofsize: 28)
         textField.keyboardType = .decimalPad
         textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        textField.placeholder = "0"
         textField.tintColor = ThemeColor.text
         textField.textColor = ThemeColor.text
         textField.accessibilityIdentifier = ScreenIdentifier1.BillInputView.textField.rawValue

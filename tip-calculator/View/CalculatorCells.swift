@@ -160,6 +160,9 @@ final class SplitInputCell: UITableViewCell {
 // MARK: - ConfirmButtonCell
 final class ConfirmButtonCell: UITableViewCell {
     static let reuseId = "ConfirmButtonCell"
+    
+    var onTap: (() -> Void)?
+    
     private(set) lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("確認", for: .normal)
@@ -185,8 +188,13 @@ final class ConfirmButtonCell: UITableViewCell {
         confirmButton.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
+        confirmButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
     }
 
     func configure() {}
+    
+    @objc private func didTapConfirm() {
+        onTap?()
+    }
 }
 
