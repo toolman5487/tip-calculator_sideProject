@@ -13,6 +13,8 @@ final class ResultDetailLocationCell: ResultDeetailTableViewCell {
 
     static let locationReuseId = "ResultDetailLocationCell"
 
+    private var mapHeightConstraint: Constraint?
+
     private let mapView: MKMapView = {
         let map = MKMapView()
         map.isUserInteractionEnabled = false
@@ -37,7 +39,7 @@ final class ResultDetailLocationCell: ResultDeetailTableViewCell {
             make.top.equalTo(valueLabel.snp.bottom).offset(4)
             make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(140)
+            mapHeightConstraint = make.height.equalTo(140).constraint
             make.bottom.equalToSuperview().offset(-10)
         }
     }
@@ -45,23 +47,22 @@ final class ResultDetailLocationCell: ResultDeetailTableViewCell {
     func configure(title: String, value: String, coordinate: CLLocationCoordinate2D?) {
         super.configure(title: title, value: value, systemImageName: "mappin.and.ellipse")
 
-        let center: CLLocationCoordinate2D
         if let coordinate {
-            center = coordinate
-        } else {
-            center = CLLocationCoordinate2D(latitude: 25.0330, longitude: 121.5654)
-        }
+            mapView.isHidden = false
+            mapHeightConstraint?.update(offset: 140)
 
-        let region = MKCoordinateRegion(center: center,
-                                        latitudinalMeters: 800,
-                                        longitudinalMeters: 800)
-        mapView.setRegion(region, animated: false)
+            let region = MKCoordinateRegion(center: coordinate,
+                                            latitudinalMeters: 800,
+                                            longitudinalMeters: 800)
+            mapView.setRegion(region, animated: false)
 
-        mapView.removeAnnotations(mapView.annotations)
-        if let coordinate {
+            mapView.removeAnnotations(mapView.annotations)
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             mapView.addAnnotation(annotation)
+        } else {
+            mapView.isHidden = true
+            mapHeightConstraint?.update(offset: 0)
         }
     }
 }

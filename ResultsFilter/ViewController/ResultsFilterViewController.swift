@@ -13,24 +13,25 @@ import CombineCocoa
 @MainActor
 final class ResultsFilterViewController: UIViewController {
 
-    
     private let viewModel: ResultsFilterViewModel
     private var cancellables = Set<AnyCancellable>()
-    private var dataSource: UITableViewDiffableDataSource<Section, RecordDisplayItem>!
-    
-    private enum Section {
+    private var dataSource: UICollectionViewDiffableDataSource<Section, RecordDisplayItem>!
+
+    private enum Section: Hashable {
         case main
     }
 
-    private let tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .plain)
-        table.tableFooterView = UIView()
-        table.backgroundColor = ThemeColor.bg
-        table.separatorStyle = .none
-        table.rowHeight = UITableView.automaticDimension
-        table.estimatedRowHeight = 80
-        table.alwaysBounceVertical = true
-        return table
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = ThemeColor.bg
+        cv.alwaysBounceVertical = true
+        cv.refreshControl = refreshControl
+        return cv
     }()
 
     private let refreshControl: UIRefreshControl = {
@@ -53,7 +54,7 @@ final class ResultsFilterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupTableView()
+        setupCollectionView()
         bindViewModel()
         viewModel.loadRecords()
     }
@@ -62,23 +63,22 @@ final class ResultsFilterViewController: UIViewController {
         viewModel.filter(keyword: keyword)
     }
 
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.register(ResultsFilterCell.self, forCellReuseIdentifier: ResultsFilterCell.reuseId)
-        tableView.refreshControl = refreshControl
+    private func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.register(ResultsFilterCell.self, forCellWithReuseIdentifier: ResultsFilterCell.reuseId)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
 
-        view.addSubview(tableView)
-
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.bottom.equalToSuperview()
         }
 
-        dataSource = UITableViewDiffableDataSource<Section, RecordDisplayItem>(
-            tableView: tableView
-        ) { tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: ResultsFilterCell.reuseId,
+        dataSource = UICollectionViewDiffableDataSource<Section, RecordDisplayItem>(
+            collectionView: collectionView
+        ) { collectionView, indexPath, item in
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ResultsFilterCell.reuseId,
                 for: indexPath
             ) as! ResultsFilterCell
             cell.configure(with: item)
@@ -102,20 +102,21 @@ final class ResultsFilterViewController: UIViewController {
 
     @objc
     private func didPullToRefresh() {
-        refreshControl.beginRefreshing()
-        viewModel.loadRecords()
+        viewModel.refresh()
     }
 }
 
-extension ResultsFilterViewController: UITableViewDelegate {
+// MARK: - UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        viewModel.loadMoreIfNeeded(currentIndex: indexPath.row)
+extension ResultsFilterViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        viewModel.loadMoreIfNeeded(currentIndex: indexPath.item)
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let item = viewModel.recordDisplayItems[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let item = viewModel.recordDisplayItems[indexPath.item]
         let detailVC = ResultDetailViewController(item: item)
         let nav = UINavigationController(rootViewController: detailVC)
         nav.modalPresentationStyle = .pageSheet
@@ -126,5 +127,10 @@ extension ResultsFilterViewController: UITableViewDelegate {
             sheet.prefersGrabberVisible = true
         }
         present(nav, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let w = collectionView.bounds.width
+        return CGSize(width: w, height: 120)
     }
 }

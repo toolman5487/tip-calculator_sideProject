@@ -10,7 +10,9 @@ import SnapKit
 import MapKit
 
 @MainActor
-final class ResultDetailViewController: UIViewController {
+final class ResultDetailViewController: BaseViewController {
+
+    // MARK: - Properties
 
     private let resultDetailItem: RecordDisplayItem
 
@@ -42,6 +44,8 @@ final class ResultDetailViewController: UIViewController {
         return table
     }()
 
+    // MARK: - Init
+
     init(item: RecordDisplayItem) {
         self.resultDetailItem = item
         super.init(nibName: nil, bundle: nil)
@@ -51,13 +55,28 @@ final class ResultDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
         title = "消費明細"
 
+        setupNavigation()
         setupTableViewLayout()
         setupHeaderView()
+    }
+
+    // MARK: - Setup
+
+    private func setupNavigation() {
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        let image = UIImage(systemName: "square.and.arrow.up", withConfiguration: config)
+        let shareItem = UIBarButtonItem(image: image,
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(shareButtonTapped))
+        navigationItem.rightBarButtonItem = shareItem
     }
 
     private func setupTableViewLayout() {
@@ -77,14 +96,12 @@ final class ResultDetailViewController: UIViewController {
         headerView.backgroundColor = .clear
 
         let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = "每人應付金額"
         titleLabel.font = ThemeFont.demiBold(Ofsize: 16)
         titleLabel.textColor = .secondaryLabel
         titleLabel.textAlignment = .center
 
         let amountLabel = UILabel()
-        amountLabel.translatesAutoresizingMaskIntoConstraints = false
         amountLabel.text = resultDetailItem.amountPerPersonText
         amountLabel.font = UIFont.systemFont(ofSize: 60, weight: .bold, width: .condensed)
         amountLabel.textColor = ThemeColor.primary
@@ -93,28 +110,58 @@ final class ResultDetailViewController: UIViewController {
         headerView.addSubview(titleLabel)
         headerView.addSubview(amountLabel)
 
-        NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 36),
-
-            amountLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            amountLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(36)
+        }
+        amountLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(titleLabel.snp.top)
+        }
 
         tableView.tableHeaderView = headerView
     }
+
+    // MARK: - Actions
+
+    @objc private func shareButtonTapped() {
+        let lines = [
+            "消費明細",
+            "時間：\(resultDetailItem.dateText)",
+            "總金額：\(resultDetailItem.totalBillText)",
+            "帳單金額：\(resultDetailItem.billText)",
+            "小費：\(resultDetailItem.totalTipText)",
+            "分攤人數：\(resultDetailItem.splitText)",
+            "每人應付：\(resultDetailItem.amountPerPersonText)",
+            resultDetailItem.addressText.isEmpty
+                ? "地點：未紀錄"
+                : "地點：\(resultDetailItem.addressText)"
+        ]
+
+        let text = lines.joined(separator: "\n")
+
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+
+        if let popover = activityVC.popoverPresentationController {
+            popover.barButtonItem = navigationItem.rightBarButtonItem
+        }
+
+        present(activityVC, animated: true)
+    }
 }
 
-extension ResultDetailViewController: UITableViewDelegate, UITableViewDataSource{
-    
+// MARK: - UITableViewDataSource
+
+extension ResultDetailViewController: UITableViewDataSource {
+
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections.count
+        sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = sections[indexPath.row]
 
@@ -193,3 +240,7 @@ extension ResultDetailViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
 }
+
+// MARK: - UITableViewDelegate
+
+extension ResultDetailViewController: UITableViewDelegate {}

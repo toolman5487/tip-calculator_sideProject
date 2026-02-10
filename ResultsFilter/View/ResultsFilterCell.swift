@@ -8,127 +8,118 @@
 import UIKit
 import SnapKit
 
-final class ResultsFilterCell: UITableViewCell {
+final class ResultsFilterCell: UICollectionViewCell {
 
     static let reuseId = "ResultsFilterCell"
 
-    private let cardView: UIView = {
+    // MARK: - UI
+
+    private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .clear
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowOpacity = 0.08
+        view.layer.shadowRadius = 6
         return view
     }()
 
     private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.bold(Ofsize: 16)
+        let label = LabelFactory.build(text: "", font: ThemeFont.demiBold(Ofsize: 16))
         label.textColor = ThemeColor.text
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         return label
     }()
 
-    private let totalLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 16)
+    private let dateLabel: UILabel = {
+        let label = LabelFactory.build(text: "", font: ThemeFont.regular(Ofsize: 12))
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         return label
     }()
 
-    private let subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 16)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
+    private let perCapitaLabel: UILabel = {
+        let label = LabelFactory.build(text: "$0", font: ThemeFont.bold(Ofsize: 24))
+        label.textColor = ThemeColor.text
+        label.textAlignment = .right
         return label
     }()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+    private let peopleLabel: UILabel = {
+        let label = LabelFactory.build(text: "", font: ThemeFont.regular(Ofsize: 12))
+        label.textColor = .secondaryLabel
+        label.textAlignment = .right
+        return label
+    }()
+
+    private let leftStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 4
+        return stack
+    }()
+
+    private let rightStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .trailing
+        stack.spacing = 4
+        return stack
+    }()
+
+    private let horizontalStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.spacing = 12
+        return stack
+    }()
+
+    // MARK: - Init
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupViews()
+        fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupViews() {
-        backgroundColor = .clear
+    // MARK: - Layout
+
+    private func setupUI() {
         contentView.backgroundColor = .clear
+        contentView.addSubview(containerView)
 
-        contentView.addSubview(cardView)
-        cardView.addSubview(titleLabel)
-        cardView.addSubview(totalLabel)
-        cardView.addSubview(subtitleLabel)
-
-        cardView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        containerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(12)
+            make.top.bottom.equalToSuperview()
         }
 
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
-            make.leading.trailing.equalToSuperview().inset(12)
-        }
+        leftStack.addArrangedSubview(titleLabel)
+        leftStack.addArrangedSubview(dateLabel)
+        rightStack.addArrangedSubview(perCapitaLabel)
+        rightStack.addArrangedSubview(peopleLabel)
+        horizontalStack.addArrangedSubview(leftStack)
+        horizontalStack.addArrangedSubview(rightStack)
 
-        totalLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview().inset(16)
-        }
-
-        subtitleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(totalLabel)
-            make.left.equalTo(totalLabel.snp.right).offset(4)
-            make.right.equalToSuperview().inset(12)
+        containerView.addSubview(horizontalStack)
+        horizontalStack.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(16)
         }
     }
+
+    // MARK: - Configure
 
     func configure(with item: RecordDisplayItem) {
-        if item.addressText.isEmpty {
-            titleLabel.attributedText = NSAttributedString(
-                string: item.dateText,
-                attributes: [
-                    .font: ThemeFont.bold(Ofsize: 16),
-                    .foregroundColor: ThemeColor.text
-                ]
-            )
-        } else {
-            let fullText = "\(item.dateText) · \(item.addressText)"
-            let attr = NSMutableAttributedString(
-                string: fullText,
-                attributes: [
-                    .font: ThemeFont.bold(Ofsize: 16),
-                    .foregroundColor: ThemeColor.text
-                ]
-            )
-            if let range = fullText.range(of: item.addressText) {
-                let nsRange = NSRange(range, in: fullText)
-                attr.addAttributes(
-                    [
-                        .font: ThemeFont.demiBold(Ofsize: 13),
-                        .foregroundColor: UIColor.secondaryLabel
-                    ],
-                    range: nsRange
-                )
-            }
-            titleLabel.attributedText = attr
-        }
-
-        totalLabel.text = "總計 \(item.totalBillText)"
-        subtitleLabel.text = "每人 \(item.amountPerPersonText)"
-        subtitleLabel.textColor = .secondaryLabel
-
-        let total = item.totalBillValue
-        switch total {
-        case 0:
-            totalLabel.textColor = .secondaryLabel
-        case 1...999:
-            totalLabel.textColor = .systemGreen
-        case 1000...9999:
-            totalLabel.textColor = .systemBlue
-        default:
-            totalLabel.textColor = .systemRed
-        }
+        titleLabel.text = item.dateText
+        dateLabel.text = item.addressText.isEmpty ? "總計 \(item.totalBillText)" : item.addressText
+        perCapitaLabel.text = item.amountPerPersonText
+        peopleLabel.text = "總計 \(item.totalBillText)"
     }
 }
 
