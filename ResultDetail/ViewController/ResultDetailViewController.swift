@@ -125,28 +125,22 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Actions
 
     @objc private func shareButtonTapped() {
-        let lines = [
-            "消費明細",
-            "時間：\(resultDetailItem.dateText)",
-            "總金額：\(resultDetailItem.totalBillText)",
-            "帳單金額：\(resultDetailItem.billText)",
-            "小費：\(resultDetailItem.totalTipText)",
-            "分攤人數：\(resultDetailItem.splitText)",
-            "每人應付：\(resultDetailItem.amountPerPersonText)",
-            resultDetailItem.addressText.isEmpty
-                ? "地點：未紀錄"
-                : "地點：\(resultDetailItem.addressText)"
-        ]
+        let image = snapshot(of: view)
 
-        let text = lines.joined(separator: "\n")
-
-        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
 
         if let popover = activityVC.popoverPresentationController {
             popover.barButtonItem = navigationItem.rightBarButtonItem
         }
 
         present(activityVC, animated: true)
+    }
+
+    private func snapshot(of targetView: UIView) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: targetView.bounds)
+        return renderer.image { _ in
+            targetView.drawHierarchy(in: targetView.bounds, afterScreenUpdates: true)
+        }
     }
 }
 

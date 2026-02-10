@@ -12,6 +12,8 @@ import Combine
 @MainActor
 final class MainUserInfoViewController: MainBaseViewController {
 
+    // MARK: - Properties
+
     private var cancellables = Set<AnyCancellable>()
     private let searchSubject = PassthroughSubject<String, Never>()
     private let viewModel = MainUserInfoViewModel()
@@ -26,7 +28,9 @@ final class MainUserInfoViewController: MainBaseViewController {
         controller.searchBar.delegate = self
         return controller
     }()
-    
+
+    // MARK: - Lifecycle
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.refresh()  
@@ -43,6 +47,8 @@ final class MainUserInfoViewController: MainBaseViewController {
         bindToViewModel()
         viewModel.load()
     }
+
+    // MARK: - Setup
 
     private func setupCollectionView() {
         collectionView.register(RecordFilterHeaderView.self,
@@ -92,6 +98,8 @@ final class MainUserInfoViewController: MainBaseViewController {
         )
         navigationItem.rightBarButtonItem = refreshItem
     }
+
+    // MARK: - Actions
 
     @objc private func refreshButtonTapped() {
         triggerRefresh()

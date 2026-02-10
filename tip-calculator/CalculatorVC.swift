@@ -13,6 +13,8 @@ import SnapKit
 @MainActor
 final class CalculatorVC: BaseViewController {
 
+    // MARK: - Properties
+
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
     private var hasBoundCells = false
@@ -77,6 +79,22 @@ final class CalculatorVC: BaseViewController {
         return table
     }()
 
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layout()
+        view.layoutIfNeeded()
+        bindingVM()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        bindCellsIfNeeded()
+    }
+
+    // MARK: - Bindings
+
     func bindingVM() {
         viewTapPublisher.sink { [weak self] _ in
             self?.view.endEditing(true)
@@ -138,6 +156,8 @@ final class CalculatorVC: BaseViewController {
         }.store(in: &cancellables)
     }
 
+    // MARK: - Layout
+
     private func layout() {
         title = "消費計算機"
         navigationItem.backButtonDisplayMode = .minimal
@@ -149,18 +169,6 @@ final class CalculatorVC: BaseViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalToSuperview()
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layout()
-        view.layoutIfNeeded()
-        bindingVM()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        bindCellsIfNeeded()
     }
 }
 

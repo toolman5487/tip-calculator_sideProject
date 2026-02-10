@@ -13,6 +13,8 @@ import CombineCocoa
 @MainActor
 final class ResultsFilterViewController: UIViewController {
 
+    // MARK: - Properties
+
     private let viewModel: ResultsFilterViewModel
     private var cancellables = Set<AnyCancellable>()
     private var dataSource: UICollectionViewDiffableDataSource<Section, RecordDisplayItem>!
@@ -41,6 +43,8 @@ final class ResultsFilterViewController: UIViewController {
         return control
     }()
 
+    // MARK: - Init
+
     init(viewModel: ResultsFilterViewModel? = nil) {
         self.viewModel = viewModel ?? ResultsFilterViewModel(store: ConsumptionRecordStore())
         super.init(nibName: nil, bundle: nil)
@@ -51,6 +55,8 @@ final class ResultsFilterViewController: UIViewController {
         super.init(coder: coder)
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -59,9 +65,13 @@ final class ResultsFilterViewController: UIViewController {
         viewModel.loadRecords()
     }
 
+    // MARK: - Public
+
     func filter(keyword: String) {
         viewModel.filter(keyword: keyword)
     }
+
+    // MARK: - Setup
 
     private func setupCollectionView() {
         collectionView.delegate = self
@@ -85,6 +95,8 @@ final class ResultsFilterViewController: UIViewController {
             return cell
         }
     }
+
+    // MARK: - Bindings
 
     private func bindViewModel() {
         viewModel.$recordDisplayItems

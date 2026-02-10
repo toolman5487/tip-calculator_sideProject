@@ -14,6 +14,8 @@ import CoreLocation
 @MainActor
 final class TotalResultViewController: UIViewController {
 
+    // MARK: - Properties
+
     private let viewModel: TotalResultViewModel
     private let locationProvider: LocationProviding
     private let dismissedSubject = PassthroughSubject<Void, Never>()
@@ -45,6 +47,8 @@ final class TotalResultViewController: UIViewController {
         return collection
     }()
 
+    // MARK: - Init
+
     init(result: Result, locationProvider: LocationProviding = LocationService.shared) {
         self.locationProvider = locationProvider
         let apiKey = Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String
@@ -60,6 +64,8 @@ final class TotalResultViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +98,8 @@ final class TotalResultViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
+
+    // MARK: - Actions
 
     @objc private func didTapLocation() {
         viewModel.refreshLocation()
