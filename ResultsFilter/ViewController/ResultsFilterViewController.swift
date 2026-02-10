@@ -40,13 +40,13 @@ final class ResultsFilterViewController: UIViewController {
         return control
     }()
 
-    init(viewModel: ResultsFilterViewModel = ResultsFilterViewModel()) {
-        self.viewModel = viewModel
+    init(viewModel: ResultsFilterViewModel? = nil) {
+        self.viewModel = viewModel ?? ResultsFilterViewModel(store: ConsumptionRecordStore())
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
-        self.viewModel = ResultsFilterViewModel()
+        self.viewModel = ResultsFilterViewModel(store: ConsumptionRecordStore())
         super.init(coder: coder)
     }
 

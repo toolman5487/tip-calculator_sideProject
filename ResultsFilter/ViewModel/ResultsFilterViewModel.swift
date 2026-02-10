@@ -9,19 +9,16 @@ import Foundation
 import CoreData
 import Combine
 
+@MainActor
 final class ResultsFilterViewModel {
 
     private let store: ConsumptionRecordStoring
-    private let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateStyle = .medium
-        f.timeStyle = .short
-        f.locale = Locale(identifier: "zh_TW")
-        return f
-    }()
 
     @Published private(set) var recordDisplayItems: [RecordDisplayItem] = []
-    private var allItems: [RecordDisplayItem] = []
+
+    private var allRecords: [ConsumptionRecord] = []
+    private var filteredRecords: [ConsumptionRecord] = []
+    private var loadedCount: Int = 0
     private let pageSize: Int = 10
     private var currentKeyword: String = ""
 
@@ -29,71 +26,51 @@ final class ResultsFilterViewModel {
         self.store = store
     }
 
-    @MainActor
     func loadRecords() {
-        let records = store.fetchAll()
-        allItems = records.map { record in
-            let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
-            let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
-            let addressText = record.address ?? ""
-            let latitude = record.latitude?.doubleValue
-            let longitude = record.longitude?.doubleValue
-            return RecordDisplayItem(
-                dateText: dateText,
-                billText: record.bill.currencyFormatted,
-                billValue: record.bill,
-                totalTipText: record.totalTip.currencyFormatted,
-                totalBillText: record.totalBill.currencyFormatted,
-                totalBillValue: record.totalBill,
-                amountPerPersonText: record.amountPerPerson.currencyFormatted,
-                amountPerPersonValue: record.amountPerPerson,
-                splitText: "\(record.split) 人",
-                tipDisplayText: tipDisplay,
-                addressText: addressText,
-                latitude: latitude,
-                longitude: longitude
-            )
-        }
-        if currentKeyword.isEmpty {
-            recordDisplayItems = Array(allItems.prefix(pageSize))
-        } else {
-            filter(keyword: currentKeyword)
-        }
+        allRecords = store.fetchAll()
+        currentKeyword = ""
+        filteredRecords = allRecords
+        loadedCount = min(pageSize, filteredRecords.count)
+        applyDisplayItems()
     }
 
-    @MainActor
     func loadMoreIfNeeded(currentIndex: Int) {
         guard currentKeyword.isEmpty else { return }
-
-        let loadedCount = recordDisplayItems.count
-        guard loadedCount < allItems.count else { return }
         guard currentIndex >= loadedCount - 3 else { return }
+        guard loadedCount < filteredRecords.count else { return }
 
-        let nextEnd = min(loadedCount + pageSize, allItems.count)
-        guard nextEnd > loadedCount else { return }
-        let nextSlice = allItems[loadedCount..<nextEnd]
-        recordDisplayItems.append(contentsOf: nextSlice)
+        loadedCount = min(loadedCount + pageSize, filteredRecords.count)
+        applyDisplayItems()
     }
 
-    @MainActor
     func filter(keyword: String) {
         let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         currentKeyword = trimmed
 
         if trimmed.isEmpty {
-            recordDisplayItems = Array(allItems.prefix(pageSize))
+            filteredRecords = allRecords
+            loadedCount = min(pageSize, filteredRecords.count)
         } else if let numeric = Double(trimmed) {
-            recordDisplayItems = allItems.filter { item in
-                let v = numeric
-                let billMatch = abs(item.billValue - v) < 0.0001
-                let totalMatch = abs(item.totalBillValue - v) < 0.0001
-                let perPersonMatch = abs(item.amountPerPersonValue - v) < 0.0001
-                return billMatch || totalMatch || perPersonMatch
+            let v = numeric
+            filteredRecords = allRecords.filter { record in
+                abs(record.bill - v) < 0.0001
+                    || abs(record.totalBill - v) < 0.0001
+                    || abs(record.amountPerPerson - v) < 0.0001
             }
+            loadedCount = filteredRecords.count
         } else {
-            recordDisplayItems = allItems.filter { item in
-                return item.addressText.localizedCaseInsensitiveContains(trimmed)
+            filteredRecords = allRecords.filter { record in
+                (record.address ?? "").localizedCaseInsensitiveContains(trimmed)
             }
+            loadedCount = filteredRecords.count
         }
+        applyDisplayItems()
+    }
+
+    // MARK: - Private
+
+    private func applyDisplayItems() {
+        let slice = Array(filteredRecords.prefix(loadedCount))
+        recordDisplayItems = slice.map { RecordDisplayItem.from($0, dateFormatter: AppDateFormatters.detail) }
     }
 }

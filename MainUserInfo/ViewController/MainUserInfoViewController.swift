@@ -70,7 +70,7 @@ final class MainUserInfoViewController: MainBaseViewController {
     }
 
     private func bindToViewModel() {
-        viewModel.$perCapitaViewModels
+        viewModel.$recordCount
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()

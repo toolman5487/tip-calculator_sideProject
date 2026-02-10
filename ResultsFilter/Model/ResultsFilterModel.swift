@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 struct RecordDisplayItem: Hashable {
     let dateText: String
@@ -21,4 +22,26 @@ struct RecordDisplayItem: Hashable {
     let addressText: String
     let latitude: Double?
     let longitude: Double?
+
+    // MARK: - Mapper
+
+    static func from(_ record: ConsumptionRecord, dateFormatter: DateFormatter) -> RecordDisplayItem {
+        let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
+        let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
+        return RecordDisplayItem(
+            dateText: dateText,
+            billText: record.bill.currencyFormatted,
+            billValue: record.bill,
+            totalTipText: record.totalTip.currencyFormatted,
+            totalBillText: record.totalBill.currencyFormatted,
+            totalBillValue: record.totalBill,
+            amountPerPersonText: record.amountPerPerson.currencyFormatted,
+            amountPerPersonValue: record.amountPerPerson,
+            splitText: "\(record.split) 人",
+            tipDisplayText: tipDisplay,
+            addressText: record.address ?? "",
+            latitude: record.latitude?.doubleValue,
+            longitude: record.longitude?.doubleValue
+        )
+    }
 }
