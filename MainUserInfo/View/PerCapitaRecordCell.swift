@@ -50,6 +50,30 @@ final class PerCapitaRecordCell: UICollectionViewCell {
         return label
     }()
 
+    private let leftStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 4
+        return stack
+    }()
+
+    private let rightStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .trailing
+        stack.spacing = 4
+        return stack
+    }()
+
+    private let horizontalStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.spacing = 12
+        return stack
+    }()
+
     // MARK: - Init
 
     override init(frame: CGRect) {
@@ -68,23 +92,16 @@ final class PerCapitaRecordCell: UICollectionViewCell {
         contentView.addSubview(containerView)
 
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(12)
+            make.left.right.equalToSuperview().inset(12)
+            make.top.bottom.equalToSuperview()
         }
 
-        let leftStack = UIStackView(arrangedSubviews: [titleLabel, dateLabel])
-        leftStack.axis = .vertical
-        leftStack.spacing = 4
-
-        let rightStack = UIStackView(arrangedSubviews: [perCapitaLabel, peopleLabel])
-        rightStack.axis = .vertical
-        rightStack.alignment = .trailing
-        rightStack.spacing = 4
-
-        let horizontalStack = UIStackView(arrangedSubviews: [leftStack, rightStack])
-        horizontalStack.axis = .horizontal
-        horizontalStack.alignment = .center
-        horizontalStack.distribution = .fill
-        horizontalStack.spacing = 12
+        leftStack.addArrangedSubview(titleLabel)
+        leftStack.addArrangedSubview(dateLabel)
+        rightStack.addArrangedSubview(perCapitaLabel)
+        rightStack.addArrangedSubview(peopleLabel)
+        horizontalStack.addArrangedSubview(leftStack)
+        horizontalStack.addArrangedSubview(rightStack)
 
         containerView.addSubview(horizontalStack)
         horizontalStack.snp.makeConstraints { make in

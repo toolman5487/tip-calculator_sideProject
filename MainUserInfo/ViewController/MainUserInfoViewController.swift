@@ -143,4 +143,10 @@ extension MainUserInfoViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 56)
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = viewModel.recordDisplayItem(at: indexPath.item) else { return }
+        let detailVC = ResultDetailViewController(item: item)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
