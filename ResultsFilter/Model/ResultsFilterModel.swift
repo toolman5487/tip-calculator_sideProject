@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 
 struct RecordDisplayItem: Hashable {
+    let id: UUID?
     let dateText: String
     let billText: String
     let billValue: Double
@@ -30,6 +31,7 @@ struct RecordDisplayItem: Hashable {
         let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
         let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
         return RecordDisplayItem(
+            id: record.id,
             dateText: dateText,
             billText: record.bill.currencyFormatted,
             billValue: record.bill,

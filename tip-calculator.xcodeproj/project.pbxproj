@@ -49,6 +49,9 @@
 		156C73FB2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
 		156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
 		156C73FD2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */; };
+		156C747A2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */; };
+		156C747B2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */; };
+		156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */; };
 		156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B32F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
@@ -108,6 +111,7 @@
 		156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFilterHeaderView.swift; sourceTree = "<group>"; };
 		156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerCapitaRecordCell.swift; sourceTree = "<group>"; };
 		156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewModel.swift; sourceTree = "<group>"; };
+		156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailViewModel.swift; sourceTree = "<group>"; };
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 		156C6FB32F35CDFD00F0C0A9 /* ResultDetail */ = {
 			isa = PBXGroup;
 			children = (
+				156C74782F3B38AE00F0C0A9 /* ViewModel */,
 				156C6FB52F35EA6000F0C0A9 /* View */,
 				156C6FB42F35CE0900F0C0A9 /* ViewController */,
 			);
@@ -319,6 +324,14 @@
 				156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */,
 			);
 			path = RecordFilterView;
+			sourceTree = "<group>";
+		};
+		156C74782F3B38AE00F0C0A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {
@@ -590,6 +603,7 @@
 				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				156C1AF02F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
+				156C747B2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C71272F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
 				156C71222F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
@@ -602,6 +616,7 @@
 			files = (
 				156C74B32F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
+				156C747A2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				156C1AFD2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
@@ -638,6 +653,7 @@
 				156C71242F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
+				156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				156C6FAD2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,

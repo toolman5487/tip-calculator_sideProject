@@ -14,7 +14,7 @@ final class ResultDetailViewController: BaseViewController {
 
     // MARK: - Properties
 
-    private let resultDetailItem: RecordDisplayItem
+    private let viewModel: ResultDetailViewModel
 
     private enum Section: Int, CaseIterable {
         case time
@@ -28,9 +28,7 @@ final class ResultDetailViewController: BaseViewController {
 
     private lazy var sections: [Section] = {
         var all = Section.allCases
-        if resultDetailItem.addressText.isEmpty,
-           resultDetailItem.latitude == nil,
-           resultDetailItem.longitude == nil {
+        if !viewModel.shouldShowAddressSection {
             all.removeAll { $0 == .address }
         }
         return all
@@ -47,7 +45,7 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Init
 
     init(item: RecordDisplayItem) {
-        self.resultDetailItem = item
+        self.viewModel = ResultDetailViewModel(item: item)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -72,12 +70,19 @@ final class ResultDetailViewController: BaseViewController {
 
     private func setupNavigation() {
         let config = UIImage.SymbolConfiguration(weight: .bold)
-        let image = UIImage(systemName: "square.and.arrow.up", withConfiguration: config)
-        let shareItem = UIBarButtonItem(image: image,
+        let shareImage = UIImage(systemName: "square.and.arrow.up", withConfiguration: config)
+        let deleteImage = UIImage(systemName: "trash", withConfiguration: config)
+
+        let shareItem = UIBarButtonItem(image: shareImage,
                                         style: .plain,
                                         target: self,
                                         action: #selector(shareButtonTapped))
-        navigationItem.rightBarButtonItem = shareItem
+        let deleteItem = UIBarButtonItem(image: deleteImage,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(deleteButtonTapped))
+
+        navigationItem.rightBarButtonItems = [deleteItem, shareItem]
     }
 
     private func setupTableViewLayout() {
@@ -103,7 +108,7 @@ final class ResultDetailViewController: BaseViewController {
         titleLabel.textAlignment = .center
 
         let amountLabel = UILabel()
-        amountLabel.text = resultDetailItem.amountPerPersonText
+        amountLabel.text = viewModel.item.amountPerPersonText
         amountLabel.font = UIFont.systemFont(ofSize: 60, weight: .bold, width: .condensed)
         amountLabel.textColor = ThemeColor.primary
         amountLabel.textAlignment = .center
@@ -137,6 +142,30 @@ final class ResultDetailViewController: BaseViewController {
         present(activityVC, animated: true)
     }
 
+    @objc private func deleteButtonTapped() {
+        guard viewModel.item.id != nil else { return }
+
+        let alert = UIAlertController(
+            title: "刪除紀錄",
+            message: "刪除後無法復原，確定要刪除這筆紀錄嗎？",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "刪除", style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.viewModel.deleteRecord()
+
+            if let nav = self.navigationController {
+                nav.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true)
+            }
+        })
+
+        present(alert, animated: true)
+    }
+
     private func snapshot(of targetView: UIView) -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: targetView.bounds)
         return renderer.image { _ in
@@ -167,7 +196,7 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "時間",
-                           value: resultDetailItem.dateText,
+                           value: viewModel.item.dateText,
                            systemImageName: "clock")
             return cell
         case .total:
@@ -176,7 +205,7 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "總金額",
-                           value: resultDetailItem.totalBillText,
+                           value: viewModel.item.totalBillText,
                            systemImageName: "dollarsign.circle.fill")
             return cell
         case .bill:
@@ -185,7 +214,7 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "帳單金額",
-                           value: resultDetailItem.billText,
+                           value: viewModel.item.billText,
                            systemImageName: "doc.text.fill")
             return cell
         case .tip:
@@ -194,7 +223,7 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "小費",
-                           value: resultDetailItem.totalTipText,
+                           value: viewModel.item.totalTipText,
                            systemImageName: "percent")
             return cell
         case .split:
@@ -203,7 +232,7 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "分攤人數",
-                           value: resultDetailItem.splitText,
+                           value: viewModel.item.splitText,
                            systemImageName: "person.3.fill")
             return cell
         case .tipSetting:
@@ -212,18 +241,18 @@ extension ResultDetailViewController: UITableViewDataSource {
                 for: indexPath
             ) as! ResultDeetailTableViewCell
             cell.configure(title: "小費設定",
-                           value: resultDetailItem.tipDisplayText,
+                           value: viewModel.item.tipDisplayText,
                            systemImageName: "slider.horizontal.3")
             return cell
         case .address:
-            let text = resultDetailItem.addressText.isEmpty ? "未紀錄" : resultDetailItem.addressText
+            let text = viewModel.item.addressText.isEmpty ? "未紀錄" : viewModel.item.addressText
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: ResultDetailLocationCell.locationReuseId,
                 for: indexPath
             ) as! ResultDetailLocationCell
             let coord: CLLocationCoordinate2D?
-            if let lat = resultDetailItem.latitude,
-               let lon = resultDetailItem.longitude {
+            if let lat = viewModel.item.latitude,
+               let lon = viewModel.item.longitude {
                 coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             } else {
                 coord = nil

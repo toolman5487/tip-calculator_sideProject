@@ -15,6 +15,9 @@ protocol ConsumptionRecordStoring {
 
     @MainActor
     func fetchAll() -> [ConsumptionRecord]
+
+    @MainActor
+    func delete(id: UUID)
 }
 
 struct ConsumptionRecordStore: ConsumptionRecordStoring {
@@ -48,6 +51,23 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
             return try CoreDataStack.viewContext.fetch(request)
         } catch {
             return []
+        }
+    }
+
+    @MainActor
+    func delete(id: UUID) {
+        let context = CoreDataStack.viewContext
+        let request = ConsumptionRecord.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+
+        do {
+            if let record = try context.fetch(request).first {
+                context.delete(record)
+                _ = CoreDataStack.saveContext()
+            }
+        } catch {
+            print("Failed to delete ConsumptionRecord with id \(id): \(error)")
         }
     }
 }

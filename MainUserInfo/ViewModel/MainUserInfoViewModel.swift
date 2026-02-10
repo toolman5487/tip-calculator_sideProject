@@ -67,6 +67,15 @@ final class MainUserInfoViewModel {
         return RecordDisplayItem.from(record, dateFormatter: AppDateFormatters.detail)
     }
 
+    func deleteRecord(at index: Int) {
+        guard index >= 0, index < filteredRecords.count else { return }
+        let record = filteredRecords[index]
+        guard let id = record.id else { return }
+
+        store.delete(id: id)
+        load()
+    }
+
     // MARK: - Private
 
     private func applyFilter() {
