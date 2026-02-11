@@ -167,7 +167,9 @@ extension TotalResultViewController: UICollectionViewDataSource {
                     ToastView.show(
                         message: "儲存成功",
                         in: self.view,
-                        autoDismissAfter: 1
+                        autoDismissAfter: 1,
+                        systemImageName: "tray.and.arrow.down",
+                        tintColor: .systemGreen
                     ) { [weak self] in
                         self?.handleDismiss()
                     }
@@ -176,7 +178,6 @@ extension TotalResultViewController: UICollectionViewDataSource {
                         message: "儲存失敗",
                         in: self.view,
                         autoDismissAfter: 1,
-                        systemImageName: "square.and.arrow.down.badge.xmark",
                         tintColor: .systemRed
                     ) { [weak self] in
                         self?.handleDismiss()

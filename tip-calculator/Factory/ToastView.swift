@@ -14,7 +14,7 @@ enum ToastView {
     static func show(message: String,
                      in parentView: UIView,
                      autoDismissAfter seconds: TimeInterval = 1.6,
-                     systemImageName: String = "square.and.arrow.down.badge.checkmark",
+                     systemImageName: String = "exclamationmark.triangle.fill",
                      tintColor: UIColor = ThemeColor.primary,
                      completion: (() -> Void)? = nil) {
 
@@ -32,7 +32,7 @@ enum ToastView {
         container.layer.masksToBounds = true
 
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: systemImageName)
+        imageView.image = UIImage(systemName: systemImageName, withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
         imageView.tintColor = tintColor
         imageView.contentMode = .scaleAspectFit
 
@@ -43,18 +43,19 @@ enum ToastView {
         label.textAlignment = .center
         label.numberOfLines = 0
 
-        let stack = UIStackView(arrangedSubviews: [imageView, label])
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = 12
-
-        container.addSubview(stack)
-        stack.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(16)
-        }
+        container.addSubview(imageView)
+        container.addSubview(label)
 
         imageView.snp.makeConstraints { make in
-            make.height.width.equalTo(40)
+            make.height.width.equalTo(60)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(16)
+        }
+
+        label.snp.makeConstraints { make in
+            make.top.equalTo(container.snp.centerY).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16)
         }
 
         overlay.addSubview(container)
@@ -62,7 +63,11 @@ enum ToastView {
 
         container.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.2)
+            make.width.lessThanOrEqualTo(320)
+            make.width.lessThanOrEqualTo(parentView).offset(-40)
+            make.width.greaterThanOrEqualTo(200)
+            make.leading.greaterThanOrEqualTo(parentView).offset(20)
+            make.trailing.lessThanOrEqualTo(parentView).offset(-20)
             make.height.equalTo(container.snp.width)
         }
 
