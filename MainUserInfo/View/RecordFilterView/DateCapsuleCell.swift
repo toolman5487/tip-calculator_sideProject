@@ -25,16 +25,20 @@ final class DateCapsuleCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
         contentView.backgroundColor = .systemBackground
-        contentView.layer.borderColor = UIColor.label.cgColor
-        contentView.layer.borderWidth = 1.5
-        contentView.layer.masksToBounds = true
+        contentView.layer.masksToBounds = false
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowOpacity = 0.08
+        contentView.layer.shadowRadius = 4
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.cornerRadius = contentView.bounds.height / 2
+        let radius = contentView.bounds.height / 2
+        contentView.layer.cornerRadius = radius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: radius).cgPath
     }
 
     override func prepareForReuse() {
@@ -51,11 +55,9 @@ final class DateCapsuleCell: UICollectionViewCell {
         if selected {
             contentView.backgroundColor = .label
             label.textColor = .systemBackground
-            contentView.layer.borderWidth = 0
         } else {
             contentView.backgroundColor = .systemBackground
             label.textColor = .label
-            contentView.layer.borderWidth = 1.5
         }
 
         let scale: CGFloat = selected ? 1.2 : 1.0

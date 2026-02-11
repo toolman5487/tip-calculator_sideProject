@@ -54,6 +54,9 @@ final class MainUserInfoViewController: MainBaseViewController {
         collectionView.register(RecordFilterHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: RecordFilterHeaderView.reuseId)
+        collectionView.register(WeekdaySectionHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: WeekdaySectionHeaderView.reuseId)
         collectionView.register(PerCapitaRecordCell.self,
                                 forCellWithReuseIdentifier: PerCapitaRecordCell.reuseId)
     }
@@ -78,6 +81,14 @@ final class MainUserInfoViewController: MainBaseViewController {
     private func bindToViewModel() {
         viewModel.$recordCount
             .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
+
+        viewModel.$selectedDateFilter
+            .receive(on: DispatchQueue.main)
+            .dropFirst()
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
             }
@@ -118,42 +129,52 @@ extension MainUserInfoViewController: UISearchBarDelegate {
 
 extension MainUserInfoViewController {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
+        viewModel.numberOfSections()
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.numberOfItems()
+        viewModel.numberOfItems(in: section)
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordFilterHeaderView.reuseId, for: indexPath) as! RecordFilterHeaderView
-            header.configure(selected: viewModel.selectedDateFilter) { [weak self] option in
-                self?.viewModel.changeFilter(option)
+            if viewModel.isFilterHeaderSection(indexPath.section) {
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordFilterHeaderView.reuseId, for: indexPath) as! RecordFilterHeaderView
+                let filterVM = RecordFilterHeaderViewModel(
+                    selected: viewModel.selectedDateFilter,
+                    onSelect: { [weak self] option in self?.viewModel.changeFilter(option) }
+                )
+                header.configure(with: filterVM)
+                return header
             }
-            return header
+            if let title = viewModel.sectionTitle(for: indexPath.section) {
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: WeekdaySectionHeaderView.reuseId, for: indexPath) as! WeekdaySectionHeaderView
+                header.configure(title: title)
+                return header
+            }
         }
         return UICollectionReusableView()
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PerCapitaRecordCell.reuseId, for: indexPath) as! PerCapitaRecordCell
-        let vm = viewModel.viewModel(at: indexPath.item)
+        let vm = viewModel.viewModel(section: indexPath.section, item: indexPath.item)
         cell.configure(with: vm)
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let w = collectionView.bounds.width
-        return CGSize(width: w, height: 120)
+        let width = collectionView.bounds.width
+        return CGSize(width: width, height: 120)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 56)
+        let height: CGFloat = viewModel.isFilterHeaderSection(section) ? 56 : 48
+        return CGSize(width: collectionView.bounds.width, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = viewModel.recordDisplayItem(at: indexPath.item) else { return }
+        guard let item = viewModel.recordDisplayItem(section: indexPath.section, item: indexPath.item) else { return }
         let detailVC = ResultDetailViewController(item: item)
         navigationController?.pushViewController(detailVC, animated: true)
     }

@@ -9,14 +9,7 @@ import SnapKit
 final class RecordFilterHeaderView: UICollectionReusableView {
 
     static let reuseId = "RecordFilterHeaderView"
-
-    var onSelect: ((RecordFilterOption) -> Void)?
-
-    private var selectedOption: RecordFilterOption = .newest {
-        didSet {
-            horizontalCollectionView.reloadData()
-        }
-    }
+    private var viewModel: RecordFilterHeaderViewModel?
 
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -35,7 +28,7 @@ final class RecordFilterHeaderView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clear
+        backgroundColor = .systemBackground
         addSubview(horizontalCollectionView)
         horizontalCollectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -44,10 +37,12 @@ final class RecordFilterHeaderView: UICollectionReusableView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    func configure(selected: RecordFilterOption, onSelect: @escaping (RecordFilterOption) -> Void) {
-        selectedOption = selected
-        self.onSelect = onSelect
-        horizontalCollectionView.reloadData()
+    func configure(with viewModel: RecordFilterHeaderViewModel) {
+        let needsReload = self.viewModel?.selected != viewModel.selected
+        self.viewModel = viewModel
+        if needsReload {
+            horizontalCollectionView.reloadData()
+        }
     }
 }
 
@@ -55,13 +50,14 @@ final class RecordFilterHeaderView: UICollectionReusableView {
 
 extension RecordFilterHeaderView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        RecordFilterOption.allCases.count
+        viewModel?.options.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DateCapsuleCell.reuseId, for: indexPath) as! DateCapsuleCell
-        let option = RecordFilterOption(rawValue: indexPath.item) ?? .month
-        cell.configure(title: option.title, isSelected: option == selectedOption)
+        guard let vm = viewModel, indexPath.item < vm.options.count else { return cell }
+        let option = vm.options[indexPath.item]
+        cell.configure(title: option.title, isSelected: option == vm.selected)
         return cell
     }
 }
@@ -79,8 +75,8 @@ extension RecordFilterHeaderView: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let option = RecordFilterOption(rawValue: indexPath.item) else { return }
-        selectedOption = option
-        onSelect?(option)
+        guard let vm = viewModel, indexPath.item < vm.options.count else { return }
+        let option = vm.options[indexPath.item]
+        vm.onSelect(option)
     }
 }

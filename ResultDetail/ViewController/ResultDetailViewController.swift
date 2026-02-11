@@ -131,15 +131,32 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Actions
 
     @objc private func shareButtonTapped() {
-        let image = snapshot(of: view)
-
-        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        let text = shareText
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
 
         if let popover = activityVC.popoverPresentationController {
             popover.barButtonItem = navigationItem.rightBarButtonItem
         }
 
         present(activityVC, animated: true)
+    }
+
+    private var shareText: String {
+        let item = viewModel.item
+        var lines = [
+            "消費明細",
+            "每人應付金額：\(item.amountPerPersonText)",
+            "時間：\(item.dateText)",
+            "總金額：\(item.totalBillText)",
+            "帳單金額：\(item.billText)",
+            "小費：\(item.totalTipText)",
+            "分攤人數：\(item.splitText)",
+            "小費設定：\(item.tipDisplayText)"
+        ]
+        if !item.addressText.isEmpty {
+            lines.append("消費地點：\(item.addressText)")
+        }
+        return lines.joined(separator: "\n")
     }
 
     @objc private func deleteButtonTapped() {
@@ -164,13 +181,6 @@ final class ResultDetailViewController: BaseViewController {
         })
 
         present(alert, animated: true)
-    }
-
-    private func snapshot(of targetView: UIView) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: targetView.bounds)
-        return renderer.image { _ in
-            targetView.drawHierarchy(in: targetView.bounds, afterScreenUpdates: true)
-        }
     }
 }
 
