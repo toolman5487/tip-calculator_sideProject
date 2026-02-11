@@ -122,7 +122,11 @@ final class TotalResultViewModel {
 
     @discardableResult
     func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
-        store.save(result: result, latitude: latitude, longitude: longitude, address: address)
+        let success = store.save(result: result, latitude: latitude, longitude: longitude, address: address)
+        if success {
+            TabBarBadgePublisher.increment(on: .userInfo)
+        }
+        return success
     }
 }
 

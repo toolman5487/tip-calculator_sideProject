@@ -61,6 +61,12 @@
 		157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
+		157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
+		157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
+		157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
+		157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
+		157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
+		157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
@@ -118,6 +124,8 @@
 		156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailViewModel.swift; sourceTree = "<group>"; };
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		157A6E532F343600005D8555 /* MainTabBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarTab.swift; sourceTree = "<group>"; };
+		157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarBadgePublisher.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
 		157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultsCell.swift; sourceTree = "<group>"; };
@@ -342,6 +350,8 @@
 		157A6E472F343483005D8554 /* MainTabBar */ = {
 			isa = PBXGroup;
 			children = (
+				157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */,
+				157A6E532F343600005D8555 /* MainTabBarTab.swift */,
 				157A6E482F343524005D8554 /* MainTabBarViewController.swift */,
 			);
 			path = MainTabBar;
@@ -602,6 +612,8 @@
 				156C6FAE2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C6F182F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */,
+				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
 				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C73FD2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
@@ -636,6 +648,8 @@
 				156C75002F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
+				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
 				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C6FAC2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
@@ -663,6 +677,8 @@
 				157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */,
+				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
 				156C6FAD2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,
