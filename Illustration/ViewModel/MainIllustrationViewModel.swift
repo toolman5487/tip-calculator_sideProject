@@ -25,6 +25,12 @@ struct IllustrationFilterHeaderViewModel {
     }
 }
 
+extension IllustrationFilterHeaderViewModel {
+    static func == (lhs: IllustrationFilterHeaderViewModel, rhs: IllustrationFilterHeaderViewModel) -> Bool {
+        lhs.selected == rhs.selected
+    }
+}
+
 @MainActor
 final class MainIllustrationViewModel {
 
@@ -42,6 +48,11 @@ final class MainIllustrationViewModel {
     func load() {
         let records = store.fetchAll()
         applyAggregation(from: records)
+    }
+    
+    func resetFilterToDefault() {
+        guard selectedTimeFilter != .day else { return }
+        selectedTimeFilter = .day
     }
 
     func changeFilter(_ option: IllustrationTimeFilterOption) {

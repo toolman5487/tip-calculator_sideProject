@@ -29,23 +29,13 @@ final class IllustrationChartCell: UICollectionViewCell {
         return label
     }()
 
-    let chartView: BarChartView = {
+    private let chartView: BarChartView = {
         let chart = BarChartView()
         chart.legend.enabled = false
         chart.rightAxis.enabled = false
         chart.xAxis.labelPosition = .bottom
         chart.xAxis.drawGridLinesEnabled = false
-        chart.animate(yAxisDuration: 0.4)
-        return chart
-    }()
-
-    private let lineChartView: LineChartView = {
-        let chart = LineChartView()
-        chart.legend.enabled = false
-        chart.rightAxis.enabled = false
-        chart.xAxis.labelPosition = .bottom
-        chart.xAxis.drawGridLinesEnabled = false
-        chart.animate(yAxisDuration: 0.4)
+        chart.leftAxis.axisMinimum = 0
         return chart
     }()
 
@@ -55,14 +45,9 @@ final class IllustrationChartCell: UICollectionViewCell {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(chartView)
-        containerView.addSubview(lineChartView)
-
-        lineChartView.isHidden = true
 
         containerView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(16)
+            make.edges.equalToSuperview().inset(16)
         }
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(16)
@@ -70,12 +55,6 @@ final class IllustrationChartCell: UICollectionViewCell {
         chartView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.trailing.bottom.equalToSuperview().inset(16)
-            make.height.equalTo(180)
-        }
-        lineChartView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.bottom.equalToSuperview().inset(16)
-            make.height.equalTo(180)
         }
     }
 
@@ -85,29 +64,34 @@ final class IllustrationChartCell: UICollectionViewCell {
 
     func configureAmountRange(title: String, data: [AmountRangeChartItem]) {
         titleLabel.text = title
-        chartView.isHidden = false
-        lineChartView.isHidden = true
-
+        
         let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: Double($0.element.count)) }
         let set = BarChartDataSet(entries: entries)
         set.colors = [ThemeColor.secondary]
-        set.drawValuesEnabled = false
-        chartView.data = BarChartData(dataSet: set)
+        set.drawValuesEnabled = true
+        set.valueFont = UIFont.systemFont(ofSize: 10)
+        
+        let chartData = BarChartData(dataSet: set)
+        chartView.data = chartData
         chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.rangeLabel })
         chartView.xAxis.granularity = 1
+        chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 10)
+        chartView.animate(yAxisDuration: 0.4)
     }
 
     func configureTimeChart(title: String, data: [TrendChartItem]) {
         titleLabel.text = title
-        chartView.isHidden = false
-        lineChartView.isHidden = true
-
+        
         let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: $0.element.totalAmount) }
         let set = BarChartDataSet(entries: entries)
         set.colors = [ThemeColor.primary]
         set.drawValuesEnabled = false
-        chartView.data = BarChartData(dataSet: set)
+        
+        let chartData = BarChartData(dataSet: set)
+        chartView.data = chartData
         chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.label })
         chartView.xAxis.granularity = 1
+        chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 10)
+        chartView.animate(yAxisDuration: 0.4)
     }
 }

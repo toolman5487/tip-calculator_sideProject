@@ -31,7 +31,6 @@ final class IllustrationFilterHeaderView: UICollectionReusableView {
         backgroundColor = .clear
         addSubview(horizontalCollectionView)
         horizontalCollectionView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
             make.edges.equalToSuperview()
         }
     }
@@ -41,9 +40,10 @@ final class IllustrationFilterHeaderView: UICollectionReusableView {
     }
 
     func configure(with viewModel: IllustrationFilterHeaderViewModel) {
-        let needsReload = self.viewModel?.selected != viewModel.selected
+        let previousSelected = self.viewModel?.selected
         self.viewModel = viewModel
-        if needsReload {
+        
+        if previousSelected != viewModel.selected {
             horizontalCollectionView.reloadData()
         }
     }
@@ -89,6 +89,13 @@ extension IllustrationFilterHeaderView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let vm = viewModel, indexPath.item < vm.options.count else { return }
         let option = vm.options[indexPath.item]
+        
+        guard option != vm.selected else { return }
+        
+        let updatedViewModel = IllustrationFilterHeaderViewModel(selected: option, onSelect: vm.onSelect)
+        self.viewModel = updatedViewModel
+        horizontalCollectionView.reloadData()
+        
         vm.onSelect(option)
     }
 }
@@ -101,29 +108,31 @@ final class IllustrationFilterOptionCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textAlignment = .center
+        label.textColor = .label
         return label
     }()
 
     override var isSelected: Bool {
         didSet {
-            updateAppearance()
+            setSelected(isSelected)
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 20
-        contentView.layer.masksToBounds = true
-        contentView.layer.borderWidth = 1
-
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
+            make.edges.equalToSuperview()
         }
+        contentView.layer.masksToBounds = false
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowOpacity = 0.08
+        contentView.layer.shadowRadius = 4
 
-        updateAppearance()
+        setSelected(false)
     }
 
     required init?(coder: NSCoder) {
@@ -132,18 +141,39 @@ final class IllustrationFilterOptionCell: UICollectionViewCell {
 
     func configure(title: String, isSelected: Bool) {
         titleLabel.text = title
-        self.isSelected = isSelected
+        setSelected(isSelected)
     }
 
-    private func updateAppearance() {
-        if isSelected {
-            contentView.backgroundColor = UIColor.label
-            contentView.layer.borderColor = UIColor.clear.cgColor
-            titleLabel.textColor = UIColor.systemBackground
+    func setSelected(_ selected: Bool) {
+        if selected {
+            contentView.backgroundColor = .label
+            titleLabel.textColor = .systemBackground
         } else {
-            contentView.backgroundColor = UIColor.clear
-            contentView.layer.borderColor = UIColor.label.withAlphaComponent(0.2).cgColor
-            titleLabel.textColor = UIColor.label
+            contentView.backgroundColor = .systemBackground
+            titleLabel.textColor = .label
         }
+
+        let scale: CGFloat = selected ? 1.2 : 1.0
+
+        UIView.animate(withDuration: 0.2,
+                       delay: 0,
+                       usingSpringWithDamping: 0.4,
+                       initialSpringVelocity: 0.5,
+                       options: [.allowUserInteraction, .beginFromCurrentState],
+                       animations: {
+            self.contentView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }, completion: nil)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let radius = contentView.bounds.height / 2
+        contentView.layer.cornerRadius = radius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: radius).cgPath
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setSelected(false)
     }
 }

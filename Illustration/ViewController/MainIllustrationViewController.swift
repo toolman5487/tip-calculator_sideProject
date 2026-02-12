@@ -15,6 +15,7 @@ final class MainIllustrationViewController: MainBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.resetFilterToDefault()
         viewModel.load()
     }
 
@@ -25,7 +26,6 @@ final class MainIllustrationViewController: MainBaseViewController {
         bindingViewModel()
         collectionView.dataSource = self
         collectionView.delegate = self
-        viewModel.load()
     }
 
     private func setupNavigation() {
@@ -133,14 +133,13 @@ extension MainIllustrationViewController {
 
         case .kpi:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICardCell.reuseId, for: indexPath) as! KPICardCell
-            if let kpi = viewModel.kpi {
-                switch indexPath.item {
-                case 0: cell.configure(title: "總消費筆數", value: "\(kpi.totalRecords)")
-                case 1: cell.configure(title: "總消費金額", value: kpi.totalAmount.currencyFormatted)
-                case 2: cell.configure(title: "平均每人", value: kpi.averagePerPerson.currencyFormatted)
-                case 3: cell.configure(title: "平均小費", value: kpi.averageTip.currencyFormatted)
-                default: break
-                }
+            let kpi = viewModel.kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerPerson: 0, averageTip: 0)
+            switch indexPath.item {
+            case 0: cell.configure(title: "總消費筆數", value: "\(kpi.totalRecords)")
+            case 1: cell.configure(title: "總消費金額", value: kpi.totalAmount.currencyFormatted)
+            case 2: cell.configure(title: "平均每人", value: kpi.averagePerPerson.currencyFormatted)
+            case 3: cell.configure(title: "平均小費", value: kpi.averageTip.currencyFormatted)
+            default: break
             }
             return cell
 
@@ -170,9 +169,9 @@ extension MainIllustrationViewController {
         case .filterHeader:
             return .zero
         case .kpi:
-            let sectionInset: CGFloat = 24
+            let horizontalInset: CGFloat = 12 * 2
             let spacing: CGFloat = 16
-            let cellWidth = (width - sectionInset - spacing) / 2
+            let cellWidth = floor((width - horizontalInset - spacing) / 2)
             return CGSize(width: cellWidth, height: 88)
         case .timeChart, .amountRangeChart:
             return CGSize(width: width, height: 260)
@@ -195,7 +194,7 @@ extension MainIllustrationViewController {
         case .filterHeader:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         default:
-            return UIEdgeInsets(top: 8, left: 12, bottom: 16, right: 12)
+            return UIEdgeInsets(top: 0, left: 12, bottom: 16, right: 12)
         }
     }
 
