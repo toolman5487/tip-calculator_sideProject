@@ -1,14 +1,14 @@
 //
-//  WeekdaySectionHeaderView.swift
+//  IllustrationSectionHeaderView.swift
 //  tip-calculator
 //
 
 import UIKit
 import SnapKit
 
-final class WeekdaySectionHeaderView: UICollectionReusableView {
+final class IllustrationSectionHeaderView: UICollectionReusableView {
 
-    static let reuseId = "WeekdaySectionHeaderView"
+    static let reuseId = "IllustrationSectionHeaderView"
 
     private lazy var blurView: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .systemUltraThinMaterialLight)
@@ -28,16 +28,17 @@ final class WeekdaySectionHeaderView: UICollectionReusableView {
         addSubview(blurView)
         addSubview(titleLabel)
         blurView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(8)
-            make.left.right.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func configure(title: String) {
         titleLabel.text = title
