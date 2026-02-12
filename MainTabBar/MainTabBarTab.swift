@@ -8,11 +8,13 @@ import UIKit
 enum MainTabBarTab: CaseIterable {
     case calculator
     case userInfo
+    case illustration
 
     var title: String {
         switch self {
         case .calculator: return "消費計算"
         case .userInfo: return "消費紀錄"
+        case .illustration: return "統計資料"
         }
     }
 
@@ -20,6 +22,7 @@ enum MainTabBarTab: CaseIterable {
         switch self {
         case .calculator: return UIImage(systemName: "square.grid.3x3.fill")
         case .userInfo: return UIImage(systemName: "person.circle")
+        case .illustration: return UIImage(systemName: "chart.bar.xaxis")
         }
     }
 
@@ -27,6 +30,7 @@ enum MainTabBarTab: CaseIterable {
         switch self {
         case .calculator: return UIImage(systemName: "square.grid.3x3.fill")
         case .userInfo: return UIImage(systemName: "person.circle.fill")
+        case .illustration: return UIImage(systemName: "chart.bar.xaxis.ascending")
         }
     }
 
@@ -36,6 +40,8 @@ enum MainTabBarTab: CaseIterable {
             return NavigationBarAppearance.wrapInNavigationController(rootViewController: CalculatorVC())
         case .userInfo:
             return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainUserInfoViewController())
+        case .illustration:
+            return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainIllustrationViewController())
         }
     }
 

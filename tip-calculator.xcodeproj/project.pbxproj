@@ -43,9 +43,6 @@
 		156C71302F39B90300F0C0A9 /* RecordFilterOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712D2F39B90000F0C0A9 /* RecordFilterOption.swift */; };
 		156C71312F39B90300F0C0A9 /* DateCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */; };
 		156C71322F39B90300F0C0A9 /* RecordFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */; };
-		156C74FF2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
-		156C75002F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
-		156C75012F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
 		156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
 		156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
 		156C73F52F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */; };
@@ -58,18 +55,24 @@
 		156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B32F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
+		156C74FF2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
+		156C75002F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
+		156C75012F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
+		156CCFDC2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
+		156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
+		156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
 		157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
+		157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
+		157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
+		157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
 		157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
 		157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E532F343600005D8555 /* MainTabBarTab.swift */; };
 		157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
-		157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
-		157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
-		157A6E512F343658005D8554 /* MainUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */; };
 		157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
@@ -118,15 +121,16 @@
 		156C712D2F39B90000F0C0A9 /* RecordFilterOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFilterOption.swift; sourceTree = "<group>"; };
 		156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCapsuleCell.swift; sourceTree = "<group>"; };
 		156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFilterHeaderView.swift; sourceTree = "<group>"; };
-		156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySectionHeaderView.swift; sourceTree = "<group>"; };
 		156C73F22F39D69600F0C0A9 /* PerCapitaRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerCapitaRecordCell.swift; sourceTree = "<group>"; };
 		156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewModel.swift; sourceTree = "<group>"; };
 		156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailViewModel.swift; sourceTree = "<group>"; };
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
+		156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySectionHeaderView.swift; sourceTree = "<group>"; };
+		156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainIllustrationViewController.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E532F343600005D8555 /* MainTabBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarTab.swift; sourceTree = "<group>"; };
 		157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarBadgePublisher.swift; sourceTree = "<group>"; };
-		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
 		157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultsCell.swift; sourceTree = "<group>"; };
 		157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewModel.swift; sourceTree = "<group>"; };
@@ -347,6 +351,22 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		156CCFD92F3C87C300F0C0A9 /* Illustration */ = {
+			isa = PBXGroup;
+			children = (
+				156CCFDA2F3C884A00F0C0A9 /* ViewController */,
+			);
+			path = Illustration;
+			sourceTree = "<group>";
+		};
+		156CCFDA2F3C884A00F0C0A9 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -413,6 +433,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				156CCFD92F3C87C300F0C0A9 /* Illustration */,
 				157A6E4C2F343634005D8554 /* MainUserInfo */,
 				156C71202F39988600F0C0A9 /* BaseView */,
 				156C6FB32F35CDFD00F0C0A9 /* ResultDetail */,
@@ -601,6 +622,7 @@
 			files = (
 				156C1AFC2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE72F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
+				156CCFDC2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
 				156C71302F39B90300F0C0A9 /* RecordFilterOption.swift in Sources */,
 				156C71312F39B90300F0C0A9 /* DateCapsuleCell.swift in Sources */,
 				156C71322F39B90300F0C0A9 /* RecordFilterHeaderView.swift in Sources */,
@@ -651,6 +673,7 @@
 				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
 				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
 				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
 				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C6FAC2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
@@ -665,6 +688,7 @@
 				156C6FB92F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift in Sources */,
 				156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
+				156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
 				156C1AFE2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */,

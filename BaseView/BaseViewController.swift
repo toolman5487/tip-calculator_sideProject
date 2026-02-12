@@ -25,7 +25,7 @@ class BaseViewController: UIViewController {
 
     func setupNavigationBar() {
         navigationItem.backButtonDisplayMode = .minimal
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .automatic
     }
 
     func setupUI() {

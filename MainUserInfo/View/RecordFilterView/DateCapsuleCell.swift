@@ -24,7 +24,6 @@ final class DateCapsuleCell: UICollectionViewCell {
         label.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        contentView.backgroundColor = .systemBackground
         contentView.layer.masksToBounds = false
         contentView.layer.shadowColor = UIColor.black.cgColor
         contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
