@@ -191,7 +191,12 @@ extension MainIllustrationViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 12, bottom: 16, right: 12)
+        switch IllustrationSection(rawValue: section) {
+        case .filterHeader:
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        default:
+            return UIEdgeInsets(top: 8, left: 12, bottom: 16, right: 12)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

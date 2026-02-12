@@ -30,7 +30,7 @@ final class MainIllustrationViewModel {
 
     private let store: ConsumptionRecordStoring
 
-    @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .month
+    @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .day
     @Published private(set) var kpi: IllustrationKPISummary?
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var amountRangeData: [AmountRangeChartItem] = []
