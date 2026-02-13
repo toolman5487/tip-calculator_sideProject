@@ -72,9 +72,9 @@
 		156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B32F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
 		156C74B42F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */; };
-		156C74FF2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
-		156C75002F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
-		156C75012F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */; };
+		156C74FF2F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */; };
+		156C75002F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */; };
+		156C75012F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */; };
 		156CCFDC2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
 		156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
 		156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
@@ -148,7 +148,7 @@
 		156C73FA2F39D99400F0C0A9 /* MainUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewModel.swift; sourceTree = "<group>"; };
 		156C74792F3B38CE00F0C0A9 /* ResultDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailViewModel.swift; sourceTree = "<group>"; };
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
-		156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySectionHeaderView.swift; sourceTree = "<group>"; };
+		156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSectionHeaderView.swift; sourceTree = "<group>"; };
 		156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainIllustrationViewController.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 			children = (
 				156C712E2F39B90100F0C0A9 /* DateCapsuleCell.swift */,
 				156C712F2F39B90200F0C0A9 /* RecordFilterHeaderView.swift */,
-				156C74FE2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift */,
+				156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */,
 			);
 			path = RecordFilterView;
 			sourceTree = "<group>";
@@ -682,7 +682,7 @@
 				156C71302F39B90300F0C0A9 /* RecordFilterOption.swift in Sources */,
 				156C71312F39B90300F0C0A9 /* DateCapsuleCell.swift in Sources */,
 				156C71322F39B90300F0C0A9 /* RecordFilterHeaderView.swift in Sources */,
-				156C74FF2F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */,
+				156C74FF2F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				156C515B2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
 				156C6FB12F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
@@ -733,7 +733,7 @@
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
-				156C75002F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */,
+				156C75002F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
@@ -764,7 +764,7 @@
 				156C1AFE2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
-				156C75012F3C000100F0C0A9 /* WeekdaySectionHeaderView.swift in Sources */,
+				156C75012F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
 				156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				156C73FB2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,

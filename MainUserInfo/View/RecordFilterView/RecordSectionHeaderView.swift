@@ -1,14 +1,14 @@
 //
-//  WeekdaySectionHeaderView.swift
+//  RecordSectionHeaderView.swift
 //  tip-calculator
 //
 
 import UIKit
 import SnapKit
 
-final class WeekdaySectionHeaderView: UICollectionReusableView {
+final class RecordSectionHeaderView: UICollectionReusableView {
 
-    static let reuseId = "WeekdaySectionHeaderView"
+    static let reuseId = "RecordSectionHeaderView"
 
     private lazy var blurView: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .systemUltraThinMaterialLight)
@@ -28,7 +28,7 @@ final class WeekdaySectionHeaderView: UICollectionReusableView {
         addSubview(blurView)
         addSubview(titleLabel)
         blurView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(8)
+            make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in

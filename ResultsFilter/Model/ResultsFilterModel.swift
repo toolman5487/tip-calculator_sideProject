@@ -27,25 +27,30 @@ struct RecordDisplayItem: Hashable {
 
     // MARK: - Mapper
 
-    static func from(_ record: ConsumptionRecord, dateFormatter: DateFormatter) -> RecordDisplayItem {
-        let dateText = record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
-        let tipDisplay = (record.tipRawValue?.isEmpty == false) ? (record.tipRawValue ?? "無") : "無"
+    static func from(_ snapshot: RecordSnapshot, dateText: String) -> RecordDisplayItem {
+        let tipDisplay = (snapshot.tipRawValue?.isEmpty == false) ? (snapshot.tipRawValue ?? "無") : "無"
         return RecordDisplayItem(
-            id: record.id,
+            id: snapshot.id,
             dateText: dateText,
-            billText: record.bill.currencyFormatted,
-            billValue: record.bill,
-            totalTipText: record.totalTip.currencyFormatted,
-            totalBillText: record.totalBill.currencyFormatted,
-            totalBillValue: record.totalBill,
-            amountPerPersonText: record.amountPerPerson.currencyFormatted,
-            amountPerPersonValue: record.amountPerPerson,
-            splitText: "\(record.split) 人",
+            billText: snapshot.bill.currencyFormatted,
+            billValue: snapshot.bill,
+            totalTipText: snapshot.totalTip.currencyFormatted,
+            totalBillText: snapshot.totalBill.currencyFormatted,
+            totalBillValue: snapshot.totalBill,
+            amountPerPersonText: snapshot.amountPerPerson.currencyFormatted,
+            amountPerPersonValue: snapshot.amountPerPerson,
+            splitText: "\(snapshot.split) 人",
             tipDisplayText: tipDisplay,
-            addressText: record.address ?? "",
-            locationNameText: record.locationName ?? "",
-            latitude: record.latitude?.doubleValue,
-            longitude: record.longitude?.doubleValue
+            addressText: snapshot.address ?? "",
+            locationNameText: snapshot.locationName ?? "",
+            latitude: snapshot.latitude,
+            longitude: snapshot.longitude
         )
+    }
+
+    static func from(_ record: ConsumptionRecord, dateFormatter: DateFormatter, dateText: String? = nil) -> RecordDisplayItem {
+        let snapshot = RecordSnapshot(record)
+        let resolvedDateText = dateText ?? record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
+        return from(snapshot, dateText: resolvedDateText)
     }
 }

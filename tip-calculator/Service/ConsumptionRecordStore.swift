@@ -18,6 +18,9 @@ protocol ConsumptionRecordStoring {
 
     @MainActor
     func delete(id: UUID)
+
+    @MainActor
+    func deleteAll()
 }
 
 struct ConsumptionRecordStore: ConsumptionRecordStoring {
@@ -68,6 +71,19 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
             }
         } catch {
             print("Failed to delete ConsumptionRecord with id \(id): \(error)")
+        }
+    }
+
+    @MainActor
+    func deleteAll() {
+        let context = CoreDataStack.viewContext
+        let request = ConsumptionRecord.fetchRequest()
+        do {
+            let records = try context.fetch(request)
+            records.forEach { context.delete($0) }
+            _ = CoreDataStack.saveContext()
+        } catch {
+            print("Failed to delete all ConsumptionRecords: \(error)")
         }
     }
 }

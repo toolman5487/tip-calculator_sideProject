@@ -6,6 +6,42 @@
 import Foundation
 import Combine
 
+// MARK: - DeleteAllAlertContent
+
+struct DeleteAllAlertContent {
+    let title: String
+    let message: String
+    let cancelTitle: String
+    let confirmTitle: String
+
+    init(
+        title: String = "刪除所有紀錄",
+        message: String = "確定要刪除所有消費紀錄嗎？此操作無法復原。",
+        cancelTitle: String = "取消",
+        confirmTitle: String = "刪除"
+    ) {
+        self.title = title
+        self.message = message
+        self.cancelTitle = cancelTitle
+        self.confirmTitle = confirmTitle
+    }
+}
+
+// MARK: - RecordListSectionViewModel
+
+struct RecordListSectionViewModel {
+    enum Kind {
+        case filterHeader(RecordFilterHeaderViewModel)
+        case recordGroup(title: String, items: [RecordListCellViewModel])
+    }
+    let kind: Kind
+}
+
+struct RecordListCellViewModel {
+    let cell: MainUserInfoViewModel.ItemViewModel
+    let detail: RecordDisplayItem
+}
+
 // MARK: - RecordFilterHeaderViewModel
 
 struct RecordFilterHeaderViewModel {
@@ -17,6 +53,38 @@ struct RecordFilterHeaderViewModel {
         self.selected = selected
         self.options = RecordFilterOption.allCases
         self.onSelect = onSelect
+    }
+}
+
+// MARK: - RecordSnapshot (thread-safe for background processing)
+
+struct RecordSnapshot {
+    let id: UUID?
+    let createdAt: Date?
+    let bill: Double
+    let totalTip: Double
+    let totalBill: Double
+    let amountPerPerson: Double
+    let split: Int
+    let tipRawValue: String?
+    let address: String?
+    let locationName: String?
+    let latitude: Double?
+    let longitude: Double?
+
+    init(_ record: ConsumptionRecord) {
+        id = record.id
+        createdAt = record.createdAt
+        bill = record.bill
+        totalTip = record.totalTip
+        totalBill = record.totalBill
+        amountPerPerson = record.amountPerPerson
+        split = Int(record.split)
+        tipRawValue = record.tipRawValue
+        address = record.address
+        locationName = record.locationName
+        latitude = record.latitude?.doubleValue
+        longitude = record.longitude?.doubleValue
     }
 }
 
@@ -42,8 +110,12 @@ final class MainUserInfoViewModel {
 
     @Published private(set) var recordCount: Int = 0
     @Published private(set) var selectedDateFilter: RecordFilterOption = .newest
+    @Published private(set) var displaySections: [RecordListSectionViewModel] = []
+
+    var deleteAllAlertContent: DeleteAllAlertContent { DeleteAllAlertContent() }
 
     private var allRecords: [ConsumptionRecord] = []
+    private var cachedSnapshots: [RecordSnapshot] = []
     private var filteredRecords: [ConsumptionRecord] = []
     private var groupedSections: [(key: Int, title: String, indices: [Int])] = []
 
@@ -57,65 +129,45 @@ final class MainUserInfoViewModel {
 
     func load() {
         allRecords = store.fetchAll()
-        applyFilter()
+        cachedSnapshots = allRecords.map { RecordSnapshot($0) }
+        applyFilterAsync()
+    }
+
+    func changeFilter(_ option: RecordFilterOption) {
+        guard option != selectedDateFilter else { return }
+        selectedDateFilter = option
+        applyFilterAsync()
+    }
+
+    private func applyFilterAsync() {
+        let snapshots = cachedSnapshots
+        let filter = selectedDateFilter
+        let onChangeFilter: (RecordFilterOption) -> Void = { [weak self] option in
+            Task { @MainActor in self?.changeFilter(option) }
+        }
+
+        Task { @MainActor in
+            let result = await Task.detached(priority: .userInitiated) {
+                Self.computeDisplayData(snapshots: snapshots, filter: filter, onChangeFilter: onChangeFilter)
+            }.value
+            self.applyResult(result)
+        }
+    }
+
+    private func applyResult(_ result: (filtered: [RecordSnapshot], grouped: [(key: Int, title: String, indices: [Int])], count: Int, sections: [RecordListSectionViewModel])) {
+        let ids = result.filtered.map { $0.id }
+        filteredRecords = ids.compactMap { id in allRecords.first { $0.id == id } }
+        groupedSections = result.grouped
+        recordCount = result.count
+        displaySections = result.sections
     }
 
     func refresh() {
         load()
     }
 
-    func changeFilter(_ option: RecordFilterOption) {
-        guard option != selectedDateFilter else { return }
-        selectedDateFilter = option
-        applyFilter()
-    }
-
-    func numberOfItems() -> Int {
-        recordCount
-    }
-
     private var hasGroupedSections: Bool {
         !groupedSections.isEmpty
-    }
-
-    func numberOfSections() -> Int {
-        hasGroupedSections ? 1 + groupedSections.count : 1
-    }
-
-    func numberOfItems(in section: Int) -> Int {
-        if hasGroupedSections {
-            guard section > 0 else { return 0 }
-            let idx = section - 1
-            return idx < groupedSections.count ? groupedSections[idx].indices.count : 0
-        }
-        return section == 0 ? filteredRecords.count : 0
-    }
-
-    func isFilterHeaderSection(_ section: Int) -> Bool {
-        section == 0
-    }
-
-    func sectionTitle(for section: Int) -> String? {
-        guard hasGroupedSections, section > 0 else { return nil }
-        let idx = section - 1
-        return idx < groupedSections.count ? groupedSections[idx].title : nil
-    }
-
-    func viewModel(section: Int, item: Int) -> ItemViewModel {
-        itemViewModel(from: record(at: section, item: item))
-    }
-
-    func recordDisplayItem(section: Int, item: Int) -> RecordDisplayItem? {
-        let record = record(at: section, item: item)
-        return RecordDisplayItem.from(record, dateFormatter: AppDateFormatters.detail)
-    }
-
-    private func record(at section: Int, item: Int) -> ConsumptionRecord {
-        if hasGroupedSections, section > 0 {
-            let idx = groupedSections[section - 1].indices[item]
-            return filteredRecords[idx]
-        }
-        return filteredRecords[item]
     }
 
     func deleteRecord(at index: Int) {
@@ -123,6 +175,11 @@ final class MainUserInfoViewModel {
         guard let id = record.id else { return }
 
         store.delete(id: id)
+        load()
+    }
+
+    func deleteAllRecords() {
+        store.deleteAll()
         load()
     }
 
@@ -141,25 +198,29 @@ final class MainUserInfoViewModel {
         return flatIndex >= 0 && flatIndex < filteredRecords.count ? filteredRecords[flatIndex] : nil
     }
 
-    // MARK: - Private
+    // MARK: - Private (static, runs on background)
 
-    private func applyFilter() {
-        let filtered = selectedDateFilter.apply(to: allRecords)
-        filteredRecords = filtered
+    private nonisolated static func computeDisplayData(
+        snapshots: [RecordSnapshot],
+        filter: RecordFilterOption,
+        onChangeFilter: @escaping (RecordFilterOption) -> Void
+    ) -> (filtered: [RecordSnapshot], grouped: [(key: Int, title: String, indices: [Int])], count: Int, sections: [RecordListSectionViewModel]) {
+        let filtered = filter.apply(to: snapshots)
         let calendar = Calendar.current
         let now = Date()
-        switch selectedDateFilter {
+        let grouped: [(key: Int, title: String, indices: [Int])]
+        switch filter {
         case .week:
             let currentKey = calendar.component(.weekday, from: now)
             let titles = ["", "週日", "週一", "週二", "週三", "週四", "週五", "週六"]
-            groupedSections = buildGroupedSections(
+            grouped = buildGroupedSections(
                 from: filtered, range: 1...7, currentKey: currentKey, modulus: 7,
                 keyExtractor: { calendar.component(.weekday, from: $0) },
                 titleBuilder: { key, _ in titles[key] }
             )
         case .month:
             let currentKey = calendar.component(.day, from: now)
-            groupedSections = buildGroupedSections(
+            grouped = buildGroupedSections(
                 from: filtered, range: 1...31, currentKey: currentKey, modulus: 31,
                 keyExtractor: { calendar.component(.day, from: $0) },
                 titleBuilder: { key, firstDate in
@@ -169,19 +230,56 @@ final class MainUserInfoViewModel {
             )
         case .year:
             let currentKey = calendar.component(.month, from: now)
-            groupedSections = buildGroupedSections(
+            grouped = buildGroupedSections(
                 from: filtered, range: 1...12, currentKey: currentKey, modulus: 12,
                 keyExtractor: { calendar.component(.month, from: $0) },
                 titleBuilder: { key, _ in "\(key)月" }
             )
         default:
-            groupedSections = []
+            grouped = []
         }
-        recordCount = filtered.count
+        let sections = buildDisplaySections(filter: filter, filtered: filtered, grouped: grouped, onChangeFilter: onChangeFilter)
+        return (filtered, grouped, filtered.count, sections)
     }
 
-    private func buildGroupedSections(
-        from records: [ConsumptionRecord],
+    private nonisolated static func buildDisplaySections(
+        filter: RecordFilterOption,
+        filtered: [RecordSnapshot],
+        grouped: [(key: Int, title: String, indices: [Int])],
+        onChangeFilter: @escaping (RecordFilterOption) -> Void
+    ) -> [RecordListSectionViewModel] {
+        var sections: [RecordListSectionViewModel] = []
+        let filterVM = RecordFilterHeaderViewModel(selected: filter, onSelect: onChangeFilter)
+        sections.append(RecordListSectionViewModel(kind: .filterHeader(filterVM)))
+        if !grouped.isEmpty {
+            for group in grouped {
+                let items = group.indices.map { recordListCellViewModel(from: filtered[$0]) }
+                sections.append(RecordListSectionViewModel(kind: .recordGroup(title: group.title, items: items)))
+            }
+        } else if !filtered.isEmpty {
+            let items = filtered.map { recordListCellViewModel(from: $0) }
+            sections.append(RecordListSectionViewModel(kind: .recordGroup(title: "", items: items)))
+        }
+        return sections
+    }
+
+    private nonisolated static func recordListCellViewModel(from snapshot: RecordSnapshot) -> RecordListCellViewModel {
+        let date = snapshot.createdAt ?? Date()
+        let listDateText = AppDateFormatters.list.string(from: date)
+        let detailDateText = AppDateFormatters.detail.string(from: date)
+        return RecordListCellViewModel(
+            cell: ItemViewModel(
+                title: String(format: "帳單 $%.0f", snapshot.totalBill),
+                dateText: listDateText,
+                perCapitaText: String(format: "$%.0f", snapshot.amountPerPerson),
+                peopleText: "\(snapshot.split) 人"
+            ),
+            detail: RecordDisplayItem.from(snapshot, dateText: detailDateText)
+        )
+    }
+
+    private nonisolated static func buildGroupedSections(
+        from records: [RecordSnapshot],
         range: ClosedRange<Int>,
         currentKey: Int,
         modulus: Int,
@@ -190,8 +288,8 @@ final class MainUserInfoViewModel {
     ) -> [(key: Int, title: String, indices: [Int])] {
         var grouped: [Int: [Int]] = [:]
         grouped.reserveCapacity(range.count)
-        for (index, record) in records.enumerated() {
-            guard let date = record.createdAt else { continue }
+        for (index, snapshot) in records.enumerated() {
+            guard let date = snapshot.createdAt else { continue }
             let key = keyExtractor(date)
             grouped[key, default: []].append(index)
         }
@@ -205,18 +303,6 @@ final class MainUserInfoViewModel {
                   let firstDate = records[indices[0]].createdAt else { return nil }
             return (key: key, title: titleBuilder(key, firstDate), indices: indices)
         }
-    }
-
-    private func itemViewModel(from record: ConsumptionRecord) -> ItemViewModel {
-        let date = record.createdAt ?? Date()
-        let people = Int(record.split)
-        let perCapita = record.amountPerPerson
-        return ItemViewModel(
-            title: String(format: "帳單 $%.0f", record.totalBill),
-            dateText: AppDateFormatters.list.string(from: date),
-            perCapitaText: String(format: "$%.0f", perCapita),
-            peopleText: "\(people) 人"
-        )
     }
 }
 

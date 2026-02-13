@@ -29,34 +29,39 @@ enum RecordFilterOption: Int, CaseIterable {
     }
 
     func apply(to records: [ConsumptionRecord]) -> [ConsumptionRecord] {
+        let snapshots = records.map { RecordSnapshot($0) }
+        let filtered = apply(to: snapshots)
+        return filtered.compactMap { s in records.first { $0.id == s.id } }
+    }
+
+    func apply(to snapshots: [RecordSnapshot]) -> [RecordSnapshot] {
         let calendar = Calendar.current
         let now = Date()
 
-        let filtered: [ConsumptionRecord]
-
+        let filtered: [RecordSnapshot]
         switch self {
         case .day:
-            filtered = records.filter {
+            filtered = snapshots.filter {
                 guard let date = $0.createdAt else { return false }
                 return calendar.isDateInToday(date)
             }
         case .week:
-            filtered = records.filter {
+            filtered = snapshots.filter {
                 guard let date = $0.createdAt else { return false }
                 return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
             }
         case .month:
-            filtered = records.filter {
+            filtered = snapshots.filter {
                 guard let date = $0.createdAt else { return false }
                 return calendar.isDate(date, equalTo: now, toGranularity: .month)
             }
         case .year:
-            filtered = records.filter {
+            filtered = snapshots.filter {
                 guard let date = $0.createdAt else { return false }
                 return calendar.isDate(date, equalTo: now, toGranularity: .year)
             }
         case .newest, .oldest, .mostExpensive, .cheapest:
-            filtered = records
+            filtered = snapshots
         }
 
         switch self {

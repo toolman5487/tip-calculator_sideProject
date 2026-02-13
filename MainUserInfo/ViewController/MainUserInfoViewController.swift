@@ -54,9 +54,9 @@ final class MainUserInfoViewController: MainBaseViewController {
         collectionView.register(RecordFilterHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: RecordFilterHeaderView.reuseId)
-        collectionView.register(WeekdaySectionHeaderView.self,
+        collectionView.register(RecordSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: WeekdaySectionHeaderView.reuseId)
+                                withReuseIdentifier: RecordSectionHeaderView.reuseId)
         collectionView.register(PerCapitaRecordCell.self,
                                 forCellWithReuseIdentifier: PerCapitaRecordCell.reuseId)
     }
@@ -79,16 +79,8 @@ final class MainUserInfoViewController: MainBaseViewController {
     }
 
     private func bindToViewModel() {
-        viewModel.$recordCount
+        viewModel.$displaySections
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        viewModel.$selectedDateFilter
-            .receive(on: DispatchQueue.main)
-            .dropFirst()
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
             }
@@ -101,16 +93,37 @@ final class MainUserInfoViewController: MainBaseViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        let trashItem = UIBarButtonItem(
+            image: UIImage(systemName: "trash", withConfiguration: config),
+            style: .plain,
+            target: self,
+            action: #selector(deleteButtonTapped)
+        )
         let refreshItem = UIBarButtonItem(
-            image: UIImage(systemName: "arrow.clockwise"),
+            image: UIImage(systemName: "arrow.clockwise", withConfiguration: config),
             style: .plain,
             target: self,
             action: #selector(refreshButtonTapped)
         )
-        navigationItem.rightBarButtonItem = refreshItem
+        navigationItem.rightBarButtonItems = [refreshItem, trashItem]
     }
 
     // MARK: - Actions
+
+    @objc private func deleteButtonTapped() {
+        let content = viewModel.deleteAllAlertContent
+        let alert = UIAlertController(
+            title: content.title,
+            message: content.message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: content.cancelTitle, style: .cancel))
+        alert.addAction(UIAlertAction(title: content.confirmTitle, style: .destructive) { [weak self] _ in
+            self?.viewModel.deleteAllRecords()
+        })
+        present(alert, animated: true)
+    }
 
     @objc private func refreshButtonTapped() {
         triggerRefresh()
@@ -129,37 +142,40 @@ extension MainUserInfoViewController: UISearchBarDelegate {
 
 extension MainUserInfoViewController {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.numberOfSections()
+        viewModel.displaySections.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.numberOfItems(in: section)
+        let sectionVM = viewModel.displaySections[section]
+        switch sectionVM.kind {
+        case .filterHeader: return 0
+        case .recordGroup(_, let items): return items.count
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            if viewModel.isFilterHeaderSection(indexPath.section) {
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordFilterHeaderView.reuseId, for: indexPath) as! RecordFilterHeaderView
-                let filterVM = RecordFilterHeaderViewModel(
-                    selected: viewModel.selectedDateFilter,
-                    onSelect: { [weak self] option in self?.viewModel.changeFilter(option) }
-                )
-                header.configure(with: filterVM)
-                return header
-            }
-            if let title = viewModel.sectionTitle(for: indexPath.section) {
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: WeekdaySectionHeaderView.reuseId, for: indexPath) as! WeekdaySectionHeaderView
-                header.configure(title: title)
-                return header
-            }
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
         }
-        return UICollectionReusableView()
+        let sectionVM = viewModel.displaySections[indexPath.section]
+        switch sectionVM.kind {
+        case .filterHeader(let filterVM):
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordFilterHeaderView.reuseId, for: indexPath) as! RecordFilterHeaderView
+            header.configure(with: filterVM)
+            return header
+        case .recordGroup(let title, _):
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordSectionHeaderView.reuseId, for: indexPath) as! RecordSectionHeaderView
+            header.configure(title: title)
+            return header
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PerCapitaRecordCell.reuseId, for: indexPath) as! PerCapitaRecordCell
-        let vm = viewModel.viewModel(section: indexPath.section, item: indexPath.item)
-        cell.configure(with: vm)
+        let sectionVM = viewModel.displaySections[indexPath.section]
+        if case .recordGroup(_, let items) = sectionVM.kind {
+            cell.configure(with: items[indexPath.item].cell)
+        }
         return cell
     }
 
@@ -169,13 +185,20 @@ extension MainUserInfoViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let height: CGFloat = viewModel.isFilterHeaderSection(section) ? 56 : 48
+        let sectionVM = viewModel.displaySections[section]
+        let height: CGFloat
+        switch sectionVM.kind {
+        case .filterHeader: height = 56
+        case .recordGroup(let title, _): height = title.isEmpty ? 0 : 40
+        }
         return CGSize(width: collectionView.bounds.width, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = viewModel.recordDisplayItem(section: indexPath.section, item: indexPath.item) else { return }
-        let detailVC = ResultDetailViewController(item: item)
+        let sectionVM = viewModel.displaySections[indexPath.section]
+        guard case .recordGroup(_, let items) = sectionVM.kind,
+              indexPath.item < items.count else { return }
+        let detailVC = ResultDetailViewController(item: items[indexPath.item].detail)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

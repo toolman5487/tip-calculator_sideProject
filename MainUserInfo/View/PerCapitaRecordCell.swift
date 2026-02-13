@@ -93,7 +93,7 @@ final class PerCapitaRecordCell: UICollectionViewCell {
 
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(12)
-            make.top.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(8)
         }
 
         leftStack.addArrangedSubview(titleLabel)
