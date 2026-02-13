@@ -43,7 +43,7 @@ final class MainIllustrationViewController: MainBaseViewController {
         collectionView.register(IllustrationFilterHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationFilterHeaderView.reuseId)
-        collectionView.register(KPICardCell.self, forCellWithReuseIdentifier: KPICardCell.reuseId)
+        collectionView.register(KPIGridCell.self, forCellWithReuseIdentifier: KPIGridCell.reuseId)
         collectionView.register(IllustrationChartCell.self, forCellWithReuseIdentifier: IllustrationChartCell.reuseId)
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -90,7 +90,7 @@ extension MainIllustrationViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader: return 0
-        case .kpi: return 4
+        case .kpi: return 1
         case .timeChart, .amountRangeChart: return 1
         case .none: return 0
         }
@@ -110,18 +110,16 @@ extension MainIllustrationViewController {
             header.configure(with: filterVM)
             return header
         case .kpi:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "總覽")
-            return header
+            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath)
         case .timeChart:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "消費趨勢")
+            header.configure(title: viewModel.selectedTimeFilter.title + "消費")
             return header
         case .amountRangeChart:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "消費金額區間")
+            header.configure(title: "消費分布")
             return header
-        case .none:
+        default:
             return UICollectionReusableView()
         }
     }
@@ -132,26 +130,28 @@ extension MainIllustrationViewController {
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
 
         case .kpi:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICardCell.reuseId, for: indexPath) as! KPICardCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPIGridCell.reuseId, for: indexPath) as! KPIGridCell
             let kpi = viewModel.kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerPerson: 0, averageTip: 0)
-            switch indexPath.item {
-            case 0: cell.configure(title: "總消費筆數", value: "\(kpi.totalRecords)")
-            case 1: cell.configure(title: "總消費金額", value: kpi.totalAmount.currencyFormatted)
-            case 2: cell.configure(title: "平均每人", value: kpi.averagePerPerson.currencyFormatted)
-            case 3: cell.configure(title: "平均小費", value: kpi.averageTip.currencyFormatted)
-            default: break
+            let items: [KPICardItem] = [
+                KPICardItem(title: "總消費筆數", value: "\(kpi.totalRecords)"),
+                KPICardItem(title: "總消費金額", value: kpi.totalAmount.currencyFormatted),
+                KPICardItem(title: "平均每人", value: kpi.averagePerPerson.currencyFormatted),
+                KPICardItem(title: "平均小費", value: kpi.averageTip.currencyFormatted)
+            ]
+            cell.configure(items: items)
+            cell.onSelect = { [weak self] index in
+                self?.openKPIDetail(at: index)
             }
             return cell
 
         case .timeChart:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationChartCell.reuseId, for: indexPath) as! IllustrationChartCell
-            let title = viewModel.selectedTimeFilter.title + "消費"
-            cell.configureTimeChart(title: title, data: viewModel.timeChartData)
+            cell.configureTimeChart(data: viewModel.timeChartData)
             return cell
 
         case .amountRangeChart:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationChartCell.reuseId, for: indexPath) as! IllustrationChartCell
-            cell.configureAmountRange(title: "筆數分布", data: viewModel.amountRangeData)
+            cell.configureAmountRange(data: viewModel.amountRangeData)
             return cell
 
         case .none:
@@ -169,10 +169,12 @@ extension MainIllustrationViewController {
         case .filterHeader:
             return .zero
         case .kpi:
-            let horizontalInset: CGFloat = 12 * 2
-            let spacing: CGFloat = 16
-            let cellWidth = floor((width - horizontalInset - spacing) / 2)
-            return CGSize(width: cellWidth, height: 88)
+            let cardHeight: CGFloat = 72
+            let lineSpacing: CGFloat = 8
+            let verticalInset: CGFloat = 8 * 2
+            let rows: CGFloat = 2
+            let gridHeight = rows * cardHeight + (rows - 1) * lineSpacing + verticalInset
+            return CGSize(width: width, height: gridHeight)
         case .timeChart, .amountRangeChart:
             return CGSize(width: width, height: 260)
         case .none:
@@ -184,6 +186,8 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return CGSize(width: collectionView.bounds.width, height: 56)
+        case .kpi:
+            return CGSize(width: collectionView.bounds.width, height: 0)
         default:
             return CGSize(width: collectionView.bounds.width, height: 44)
         }
@@ -193,12 +197,38 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        case .kpi:
+            return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         default:
             return UIEdgeInsets(top: 0, left: 12, bottom: 16, right: 12)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        IllustrationSection(rawValue: section) == .kpi ? 16 : 0
+        0
+    }
+
+    private func openKPIDetail(at index: Int) {
+        let titles = ["總消費筆數", "總消費金額", "平均每人", "平均小費"]
+        let title = titles.indices.contains(index) ? titles[index] : "總覽"
+        let detailVC = ChartDetailViewController(detailItem: .kpi(title: title))
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = IllustrationSection(rawValue: indexPath.section) else { return }
+        let detailVC: ChartDetailViewController
+        switch section {
+        case .kpi:
+            return
+        case .timeChart:
+            let title = viewModel.selectedTimeFilter.title + "消費"
+            detailVC = ChartDetailViewController(detailItem: .timeChart(title: title))
+        case .amountRangeChart:
+            detailVC = ChartDetailViewController(detailItem: .amountRangeChart(title: "筆數分布"))
+        case .filterHeader:
+            return
+        }
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

@@ -13,10 +13,10 @@ enum IllustrationTimeFilterOption: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .day: return "每日"
-        case .week: return "每週"
-        case .month: return "每月"
-        case .year: return "每年"
+        case .day: return "每日消費"
+        case .week: return "每週消費"
+        case .month: return "每月消費"
+        case .year: return "每年消費"
         }
     }
 }
