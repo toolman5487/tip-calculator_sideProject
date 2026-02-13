@@ -12,15 +12,20 @@ final class KPICardCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .clear
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.label.cgColor
         view.layer.cornerRadius = 12
+        view.clipsToBounds = true
         return view
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = ThemeFont.regular(Ofsize: 12)
-        label.textColor = .secondaryLabel
+        label.textColor = .systemBackground
+        label.textAlignment = .center
+        label.backgroundColor = .label
         return label
     }()
 
@@ -28,6 +33,9 @@ final class KPICardCell: UICollectionViewCell {
         let label = UILabel()
         label.font = ThemeFont.bold(Ofsize: 20)
         label.textColor = ThemeColor.text
+        label.textAlignment = .center
+        label.textColor = .label
+        label.backgroundColor = .systemBackground
         return label
     }()
 
