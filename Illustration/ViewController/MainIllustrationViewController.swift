@@ -43,6 +43,7 @@ final class MainIllustrationViewController: MainBaseViewController {
         collectionView.register(IllustrationFilterHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationFilterHeaderView.reuseId)
+        collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
         collectionView.register(IllustrationChartCell.self, forCellWithReuseIdentifier: IllustrationChartCell.reuseId)
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -63,8 +64,9 @@ final class MainIllustrationViewController: MainBaseViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.$timeChartData
+        viewModel.$kpiDisplay
             .map { _ in }
+            .merge(with: viewModel.$timeChartData.map { _ in })
             .merge(with: viewModel.$amountRangeData.map { _ in })
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -88,6 +90,7 @@ extension MainIllustrationViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader: return 0
+        case .kpi: return 1
         case .timeChart, .amountRangeChart: return 1
         case .none: return 0
         }
@@ -106,6 +109,8 @@ extension MainIllustrationViewController {
             )
             header.configure(with: filterVM)
             return header
+        case .kpi:
+            return UICollectionReusableView()
         case .timeChart:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
             header.configure(title: "消費趨勢")
@@ -123,6 +128,17 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
+
+        case .kpi:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICarouselCell.reuseId, for: indexPath) as! KPICarouselCell
+            let display = viewModel.kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerRecordText: "$0", averageTipText: "$0")
+            let items: [KPICardItem] = [
+                KPICardItem(title: "總消費筆數", value: display.totalRecordsText),
+                KPICardItem(title: "平均每筆消費", value: display.averagePerRecordText),
+                KPICardItem(title: "平均小費", value: display.averageTipText)
+            ]
+            cell.configure(items: items)
+            return cell
 
         case .timeChart:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationChartCell.reuseId, for: indexPath) as! IllustrationChartCell
@@ -148,6 +164,11 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             return .zero
+        case .kpi:
+            let inset: CGFloat = 12 * 2
+            let spacing: CGFloat = 8 * 2
+            let cellSide = width > 0 ? max(0, (width - inset - spacing) / 3) : 100
+            return CGSize(width: width, height: cellSide)
         case .timeChart, .amountRangeChart:
             return CGSize(width: width, height: 260)
         case .none:
@@ -159,6 +180,8 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return CGSize(width: collectionView.bounds.width, height: 56)
+        case .kpi:
+            return CGSize(width: collectionView.bounds.width, height: 0)
         default:
             return CGSize(width: collectionView.bounds.width, height: 44)
         }
@@ -168,8 +191,10 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        case .kpi:
+            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         default:
-            return UIEdgeInsets(top: 8, left: 12, bottom: 16, right: 12)
+            return UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
         }
     }
 

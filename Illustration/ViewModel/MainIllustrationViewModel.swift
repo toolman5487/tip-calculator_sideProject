@@ -8,6 +8,7 @@ import Combine
 
 enum IllustrationSection: Int, CaseIterable {
     case filterHeader
+    case kpi
     case timeChart
     case amountRangeChart
 }
@@ -30,12 +31,20 @@ extension IllustrationFilterHeaderViewModel {
     }
 }
 
+struct IllustrationKPIDisplay {
+    let totalRecordsText: String
+    let averagePerRecordText: String
+    let averageTipText: String
+}
+
 @MainActor
 final class MainIllustrationViewModel {
 
     private let store: ConsumptionRecordStoring
 
     @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .day
+    @Published private(set) var kpi: IllustrationKPISummary?
+    @Published private(set) var kpiDisplay: IllustrationKPIDisplay?
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var amountRangeData: [AmountRangeChartItem] = []
 
@@ -61,8 +70,27 @@ final class MainIllustrationViewModel {
 
     private func applyAggregation(from records: [ConsumptionRecord]) {
         let filtered = filterRecordsByTimeDimension(records)
+        let summary = buildKPI(from: filtered)
+        kpi = summary
+        kpiDisplay = IllustrationKPIDisplay(
+            totalRecordsText: Double(summary.totalRecords).abbreviatedFormatted,
+            averagePerRecordText: summary.averagePerRecord.currencyAbbreviatedFormatted,
+            averageTipText: summary.averageTip.currencyAbbreviatedFormatted
+        )
         timeChartData = buildTimeChartData(from: records)
         amountRangeData = buildAmountRangeData(from: filtered)
+    }
+
+    private func buildKPI(from records: [ConsumptionRecord]) -> IllustrationKPISummary {
+        let totalRecords = records.count
+        let totalAmount = records.reduce(0) { $0 + $1.totalBill }
+        let totalTip = records.reduce(0) { $0 + $1.totalTip }
+        return IllustrationKPISummary(
+            totalRecords: totalRecords,
+            totalAmount: totalAmount,
+            averagePerRecord: totalRecords > 0 ? totalAmount / Double(totalRecords) : 0,
+            averageTip: totalRecords > 0 ? totalTip / Double(totalRecords) : 0
+        )
     }
 
     private func filterRecordsByTimeDimension(_ records: [ConsumptionRecord]) -> [ConsumptionRecord] {
