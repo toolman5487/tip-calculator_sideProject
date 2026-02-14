@@ -21,13 +21,6 @@ enum IllustrationTimeFilterOption: Int, CaseIterable {
     }
 }
 
-struct IllustrationKPISummary {
-    let totalRecords: Int
-    let totalAmount: Double
-    let averagePerPerson: Double
-    let averageTip: Double
-}
-
 struct MonthlyChartItem {
     let month: Int
     let label: String

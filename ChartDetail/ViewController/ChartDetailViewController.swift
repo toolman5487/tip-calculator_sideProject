@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 
 enum ChartDetailItem {
-    case kpi(title: String)
     case timeChart(title: String)
     case amountRangeChart(title: String)
 }
@@ -35,8 +34,7 @@ final class ChartDetailViewController: MainBaseViewController {
 
     override func setupNavigationBar() {
         switch detailItem {
-        case .kpi(let title),
-             .timeChart(let title),
+        case .timeChart(let title),
              .amountRangeChart(let title):
             self.title = title
         }

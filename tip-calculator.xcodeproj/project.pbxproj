@@ -26,19 +26,13 @@
 		156C515F2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C515D2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift */; };
 		156C51602F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C515D2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift */; };
 		156C51612F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C515D2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift */; };
-		156C51652F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51642F3DDB0000F0C0A9 /* KPICardCell.swift */; };
 		156C51662F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */; };
 		156C51672F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51622F3DDB0000F0C0A9 /* IllustrationChartCell.swift */; };
-		156C51682F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51642F3DDB0000F0C0A9 /* KPICardCell.swift */; };
 		156C51692F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */; };
 		156C516A2F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51622F3DDB0000F0C0A9 /* IllustrationChartCell.swift */; };
-		156C516B2F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51642F3DDB0000F0C0A9 /* KPICardCell.swift */; };
 		156C516C2F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */; };
 		156C516D2F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51622F3DDB0000F0C0A9 /* IllustrationChartCell.swift */; };
 		156C51742F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */; };
-		156C51802F3E600000F0C0A9 /* KPIGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C517F2F3E600000F0C0A9 /* KPIGridCell.swift */; };
-		156C51812F3E600000F0C0A9 /* KPIGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C517F2F3E600000F0C0A9 /* KPIGridCell.swift */; };
-		156C51822F3E600000F0C0A9 /* KPIGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C517F2F3E600000F0C0A9 /* KPIGridCell.swift */; };
 		156C5BEA2F3ED53500F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */; };
 		156C5BEB2F3ED53500F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */; };
 		156C5C682F3ED5A500F0C0A9 /* ChartDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156C5C672F3ED5A500F0C0A9 /* ChartDetailViewController.swift */; };
@@ -140,9 +134,7 @@
 		156C515D2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainIllustrationViewModel.swift; sourceTree = "<group>"; };
 		156C51622F3DDB0000F0C0A9 /* IllustrationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationChartCell.swift; sourceTree = "<group>"; };
 		156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationSectionHeaderView.swift; sourceTree = "<group>"; };
-		156C51642F3DDB0000F0C0A9 /* KPICardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPICardCell.swift; sourceTree = "<group>"; };
 		156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationFilterHeaderView.swift; sourceTree = "<group>"; };
-		156C517F2F3E600000F0C0A9 /* KPIGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPIGridCell.swift; sourceTree = "<group>"; };
 		156C5C672F3ED5A500F0C0A9 /* ChartDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDetailViewController.swift; sourceTree = "<group>"; };
 		156C6F152F3581FF00F0C0A9 /* ResultsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterViewModel.swift; sourceTree = "<group>"; };
 		156C6FAA2F35CABB00F0C0A9 /* ResultsFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterCell.swift; sourceTree = "<group>"; };
@@ -285,7 +277,6 @@
 		156C51572F3DD8B500F0C0A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				156CDEAA2F3EFD1D00F0C0A9 /* KPI */,
 				156C51622F3DDB0000F0C0A9 /* IllustrationChartCell.swift */,
 				156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */,
 				156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */,
@@ -445,15 +436,6 @@
 				156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */,
 			);
 			path = ViewController;
-			sourceTree = "<group>";
-		};
-		156CDEAA2F3EFD1D00F0C0A9 /* KPI */ = {
-			isa = PBXGroup;
-			children = (
-				156C517F2F3E600000F0C0A9 /* KPIGridCell.swift */,
-				156C51642F3DDB0000F0C0A9 /* KPICardCell.swift */,
-			);
-			path = KPI;
 			sourceTree = "<group>";
 		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {
@@ -734,8 +716,6 @@
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				156C51602F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
 				156C5C682F3ED5A500F0C0A9 /* ChartDetailViewController.swift in Sources */,
-				156C51802F3E600000F0C0A9 /* KPIGridCell.swift in Sources */,
-				156C51652F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */,
 				156C51662F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				156C51742F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
 				156C51672F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */,
@@ -760,8 +740,6 @@
 				156C1AFD2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
-				156C51812F3E600000F0C0A9 /* KPIGridCell.swift in Sources */,
-				156C516B2F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */,
 				156C516C2F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				156C5BEA2F3ED53500F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
 				156C516D2F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */,
@@ -797,8 +775,6 @@
 				156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
-				156C51822F3E600000F0C0A9 /* KPIGridCell.swift in Sources */,
-				156C51682F3DDB0000F0C0A9 /* KPICardCell.swift in Sources */,
 				156C51692F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				156C5BEB2F3ED53500F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
 				156C516A2F3DDB0000F0C0A9 /* IllustrationChartCell.swift in Sources */,

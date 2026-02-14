@@ -8,7 +8,6 @@ import Combine
 
 enum IllustrationSection: Int, CaseIterable {
     case filterHeader
-    case kpi
     case timeChart
     case amountRangeChart
 }
@@ -37,7 +36,6 @@ final class MainIllustrationViewModel {
     private let store: ConsumptionRecordStoring
 
     @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .day
-    @Published private(set) var kpi: IllustrationKPISummary?
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var amountRangeData: [AmountRangeChartItem] = []
 
@@ -63,7 +61,6 @@ final class MainIllustrationViewModel {
 
     private func applyAggregation(from records: [ConsumptionRecord]) {
         let filtered = filterRecordsByTimeDimension(records)
-        kpi = buildKPI(from: filtered)
         timeChartData = buildTimeChartData(from: records)
         amountRangeData = buildAmountRangeData(from: filtered)
     }
@@ -94,19 +91,6 @@ final class MainIllustrationViewModel {
                 return calendar.isDate(date, equalTo: now, toGranularity: .year)
             }
         }
-    }
-
-    private func buildKPI(from records: [ConsumptionRecord]) -> IllustrationKPISummary {
-        let totalRecords = records.count
-        let totalAmount = records.reduce(0) { $0 + $1.totalBill }
-        let totalPerPerson = records.reduce(0) { $0 + $1.amountPerPerson }
-        let totalTip = records.reduce(0) { $0 + $1.totalTip }
-        return IllustrationKPISummary(
-            totalRecords: totalRecords,
-            totalAmount: totalAmount,
-            averagePerPerson: totalRecords > 0 ? totalPerPerson / Double(totalRecords) : 0,
-            averageTip: totalRecords > 0 ? totalTip / Double(totalRecords) : 0
-        )
     }
 
     private func buildTimeChartData(from records: [ConsumptionRecord]) -> [TrendChartItem] {
