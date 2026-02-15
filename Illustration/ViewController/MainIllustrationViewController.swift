@@ -131,10 +131,10 @@ extension MainIllustrationViewController {
 
         case .kpi:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICarouselCell.reuseId, for: indexPath) as! KPICarouselCell
-            let display = viewModel.kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerRecordText: "$0", averageTipText: "$0")
+            let display = viewModel.kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", averageTipText: "$0")
             let items: [KPICardItem] = [
                 KPICardItem(title: "總消費筆數", value: display.totalRecordsText),
-                KPICardItem(title: "平均每筆消費", value: display.averagePerRecordText),
+                KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText),
                 KPICardItem(title: "平均小費", value: display.averageTipText)
             ]
             cell.configure(items: items)

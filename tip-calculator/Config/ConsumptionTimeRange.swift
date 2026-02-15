@@ -65,4 +65,27 @@ enum ConsumptionTimeRange {
         result.reverse()
         return result
     }
+
+    func bucketIndex(for date: Date, periods: Int, calendar: Calendar = .current, now: Date = Date()) -> Int? {
+        switch self {
+        case .day:
+            let dStart = calendar.startOfDay(for: date)
+            let nowStart = calendar.startOfDay(for: now)
+            guard let days = calendar.dateComponents([.day], from: dStart, to: nowStart).day, days >= 0, days < periods else { return nil }
+            return periods - 1 - days
+        case .week:
+            let sec = now.timeIntervalSince(date)
+            guard sec >= 0 else { return nil }
+            let periodSec: TimeInterval = 7 * 24 * 3600
+            let periodsAgo = Int(sec / periodSec)
+            guard periodsAgo < periods else { return nil }
+            return periods - 1 - periodsAgo
+        case .month:
+            guard let months = calendar.dateComponents([.month], from: date, to: now).month, months >= 0, months < periods else { return nil }
+            return periods - 1 - months
+        case .year:
+            guard let years = calendar.dateComponents([.year], from: date, to: now).year, years >= 0, years < periods else { return nil }
+            return periods - 1 - years
+        }
+    }
 }

@@ -33,7 +33,7 @@ extension IllustrationFilterHeaderViewModel {
 
 struct IllustrationKPIDisplay {
     let totalRecordsText: String
-    let averagePerRecordText: String
+    let averagePerPersonText: String
     let averageTipText: String
 }
 
@@ -74,7 +74,7 @@ final class MainIllustrationViewModel {
         kpi = summary
         kpiDisplay = IllustrationKPIDisplay(
             totalRecordsText: Double(summary.totalRecords).abbreviatedFormatted,
-            averagePerRecordText: summary.averagePerRecord.currencyAbbreviatedFormatted,
+            averagePerPersonText: summary.averagePerRecord.currencyAbbreviatedFormatted,
             averageTipText: summary.averageTip.currencyAbbreviatedFormatted
         )
         timeChartData = buildTimeChartData(from: records)
@@ -124,9 +124,10 @@ final class MainIllustrationViewModel {
         for r in ranges { sums[r.start] = 0 }
         for record in records {
             guard let date = record.createdAt else { continue }
-            if let r = ranges.first(where: { date >= $0.start && date < $0.end }) {
-                sums[r.start, default: 0] += record.totalBill
-            }
+            guard let idx = timeRange.bucketIndex(for: date, periods: periods, calendar: calendar, now: now),
+                  idx < ranges.count else { continue }
+            let key = ranges[idx].start
+            sums[key, default: 0] += record.totalBill
         }
         return ranges.map { r in
             TrendChartItem(label: formatter.string(from: r.start), totalAmount: sums[r.start] ?? 0)

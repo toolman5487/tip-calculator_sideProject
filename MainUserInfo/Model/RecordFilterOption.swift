@@ -31,7 +31,8 @@ enum RecordFilterOption: Int, CaseIterable {
     func apply(to records: [ConsumptionRecord]) -> [ConsumptionRecord] {
         let snapshots = records.map { RecordSnapshot($0) }
         let filtered = apply(to: snapshots)
-        return filtered.compactMap { s in records.first { $0.id == s.id } }
+        let byId = Dictionary(uniqueKeysWithValues: records.compactMap { r in r.id.map { ($0, r) } })
+        return filtered.compactMap { s in s.id.flatMap { byId[$0] } }
     }
 
     private var consumptionTimeRange: ConsumptionTimeRange? {
