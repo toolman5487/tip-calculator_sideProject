@@ -96,7 +96,6 @@ final class MainIllustrationViewModel {
     private func filterRecordsByTimeDimension(_ records: [ConsumptionRecord]) -> [ConsumptionRecord] {
         let calendar = Calendar.current
         let now = Date()
-
         switch selectedTimeFilter {
         case .day:
             return records.filter {
@@ -104,19 +103,22 @@ final class MainIllustrationViewModel {
                 return calendar.isDateInToday(date)
             }
         case .week:
+            guard let start = calendar.date(byAdding: .day, value: -7, to: now) else { return [] }
             return records.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         case .month:
+            guard let start = calendar.date(byAdding: .month, value: -1, to: now) else { return [] }
             return records.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .month)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         case .year:
+            guard let start = calendar.date(byAdding: .year, value: -1, to: now) else { return [] }
             return records.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .year)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         }
     }
@@ -151,54 +153,65 @@ final class MainIllustrationViewModel {
 
         case .week:
             formatter.dateFormat = "M/d"
-            var weekSums: [(start: Date, end: Date)] = []
+            var ranges: [(start: Date, end: Date)] = []
             for i in 0..<12 {
-                guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -i, to: now),
-                      let range = calendar.dateInterval(of: .weekOfYear, for: weekStart) else { continue }
-                weekSums.append((range.start, range.end))
+                guard let end = calendar.date(byAdding: .day, value: -i * 7, to: now),
+                      let start = calendar.date(byAdding: .day, value: -7, to: end) else { continue }
+                ranges.append((start, end))
             }
-            weekSums.reverse()
+            ranges.reverse()
             var sums: [Date: Double] = [:]
-            for w in weekSums { sums[w.start] = 0 }
+            for r in ranges { sums[r.start] = 0 }
             for record in records {
                 guard let date = record.createdAt else { continue }
-                if let range = weekSums.first(where: { date >= $0.start && date < $0.end }) {
-                    sums[range.start, default: 0] += record.totalBill
+                if let r = ranges.first(where: { date >= $0.start && date < $0.end }) {
+                    sums[r.start, default: 0] += record.totalBill
                 }
             }
-            return weekSums.map { w in
-                TrendChartItem(label: formatter.string(from: w.start), totalAmount: sums[w.start] ?? 0)
+            return ranges.map { r in
+                TrendChartItem(label: formatter.string(from: r.start), totalAmount: sums[r.start] ?? 0)
             }
 
         case .month:
             formatter.dateFormat = "M月"
-            let year = calendar.component(.year, from: now)
-            var monthSums: [Int: Double] = Dictionary(uniqueKeysWithValues: (1...12).map { ($0, 0) })
-            for record in records {
-                guard let date = record.createdAt,
-                      calendar.component(.year, from: date) == year else { continue }
-                let month = calendar.component(.month, from: date)
-                monthSums[month, default: 0] += record.totalBill
+            var ranges: [(start: Date, end: Date)] = []
+            for i in 0..<12 {
+                guard let end = calendar.date(byAdding: .month, value: -i, to: now),
+                      let start = calendar.date(byAdding: .month, value: -1, to: end) else { continue }
+                ranges.append((start, end))
             }
-            return (1...12).map { month in
-                let d = calendar.date(from: DateComponents(year: year, month: month, day: 1)) ?? now
-                return TrendChartItem(label: formatter.string(from: d), totalAmount: monthSums[month] ?? 0)
+            ranges.reverse()
+            var sums: [Date: Double] = [:]
+            for r in ranges { sums[r.start] = 0 }
+            for record in records {
+                guard let date = record.createdAt else { continue }
+                if let r = ranges.first(where: { date >= $0.start && date < $0.end }) {
+                    sums[r.start, default: 0] += record.totalBill
+                }
+            }
+            return ranges.map { r in
+                TrendChartItem(label: formatter.string(from: r.start), totalAmount: sums[r.start] ?? 0)
             }
 
         case .year:
-            let currentYear = calendar.component(.year, from: now)
-            let years = (0..<5).map { currentYear - $0 }.reversed()
-            var yearSums: [Int: Double] = [:]
-            for y in years { yearSums[y] = 0 }
+            var ranges: [(start: Date, end: Date)] = []
+            for i in 0..<5 {
+                guard let end = calendar.date(byAdding: .year, value: -i, to: now),
+                      let start = calendar.date(byAdding: .year, value: -1, to: end) else { continue }
+                ranges.append((start, end))
+            }
+            ranges.reverse()
+            var sums: [Date: Double] = [:]
+            for r in ranges { sums[r.start] = 0 }
             for record in records {
                 guard let date = record.createdAt else { continue }
-                let y = calendar.component(.year, from: date)
-                if yearSums[y] != nil {
-                    yearSums[y, default: 0] += record.totalBill
+                if let r = ranges.first(where: { date >= $0.start && date < $0.end }) {
+                    sums[r.start, default: 0] += record.totalBill
                 }
             }
-            return years.map { y in
-                TrendChartItem(label: "\(y)年", totalAmount: yearSums[y] ?? 0)
+            formatter.dateFormat = "yyyy年"
+            return ranges.map { r in
+                TrendChartItem(label: formatter.string(from: r.start), totalAmount: sums[r.start] ?? 0)
             }
         }
     }
