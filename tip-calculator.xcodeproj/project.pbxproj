@@ -293,15 +293,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		156CDEAB2F3EFD1D00F0C0A9 /* KPI */ = {
-			isa = PBXGroup;
-			children = (
-				156C51902F3E700000F0C0A9 /* KPICardCell.swift */,
-				156C51912F3E700000F0C0A9 /* KPICarouselCell.swift */,
-			);
-			path = KPI;
-			sourceTree = "<group>";
-		};
 		156C51582F3DD8C700F0C0A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,6 +445,15 @@
 				156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		156CDEAB2F3EFD1D00F0C0A9 /* KPI */ = {
+			isa = PBXGroup;
+			children = (
+				156C51902F3E700000F0C0A9 /* KPICardCell.swift */,
+				156C51912F3E700000F0C0A9 /* KPICarouselCell.swift */,
+			);
+			path = KPI;
 			sourceTree = "<group>";
 		};
 		157A6E472F343483005D8554 /* MainTabBar */ = {

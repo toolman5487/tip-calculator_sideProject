@@ -19,6 +19,15 @@ enum IllustrationTimeFilterOption: Int, CaseIterable {
         case .year: return "每年消費"
         }
     }
+
+    var consumptionTimeRange: ConsumptionTimeRange {
+        switch self {
+        case .day: return .day
+        case .week: return .week
+        case .month: return .month
+        case .year: return .year
+        }
+    }
 }
 
 struct IllustrationKPISummary {

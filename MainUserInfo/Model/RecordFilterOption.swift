@@ -34,35 +34,26 @@ enum RecordFilterOption: Int, CaseIterable {
         return filtered.compactMap { s in records.first { $0.id == s.id } }
     }
 
+    private var consumptionTimeRange: ConsumptionTimeRange? {
+        switch self {
+        case .day: return .day
+        case .week: return .week
+        case .month: return .month
+        case .year: return .year
+        default: return nil
+        }
+    }
+
     func apply(to snapshots: [RecordSnapshot]) -> [RecordSnapshot] {
         let calendar = Calendar.current
         let now = Date()
         let filtered: [RecordSnapshot]
-        switch self {
-        case .day:
-            filtered = snapshots.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDateInToday(date)
-            }
-        case .week:
-            guard let start = calendar.date(byAdding: .day, value: -7, to: now) else { filtered = []; break }
+        if let timeRange = consumptionTimeRange, let r = timeRange.range(calendar: calendar, now: now) {
             filtered = snapshots.filter {
                 guard let d = $0.createdAt else { return false }
-                return d >= start && d <= now
+                return timeRange.contains(d, range: r)
             }
-        case .month:
-            guard let start = calendar.date(byAdding: .month, value: -1, to: now) else { filtered = []; break }
-            filtered = snapshots.filter {
-                guard let d = $0.createdAt else { return false }
-                return d >= start && d <= now
-            }
-        case .year:
-            guard let start = calendar.date(byAdding: .year, value: -1, to: now) else { filtered = []; break }
-            filtered = snapshots.filter {
-                guard let d = $0.createdAt else { return false }
-                return d >= start && d <= now
-            }
-        case .newest, .oldest, .mostExpensive, .cheapest:
+        } else {
             filtered = snapshots
         }
         switch self {
