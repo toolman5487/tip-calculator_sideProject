@@ -37,6 +37,7 @@ final class CalculatorVC: BaseViewController {
     @MainActor
     private enum Row: Int, CaseIterable {
         case result
+        case categoriesInput
         case billInput
         case tipInput
         case splitInput
@@ -45,6 +46,7 @@ final class CalculatorVC: BaseViewController {
         var reuseId: String {
             switch self {
             case .result: return ResultCell.reuseId
+            case .categoriesInput: return CategoriesInputCell.reuseId
             case .billInput: return BillInputCell.reuseId
             case .tipInput: return TipInputCell.reuseId
             case .splitInput: return SplitInputCell.reuseId
@@ -57,6 +59,7 @@ final class CalculatorVC: BaseViewController {
         var rowHeight: CGFloat {
             switch self {
             case .result: return 260
+            case .categoriesInput: return 160
             case .billInput: return 92
             case .tipInput: return 151
             case .splitInput: return 92
@@ -72,6 +75,7 @@ final class CalculatorVC: BaseViewController {
         table.contentInsetAdjustmentBehavior = .automatic
         table.showsVerticalScrollIndicator = false
         table.register(ResultCell.self, forCellReuseIdentifier: ResultCell.reuseId)
+        table.register(CategoriesInputCell.self, forCellReuseIdentifier: CategoriesInputCell.reuseId)
         table.register(BillInputCell.self, forCellReuseIdentifier: BillInputCell.reuseId)
         table.register(TipInputCell.self, forCellReuseIdentifier: TipInputCell.reuseId)
         table.register(SplitInputCell.self, forCellReuseIdentifier: SplitInputCell.reuseId)
@@ -162,6 +166,10 @@ extension CalculatorVC: UITableViewDataSource {
         switch row {
         case .result:
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ResultCell
+            cell.configure()
+            return cell
+        case .categoriesInput:
+            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! CategoriesInputCell
             cell.configure()
             return cell
         case .billInput:
