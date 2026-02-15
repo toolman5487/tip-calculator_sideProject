@@ -37,7 +37,6 @@ enum RecordFilterOption: Int, CaseIterable {
     func apply(to snapshots: [RecordSnapshot]) -> [RecordSnapshot] {
         let calendar = Calendar.current
         let now = Date()
-
         let filtered: [RecordSnapshot]
         switch self {
         case .day:
@@ -46,33 +45,31 @@ enum RecordFilterOption: Int, CaseIterable {
                 return calendar.isDateInToday(date)
             }
         case .week:
+            guard let start = calendar.date(byAdding: .day, value: -7, to: now) else { filtered = []; break }
             filtered = snapshots.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         case .month:
+            guard let start = calendar.date(byAdding: .month, value: -1, to: now) else { filtered = []; break }
             filtered = snapshots.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .month)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         case .year:
+            guard let start = calendar.date(byAdding: .year, value: -1, to: now) else { filtered = []; break }
             filtered = snapshots.filter {
-                guard let date = $0.createdAt else { return false }
-                return calendar.isDate(date, equalTo: now, toGranularity: .year)
+                guard let d = $0.createdAt else { return false }
+                return d >= start && d <= now
             }
         case .newest, .oldest, .mostExpensive, .cheapest:
             filtered = snapshots
         }
-
         switch self {
         case .newest, .day, .week, .month, .year:
-            return filtered.sorted {
-                ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast)
-            }
+            return filtered.sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
         case .oldest:
-            return filtered.sorted {
-                ($0.createdAt ?? .distantPast) < ($1.createdAt ?? .distantPast)
-            }
+            return filtered.sorted { ($0.createdAt ?? .distantPast) < ($1.createdAt ?? .distantPast) }
         case .mostExpensive:
             return filtered.sorted { $0.amountPerPerson > $1.amountPerPerson }
         case .cheapest:
