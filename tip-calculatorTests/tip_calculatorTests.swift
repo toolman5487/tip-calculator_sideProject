@@ -25,10 +25,11 @@ final class tip_calculatorTests: XCTestCase {
         super.setUp()
     }
     
-    func buildInput(bill:Double, tip:Tip, split: Int) -> CalculatorVM.Input {
+    func buildInput(bill: Double, tip: Tip, split: Int, categoryIdentifier: String? = nil) -> CalculatorVM.Input {
         return .init(billPublisher: Just(bill).eraseToAnyPublisher(),
                      tipPublisher: Just(tip).eraseToAnyPublisher(),
                      splitPublisher: Just(split).eraseToAnyPublisher(),
+                     categoryPublisher: Just(categoryIdentifier).eraseToAnyPublisher(),
                      logoViewTapPublisher: logoViewTapSubject.eraseToAnyPublisher())
     }
     

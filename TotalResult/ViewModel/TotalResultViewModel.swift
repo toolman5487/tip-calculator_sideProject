@@ -17,6 +17,7 @@ enum TotalResultRow: Int, CaseIterable {
     case bill
     case tip
     case split
+    case category
     case location
     case save
 
@@ -28,6 +29,7 @@ enum TotalResultRow: Int, CaseIterable {
         case .bill:            return "帳單金額"
         case .tip:             return "小費設定"
         case .split:           return "分攤人數"
+        case .category:        return "消費種類"
         case .location:        return "消費地點"
         case .save:            return "儲存紀錄"
         }
@@ -47,6 +49,8 @@ enum TotalResultRow: Int, CaseIterable {
             return result.tip.stringValue.isEmpty ? "無" : result.tip.stringValue
         case .split:
             return "\(result.split)"
+        case .category:
+            return result.categoryDisplayTitle ?? "—"
         case .location:
             return ""
         case .save:
@@ -122,7 +126,7 @@ final class TotalResultViewModel {
 
     @discardableResult
     func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
-        let success = store.save(result: result, latitude: latitude, longitude: longitude, address: address)
+        let success = store.save(result: result, latitude: latitude, longitude: longitude, address: address, categoryIdentifier: result.categoryIdentifier)
         if success {
             TabBarBadgePublisher.increment(on: .userInfo)
         }

@@ -13,6 +13,11 @@ private var cellContentInsets: UIEdgeInsets {
     UIEdgeInsets(top: cellInsetVertical, left: cellInsetHorizontal, bottom: cellInsetVertical, right: cellInsetHorizontal)
 }
 
+// MARK: - Resettable Protocol
+protocol Resettable: AnyObject {
+    func reset()
+}
+
 // MARK: - ResultCell
 final class ResultCell: UITableViewCell {
     static let reuseId = "ResultCell"
@@ -85,6 +90,12 @@ final class BillInputCell: UITableViewCell {
     func configure() {}
 }
 
+extension BillInputCell: Resettable {
+    func reset() {
+        billInputView.billReset()
+    }
+}
+
 // MARK: - CategoriesInputCell
 final class CategoriesInputCell: UITableViewCell {
     static let reuseId = "CategoriesInputCell"
@@ -105,6 +116,17 @@ final class CategoriesInputCell: UITableViewCell {
             case .transport: return "行"
             case .education: return "育"
             case .entertainment: return "樂"
+            }
+        }
+
+        var identifier: String {
+            switch self {
+            case .food: return "food"
+            case .clothing: return "clothing"
+            case .housing: return "housing"
+            case .transport: return "transport"
+            case .education: return "education"
+            case .entertainment: return "entertainment"
             }
         }
     }
@@ -150,7 +172,7 @@ final class CategoriesInputCell: UITableViewCell {
         s.minimumValue = 0
         s.maximumValue = 5
         s.value = 0
-        s.minimumTrackTintColor = ThemeColor.primary
+        s.minimumTrackTintColor = ThemeColor.secondary
         s.maximumTrackTintColor = ThemeColor.primary.withAlphaComponent(0.3)
         s.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         return s
@@ -180,7 +202,7 @@ final class CategoriesInputCell: UITableViewCell {
         for (i, label) in categoryLabels.enumerated() {
             let isSelected = (i == index)
             label.font = isSelected ? ThemeFont.bold(Ofsize: 16) : ThemeFont.regular(Ofsize: 14)
-            label.textColor = isSelected ? ThemeColor.text : ThemeColor.text.withAlphaComponent(0.6)
+            label.textColor = isSelected ? ThemeColor.secondary : ThemeColor.text.withAlphaComponent(0.6)
         }
     }
 
@@ -221,6 +243,12 @@ final class CategoriesInputCell: UITableViewCell {
     }
 }
 
+extension CategoriesInputCell: Resettable {
+    func reset() {
+        configure(selectedCategory: .food)
+    }
+}
+
 // MARK: - TipInputCell
 final class TipInputCell: UITableViewCell {
     static let reuseId = "TipInputCell"
@@ -255,6 +283,12 @@ final class TipInputCell: UITableViewCell {
     }
 
     func configure() {}
+}
+
+extension TipInputCell: Resettable {
+    func reset() {
+        tipInputView.tipReset()
+    }
 }
 
 // MARK: - SplitInputCell
@@ -292,6 +326,12 @@ final class SplitInputCell: UITableViewCell {
     }
 
     func configure() {}
+}
+
+extension SplitInputCell: Resettable {
+    func reset() {
+        splitInputView.splitReset()
+    }
 }
 
 // MARK: - ConfirmButtonCell

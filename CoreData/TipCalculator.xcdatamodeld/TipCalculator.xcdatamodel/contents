@@ -5,6 +5,7 @@
         <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="amountPerPerson" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="bill" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="categoryIdentifier" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" usesScalarValueType="YES"/>

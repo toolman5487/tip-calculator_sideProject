@@ -20,7 +20,8 @@ final class CalculatorVM {
         totalTip: 0,
         bill: 0,
         tip: .none,
-        split: 1
+        split: 1,
+        categoryIdentifier: nil
     )
 
     private let resetSubject = PassthroughSubject<Void, Never>()
@@ -34,6 +35,7 @@ final class CalculatorVM {
         let billPublisher: AnyPublisher<Double, Never>
         let tipPublisher: AnyPublisher<Tip, Never>
         let splitPublisher: AnyPublisher<Int, Never>
+        let categoryPublisher: AnyPublisher<String?, Never>
         let logoViewTapPublisher: AnyPublisher<Void, Never>
     }
     
@@ -53,12 +55,13 @@ final class CalculatorVM {
     }
     
     func bind(input: Input) {
-        Publishers.CombineLatest3(
+        Publishers.CombineLatest4(
             input.billPublisher,
             input.tipPublisher,
-            input.splitPublisher
+            input.splitPublisher,
+            input.categoryPublisher
         )
-        .map { [weak self] bill, tip, split -> Result in
+        .map { [weak self] bill, tip, split, categoryId -> Result in
             guard let self else {
                 return Result(
                     amountPerPerson: 0,
@@ -66,7 +69,8 @@ final class CalculatorVM {
                     totalTip: 0,
                     bill: 0,
                     tip: .none,
-                    split: 1
+                    split: 1,
+                    categoryIdentifier: nil
                 )
             }
             let totalTip = self.getTipAmount(bill: bill, tip: tip)
@@ -78,7 +82,8 @@ final class CalculatorVM {
                 totalTip: totalTip,
                 bill: bill,
                 tip: tip,
-                split: split
+                split: split,
+                categoryIdentifier: categoryId
             )
         }
         .assign(to: &$result)

@@ -31,7 +31,10 @@ final class CalculatorVC: BaseViewController {
         let item = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
         item.accessibilityIdentifier = "refreshButton"
         navigationItem.rightBarButtonItem = item
-        return item.tapPublisher.map { _ in () }.eraseToAnyPublisher()
+        return item.tapPublisher
+            .map { _ in () }
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }()
 
     @MainActor
@@ -116,6 +119,7 @@ final class CalculatorVC: BaseViewController {
 
         guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
               let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
+              let categoriesInputCell = tableView.cellForRow(at: IndexPath(row: Row.categoriesInput.rawValue, section: 0)) as? CategoriesInputCell,
               let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,
               let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell
         else { return }
@@ -124,6 +128,7 @@ final class CalculatorVC: BaseViewController {
             billPublisher: billInputCell.billInputView.valuePublisher,
             tipPublisher: tipInputCell.tipInputView.valuePublisher,
             splitPublisher: splitInputCell.splitInputView.valuePublisher,
+            categoryPublisher: categoriesInputCell.valuePublisher.map { Optional($0.identifier) }.eraseToAnyPublisher(),
             logoViewTapPublisher: refreshButtonTapPublisher)
         vm.bind(input: input)
 
@@ -133,9 +138,12 @@ final class CalculatorVC: BaseViewController {
 
         vm.resetPublisher.sink { [weak self] _ in
             guard let self else { return }
-            (self.tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell)?.billInputView.billReset()
-            (self.tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell)?.tipInputView.tipReset()
-            (self.tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell)?.splitInputView.splitReset()
+            let resettableRows: [Row] = [.billInput, .categoriesInput, .tipInput, .splitInput]
+            for row in resettableRows {
+                if let cell = self.tableView.cellForRow(at: IndexPath(row: row.rawValue, section: 0)) as? Resettable {
+                    cell.reset()
+                }
+            }
         }.store(in: &cancellables)
     }
 

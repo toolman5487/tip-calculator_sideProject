@@ -42,6 +42,7 @@ final class TotalResultViewController: UIViewController {
         collection.register(BillCell.self, forCellWithReuseIdentifier: BillCell.reuseId)
         collection.register(TipCell.self, forCellWithReuseIdentifier: TipCell.reuseId)
         collection.register(SplitCell.self, forCellWithReuseIdentifier: SplitCell.reuseId)
+        collection.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.reuseId)
         collection.register(LocationCell.self, forCellWithReuseIdentifier: LocationCell.reuseId)
         collection.register(SaveRecordCell.self, forCellWithReuseIdentifier: SaveRecordCell.reuseId)
         return collection
@@ -149,6 +150,10 @@ extension TotalResultViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SplitCell.reuseId, for: indexPath) as! SplitCell
             cell.configure(with: viewModel.result)
             return cell
+        case .category:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseId, for: indexPath) as! CategoryCell
+            cell.configure(with: viewModel.result)
+            return cell
         case .location:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationCell.reuseId, for: indexPath) as! LocationCell
             cell.configure(locationText: viewModel.locationDisplayText, isLoading: viewModel.isLocationLoading)
@@ -206,6 +211,8 @@ extension TotalResultViewController: UICollectionViewDelegateFlowLayout {
         case .tip:
             return CGSize(width: width, height: 100)
         case .split:
+            return CGSize(width: width, height: 100)
+        case .category:
             return CGSize(width: width, height: 100)
         case .location:
             return CGSize(width: width, height: 100)

@@ -25,6 +25,7 @@ extension ConsumptionRecord {
     @NSManaged public var latitude: NSNumber?
     @NSManaged public var longitude: NSNumber?
     @NSManaged public var bill: Double
+    @NSManaged public var categoryIdentifier: String?
     @NSManaged public var totalTip: Double
     @NSManaged public var totalBill: Double
     @NSManaged public var amountPerPerson: Double

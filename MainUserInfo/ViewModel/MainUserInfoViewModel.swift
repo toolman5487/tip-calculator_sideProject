@@ -67,6 +67,7 @@ struct RecordSnapshot {
     let amountPerPerson: Double
     let split: Int
     let tipRawValue: String?
+    let categoryIdentifier: String?
     let address: String?
     let locationName: String?
     let latitude: Double?
@@ -81,6 +82,7 @@ struct RecordSnapshot {
         amountPerPerson = record.amountPerPerson
         split = Int(record.split)
         tipRawValue = record.tipRawValue
+        categoryIdentifier = record.categoryIdentifier
         address = record.address
         locationName = record.locationName
         latitude = record.latitude?.doubleValue

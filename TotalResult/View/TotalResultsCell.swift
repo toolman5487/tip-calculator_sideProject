@@ -125,6 +125,17 @@ final class SplitCell: BaseResultInfoCell {
     }
 }
 
+final class CategoryCell: BaseResultInfoCell {
+    static let reuseId = "CategoryCell"
+
+    func configure(with result: Result) {
+        titleLabel.text = "消費種類"
+        valueLabel.text = result.categoryDisplayTitle ?? "—"
+        valueLabel.font = ThemeFont.bold(Ofsize: 20)
+        valueLabel.textColor = ThemeColor.secondary
+    }
+}
+
 final class LocationCell: BaseResultInfoCell {
     static let reuseId = "LocationCell"
 

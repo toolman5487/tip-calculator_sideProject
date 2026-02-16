@@ -32,7 +32,11 @@ final class Tip_CalculatorSnapshotTests: XCTestCase {
         let size = CGSize(width: screenWidth, height: 224)
         let result = Result(amountPerPerson: 100.25,
                             totalBill: 45,
-                            totalTip: 60)
+                            totalTip: 60,
+                            bill: 40,
+                            tip: .fifteenPercent,
+                            split: 2,
+                            categoryIdentifier: "food")
         let view = ResultView()
         view.configure(result: result)
         assertSnapshot(matching: view, as: .image(size: size))

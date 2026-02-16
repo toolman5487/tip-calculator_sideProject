@@ -11,7 +11,7 @@ import CoreData
 protocol ConsumptionRecordStoring {
     @MainActor
     @discardableResult
-    func save(result: Result, latitude: Double?, longitude: Double?, address: String?) -> Bool
+    func save(result: Result, latitude: Double?, longitude: Double?, address: String?, categoryIdentifier: String?) -> Bool
 
     @MainActor
     func fetchAll() -> [ConsumptionRecord]
@@ -27,7 +27,7 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
 
     @MainActor
     @discardableResult
-    func save(result: Result, latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
+    func save(result: Result, latitude: Double? = nil, longitude: Double? = nil, address: String? = nil, categoryIdentifier: String? = nil) -> Bool {
         let context = CoreDataStack.viewContext
 
         let record = ConsumptionRecord(context: context)
@@ -39,6 +39,7 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         record.amountPerPerson = result.amountPerPerson
         record.split = Int16(result.split)
         record.tipRawValue = result.tip.stringValue
+        record.categoryIdentifier = categoryIdentifier?.isEmpty == true ? nil : categoryIdentifier
         record.latitude = latitude.map { NSNumber(value: $0) }
         record.longitude = longitude.map { NSNumber(value: $0) }
         record.address = address?.isEmpty == true ? nil : address
