@@ -5,6 +5,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 private let cellInsetHorizontal: CGFloat = 16
 private let cellInsetVertical: CGFloat = 8
@@ -41,6 +42,43 @@ final class ResultCell: UITableViewCell {
         resultView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(8)
             make.right.left.bottom.equalToSuperview()
+        }
+    }
+
+    func configure() {}
+}
+
+// MARK: - BillInputCell
+final class BillInputCell: UITableViewCell {
+    static let reuseId = "BillInputCell"
+
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+        return view
+    }()
+    private(set) lazy var billInputView = BillInputView()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        setupView()
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    private func setupView() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(billInputView)
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(cellContentInsets)
+        }
+        billInputView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(16)
         }
     }
 
@@ -87,22 +125,35 @@ final class CategoriesInputCell: UITableViewCell {
         return view
     }()
 
-    private let columnCount: CGFloat = 3
-    private let spacing: CGFloat = 8
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = spacing
-        layout.minimumLineSpacing = spacing
-        layout.scrollDirection = .vertical
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.showsVerticalScrollIndicator = false
-        cv.showsHorizontalScrollIndicator = false
-        cv.isScrollEnabled = false
-        cv.delegate = self
-        cv.dataSource = self
-        cv.register(CategoryItemCell.self, forCellWithReuseIdentifier: CategoryItemCell.reuseId)
-        return cv
+    private let categorySubject = CurrentValueSubject<Category, Never>(.food)
+    var valuePublisher: AnyPublisher<Category, Never> { categorySubject.eraseToAnyPublisher() }
+
+    private lazy var categoryLabels: [UILabel] = Category.allCases.map { cat in
+        let l = UILabel()
+        l.text = cat.title
+        l.font = ThemeFont.regular(Ofsize: 14)
+        l.textColor = ThemeColor.text.withAlphaComponent(0.6)
+        l.textAlignment = .center
+        return l
+    }
+
+    private lazy var labelsStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: categoryLabels)
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 0
+        return stack
+    }()
+
+    private lazy var slider: UISlider = {
+        let s = UISlider()
+        s.minimumValue = 0
+        s.maximumValue = 5
+        s.value = 0
+        s.minimumTrackTintColor = ThemeColor.primary
+        s.maximumTrackTintColor = ThemeColor.primary.withAlphaComponent(0.3)
+        s.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        return s
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -115,10 +166,29 @@ final class CategoriesInputCell: UITableViewCell {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
+    @objc private func sliderValueChanged() {
+        let step = Int(slider.value.rounded())
+        let clamped = min(max(step, 0), 5)
+        slider.value = Float(clamped)
+        let category = Category(rawValue: clamped) ?? .food
+        categorySubject.send(category)
+        updateLabelsHighlight(index: clamped)
+        onCategoryTap?(category)
+    }
+
+    private func updateLabelsHighlight(index: Int) {
+        for (i, label) in categoryLabels.enumerated() {
+            let isSelected = (i == index)
+            label.font = isSelected ? ThemeFont.bold(Ofsize: 16) : ThemeFont.regular(Ofsize: 14)
+            label.textColor = isSelected ? ThemeColor.text : ThemeColor.text.withAlphaComponent(0.6)
+        }
+    }
+
     private func setupView() {
         contentView.addSubview(containerView)
         containerView.addSubview(headerView)
-        containerView.addSubview(collectionView)
+        containerView.addSubview(slider)
+        containerView.addSubview(labelsStack)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
@@ -127,70 +197,27 @@ final class CategoriesInputCell: UITableViewCell {
             make.width.equalTo(68)
             make.centerY.equalToSuperview()
         }
-        collectionView.snp.makeConstraints { make in
+        slider.snp.makeConstraints { make in
             make.leading.equalTo(headerView.snp.trailing).offset(24)
-            make.top.bottom.trailing.equalToSuperview().inset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.centerY.equalToSuperview().offset(-12)
         }
-    }
-
-    func configure() {}
-}
-
-// MARK: - CategoryItemCell
-private final class CategoryItemCell: UICollectionViewCell {
-    static let reuseId = "CategoryItemCell"
-    private let label: UILabel = {
-        let l = UILabel()
-        l.font = ThemeFont.bold(Ofsize: 20)
-        l.textColor = .white
-        l.textAlignment = .center
-        return l
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.backgroundColor = ThemeColor.primary
-        contentView.addCornerRadius(radius: 8)
-        contentView.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        labelsStack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(slider)
+            make.top.equalTo(slider.snp.bottom).offset(8)
         }
+        updateLabelsHighlight(index: 0)
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    func configure(title: String) {
-        label.text = title
-    }
-}
-
-// MARK: - CategoriesInputCell + UICollectionView
-extension CategoriesInputCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Category.allCases.count
+    func configure(selectedCategory: Category? = nil) {
+        let category = selectedCategory ?? .food
+        categorySubject.send(category)
+        slider.value = Float(category.rawValue)
+        updateLabelsHighlight(index: category.rawValue)
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryItemCell.reuseId, for: indexPath) as! CategoryItemCell
-        let category = Category(rawValue: indexPath.item) ?? .food
-        cell.configure(title: category.title)
-        return cell
-    }
-}
-
-extension CategoriesInputCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalSpacing = spacing * (columnCount - 1)
-        let w = max(1, collectionView.bounds.width)
-        let h = max(1, collectionView.bounds.height)
-        let itemWidth = (w - totalSpacing) / columnCount
-        let itemHeight = (h - spacing) / 2
-        return CGSize(width: itemWidth, height: itemHeight)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let category = Category(rawValue: indexPath.item) else { return }
-        onCategoryTap?(category)
+    func configure() {
+        configure(selectedCategory: .food)
     }
 }
 
