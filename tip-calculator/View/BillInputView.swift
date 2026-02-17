@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import CombineCocoa
 
-class BillInputView: UIView {
+final class BillInputView: UIView {
     
     private var cancellables = Set<AnyCancellable>()
     private let billSubject:PassthroughSubject<Double,Never> = .init()

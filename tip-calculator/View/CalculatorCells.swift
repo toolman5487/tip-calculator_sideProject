@@ -101,6 +101,7 @@ final class CategoriesInputCell: UITableViewCell {
     static let reuseId = "CategoriesInputCell"
 
     enum Category: Int, CaseIterable {
+        case none
         case food
         case clothing
         case housing
@@ -110,6 +111,7 @@ final class CategoriesInputCell: UITableViewCell {
 
         var identifier: String {
             switch self {
+            case .none: return ""
             case .food: return "food"
             case .clothing: return "clothing"
             case .housing: return "housing"
@@ -121,6 +123,7 @@ final class CategoriesInputCell: UITableViewCell {
 
         var systemImageName: String {
             switch self {
+            case .none: return "person.fill.questionmark"
             case .food: return "fork.knife"
             case .clothing: return "tshirt.fill"
             case .housing: return "house.fill"
@@ -147,7 +150,7 @@ final class CategoriesInputCell: UITableViewCell {
         return view
     }()
 
-    private let categorySubject = CurrentValueSubject<Category, Never>(.food)
+    private let categorySubject = CurrentValueSubject<Category, Never>(.none)
     var valuePublisher: AnyPublisher<Category, Never> { categorySubject.eraseToAnyPublisher() }
 
     private lazy var categoryImageViews: [UIImageView] = Category.allCases.map { cat in
@@ -175,7 +178,7 @@ final class CategoriesInputCell: UITableViewCell {
     private lazy var slider: UISlider = {
         let s = UISlider()
         s.minimumValue = 0
-        s.maximumValue = 5
+        s.maximumValue = Float(Category.allCases.count - 1)
         s.value = 0
         s.minimumTrackTintColor = ThemeColor.secondary
         s.maximumTrackTintColor = ThemeColor.primary.withAlphaComponent(0.3)
@@ -195,9 +198,9 @@ final class CategoriesInputCell: UITableViewCell {
 
     @objc private func sliderValueChanged() {
         let step = Int(slider.value.rounded())
-        let clamped = min(max(step, 0), 5)
+        let clamped = min(max(step, 0), Category.allCases.count - 1)
         slider.value = Float(clamped)
-        let category = Category(rawValue: clamped) ?? .food
+        let category = Category(rawValue: clamped) ?? .none
         categorySubject.send(category)
         updateIconsHighlight(index: clamped)
         onCategoryTap?(category)
@@ -240,20 +243,20 @@ final class CategoriesInputCell: UITableViewCell {
     }
 
     func configure(selectedCategory: Category? = nil) {
-        let category = selectedCategory ?? .food
+        let category = selectedCategory ?? .none
         categorySubject.send(category)
         slider.value = Float(category.rawValue)
         updateIconsHighlight(index: category.rawValue)
     }
 
     func configure() {
-        configure(selectedCategory: .food)
+        configure(selectedCategory: .none)
     }
 }
 
 extension CategoriesInputCell: Resettable {
     func reset() {
-        configure(selectedCategory: .food)
+        configure(selectedCategory: .none)
     }
 }
 

@@ -10,7 +10,7 @@ import Combine
 import CombineCocoa
 import SnapKit
 
-class TipInputView: UIView {
+final class TipInputView: UIView {
     
     private var tipSubject:CurrentValueSubject<Tip, Never> = .init(.none)
     var valuePublisher: AnyPublisher<Tip, Never> {

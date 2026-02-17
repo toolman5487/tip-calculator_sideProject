@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ResultView: UIView {
+final class ResultView: UIView {
     
     private let headerLabel: UILabel = {
         LabelFactory.build(text: "每人應付金額", font: ThemeFont.demiBold(Ofsize: 18))
