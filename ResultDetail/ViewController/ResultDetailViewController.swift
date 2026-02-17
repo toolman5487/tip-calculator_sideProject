@@ -93,6 +93,7 @@ final class ResultDetailViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ResultDeetailTableViewCell.self, forCellReuseIdentifier: ResultDeetailTableViewCell.reuseId)
+        tableView.register(ResultDetailImageValueCell.self, forCellReuseIdentifier: ResultDetailImageValueCell.reuseId)
         tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -263,13 +264,10 @@ extension ResultDetailViewController: UITableViewDataSource {
             return cell
         case .category:
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                withIdentifier: ResultDetailImageValueCell.reuseId,
                 for: indexPath
-            ) as! ResultDeetailTableViewCell
-            cell.configure(title: "消費種類",
-                           value: viewModel.item.categoryDisplayText,
-                           systemImageName: "tag.fill",
-                           valueColor: ThemeColor.secondary)
+            ) as! ResultDetailImageValueCell
+            cell.configure(title: "消費種類", systemImageName: "tag.fill", valueImageName: viewModel.categorySystemImageName, valueImageTintColor: ThemeColor.secondary)
             return cell
         case .address:
             let text = viewModel.item.addressText.isEmpty ? "未紀錄" : viewModel.item.addressText

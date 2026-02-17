@@ -86,6 +86,9 @@
 		156CCFDC2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
 		156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
 		156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */; };
+		157579C82F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157579C72F444C2500DE7163 /* ResultDetailImageValueCell.swift */; };
+		157579C92F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157579C72F444C2500DE7163 /* ResultDetailImageValueCell.swift */; };
+		157579CA2F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157579C72F444C2500DE7163 /* ResultDetailImageValueCell.swift */; };
 		157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
 		157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E482F343524005D8554 /* MainTabBarViewController.swift */; };
@@ -160,6 +163,7 @@
 		156C74B12F35853400F0C0A9 /* ResultsFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsFilterModel.swift; sourceTree = "<group>"; };
 		156C74FE2F3C000100F0C0A9 /* RecordSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSectionHeaderView.swift; sourceTree = "<group>"; };
 		156CCFDB2F3C889C00F0C0A9 /* MainIllustrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainIllustrationViewController.swift; sourceTree = "<group>"; };
+		157579C72F444C2500DE7163 /* ResultDetailImageValueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailImageValueCell.swift; sourceTree = "<group>"; };
 		157A6E482F343524005D8554 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E532F343600005D8555 /* MainTabBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarTab.swift; sourceTree = "<group>"; };
@@ -370,6 +374,7 @@
 		156C6FB52F35EA6000F0C0A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				157579C72F444C2500DE7163 /* ResultDetailImageValueCell.swift */,
 				156C6FBA2F35F28700F0C0A9 /* ResultDetailLocationCell.swift */,
 				156C6FB62F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift */,
 			);
@@ -727,6 +732,7 @@
 				156C6FAE2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C6F182F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				157A6E492F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				157579C92F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */,
 				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
 				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
@@ -777,6 +783,7 @@
 				157A6E4A2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
 				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
+				157579C82F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
 				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
@@ -819,6 +826,7 @@
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
 				157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
+				157579CA2F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				156C6FAD2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,

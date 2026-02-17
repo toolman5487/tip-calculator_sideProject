@@ -35,6 +35,19 @@ final class ResultDetailViewModel {
         item.categoryDisplayText != "—"
     }
 
+    /// 消費種類對應的 SF Symbol 名稱，無種類時為 nil
+    var categorySystemImageName: String? {
+        switch item.categoryDisplayText {
+        case "食": return "fork.knife"
+        case "衣": return "tshirt.fill"
+        case "住": return "house.fill"
+        case "行": return "car.fill"
+        case "育": return "book.fill"
+        case "樂": return "gamecontroller.fill"
+        default: return nil
+        }
+    }
+
     // MARK: - Actions
 
     func deleteRecord() {
