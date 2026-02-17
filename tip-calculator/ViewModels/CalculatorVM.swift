@@ -89,6 +89,7 @@ final class CalculatorVM {
         .assign(to: &$result)
 
         input.logoViewTapPublisher
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.audioPlayerServer.playSound()
             })

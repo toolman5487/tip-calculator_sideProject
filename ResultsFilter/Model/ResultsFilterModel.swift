@@ -20,10 +20,24 @@ struct RecordDisplayItem: Hashable {
     let amountPerPersonValue: Double
     let splitText: String
     let tipDisplayText: String
+    let categoryDisplayText: String
     let addressText: String
     let locationNameText: String
     let latitude: Double?
     let longitude: Double?
+
+    static func categoryDisplayText(from identifier: String?) -> String {
+        guard let id = identifier else { return "—" }
+        switch id {
+        case "food": return "食"
+        case "clothing": return "衣"
+        case "housing": return "住"
+        case "transport": return "行"
+        case "education": return "育"
+        case "entertainment": return "樂"
+        default: return "—"
+        }
+    }
 
     // MARK: - Mapper
 
@@ -41,6 +55,7 @@ struct RecordDisplayItem: Hashable {
             amountPerPersonValue: snapshot.amountPerPerson,
             splitText: "\(snapshot.split) 人",
             tipDisplayText: tipDisplay,
+            categoryDisplayText: categoryDisplayText(from: snapshot.categoryIdentifier),
             addressText: snapshot.address ?? "",
             locationNameText: snapshot.locationName ?? "",
             latitude: snapshot.latitude,

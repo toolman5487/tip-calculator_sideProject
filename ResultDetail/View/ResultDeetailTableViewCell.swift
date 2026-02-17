@@ -84,9 +84,10 @@ class ResultDeetailTableViewCell: UITableViewCell {
         }
     }
 
-    func configure(title: String, value: String, systemImageName: String) {
+    func configure(title: String, value: String, systemImageName: String, valueColor: UIColor? = nil) {
         titleLabel.text = title
         valueLabel.text = value
+        valueLabel.textColor = valueColor ?? ThemeColor.text
         iconImageView.image = UIImage(systemName: systemImageName)
     }
 }

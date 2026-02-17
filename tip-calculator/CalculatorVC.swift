@@ -31,17 +31,14 @@ final class CalculatorVC: BaseViewController {
         let item = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
         item.accessibilityIdentifier = "refreshButton"
         navigationItem.rightBarButtonItem = item
-        return item.tapPublisher
-            .map { _ in () }
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        return item.tapPublisher.map { _ in () }.eraseToAnyPublisher()
     }()
 
     @MainActor
     private enum Row: Int, CaseIterable {
         case result
-        case categoriesInput
         case billInput
+        case categoriesInput
         case tipInput
         case splitInput
         case confirmButton
@@ -49,8 +46,8 @@ final class CalculatorVC: BaseViewController {
         var reuseId: String {
             switch self {
             case .result: return ResultCell.reuseId
-            case .categoriesInput: return CategoriesInputCell.reuseId
             case .billInput: return BillInputCell.reuseId
+            case .categoriesInput: return CategoriesInputCell.reuseId
             case .tipInput: return TipInputCell.reuseId
             case .splitInput: return SplitInputCell.reuseId
             case .confirmButton: return ConfirmButtonCell.reuseId
@@ -62,8 +59,8 @@ final class CalculatorVC: BaseViewController {
         var rowHeight: CGFloat {
             switch self {
             case .result: return 260
-            case .categoriesInput: return 160
             case .billInput: return 92
+            case .categoriesInput: return 160
             case .tipInput: return 151
             case .splitInput: return 92
             case .confirmButton: return 68
@@ -176,12 +173,12 @@ extension CalculatorVC: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ResultCell
             cell.configure()
             return cell
-        case .categoriesInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! CategoriesInputCell
-            cell.configure()
-            return cell
         case .billInput:
             let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! BillInputCell
+            cell.configure()
+            return cell
+        case .categoriesInput:
+            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! CategoriesInputCell
             cell.configure()
             return cell
         case .tipInput:

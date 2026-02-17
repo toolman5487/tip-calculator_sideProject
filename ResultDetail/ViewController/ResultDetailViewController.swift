@@ -23,11 +23,15 @@ final class ResultDetailViewController: BaseViewController {
         case tip
         case split
         case tipSetting
+        case category
         case address
     }
 
     private lazy var sections: [Section] = {
         var all = Section.allCases
+        if !viewModel.shouldShowCategorySection {
+            all.removeAll { $0 == .category }
+        }
         if !viewModel.shouldShowAddressSection {
             all.removeAll { $0 == .address }
         }
@@ -153,6 +157,9 @@ final class ResultDetailViewController: BaseViewController {
             "分攤人數：\(item.splitText)",
             "小費設定：\(item.tipDisplayText)"
         ]
+        if item.categoryDisplayText != "—" {
+            lines.append("消費種類：\(item.categoryDisplayText)")
+        }
         if !item.addressText.isEmpty {
             lines.append("消費地點：\(item.addressText)")
         }
@@ -253,6 +260,16 @@ extension ResultDetailViewController: UITableViewDataSource {
             cell.configure(title: "小費設定",
                            value: viewModel.item.tipDisplayText,
                            systemImageName: "slider.horizontal.3")
+            return cell
+        case .category:
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ResultDeetailTableViewCell.reuseId,
+                for: indexPath
+            ) as! ResultDeetailTableViewCell
+            cell.configure(title: "消費種類",
+                           value: viewModel.item.categoryDisplayText,
+                           systemImageName: "tag.fill",
+                           valueColor: ThemeColor.secondary)
             return cell
         case .address:
             let text = viewModel.item.addressText.isEmpty ? "未紀錄" : viewModel.item.addressText

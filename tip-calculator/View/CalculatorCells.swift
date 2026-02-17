@@ -108,17 +108,6 @@ final class CategoriesInputCell: UITableViewCell {
         case education
         case entertainment
 
-        var title: String {
-            switch self {
-            case .food: return "食"
-            case .clothing: return "衣"
-            case .housing: return "住"
-            case .transport: return "行"
-            case .education: return "育"
-            case .entertainment: return "樂"
-            }
-        }
-
         var identifier: String {
             switch self {
             case .food: return "food"
@@ -127,6 +116,17 @@ final class CategoriesInputCell: UITableViewCell {
             case .transport: return "transport"
             case .education: return "education"
             case .entertainment: return "entertainment"
+            }
+        }
+
+        var systemImageName: String {
+            switch self {
+            case .food: return "fork.knife"
+            case .clothing: return "tshirt.fill"
+            case .housing: return "house.fill"
+            case .transport: return "car.fill"
+            case .education: return "book.fill"
+            case .entertainment: return "gamecontroller.fill"
             }
         }
     }
@@ -150,21 +150,26 @@ final class CategoriesInputCell: UITableViewCell {
     private let categorySubject = CurrentValueSubject<Category, Never>(.food)
     var valuePublisher: AnyPublisher<Category, Never> { categorySubject.eraseToAnyPublisher() }
 
-    private lazy var categoryLabels: [UILabel] = Category.allCases.map { cat in
-        let l = UILabel()
-        l.text = cat.title
-        l.font = ThemeFont.regular(Ofsize: 14)
-        l.textColor = ThemeColor.text.withAlphaComponent(0.6)
-        l.textAlignment = .center
-        return l
+    private lazy var categoryImageViews: [UIImageView] = Category.allCases.map { cat in
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: cat.systemImageName)
+        iv.tintColor = ThemeColor.text.withAlphaComponent(0.6)
+        return iv
     }
 
-    private lazy var labelsStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: categoryLabels)
+    private lazy var iconsStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: categoryImageViews)
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = 0
         return stack
+    }()
+
+    private let sliderIconsContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }()
 
     private lazy var slider: UISlider = {
@@ -194,23 +199,23 @@ final class CategoriesInputCell: UITableViewCell {
         slider.value = Float(clamped)
         let category = Category(rawValue: clamped) ?? .food
         categorySubject.send(category)
-        updateLabelsHighlight(index: clamped)
+        updateIconsHighlight(index: clamped)
         onCategoryTap?(category)
     }
 
-    private func updateLabelsHighlight(index: Int) {
-        for (i, label) in categoryLabels.enumerated() {
+    private func updateIconsHighlight(index: Int) {
+        for (i, imageView) in categoryImageViews.enumerated() {
             let isSelected = (i == index)
-            label.font = isSelected ? ThemeFont.bold(Ofsize: 16) : ThemeFont.regular(Ofsize: 14)
-            label.textColor = isSelected ? ThemeColor.secondary : ThemeColor.text.withAlphaComponent(0.6)
+            imageView.tintColor = isSelected ? ThemeColor.secondary : ThemeColor.text.withAlphaComponent(0.6)
         }
     }
 
     private func setupView() {
         contentView.addSubview(containerView)
         containerView.addSubview(headerView)
-        containerView.addSubview(slider)
-        containerView.addSubview(labelsStack)
+        containerView.addSubview(sliderIconsContainerView)
+        sliderIconsContainerView.addSubview(iconsStack)
+        sliderIconsContainerView.addSubview(slider)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
@@ -219,23 +224,26 @@ final class CategoriesInputCell: UITableViewCell {
             make.width.equalTo(68)
             make.centerY.equalToSuperview()
         }
-        slider.snp.makeConstraints { make in
+        sliderIconsContainerView.snp.makeConstraints { make in
             make.leading.equalTo(headerView.snp.trailing).offset(24)
             make.trailing.equalToSuperview().offset(-12)
-            make.centerY.equalToSuperview().offset(-12)
+            make.centerY.equalTo(headerView)
         }
-        labelsStack.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(slider)
-            make.top.equalTo(slider.snp.bottom).offset(8)
+        iconsStack.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
         }
-        updateLabelsHighlight(index: 0)
+        slider.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(iconsStack.snp.bottom).offset(8)
+        }
+        updateIconsHighlight(index: 0)
     }
 
     func configure(selectedCategory: Category? = nil) {
         let category = selectedCategory ?? .food
         categorySubject.send(category)
         slider.value = Float(category.rawValue)
-        updateLabelsHighlight(index: category.rawValue)
+        updateIconsHighlight(index: category.rawValue)
     }
 
     func configure() {

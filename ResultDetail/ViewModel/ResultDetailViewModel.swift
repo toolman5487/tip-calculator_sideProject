@@ -31,6 +31,10 @@ final class ResultDetailViewModel {
         !(item.addressText.isEmpty && item.latitude == nil && item.longitude == nil)
     }
 
+    var shouldShowCategorySection: Bool {
+        item.categoryDisplayText != "—"
+    }
+
     // MARK: - Actions
 
     func deleteRecord() {
