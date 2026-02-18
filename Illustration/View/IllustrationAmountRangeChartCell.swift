@@ -38,6 +38,7 @@ final class IllustrationAmountRangeChartCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         containerView.addSubview(chartView)
+        chartView.isUserInteractionEnabled = false
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
