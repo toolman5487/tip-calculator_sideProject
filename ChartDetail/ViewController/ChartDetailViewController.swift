@@ -33,6 +33,7 @@ final class ChartDetailViewController: MainBaseViewController {
     }
 
     override func setupNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
         switch detailItem {
         case .timeChart(let title),
              .amountRangeChart(let title):

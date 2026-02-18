@@ -21,7 +21,7 @@ enum MainTabBarTab: CaseIterable {
     var image: UIImage? {
         switch self {
         case .calculator: return UIImage(systemName: "square.grid.3x3.fill")
-        case .userInfo: return UIImage(systemName: "person.circle")
+        case .userInfo: return UIImage(systemName: "list.bullet.rectangle")
         case .illustration: return UIImage(systemName: "chart.bar.xaxis")
         }
     }
@@ -29,7 +29,7 @@ enum MainTabBarTab: CaseIterable {
     var selectedImage: UIImage? {
         switch self {
         case .calculator: return UIImage(systemName: "square.grid.3x3.fill")
-        case .userInfo: return UIImage(systemName: "person.circle.fill")
+        case .userInfo: return UIImage(systemName: "list.bullet.rectangle.fill")
         case .illustration: return UIImage(systemName: "chart.bar.xaxis.ascending")
         }
     }

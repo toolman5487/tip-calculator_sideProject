@@ -1,5 +1,5 @@
 //
-//  IllustrationChartCell.swift
+//  IllustrationAmountRangeChartCell.swift
 //  tip-calculator
 //
 
@@ -7,14 +7,13 @@ import DGCharts
 import UIKit
 import SnapKit
 
-final class IllustrationChartCell: UICollectionViewCell {
+final class IllustrationAmountRangeChartCell: UICollectionViewCell {
 
-    static let reuseId = "IllustrationChartCell"
+    static let reuseId = "IllustrationAmountRangeChartCell"
 
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 12
+        view.backgroundColor = .clear
         return view
     }()
 
@@ -39,7 +38,6 @@ final class IllustrationChartCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         containerView.addSubview(chartView)
-
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -52,30 +50,16 @@ final class IllustrationChartCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureAmountRange(data: [AmountRangeChartItem]) {
+    func configure(data: [AmountRangeChartItem]) {
         let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: Double($0.element.count)) }
         let set = BarChartDataSet(entries: entries)
-        set.colors = [ThemeColor.secondary]
+        set.colors = [UIColor.label]
         set.drawValuesEnabled = true
-        set.valueFont = UIFont.systemFont(ofSize: 10)
-        
+        set.valueFont = UIFont.systemFont(ofSize: 8)
         let chartData = BarChartData(dataSet: set)
         chartView.data = chartData
         chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.rangeLabel })
         chartView.xAxis.granularity = 1
-        chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 10)
-    }
-
-    func configureTimeChart(data: [TrendChartItem]) {
-        let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: $0.element.totalAmount) }
-        let set = BarChartDataSet(entries: entries)
-        set.colors = [ThemeColor.primary]
-        set.drawValuesEnabled = false
-        
-        let chartData = BarChartData(dataSet: set)
-        chartView.data = chartData
-        chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.label })
-        chartView.xAxis.granularity = 1
-        chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 10)
+        chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 8)
     }
 }

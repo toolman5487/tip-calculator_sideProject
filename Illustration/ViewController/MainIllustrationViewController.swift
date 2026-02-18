@@ -44,7 +44,8 @@ final class MainIllustrationViewController: MainBaseViewController {
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationFilterHeaderView.reuseId)
         collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
-        collectionView.register(IllustrationChartCell.self, forCellWithReuseIdentifier: IllustrationChartCell.reuseId)
+        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
+        collectionView.register(IllustrationAmountRangeChartCell.self, forCellWithReuseIdentifier: IllustrationAmountRangeChartCell.reuseId)
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
@@ -141,17 +142,34 @@ extension MainIllustrationViewController {
             return cell
 
         case .timeChart:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationChartCell.reuseId, for: indexPath) as! IllustrationChartCell
-            cell.configureTimeChart(data: viewModel.timeChartData)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationTimeChartCell.reuseId, for: indexPath) as! IllustrationTimeChartCell
+            cell.configure(data: viewModel.timeChartData)
             return cell
 
         case .amountRangeChart:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationChartCell.reuseId, for: indexPath) as! IllustrationChartCell
-            cell.configureAmountRange(data: viewModel.amountRangeData)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationAmountRangeChartCell.reuseId, for: indexPath) as! IllustrationAmountRangeChartCell
+            cell.configure(data: viewModel.amountRangeData)
             return cell
-
         case .none:
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
+        }
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension MainIllustrationViewController {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = IllustrationSection(rawValue: indexPath.section) else { return }
+        switch section {
+        case .timeChart:
+            let vc = ChartDetailViewController(detailItem: .timeChart(title: "消費趨勢"))
+            navigationController?.pushViewController(vc, animated: true)
+        case .amountRangeChart:
+            let vc = ChartDetailViewController(detailItem: .amountRangeChart(title: "消費金額區間"))
+            navigationController?.pushViewController(vc, animated: true)
+        case .filterHeader, .kpi:
+            break
         }
     }
 }
