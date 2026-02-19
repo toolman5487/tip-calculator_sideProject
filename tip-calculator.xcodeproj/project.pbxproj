@@ -261,6 +261,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		150DB7F92F46EEF0008209A1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		150DB7FA2F46F4F9008209A1 /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				150DB7F12F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift */,
+				150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */,
+			);
+			path = Chart;
+			sourceTree = "<group>";
+		};
+		150DB7FC2F46FBF5008209A1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		156C1AF82F349DF600F0C0A9 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -293,8 +316,7 @@
 		156C51572F3DD8B500F0C0A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				150DB7F12F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift */,
-				150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */,
+				150DB7FA2F46F4F9008209A1 /* Chart */,
 				156CDEAB2F3EFD1D00F0C0A9 /* KPI */,
 				156C51752F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift */,
 				156C51632F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift */,
@@ -321,6 +343,8 @@
 		156C5C652F3ED57800F0C0A9 /* ChartDetail */ = {
 			isa = PBXGroup;
 			children = (
+				150DB7FC2F46FBF5008209A1 /* ViewModel */,
+				150DB7F92F46EEF0008209A1 /* View */,
 				156C5C662F3ED58500F0C0A9 /* ViewController */,
 			);
 			path = ChartDetail;

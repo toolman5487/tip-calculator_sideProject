@@ -47,6 +47,7 @@ final class MainIllustrationViewModel {
     @Published private(set) var kpiDisplay: IllustrationKPIDisplay?
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var amountRangeData: [AmountRangeChartItem] = []
+    @Published private(set) var filteredRecords: [ConsumptionRecord] = []
 
     init(store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
         self.store = store
@@ -70,6 +71,7 @@ final class MainIllustrationViewModel {
 
     private func applyAggregation(from records: [ConsumptionRecord]) {
         let filtered = filterRecordsByTimeDimension(records)
+        filteredRecords = filtered
         let summary = buildKPI(from: filtered)
         kpi = summary
         kpiDisplay = IllustrationKPIDisplay(

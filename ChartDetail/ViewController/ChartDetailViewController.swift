@@ -5,13 +5,11 @@
 //  Created by Willy Hsu on 2026/2/13.
 //
 
-import Foundation
 import UIKit
-import SnapKit
 
 enum ChartDetailItem {
-    case timeChart(title: String)
-    case amountRangeChart(title: String)
+    case timeChart(title: String, timeFilter: IllustrationTimeFilterOption, records: [ConsumptionRecord])
+    case amountRangeChart(title: String, records: [ConsumptionRecord])
 }
 
 @MainActor
@@ -33,11 +31,17 @@ final class ChartDetailViewController: MainBaseViewController {
     }
 
     override func setupNavigationBar() {
+        super.setupNavigationBar()
         navigationItem.largeTitleDisplayMode = .never
         switch detailItem {
-        case .timeChart(let title),
-             .amountRangeChart(let title):
+        case .timeChart(let title, _, _), .amountRangeChart(let title, _):
             self.title = title
         }
+    }
+
+    override func setupUI() {
+        super.setupUI()
+        view.backgroundColor = .systemGroupedBackground
+        collectionView.backgroundColor = .clear
     }
 }
