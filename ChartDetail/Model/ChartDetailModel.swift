@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct PieChartSliceItem {
+    let label: String
+    let value: Double
+}
+
 enum ChartDetailCategoryOption: Int, CaseIterable {
     case all
     case food

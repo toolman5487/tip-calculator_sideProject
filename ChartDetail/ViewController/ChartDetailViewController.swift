@@ -5,6 +5,7 @@
 //  Created by Willy Hsu on 2026/2/13.
 //
 
+import Combine
 import UIKit
 
 enum ChartDetailItem {
@@ -12,14 +13,14 @@ enum ChartDetailItem {
     case amountRangeChart(title: String, records: [ConsumptionRecord])
 }
 
-
 @MainActor
 final class ChartDetailViewController: MainBaseViewController {
 
-    private let detailItem: ChartDetailItem
+    private let viewModel: ChartDetailViewModel
+    private var cancellables = Set<AnyCancellable>()
 
     init(detailItem: ChartDetailItem) {
-        self.detailItem = detailItem
+        self.viewModel = ChartDetailViewModel(detailItem: detailItem)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,12 +31,13 @@ final class ChartDetailViewController: MainBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        binding()
     }
 
     override func setupNavigationBar() {
         super.setupNavigationBar()
         navigationItem.largeTitleDisplayMode = .never
-        switch detailItem {
+        switch viewModel.detailItem {
         case .timeChart(let title, _, _), .amountRangeChart(let title, _):
             self.title = title
         }
@@ -54,6 +56,18 @@ final class ChartDetailViewController: MainBaseViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: ChartDetailCategoryFilterHeaderView.reuseId
         )
+        collectionView.register(ChartDetailPieChartCell.self, forCellWithReuseIdentifier: ChartDetailPieChartCell.reuseId)
+    }
+
+    private func binding() {
+        viewModel.$pieChartData
+            .map { _ in () }
+            .merge(with: viewModel.$selectedCategory.map { _ in () })
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -65,13 +79,12 @@ extension ChartDetailViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
+        1
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Self.defaultCellReuseId, for: indexPath)
-        cell.backgroundColor = .secondarySystemBackground
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChartDetailPieChartCell.reuseId, for: indexPath) as! ChartDetailPieChartCell
+        cell.configure(data: viewModel.pieChartData)
         return cell
     }
 
@@ -84,6 +97,10 @@ extension ChartDetailViewController {
             withReuseIdentifier: ChartDetailCategoryFilterHeaderView.reuseId,
             for: indexPath
         ) as! ChartDetailCategoryFilterHeaderView
+        header.configure(selected: viewModel.selectedCategory)
+        header.onSelect = { [weak self] option in
+            self?.viewModel.selectCategory(option)
+        }
         return header
     }
 }
@@ -92,11 +109,11 @@ extension ChartDetailViewController {
 
 extension ChartDetailViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 120)
+        CGSize(width: collectionView.bounds.width, height: 280)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 72)  // 16 + 40 + 16 對齊 IllustrationFilterHeaderView
+        CGSize(width: collectionView.bounds.width, height: 72)  
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

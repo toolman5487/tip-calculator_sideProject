@@ -250,13 +250,13 @@ final class CategoriesInputCell: UITableViewCell {
     }
 
     func configure() {
-        configure(selectedCategory: .none)
+        configure(selectedCategory: CategoriesInputCell.Category.none)
     }
 }
 
 extension CategoriesInputCell: Resettable {
     func reset() {
-        configure(selectedCategory: .none)
+        configure(selectedCategory: CategoriesInputCell.Category.none)
     }
 }
 
