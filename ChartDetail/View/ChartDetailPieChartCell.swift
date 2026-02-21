@@ -25,6 +25,7 @@ final class ChartDetailPieChartCell: UICollectionViewCell {
         chart.holeRadiusPercent = 0.5
         chart.transparentCircleRadiusPercent = 0.55
         chart.transparentCircleColor = UIColor.systemBackground
+        chart.usePercentValuesEnabled = true
         chart.highlightPerTapEnabled = false
         chart.rotationEnabled = false
         chart.isUserInteractionEnabled = false
@@ -49,13 +50,15 @@ final class ChartDetailPieChartCell: UICollectionViewCell {
     }
 
     func configure(data: [PieChartSliceItem]) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = 0
+        formatter.multiplier = 1.0
         let colors: [UIColor] = [
             .systemRed, .systemOrange, .systemYellow, .systemGreen,
             .systemTeal, .systemBlue, .systemPurple
         ]
-        let entries = data.enumerated().map { index, item in
-            PieChartDataEntry(value: item.value, label: item.label)
-        }
+        let entries = data.map { PieChartDataEntry(value: $0.value, label: $0.label) }
         let set = PieChartDataSet(entries: entries)
         set.colors = (0..<entries.count).map { colors[$0 % colors.count] }
         set.drawValuesEnabled = true
@@ -63,5 +66,7 @@ final class ChartDetailPieChartCell: UICollectionViewCell {
         set.valueTextColor = .label
         let chartData = PieChartData(dataSet: set)
         chartView.data = chartData
+        let valueFormatter = DefaultValueFormatter(formatter: formatter)
+        chartData.setValueFormatter(valueFormatter)
     }
 }
