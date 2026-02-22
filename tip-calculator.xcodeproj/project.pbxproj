@@ -16,8 +16,6 @@
 		150DB80A2F470EC0008209A1 /* ChartDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DB8092F470EC0008209A1 /* ChartDetailModel.swift */; };
 		150DB80B2F470EC0008209A1 /* ChartDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DB8092F470EC0008209A1 /* ChartDetailModel.swift */; };
 		150DB80C2F470EC0008209A1 /* ChartDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DB8092F470EC0008209A1 /* ChartDetailModel.swift */; };
-		150DB80D2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DB80E2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift */; };
-		150DB8132F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DB80E2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift */; };
 		150DBCD22F483CBD008209A1 /* ChartDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DBCD12F483CBD008209A1 /* ChartDetailViewModel.swift */; };
 		150DBCD32F483CBD008209A1 /* ChartDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DBCD12F483CBD008209A1 /* ChartDetailViewModel.swift */; };
 		150DBCD42F483CBD008209A1 /* ChartDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DBCD12F483CBD008209A1 /* ChartDetailViewModel.swift */; };
@@ -152,7 +150,6 @@
 		150DB7F12F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationAmountRangeChartCell.swift; sourceTree = "<group>"; };
 		150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationTimeChartCell.swift; sourceTree = "<group>"; };
 		150DB8092F470EC0008209A1 /* ChartDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDetailModel.swift; sourceTree = "<group>"; };
-		150DB80E2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDetailCategoryFilterHeaderView.swift; sourceTree = "<group>"; };
 		150DBCD12F483CBD008209A1 /* ChartDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDetailViewModel.swift; sourceTree = "<group>"; };
 		150DBCD52F483E72008209A1 /* ChartDetailPieChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDetailPieChartCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
@@ -280,7 +277,6 @@
 			isa = PBXGroup;
 			children = (
 				150DBCD52F483E72008209A1 /* ChartDetailPieChartCell.swift */,
-				150DB80E2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -798,7 +794,6 @@
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				156C51602F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
 				156C5C682F3ED5A500F0C0A9 /* ChartDetailViewController.swift in Sources */,
-				150DB80D2F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift in Sources */,
 				156C51662F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				156C51742F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
 				156C51922F3E700000F0C0A9 /* KPICardCell.swift in Sources */,
@@ -900,7 +895,6 @@
 				150DB7F82F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
 				156C6F172F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				150DB80C2F470EC0008209A1 /* ChartDetailModel.swift in Sources */,
-				150DB8132F47100008209A1 /* ChartDetailCategoryFilterHeaderView.swift in Sources */,
 				156C6FB22F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				156C6FBD2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
 			);

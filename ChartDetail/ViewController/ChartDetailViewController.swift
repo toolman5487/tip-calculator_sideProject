@@ -13,6 +13,14 @@ enum ChartDetailItem {
     case amountRangeChart(title: String, records: [ConsumptionRecord])
 }
 
+private enum ChartDetailSection: Int, CaseIterable {
+    case main
+}
+
+private enum ChartDetailCellItem: Int, CaseIterable {
+    case pieChart
+}
+
 @MainActor
 final class ChartDetailViewController: MainBaseViewController {
 
@@ -50,19 +58,12 @@ final class ChartDetailViewController: MainBaseViewController {
     }
 
     private func setupCollectionView() {
-        (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.sectionHeadersPinToVisibleBounds = true
-        collectionView.register(
-            ChartDetailCategoryFilterHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: ChartDetailCategoryFilterHeaderView.reuseId
-        )
         collectionView.register(ChartDetailPieChartCell.self, forCellWithReuseIdentifier: ChartDetailPieChartCell.reuseId)
     }
 
     private func binding() {
         viewModel.$pieChartData
             .map { _ in () }
-            .merge(with: viewModel.$selectedCategory.map { _ in () })
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
@@ -75,48 +76,51 @@ final class ChartDetailViewController: MainBaseViewController {
 
 extension ChartDetailViewController {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
+        ChartDetailSection.allCases.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+        switch ChartDetailSection(rawValue: section) {
+        case .main:
+            return ChartDetailCellItem.allCases.count
+        case .none:
+            return 0
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChartDetailPieChartCell.reuseId, for: indexPath) as! ChartDetailPieChartCell
-        cell.configure(data: viewModel.pieChartData)
-        return cell
+        switch ChartDetailCellItem(rawValue: indexPath.item) {
+        case .pieChart:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChartDetailPieChartCell.reuseId, for: indexPath) as! ChartDetailPieChartCell
+            cell.configure(data: viewModel.pieChartData)
+            return cell
+        case .none:
+            return collectionView.dequeueReusableCell(withReuseIdentifier: Self.defaultCellReuseId, for: indexPath)
+        }
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: ChartDetailCategoryFilterHeaderView.reuseId,
-            for: indexPath
-        ) as! ChartDetailCategoryFilterHeaderView
-        header.configure(selected: viewModel.selectedCategory)
-        header.onSelect = { [weak self] option in
-            self?.viewModel.selectCategory(option)
-        }
-        return header
-    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension ChartDetailViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 280)
+        let width = collectionView.bounds.width
+        switch ChartDetailCellItem(rawValue: indexPath.item) {
+        case .pieChart:
+            return CGSize(width: width, height: 280)
+        case .none:
+            return CGSize(width: width, height: 44)
+        }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 72)  
-    }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        switch ChartDetailSection(rawValue: section) {
+        case .main:
+            return .zero
+        case .none:
+            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        }
     }
 }
