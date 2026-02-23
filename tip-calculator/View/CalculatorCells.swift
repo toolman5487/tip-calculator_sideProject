@@ -111,7 +111,7 @@ final class CategoriesInputCell: UITableViewCell {
 
     private(set) lazy var categoryInputView = CategoryInputView()
 
-    var valuePublisher: AnyPublisher<Category, Never> { categoryInputView.valuePublisher }
+    var mainGridCategoryTapPublisher: AnyPublisher<Category, Never> { categoryInputView.mainGridCategoryTapPublisher }
     var onMoreOptionsTap: (() -> Void)? {
         get { categoryInputView.onMoreOptionsTap }
         set { categoryInputView.onMoreOptionsTap = newValue }

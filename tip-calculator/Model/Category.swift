@@ -14,6 +14,11 @@ enum Category: Int, CaseIterable {
     case education
     case entertainment
 
+    static let mainGridCategories: [Category] = [.food, .clothing, .housing, .transport]
+    static var sheetCategories: [Category] {
+        allCases.filter { $0 != .none && !mainGridCategories.contains($0) }
+    }
+
     var identifier: String {
         switch self {
         case .none: return ""

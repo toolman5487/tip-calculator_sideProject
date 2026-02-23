@@ -53,6 +53,7 @@ final class CategoryPickerSheetViewController: BaseViewController {
 
     private func setupNavigation() {
         title = "選擇消費種類"
+        navigationItem.largeTitleDisplayMode = .never
     }
 
     private func bindViewModel() {

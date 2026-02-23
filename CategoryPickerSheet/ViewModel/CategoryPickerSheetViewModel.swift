@@ -9,7 +9,7 @@ import Combine
 @MainActor
 final class CategoryPickerSheetViewModel {
 
-    let categories: [Category] = Category.allCases
+    let categories: [Category] = Category.sheetCategories
     let currentCategory: Category
 
     private let selectSubject = PassthroughSubject<Category, Never>()

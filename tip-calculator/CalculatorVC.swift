@@ -88,16 +88,26 @@ final class CalculatorVC: BaseViewController {
             .store(in: &cancellables)
         view.addGestureRecognizer(tapGesture)
 
+        let confirmTapSubject = PassthroughSubject<Void, Never>()
+        let moreOptionsTapSubject = PassthroughSubject<Void, Never>()
+        let resultDismissedSubject = PassthroughSubject<Void, Never>()
+        let sheetCategorySelectSubject = PassthroughSubject<Category, Never>()
+
+        confirmButtonCell.onTap = { confirmTapSubject.send(()) }
+        categoriesInputCell.onMoreOptionsTap = { moreOptionsTapSubject.send(()) }
+
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
             tipPublisher: tipInputCell.tipInputView.valuePublisher,
             splitPublisher: splitInputCell.splitInputView.valuePublisher,
-            categoryPublisher: categoriesInputCell.valuePublisher
-                .map { Optional($0.identifier) }
-                .eraseToAnyPublisher(),
+            mainGridCategoryTapPublisher: categoriesInputCell.mainGridCategoryTapPublisher,
+            sheetCategorySelectPublisher: sheetCategorySelectSubject.eraseToAnyPublisher(),
             logoViewTapPublisher: refreshBarItem.tapPublisher
                 .map { _ in () }
-                .eraseToAnyPublisher()
+                .eraseToAnyPublisher(),
+            confirmTapPublisher: confirmTapSubject.eraseToAnyPublisher(),
+            moreOptionsTapPublisher: moreOptionsTapSubject.eraseToAnyPublisher(),
+            resultDismissedPublisher: resultDismissedSubject.eraseToAnyPublisher()
         )
         vm.bind(input: input)
 
@@ -112,22 +122,32 @@ final class CalculatorVC: BaseViewController {
             .sink { [weak self] _ in self?.resetInputCells() }
             .store(in: &cancellables)
 
-        confirmButtonCell.onTap = { [weak self] in
-            self?.presentTotalResult()
-        }
+        vm.showTotalResultPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                self?.presentTotalResult(result: result, onDismiss: { resultDismissedSubject.send(()) })
+            }
+            .store(in: &cancellables)
 
-        categoriesInputCell.onMoreOptionsTap = { [weak self] in
-            self?.presentCategoryOptionsSheet()
-        }
+        vm.$selectedCategory
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] category in
+                self?.categoriesInputCell.categoryInputView.updateSelection(category)
+            }
+            .store(in: &cancellables)
+
+        vm.showCategoryPickerPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentCategory in
+                self?.presentCategoryOptionsSheet(currentCategory: currentCategory, onSelect: { sheetCategorySelectSubject.send($0) })
+            }
+            .store(in: &cancellables)
     }
 
-    private func presentCategoryOptionsSheet() {
-        let current = categoriesInputCell.categoryInputView.currentCategory
-        let viewModel = CategoryPickerSheetViewModel(currentCategory: current)
+    private func presentCategoryOptionsSheet(currentCategory: Category, onSelect: @escaping (Category) -> Void) {
+        let viewModel = CategoryPickerSheetViewModel(currentCategory: currentCategory)
         let pickerVC = CategoryPickerSheetViewController(viewModel: viewModel)
-        pickerVC.onSelect = { [weak self] category in
-            self?.categoriesInputCell.categoryInputView.selectCategory(category)
-        }
+        pickerVC.onSelect = onSelect
         let nav = UINavigationController(rootViewController: pickerVC)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
@@ -146,11 +166,11 @@ final class CalculatorVC: BaseViewController {
             .forEach { $0.reset() }
     }
 
-    private func presentTotalResult() {
-        let totalVC = TotalResultViewController(result: vm.result)
+    private func presentTotalResult(result: Result, onDismiss: @escaping () -> Void) {
+        let totalVC = TotalResultViewController(result: result)
         totalVC.dismissedPublisher
             .prefix(1)
-            .sink { [weak self] in self?.vm.reset() }
+            .sink { _ in onDismiss() }
             .store(in: &cancellables)
 
         let nav = UINavigationController(rootViewController: totalVC)

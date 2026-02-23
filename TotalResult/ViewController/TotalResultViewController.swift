@@ -82,6 +82,7 @@ final class TotalResultViewController: UIViewController {
     }
 
     private func setupNavigation() {
+        navigationItem.largeTitleDisplayMode = .never
         let locationItem = UIBarButtonItem(
             image: UIImage(systemName: "location.fill"),
             style: .plain,

@@ -10,12 +10,11 @@ import SnapKit
 
 final class CategoryInputView: UIView {
 
-    private static let displayCategories: [Category] = [.food, .clothing, .housing, .transport]
+    private static let displayCategories: [Category] = Category.mainGridCategories
 
     private var cancellables = Set<AnyCancellable>()
-    private let categorySubject = CurrentValueSubject<Category, Never>(.none)
-    var valuePublisher: AnyPublisher<Category, Never> { categorySubject.eraseToAnyPublisher() }
-    var currentCategory: Category { categorySubject.value }
+    private let mainGridCategoryTapSubject = PassthroughSubject<Category, Never>()
+    var mainGridCategoryTapPublisher: AnyPublisher<Category, Never> { mainGridCategoryTapSubject.eraseToAnyPublisher() }
     var onMoreOptionsTap: (() -> Void)?
 
     private let headerView: HeaderView = {
@@ -75,23 +74,13 @@ final class CategoryInputView: UIView {
             let category = Self.displayCategories[index]
             button.tapPublisher
                 .sink { [weak self] _ in
-                    guard let self else { return }
-                    if categorySubject.value == category {
-                        categorySubject.send(.none)
-                    } else {
-                        categorySubject.send(category)
-                    }
+                    self?.mainGridCategoryTapSubject.send(category)
                 }
                 .store(in: &cancellables)
         }
         moreButton.tapPublisher
             .sink { [weak self] _ in
                 self?.onMoreOptionsTap?()
-            }
-            .store(in: &cancellables)
-        categorySubject
-            .sink { [weak self] selected in
-                self?.updateButtonSelection(selected: selected)
             }
             .store(in: &cancellables)
     }
@@ -102,9 +91,10 @@ final class CategoryInputView: UIView {
             let isSelected = Self.displayCategories[index] == selected
             button.backgroundColor = isSelected ? ThemeColor.secondary : ThemeColor.primary
         }
-        moreButton.backgroundColor = ThemeColor.primary
+        let isMoreSelected = Category.sheetCategories.contains(selected)
+        moreButton.backgroundColor = isMoreSelected ? ThemeColor.secondary : ThemeColor.primary
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        let imageName = selected.systemImageName ?? "ellipsis"
+        let imageName = isMoreSelected ? (selected.systemImageName ?? "ellipsis") : "ellipsis"
         moreButton.setImage(UIImage(systemName: imageName, withConfiguration: config), for: .normal)
     }
 
@@ -130,11 +120,11 @@ final class CategoryInputView: UIView {
         }
     }
 
-    func categoryReset() {
-        categorySubject.send(.none)
+    func updateSelection(_ category: Category) {
+        updateButtonSelection(selected: category)
     }
 
-    func selectCategory(_ category: Category) {
-        categorySubject.send(category)
+    func categoryReset() {
+        updateSelection(.none)
     }
 }
