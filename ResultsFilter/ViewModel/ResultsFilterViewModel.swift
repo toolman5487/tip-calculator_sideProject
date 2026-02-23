@@ -34,7 +34,6 @@ final class ResultsFilterViewModel {
         applyDisplayItems()
     }
 
-    /// 重新從 store 取資料，並保留目前搜尋關鍵字再篩選一次
     func refresh() {
         allRecords = store.fetchAll()
         if currentKeyword.isEmpty {

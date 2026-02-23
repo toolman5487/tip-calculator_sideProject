@@ -17,24 +17,22 @@ final class CalculatorVC: BaseViewController {
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
-    private var hasBoundCells = false
-    private lazy var viewTapPublisher: AnyPublisher<Void, Never> = {
-        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
-        view.addGestureRecognizer(tapGesture)
-        return tapGesture.tapPublisher
-            .flatMap { _ in Just(()) }
-            .eraseToAnyPublisher()
-    }()
-    private lazy var refreshButtonTapPublisher: AnyPublisher<Void, Never> = {
+
+    private lazy var refreshBarItem: UIBarButtonItem = {
         let config = UIImage.SymbolConfiguration(weight: .bold)
         let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config)
         let item = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
         item.accessibilityIdentifier = "refreshButton"
-        navigationItem.rightBarButtonItem = item
-        return item.tapPublisher.map { _ in () }.eraseToAnyPublisher()
+        return item
     }()
 
-    @MainActor
+    private let resultCell = ResultCell()
+    private let billInputCell = BillInputCell()
+    private let categoriesInputCell = CategoriesInputCell()
+    private let tipInputCell = TipInputCell()
+    private let splitInputCell = SplitInputCell()
+    private let confirmButtonCell = ConfirmButtonCell()
+
     private enum Row: Int, CaseIterable {
         case result
         case billInput
@@ -42,125 +40,130 @@ final class CalculatorVC: BaseViewController {
         case tipInput
         case splitInput
         case confirmButton
-
-        var reuseId: String {
-            switch self {
-            case .result: return ResultCell.reuseId
-            case .billInput: return BillInputCell.reuseId
-            case .categoriesInput: return CategoriesInputCell.reuseId
-            case .tipInput: return TipInputCell.reuseId
-            case .splitInput: return SplitInputCell.reuseId
-            case .confirmButton: return ConfirmButtonCell.reuseId
-            }
-        }
-
-        private static let rowSpacing: CGFloat = 36
-
-        var rowHeight: CGFloat {
-            switch self {
-            case .result: return 260
-            case .billInput: return 92
-            case .categoriesInput: return 160
-            case .tipInput: return 151
-            case .splitInput: return 92
-            case .confirmButton: return 68
-            }
-        }
     }
 
     private lazy var tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .plain)
-        table.separatorStyle = .none
-        table.backgroundColor = ThemeColor.bg
-        table.contentInsetAdjustmentBehavior = .automatic
-        table.showsVerticalScrollIndicator = false
-        table.register(ResultCell.self, forCellReuseIdentifier: ResultCell.reuseId)
-        table.register(CategoriesInputCell.self, forCellReuseIdentifier: CategoriesInputCell.reuseId)
-        table.register(BillInputCell.self, forCellReuseIdentifier: BillInputCell.reuseId)
-        table.register(TipInputCell.self, forCellReuseIdentifier: TipInputCell.reuseId)
-        table.register(SplitInputCell.self, forCellReuseIdentifier: SplitInputCell.reuseId)
-        table.register(ConfirmButtonCell.self, forCellReuseIdentifier: ConfirmButtonCell.reuseId)
-        table.dataSource = self
-        table.delegate = self
-        return table
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.separatorStyle = .none
+        tv.backgroundColor = ThemeColor.bg
+        tv.showsVerticalScrollIndicator = false
+        tv.dataSource = self
+        tv.delegate = self
+        return tv
     }()
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        layout()
-        view.layoutIfNeeded()
-        bindingVM()
+        setupNavigation()
+        setupLayout()
+        bind()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        bindCellsIfNeeded()
+    // MARK: - Setup
+
+    private func setupNavigation() {
+        title = "消費計算機"
+        navigationItem.backButtonDisplayMode = .minimal
+        navigationItem.rightBarButtonItem = refreshBarItem
     }
 
-    // MARK: - Bindings
-
-    func bindingVM() {
-        viewTapPublisher.sink { [weak self] _ in
-            self?.view.endEditing(true)
-        }.store(in: &cancellables)
+    private func setupLayout() {
+        view.backgroundColor = ThemeColor.bg
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalToSuperview()
+        }
     }
 
-    private func bindCellsIfNeeded() {
-        guard !hasBoundCells else { return }
-        hasBoundCells = true
+    // MARK: - Binding
 
-        tableView.reloadData()
-        tableView.layoutIfNeeded()
-
-        guard let resultCell = tableView.cellForRow(at: IndexPath(row: Row.result.rawValue, section: 0)) as? ResultCell,
-              let billInputCell = tableView.cellForRow(at: IndexPath(row: Row.billInput.rawValue, section: 0)) as? BillInputCell,
-              let categoriesInputCell = tableView.cellForRow(at: IndexPath(row: Row.categoriesInput.rawValue, section: 0)) as? CategoriesInputCell,
-              let tipInputCell = tableView.cellForRow(at: IndexPath(row: Row.tipInput.rawValue, section: 0)) as? TipInputCell,
-              let splitInputCell = tableView.cellForRow(at: IndexPath(row: Row.splitInput.rawValue, section: 0)) as? SplitInputCell
-        else { return }
+    private func bind() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
+        tapGesture.tapPublisher
+            .sink { [weak self] _ in self?.view.endEditing(true) }
+            .store(in: &cancellables)
+        view.addGestureRecognizer(tapGesture)
 
         let input = CalculatorVM.Input(
             billPublisher: billInputCell.billInputView.valuePublisher,
             tipPublisher: tipInputCell.tipInputView.valuePublisher,
             splitPublisher: splitInputCell.splitInputView.valuePublisher,
-            categoryPublisher: categoriesInputCell.valuePublisher.map { Optional($0.identifier) }.eraseToAnyPublisher(),
-            logoViewTapPublisher: refreshButtonTapPublisher)
+            categoryPublisher: categoriesInputCell.valuePublisher
+                .map { Optional($0.identifier) }
+                .eraseToAnyPublisher(),
+            logoViewTapPublisher: refreshBarItem.tapPublisher
+                .map { _ in () }
+                .eraseToAnyPublisher()
+        )
         vm.bind(input: input)
 
-        vm.$result.sink { result in
-            resultCell.resultView.configure(result: result)
-        }.store(in: &cancellables)
-
-        vm.resetPublisher.sink { [weak self] _ in
-            guard let self else { return }
-            let resettableRows: [Row] = [.billInput, .categoriesInput, .tipInput, .splitInput]
-            for row in resettableRows {
-                if let cell = self.tableView.cellForRow(at: IndexPath(row: row.rawValue, section: 0)) as? Resettable {
-                    cell.reset()
-                }
+        vm.$result
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                self?.resultCell.resultView.configure(result: result)
             }
-        }.store(in: &cancellables)
+            .store(in: &cancellables)
+
+        vm.resetPublisher
+            .sink { [weak self] _ in self?.resetInputCells() }
+            .store(in: &cancellables)
+
+        confirmButtonCell.onTap = { [weak self] in
+            self?.presentTotalResult()
+        }
+
+        categoriesInputCell.onMoreOptionsTap = { [weak self] in
+            self?.presentCategoryOptionsSheet()
+        }
     }
 
-    // MARK: - Layout
-
-    private func layout() {
-        title = "消費計算機"
-        navigationItem.backButtonDisplayMode = .minimal
-        view.backgroundColor = ThemeColor.bg
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalToSuperview()
+    private func presentCategoryOptionsSheet() {
+        let pickerVC = CategoryPickerSheetViewController()
+        pickerVC.onSelect = { [weak self] category in
+            self?.categoriesInputCell.categoryInputView.selectCategory(category)
         }
+        let nav = UINavigationController(rootViewController: pickerVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    // MARK: - Actions
+
+    private func resetInputCells() {
+        [billInputCell, categoriesInputCell, tipInputCell, splitInputCell]
+            .compactMap { $0 as? Resettable }
+            .forEach { $0.reset() }
+    }
+
+    private func presentTotalResult() {
+        let totalVC = TotalResultViewController(result: vm.result)
+        totalVC.dismissedPublisher
+            .prefix(1)
+            .sink { [weak self] in self?.vm.reset() }
+            .store(in: &cancellables)
+
+        let nav = UINavigationController(rootViewController: totalVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 }
 
 // MARK: - UITableViewDataSource
+
 extension CalculatorVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Row.allCases.count
@@ -169,59 +172,28 @@ extension CalculatorVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let row = Row(rawValue: indexPath.row) else { return UITableViewCell() }
         switch row {
-        case .result:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ResultCell
-            cell.configure()
-            return cell
-        case .billInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! BillInputCell
-            cell.configure()
-            return cell
-        case .categoriesInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! CategoriesInputCell
-            cell.configure()
-            return cell
-        case .tipInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! TipInputCell
-            cell.configure()
-            return cell
-        case .splitInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! SplitInputCell
-            cell.configure()
-            return cell
-        case .confirmButton:
-            let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseId, for: indexPath) as! ConfirmButtonCell
-            cell.configure()
-            cell.onTap = { [weak self] in
-                guard let self else { return }
-                let totalVC = TotalResultViewController(result: self.vm.result)
-
-                totalVC.dismissedPublisher
-                    .prefix(1)
-                    .sink { [weak self] in
-                        self?.vm.reset()
-                    }
-                    .store(in: &self.cancellables)
-
-                let nav = UINavigationController(rootViewController: totalVC)
-                nav.modalPresentationStyle = .pageSheet
-                nav.modalTransitionStyle = .coverVertical
-                if let sheet = nav.sheetPresentationController {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.selectedDetentIdentifier = .medium
-                    sheet.prefersGrabberVisible = true
-                }
-                self.present(nav, animated: true)
-            }
-            return cell
+        case .result:       return resultCell
+        case .billInput:    return billInputCell
+        case .categoriesInput: return categoriesInputCell
+        case .tipInput:     return tipInputCell
+        case .splitInput:   return splitInputCell
+        case .confirmButton: return confirmButtonCell
         }
     }
 }
 
 // MARK: - UITableViewDelegate
+
 extension CalculatorVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let row = Row(rawValue: indexPath.row) else { return 0 }
-        return row.rowHeight
+        switch Row(rawValue: indexPath.row) {
+        case .result: return 260
+        case .billInput: return 92
+        case .categoriesInput: return 160
+        case .tipInput: return 151
+        case .splitInput: return 92
+        case .confirmButton: return 68
+        case .none: return 0
+        }
     }
 }

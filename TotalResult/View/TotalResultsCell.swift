@@ -125,14 +125,20 @@ final class SplitCell: BaseResultInfoCell {
     }
 }
 
-final class CategoryCell: BaseResultInfoCell {
+final class CategoryCell: BaseImageResultInfoCell {
     static let reuseId = "CategoryCell"
 
     func configure(with result: Result) {
         titleLabel.text = "消費種類"
-        valueLabel.text = result.categoryDisplayTitle ?? "—"
-        valueLabel.font = ThemeFont.bold(Ofsize: 20)
-        valueLabel.textColor = ThemeColor.secondary
+
+        if let name = result.categorySystemImageName {
+            let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
+            valueImageView.image = UIImage(systemName: name, withConfiguration: config)
+            valueImageView.isHidden = false
+        } else {
+            valueImageView.image = nil
+            valueImageView.isHidden = true
+        }
     }
 }
 

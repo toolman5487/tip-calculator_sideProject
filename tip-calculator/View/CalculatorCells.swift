@@ -6,6 +6,7 @@
 import UIKit
 import SnapKit
 import Combine
+import CombineCocoa
 
 private let cellInsetHorizontal: CGFloat = 16
 private let cellInsetVertical: CGFloat = 8
@@ -100,42 +101,6 @@ extension BillInputCell: Resettable {
 final class CategoriesInputCell: UITableViewCell {
     static let reuseId = "CategoriesInputCell"
 
-    enum Category: Int, CaseIterable {
-        case none
-        case food
-        case clothing
-        case housing
-        case transport
-        case education
-        case entertainment
-
-        var identifier: String {
-            switch self {
-            case .none: return ""
-            case .food: return "food"
-            case .clothing: return "clothing"
-            case .housing: return "housing"
-            case .transport: return "transport"
-            case .education: return "education"
-            case .entertainment: return "entertainment"
-            }
-        }
-
-        var systemImageName: String {
-            switch self {
-            case .none: return "person.fill.questionmark"
-            case .food: return "fork.knife"
-            case .clothing: return "tshirt.fill"
-            case .housing: return "house.fill"
-            case .transport: return "car.fill"
-            case .education: return "book.fill"
-            case .entertainment: return "gamecontroller.fill"
-            }
-        }
-    }
-
-    var onCategoryTap: ((Category) -> Void)?
-
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -144,47 +109,13 @@ final class CategoriesInputCell: UITableViewCell {
         return view
     }()
 
-    private let headerView: HeaderView = {
-        let view = HeaderView()
-        view.configure(topText: "選擇", bottomText: "消費種類")
-        return view
-    }()
+    private(set) lazy var categoryInputView = CategoryInputView()
 
-    private let categorySubject = CurrentValueSubject<Category, Never>(.none)
-    var valuePublisher: AnyPublisher<Category, Never> { categorySubject.eraseToAnyPublisher() }
-
-    private lazy var categoryImageViews: [UIImageView] = Category.allCases.map { cat in
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(systemName: cat.systemImageName)
-        iv.tintColor = ThemeColor.text.withAlphaComponent(0.6)
-        return iv
+    var valuePublisher: AnyPublisher<Category, Never> { categoryInputView.valuePublisher }
+    var onMoreOptionsTap: (() -> Void)? {
+        get { categoryInputView.onMoreOptionsTap }
+        set { categoryInputView.onMoreOptionsTap = newValue }
     }
-
-    private lazy var iconsStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: categoryImageViews)
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 0
-        return stack
-    }()
-
-    private let sliderIconsContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
-
-    private lazy var slider: UISlider = {
-        let s = UISlider()
-        s.minimumValue = 0
-        s.maximumValue = Float(Category.allCases.count - 1)
-        s.value = 0
-        s.minimumTrackTintColor = ThemeColor.secondary
-        s.maximumTrackTintColor = ThemeColor.primary.withAlphaComponent(0.3)
-        s.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-        return s
-    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -196,67 +127,23 @@ final class CategoriesInputCell: UITableViewCell {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    @objc private func sliderValueChanged() {
-        let step = Int(slider.value.rounded())
-        let clamped = min(max(step, 0), Category.allCases.count - 1)
-        slider.value = Float(clamped)
-        let category = Category(rawValue: clamped) ?? .none
-        categorySubject.send(category)
-        updateIconsHighlight(index: clamped)
-        onCategoryTap?(category)
-    }
-
-    private func updateIconsHighlight(index: Int) {
-        for (i, imageView) in categoryImageViews.enumerated() {
-            let isSelected = (i == index)
-            imageView.tintColor = isSelected ? ThemeColor.secondary : ThemeColor.text.withAlphaComponent(0.6)
-        }
-    }
-
     private func setupView() {
         contentView.addSubview(containerView)
-        containerView.addSubview(headerView)
-        containerView.addSubview(sliderIconsContainerView)
-        sliderIconsContainerView.addSubview(iconsStack)
-        sliderIconsContainerView.addSubview(slider)
+        containerView.addSubview(categoryInputView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
-        headerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
-            make.width.equalTo(68)
-            make.centerY.equalToSuperview()
+        categoryInputView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(12)
         }
-        sliderIconsContainerView.snp.makeConstraints { make in
-            make.leading.equalTo(headerView.snp.trailing).offset(24)
-            make.trailing.equalToSuperview().offset(-12)
-            make.centerY.equalTo(headerView)
-        }
-        iconsStack.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-        }
-        slider.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(iconsStack.snp.bottom).offset(8)
-        }
-        updateIconsHighlight(index: 0)
     }
 
-    func configure(selectedCategory: Category? = nil) {
-        let category = selectedCategory ?? .none
-        categorySubject.send(category)
-        slider.value = Float(category.rawValue)
-        updateIconsHighlight(index: category.rawValue)
-    }
-
-    func configure() {
-        configure(selectedCategory: CategoriesInputCell.Category.none)
-    }
+    func configure() {}
 }
 
 extension CategoriesInputCell: Resettable {
     func reset() {
-        configure(selectedCategory: CategoriesInputCell.Category.none)
+        categoryInputView.categoryReset()
     }
 }
 
