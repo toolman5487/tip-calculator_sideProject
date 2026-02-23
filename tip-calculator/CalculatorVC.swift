@@ -122,7 +122,9 @@ final class CalculatorVC: BaseViewController {
     }
 
     private func presentCategoryOptionsSheet() {
-        let pickerVC = CategoryPickerSheetViewController()
+        let current = categoriesInputCell.categoryInputView.currentCategory
+        let viewModel = CategoryPickerSheetViewModel(currentCategory: current)
+        let pickerVC = CategoryPickerSheetViewController(viewModel: viewModel)
         pickerVC.onSelect = { [weak self] category in
             self?.categoriesInputCell.categoryInputView.selectCategory(category)
         }
@@ -189,8 +191,8 @@ extension CalculatorVC: UITableViewDelegate {
         switch Row(rawValue: indexPath.row) {
         case .result: return 260
         case .billInput: return 92
-        case .categoriesInput: return 160
-        case .tipInput: return 151
+        case .categoriesInput: return 152
+        case .tipInput: return 152
         case .splitInput: return 92
         case .confirmButton: return 68
         case .none: return 0

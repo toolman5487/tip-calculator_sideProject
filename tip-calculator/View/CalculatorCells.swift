@@ -134,7 +134,7 @@ final class CategoriesInputCell: UITableViewCell {
             make.edges.equalToSuperview().inset(cellContentInsets)
         }
         categoryInputView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(12)
+            make.edges.equalToSuperview().inset(16)
         }
     }
 
