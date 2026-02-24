@@ -26,12 +26,7 @@ final class CalculatorVC: BaseViewController {
         return item
     }()
 
-    private let resultCell = ResultCell()
-    private let billInputCell = BillInputCell()
-    private let categoriesInputCell = CategoriesInputCell()
-    private let tipInputCell = TipInputCell()
-    private let splitInputCell = SplitInputCell()
-    private let confirmButtonCell = ConfirmButtonCell()
+    private let cells = CalculatorCells()
 
     private enum Row: Int, CaseIterable {
         case result
@@ -93,14 +88,14 @@ final class CalculatorVC: BaseViewController {
         let resultDismissedSubject = PassthroughSubject<Void, Never>()
         let sheetCategorySelectSubject = PassthroughSubject<Category, Never>()
 
-        confirmButtonCell.onTap = { confirmTapSubject.send(()) }
-        categoriesInputCell.onMoreOptionsTap = { moreOptionsTapSubject.send(()) }
+        cells.confirmButton.onTap = { confirmTapSubject.send(()) }
+        cells.categoriesInput.onMoreOptionsTap = { moreOptionsTapSubject.send(()) }
 
         let input = CalculatorVM.Input(
-            billPublisher: billInputCell.billInputView.valuePublisher,
-            tipPublisher: tipInputCell.tipInputView.valuePublisher,
-            splitPublisher: splitInputCell.splitInputView.valuePublisher,
-            mainGridCategoryTapPublisher: categoriesInputCell.mainGridCategoryTapPublisher,
+            billPublisher: cells.billInput.billInputView.valuePublisher,
+            tipPublisher: cells.tipInput.tipInputView.valuePublisher,
+            splitPublisher: cells.splitInput.splitInputView.valuePublisher,
+            mainGridCategoryTapPublisher: cells.categoriesInput.mainGridCategoryTapPublisher,
             sheetCategorySelectPublisher: sheetCategorySelectSubject.eraseToAnyPublisher(),
             logoViewTapPublisher: refreshBarItem.tapPublisher
                 .map { _ in () }
@@ -114,7 +109,7 @@ final class CalculatorVC: BaseViewController {
         vm.$result
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
-                self?.resultCell.resultView.configure(result: result)
+                self?.cells.result.resultView.configure(result: result)
             }
             .store(in: &cancellables)
 
@@ -132,7 +127,7 @@ final class CalculatorVC: BaseViewController {
         vm.$selectedCategory
             .receive(on: DispatchQueue.main)
             .sink { [weak self] category in
-                self?.categoriesInputCell.categoryInputView.updateSelection(category)
+                self?.cells.categoriesInput.categoryInputView.updateSelection(category)
             }
             .store(in: &cancellables)
 
@@ -161,9 +156,7 @@ final class CalculatorVC: BaseViewController {
     // MARK: - Actions
 
     private func resetInputCells() {
-        [billInputCell, categoriesInputCell, tipInputCell, splitInputCell]
-            .compactMap { $0 as? Resettable }
-            .forEach { $0.reset() }
+        cells.resettables.forEach { $0.reset() }
     }
 
     private func presentTotalResult(result: Result, onDismiss: @escaping () -> Void) {
@@ -194,12 +187,12 @@ extension CalculatorVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let row = Row(rawValue: indexPath.row) else { return UITableViewCell() }
         switch row {
-        case .result:       return resultCell
-        case .billInput:    return billInputCell
-        case .categoriesInput: return categoriesInputCell
-        case .tipInput:     return tipInputCell
-        case .splitInput:   return splitInputCell
-        case .confirmButton: return confirmButtonCell
+        case .result:       return cells.result
+        case .billInput:    return cells.billInput
+        case .categoriesInput: return cells.categoriesInput
+        case .tipInput:     return cells.tipInput
+        case .splitInput:   return cells.splitInput
+        case .confirmButton: return cells.confirmButton
         }
     }
 }

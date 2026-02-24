@@ -18,19 +18,22 @@ enum ChartDetailCategoryOption: Int, CaseIterable {
     case clothing
     case housing
     case transport
+    case drink
     case education
     case entertainment
+    case shopping
+    case subscription
+    case medical
+    case beauty
+    case fitness
+    case child
+    case pet
+    case gift
+    case insurance
 
     var displayTitle: String {
-        switch self {
-        case .all: return "全部"
-        case .food: return "食"
-        case .clothing: return "衣"
-        case .housing: return "住"
-        case .transport: return "行"
-        case .education: return "育"
-        case .entertainment: return "樂"
-        }
+        guard let id = identifier else { return "全部" }
+        return Category(identifier: id)?.displayName ?? "全部"
     }
 
     var systemImageName: String {
@@ -40,8 +43,40 @@ enum ChartDetailCategoryOption: Int, CaseIterable {
         case .clothing: return "tshirt.fill"
         case .housing: return "house.fill"
         case .transport: return "car.fill"
+        case .drink: return "cup.and.saucer.fill"
         case .education: return "book.fill"
         case .entertainment: return "gamecontroller.fill"
+        case .shopping: return "bag.fill"
+        case .subscription: return "creditcard.fill"
+        case .medical: return "cross.case.fill"
+        case .beauty: return "sparkles"
+        case .fitness: return "figure.run"
+        case .child: return "figure.2.and.child.holdinghands"
+        case .pet: return "paw.print.fill"
+        case .gift: return "gift.fill"
+        case .insurance: return "shield.fill"
+        }
+    }
+
+    var identifier: String? {
+        switch self {
+        case .all: return nil
+        case .food: return "food"
+        case .clothing: return "clothing"
+        case .housing: return "housing"
+        case .transport: return "transport"
+        case .drink: return "drink"
+        case .education: return "education"
+        case .entertainment: return "entertainment"
+        case .shopping: return "shopping"
+        case .subscription: return "subscription"
+        case .medical: return "medical"
+        case .beauty: return "beauty"
+        case .fitness: return "fitness"
+        case .child: return "child"
+        case .pet: return "pet"
+        case .gift: return "gift"
+        case .insurance: return "insurance"
         }
     }
 }

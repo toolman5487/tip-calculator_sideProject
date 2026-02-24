@@ -124,6 +124,20 @@
 		157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
 		15B9F2D82F4C489F00B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
 		15B9F2DC2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */; };
+		15B9F5002F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5012F4D600000B0A364 /* CategorySectionHeaderView.swift */; };
+		15B9F5022F4D600000B0A364 /* CategorySectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5032F4D600000B0A364 /* CategorySectionCell.swift */; };
+		15B9F5042F4D600000B0A364 /* CategoryOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5052F4D600000B0A364 /* CategoryOptionCell.swift */; };
+		15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
+		15B9F4DC2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
+		15B9F5092F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5012F4D600000B0A364 /* CategorySectionHeaderView.swift */; };
+		15B9F50A2F4D600000B0A364 /* CategorySectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5032F4D600000B0A364 /* CategorySectionCell.swift */; };
+		15B9F50B2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5052F4D600000B0A364 /* CategoryOptionCell.swift */; };
+		15B9F50D2F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5012F4D600000B0A364 /* CategorySectionHeaderView.swift */; };
+		15B9F50E2F4D600000B0A364 /* CategorySectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5032F4D600000B0A364 /* CategorySectionCell.swift */; };
+		15B9F50F2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F5052F4D600000B0A364 /* CategoryOptionCell.swift */; };
+		15B9F4E02F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */; };
+		15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */; };
+		15B9F4E22F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */; };
 		15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA02D95A2B300270813 /* CombineCocoa */; };
 		15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA32D95A2CE00270813 /* SnapKit */; };
 		15C22DA72D95A2E700270813 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15C22DA62D95A2E700270813 /* CombineCocoa */; };
@@ -191,6 +205,10 @@
 		157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewModel.swift; sourceTree = "<group>"; };
 		15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetViewController.swift; sourceTree = "<group>"; };
 		15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetViewModel.swift; sourceTree = "<group>"; };
+		15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetModel.swift; sourceTree = "<group>"; };
+		15B9F5012F4D600000B0A364 /* CategorySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySectionHeaderView.swift; sourceTree = "<group>"; };
+		15B9F5032F4D600000B0A364 /* CategorySectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySectionCell.swift; sourceTree = "<group>"; };
+		15B9F5052F4D600000B0A364 /* CategoryOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryOptionCell.swift; sourceTree = "<group>"; };
 		15C22D6B2D95A29900270813 /* tip-calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tip-calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -583,7 +601,9 @@
 		15B9F2D92F4C492D00B0A364 /* CategoryPickerSheet */ = {
 			isa = PBXGroup;
 			children = (
+				15B9F4DF2F4D54A600B0A364 /* Model */,
 				15B9F2DA2F4C495100B0A364 /* ViewController */,
+				15B9F5082F4D600000B0A364 /* View */,
 				15B9F2DD2F4C500100B0A364 /* ViewModel */,
 			);
 			path = CategoryPickerSheet;
@@ -603,6 +623,24 @@
 				15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		15B9F4DF2F4D54A600B0A364 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		15B9F5082F4D600000B0A364 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15B9F5012F4D600000B0A364 /* CategorySectionHeaderView.swift */,
+				15B9F5032F4D600000B0A364 /* CategorySectionCell.swift */,
+				15B9F5052F4D600000B0A364 /* CategoryOptionCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		15C22D622D95A29900270813 = {
@@ -811,6 +849,10 @@
 				156C6FB12F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				15B9F2D82F4C489F00B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
 				15B9F2DC2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift in Sources */,
+				15B9F4E22F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
+				15B9F5002F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
+				15B9F5022F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
+				15B9F5042F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 				156C6FB82F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift in Sources */,
 				156C6FBC2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
 				156C6FAE2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
@@ -880,11 +922,16 @@
 				156C5C692F3ED5A500F0C0A9 /* ChartDetailViewController.swift in Sources */,
 				156C6FAC2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
+				15B9F4E02F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				156C51612F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
 				150DBCD22F483CBD008209A1 /* ChartDetailViewModel.swift in Sources */,
 				150DBCD72F483E72008209A1 /* ChartDetailPieChartCell.swift in Sources */,
 				156C515A2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
 				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
+				15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
+				15B9F5092F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
+				15B9F50A2F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
+				15B9F50B2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -916,7 +963,12 @@
 				156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				156C5C6A2F3ED5A500F0C0A9 /* ChartDetailViewController.swift in Sources */,
 				157A6E4B2F343524005D8554 /* MainTabBarViewController.swift in Sources */,
+				15B9F4DC2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
+				15B9F50D2F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
+				15B9F50E2F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
+				15B9F50F2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 				157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */,
+				15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
 				157579CA2F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				156C6FAD2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,

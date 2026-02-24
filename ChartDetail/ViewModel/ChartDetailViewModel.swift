@@ -35,37 +35,22 @@ final class ChartDetailViewModel {
 
     private func filteredRecords() -> [ConsumptionRecord] {
         let base = records
-        switch selectedCategory {
-        case .all: return base
-        case .food: return base.filter { $0.categoryIdentifier == "food" }
-        case .clothing: return base.filter { $0.categoryIdentifier == "clothing" }
-        case .housing: return base.filter { $0.categoryIdentifier == "housing" }
-        case .transport: return base.filter { $0.categoryIdentifier == "transport" }
-        case .education: return base.filter { $0.categoryIdentifier == "education" }
-        case .entertainment: return base.filter { $0.categoryIdentifier == "entertainment" }
-        }
+        guard let id = selectedCategory.identifier else { return base }
+        return base.filter { $0.categoryIdentifier == id }
     }
 
     private func buildPieChartData() {
         let filtered = filteredRecords()
-        var sums: [String: Double] = [
-            "食": 0, "衣": 0, "住": 0, "行": 0, "育": 0, "樂": 0, "無": 0
-        ]
+        var sums: [String: Double] = [:]
         for record in filtered {
             let amount = record.totalBill
-            let key: String
-            switch record.categoryIdentifier {
-            case "food": key = "食"
-            case "clothing": key = "衣"
-            case "housing": key = "住"
-            case "transport": key = "行"
-            case "education": key = "育"
-            case "entertainment": key = "樂"
-            default: key = "無"
-            }
+            let key = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "無"
             sums[key, default: 0] += amount
         }
-        pieChartData = ["食", "衣", "住", "行", "育", "樂", "無"]
+        let labelOrder = Category.mainGridCategories.map(\.displayName)
+            + Category.sheetCategories.map(\.displayName)
+            + ["無"]
+        pieChartData = labelOrder
             .compactMap { label -> PieChartSliceItem? in
                 let v = sums[label] ?? 0
                 return v > 0 ? PieChartSliceItem(label: label, value: v) : nil

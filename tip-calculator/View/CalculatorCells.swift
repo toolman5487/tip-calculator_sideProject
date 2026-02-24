@@ -14,6 +14,21 @@ private var cellContentInsets: UIEdgeInsets {
     UIEdgeInsets(top: cellInsetVertical, left: cellInsetHorizontal, bottom: cellInsetVertical, right: cellInsetHorizontal)
 }
 
+// MARK: - CalculatorCells
+
+struct CalculatorCells {
+    let result = ResultCell()
+    let billInput = BillInputCell()
+    let categoriesInput = CategoriesInputCell()
+    let tipInput = TipInputCell()
+    let splitInput = SplitInputCell()
+    let confirmButton = ConfirmButtonCell()
+
+    var resettables: [Resettable] {
+        [billInput, categoriesInput, tipInput, splitInput].compactMap { $0 as? Resettable }
+    }
+}
+
 // MARK: - Resettable Protocol
 protocol Resettable: AnyObject {
     func reset()
