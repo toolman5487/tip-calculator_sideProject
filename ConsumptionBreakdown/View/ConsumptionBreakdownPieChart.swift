@@ -1,5 +1,5 @@
 //
-//  ChartDetailPieChartCell.swift
+//  ConsumptionBreakdownPieChartCell.swift
 //  tip-calculator
 //
 
@@ -7,14 +7,13 @@ import DGCharts
 import UIKit
 import SnapKit
 
-final class ChartDetailPieChartCell: UICollectionViewCell {
+final class ConsumptionBreakdownPieChart: UICollectionReusableView {
 
-    static let reuseId = "ChartDetailPieChartCell"
+    static let reuseId = "ConsumptionBreakdownPieChartCell"
 
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 12
         return view
     }()
 
@@ -34,14 +33,16 @@ final class ChartDetailPieChartCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .clear
-        contentView.addSubview(containerView)
+        backgroundColor = .clear
+        addSubview(containerView)
         containerView.addSubview(chartView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         chartView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(16)
+            make.center.equalToSuperview()
+            make.left.right.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(8)
         }
     }
 
@@ -66,7 +67,6 @@ final class ChartDetailPieChartCell: UICollectionViewCell {
         set.valueTextColor = .label
         let chartData = PieChartData(dataSet: set)
         chartView.data = chartData
-        let valueFormatter = DefaultValueFormatter(formatter: formatter)
-        chartData.setValueFormatter(valueFormatter)
+        chartData.setValueFormatter(DefaultValueFormatter(formatter: formatter))
     }
 }

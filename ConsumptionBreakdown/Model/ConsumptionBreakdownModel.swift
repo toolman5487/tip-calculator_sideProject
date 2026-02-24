@@ -1,5 +1,5 @@
 //
-//  ChartDetailModel.swift
+//  ConsumptionBreakdownModel.swift
 //  tip-calculator
 //
 //  Created by Willy Hsu on 2026/2/19.
@@ -12,7 +12,14 @@ struct PieChartSliceItem {
     let value: Double
 }
 
-enum ChartDetailCategoryOption: Int, CaseIterable {
+struct ConsumptionBreakdownCategoryRowItem {
+    let label: String
+    let value: Double
+    let percent: Double
+    let iconName: String?
+}
+
+enum ConsumptionBreakdownCategoryOption: Int, CaseIterable {
     case all
     case food
     case clothing
