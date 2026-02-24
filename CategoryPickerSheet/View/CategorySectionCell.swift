@@ -65,7 +65,7 @@ extension CategorySectionCell: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.bounds.width
+        let availableWidth = max(1, collectionView.bounds.width)
         let width = CategoryPickerSheetViewController.cellWidth(containerWidth: availableWidth)
         return CGSize(width: width, height: width)
     }

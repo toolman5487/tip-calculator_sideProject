@@ -92,12 +92,14 @@ extension CategoryPickerSheetViewController {
 extension CategoryPickerSheetViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let section = viewModel.section(at: indexPath.section) else { return .zero }
-        let height = CategoryPickerSheetViewController.sectionCellHeight(categoryCount: section.categories.count, containerWidth: collectionView.bounds.width)
-        return CGSize(width: collectionView.bounds.width, height: max(0, height))
+        let width = max(1, collectionView.bounds.width)
+        let height = Self.sectionCellHeight(categoryCount: section.categories.count, containerWidth: width)
+        return CGSize(width: width, height: max(0, height))
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: Self.headerHeight)
+        let width = max(1, collectionView.bounds.width)
+        return CGSize(width: width, height: Self.headerHeight)
     }
 
     static func cellWidth(containerWidth: CGFloat) -> CGFloat {

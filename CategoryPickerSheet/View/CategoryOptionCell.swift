@@ -15,7 +15,7 @@ final class CategoryOptionCell: UICollectionViewCell {
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = .white
+        iv.tintColor = .systemBackground
         return iv
     }()
 

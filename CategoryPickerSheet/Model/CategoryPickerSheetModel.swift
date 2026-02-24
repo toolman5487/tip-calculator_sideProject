@@ -26,6 +26,6 @@ enum CategoryPickerSheetModel {
                 result.append(CategoryPickerSection(title: title, categories: [category]))
             }
         }
-        return result
+        return result.sorted { $0.categories.count < $1.categories.count }
     }()
 }
