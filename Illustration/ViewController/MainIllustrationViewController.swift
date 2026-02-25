@@ -155,10 +155,10 @@ extension MainIllustrationViewController {
         guard let section = IllustrationSection(rawValue: indexPath.section) else { return }
         switch section {
         case .timeChart:
-            let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: "消費趨勢", timeFilter: viewModel.selectedTimeFilter, records: viewModel.filteredRecords))
+            let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: "消費趨勢", timeFilter: viewModel.selectedTimeFilter))
             navigationController?.pushViewController(vc, animated: true)
         case .amountRangeChart:
-            let vc = ConsumptionBreakdownViewController(detailItem: .amountRangeChart(title: "消費金額區間", records: viewModel.filteredRecords))
+            let vc = ConsumptionBreakdownViewController(detailItem: .amountRangeChart(title: "消費金額區間", timeFilter: viewModel.selectedTimeFilter))
             navigationController?.pushViewController(vc, animated: true)
         case .filterHeader, .kpi:
             break

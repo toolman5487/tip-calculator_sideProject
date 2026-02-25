@@ -8,8 +8,8 @@
 import Foundation
 
 enum ConsumptionBreakdownItem {
-    case timeChart(title: String, timeFilter: IllustrationTimeFilterOption, records: [ConsumptionRecord])
-    case amountRangeChart(title: String, records: [ConsumptionRecord])
+    case timeChart(title: String, timeFilter: IllustrationTimeFilterOption)
+    case amountRangeChart(title: String, timeFilter: IllustrationTimeFilterOption)
 }
 
 struct PieChartSliceItem {

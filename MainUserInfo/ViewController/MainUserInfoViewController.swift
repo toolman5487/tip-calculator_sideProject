@@ -18,6 +18,13 @@ final class MainUserInfoViewController: MainBaseViewController {
     private let searchSubject = PassthroughSubject<String, Never>()
     private let viewModel = MainUserInfoViewModel()
 
+    private let emptyStateView: EmptyStateView = {
+        let v = EmptyStateView()
+        v.label.text = "尚無消費紀錄"
+        v.isHidden = true
+        return v
+    }()
+
     private lazy var searchController: UISearchController = {
         let resultsVC = ResultsFilterViewController()
         let controller = UISearchController(searchResultsController: resultsVC)
@@ -33,12 +40,18 @@ final class MainUserInfoViewController: MainBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.refresh()  
+        viewModel.refresh()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        emptyStateView.stop()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupEmptyStateView()
         setupNavigation()
         setupCollectionView()
         bindingViewModel()
@@ -49,6 +62,14 @@ final class MainUserInfoViewController: MainBaseViewController {
     }
 
     // MARK: - Setup
+
+    private func setupEmptyStateView() {
+        view.addSubview(emptyStateView)
+        emptyStateView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(360)
+        }
+    }
 
     private func setupCollectionView() {
         collectionView.register(RecordFilterHeaderView.self,
@@ -82,9 +103,22 @@ final class MainUserInfoViewController: MainBaseViewController {
         viewModel.$displaySections
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.collectionView.reloadData()
+                guard let self else { return }
+                self.collectionView.reloadData()
+                self.updateEmptyState(isEmpty: self.viewModel.recordCount == 0)
             }
             .store(in: &cancellables)
+    }
+
+    private func updateEmptyState(isEmpty: Bool) {
+        emptyStateView.isHidden = !isEmpty
+        collectionView.isHidden = isEmpty
+        if isEmpty {
+            view.bringSubviewToFront(emptyStateView)
+            emptyStateView.play()
+        } else {
+            emptyStateView.stop()
+        }
     }
 
     private func setupNavigation() {

@@ -31,6 +31,7 @@ final class ConsumptionBreakdownViewModel {
         + Category.sheetCategories.map(\.displayName)
         + ["未知"]
 
+    private let store: ConsumptionRecordStoring
     let detailItem: ConsumptionBreakdownItem
 
     @Published private(set) var pieChartData: [PieChartSliceItem] = []
@@ -89,7 +90,8 @@ final class ConsumptionBreakdownViewModel {
         return RecordDisplayItem.from(records[index], dateFormatter: AppDateFormatters.detail)
     }
 
-    init(detailItem: ConsumptionBreakdownItem) {
+    init(detailItem: ConsumptionBreakdownItem, store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
+        self.store = store
         self.detailItem = detailItem
         buildPieChartData()
     }
@@ -98,14 +100,22 @@ final class ConsumptionBreakdownViewModel {
         buildPieChartData()
     }
 
-    private var records: [ConsumptionRecord] {
+    private var timeFilter: IllustrationTimeFilterOption {
         switch detailItem {
-        case .timeChart(_, _, let r), .amountRangeChart(_, let r): return r
+        case .timeChart(_, let f), .amountRangeChart(_, let f): return f
         }
     }
 
     private func filteredRecords() -> [ConsumptionRecord] {
-        records
+        let all = store.fetchAll()
+        let calendar = Calendar.current
+        let now = Date()
+        let timeRange = timeFilter.consumptionTimeRange
+        guard let r = timeRange.range(calendar: calendar, now: now) else { return [] }
+        return all.filter {
+            guard let d = $0.createdAt else { return false }
+            return timeRange.contains(d, range: r)
+        }
     }
 
     private func buildPieChartData() {

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SnapKit
 import UIKit
 
 private enum ConsumptionBreakdownSection: Int, CaseIterable {
@@ -36,6 +37,13 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
     private let viewModel: ConsumptionBreakdownViewModel
     private var cancellables = Set<AnyCancellable>()
 
+    private let emptyStateView: EmptyStateView = {
+        let v = EmptyStateView()
+        v.label.text = "尚無資料"
+        v.isHidden = true
+        return v
+    }()
+
     init(detailItem: ConsumptionBreakdownItem) {
         self.viewModel = ConsumptionBreakdownViewModel(detailItem: detailItem)
         super.init(nibName: nil, bundle: nil)
@@ -51,11 +59,16 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         binding()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        emptyStateView.stop()
+    }
+
     override func setupNavigationBar() {
         super.setupNavigationBar()
         navigationItem.largeTitleDisplayMode = .never
         switch viewModel.detailItem {
-        case .timeChart(let title, _, _), .amountRangeChart(let title, _):
+        case .timeChart(let title, _), .amountRangeChart(let title, _):
             self.title = title
         }
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
@@ -67,6 +80,11 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         super.setupUI()
         view.backgroundColor = .systemGroupedBackground
         collectionView.backgroundColor = .clear
+        view.addSubview(emptyStateView)
+        emptyStateView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(360)
+        }
     }
 
     private func setupCollectionView() {
@@ -82,10 +100,22 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
     private func binding() {
         viewModel.$pieChartData
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] data in
                 self?.collectionView.reloadData()
+                self?.updateEmptyState(isEmpty: data.isEmpty)
             }
             .store(in: &cancellables)
+    }
+
+    private func updateEmptyState(isEmpty: Bool) {
+        emptyStateView.isHidden = !isEmpty
+        collectionView.isHidden = isEmpty
+        if isEmpty {
+            view.bringSubviewToFront(emptyStateView)
+            emptyStateView.play()
+        } else {
+            emptyStateView.stop()
+        }
     }
 
     private func cellKinds(for section: ConsumptionBreakdownSection) -> [ConsumptionBreakdownCellKind] {
