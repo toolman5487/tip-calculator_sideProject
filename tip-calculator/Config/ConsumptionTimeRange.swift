@@ -30,47 +30,42 @@ enum ConsumptionTimeRange {
     }
 
     func contains(_ date: Date, range r: (start: Date, end: Date)?) -> Bool {
-        guard let r = r else { return false }
-        return date >= r.start && date <= r.end
+        r.map { date >= $0.start && date <= $0.end } ?? false
     }
 
     func rangesForChart(periods: Int, calendar: Calendar = .current, now: Date = Date()) -> [(start: Date, end: Date)] {
-        var result: [(start: Date, end: Date)] = []
+        typealias RangeTuple = (start: Date, end: Date)
+        let indices = (0..<periods).reversed()
+
         switch self {
         case .day:
-            for i in 0..<periods {
-                guard let date = calendar.date(byAdding: .day, value: -i, to: now) else { continue }
+            return indices.compactMap { i -> RangeTuple? in
+                guard let date = calendar.date(byAdding: .day, value: -i, to: now) else { return nil }
                 let start = calendar.startOfDay(for: date)
                 let end = calendar.date(byAdding: .day, value: 1, to: start) ?? start
-                result.append((start, end))
+                return (start, end)
             }
         case .week:
-            for i in 0..<periods {
-                guard let startDate = calendar.date(byAdding: .day, value: -6 - i * 7, to: now) else { continue }
+            return indices.compactMap { i -> RangeTuple? in
+                guard let startDate = calendar.date(byAdding: .day, value: -6 - i * 7, to: now) else { return nil }
                 let start = calendar.startOfDay(for: startDate)
-                let end: Date
-                if i == 0 {
-                    end = now
-                } else if let endDate = calendar.date(byAdding: .day, value: -6 - (i - 1) * 7, to: now) {
-                    end = calendar.startOfDay(for: endDate)
-                } else { continue }
-                result.append((start, end))
+                let end = i == 0 ? now : calendar.date(byAdding: .day, value: -6 - (i - 1) * 7, to: now).map { calendar.startOfDay(for: $0) }
+                guard let end = end else { return nil }
+                return (start, end)
             }
         case .month:
-            for i in 0..<periods {
+            return indices.compactMap { i -> RangeTuple? in
                 guard let end = calendar.date(byAdding: .month, value: -i, to: now),
-                      let start = calendar.date(byAdding: .month, value: -1, to: end) else { continue }
-                result.append((start, end))
+                      let start = calendar.date(byAdding: .month, value: -1, to: end) else { return nil }
+                return (start, end)
             }
         case .year:
-            for i in 0..<periods {
+            return indices.compactMap { i -> RangeTuple? in
                 guard let end = calendar.date(byAdding: .year, value: -i, to: now),
-                      let start = calendar.date(byAdding: .year, value: -1, to: end) else { continue }
-                result.append((start, end))
+                      let start = calendar.date(byAdding: .year, value: -1, to: end) else { return nil }
+                return (start, end)
             }
         }
-        result.reverse()
-        return result
     }
 
     func bucketIndex(for date: Date, periods: Int, calendar: Calendar = .current, now: Date = Date()) -> Int? {

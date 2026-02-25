@@ -10,7 +10,7 @@ final class CategoryOptionCell: UICollectionViewCell {
 
     static let reuseId = "CategoryOptionCell"
 
-    private static let iconConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
+    private static let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .bold)
 
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
@@ -22,7 +22,7 @@ final class CategoryOptionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = ThemeColor.primary
-        contentView.layer.cornerRadius = 12
+        contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
         contentView.addSubview(iconImageView)
         iconImageView.snp.makeConstraints { make in

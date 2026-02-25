@@ -130,15 +130,9 @@ final class CategoryCell: BaseImageResultInfoCell {
 
     func configure(with result: Result) {
         titleLabel.text = "消費種類"
-
-        if let name = result.categorySystemImageName {
-            let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
-            valueImageView.image = UIImage(systemName: name, withConfiguration: config)
-            valueImageView.isHidden = false
-        } else {
-            valueImageView.image = nil
-            valueImageView.isHidden = true
-        }
+        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
+        valueImageView.image = UIImage(systemName: result.categorySystemImageName, withConfiguration: config)
+        valueImageView.isHidden = false
     }
 }
 

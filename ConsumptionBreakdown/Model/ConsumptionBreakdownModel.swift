@@ -27,8 +27,7 @@ enum ConsumptionBreakdownCategoryOption: Int, CaseIterable {
     case transport
     case drink
     case education
-    case entertainment
-    case beauty
+    case gaming
     case fitness
     case child
     case pet
@@ -49,8 +48,7 @@ enum ConsumptionBreakdownCategoryOption: Int, CaseIterable {
         case .transport: return "car.fill"
         case .drink: return "cup.and.saucer.fill"
         case .education: return "book.fill"
-        case .entertainment: return "gamecontroller.fill"
-        case .beauty: return "sparkles"
+        case .gaming: return "gamecontroller.fill"
         case .fitness: return "figure.run"
         case .child: return "figure.2.and.child.holdinghands"
         case .pet: return "paw.print.fill"
@@ -68,8 +66,7 @@ enum ConsumptionBreakdownCategoryOption: Int, CaseIterable {
         case .transport: return "transport"
         case .drink: return "drink"
         case .education: return "education"
-        case .entertainment: return "entertainment"
-        case .beauty: return "beauty"
+        case .gaming: return "gaming"
         case .fitness: return "fitness"
         case .child: return "child"
         case .pet: return "pet"

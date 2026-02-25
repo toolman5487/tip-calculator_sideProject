@@ -20,7 +20,8 @@ struct Result: Sendable {
         categoryIdentifier.flatMap { Category(identifier: $0)?.displayName }
     }
 
-    var categorySystemImageName: String? {
+    var categorySystemImageName: String {
         categoryIdentifier.flatMap { Category(identifier: $0)?.systemImageName }
+            ?? Category.none.systemImageName ?? "questionmark.circle"
     }
 }

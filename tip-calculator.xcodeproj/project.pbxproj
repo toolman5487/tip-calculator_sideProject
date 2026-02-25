@@ -131,6 +131,7 @@
 		159BB1AC2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
 		159BB1AD2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
 		159BB1AE2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
+		159BB1B12F4EC5C800572631 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 159BB1B02F4EC5C800572631 /* Algorithms */; };
 		15B9F2D82F4C489F00B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
 		15B9F2DC2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */; };
 		15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
@@ -281,6 +282,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159BB1B12F4EC5C800572631 /* Algorithms in Frameworks */,
 				15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */,
 				156C51562F3DD78E00F0C0A9 /* DGCharts in Frameworks */,
 				15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */,
@@ -735,6 +737,7 @@
 				15C22DA02D95A2B300270813 /* CombineCocoa */,
 				15C22DA32D95A2CE00270813 /* SnapKit */,
 				156C51552F3DD78E00F0C0A9 /* DGCharts */,
+				159BB1B02F4EC5C800572631 /* Algorithms */,
 			);
 			productName = "tip-calculator";
 			productReference = 15C22D6B2D95A29900270813 /* tip-calculator.app */;
@@ -826,6 +829,7 @@
 				15C22DA22D95A2CE00270813 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				15C22DA82D95A32E00270813 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				156C51542F3DD78E00F0C0A9 /* XCRemoteSwiftPackageReference "Charts" */,
+				159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 15C22D6C2D95A29900270813 /* Products */;
@@ -1341,6 +1345,14 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
 		15C22D9F2D95A2B300270813 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa";
@@ -1372,6 +1384,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 156C51542F3DD78E00F0C0A9 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
+		};
+		159BB1B02F4EC5C800572631 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		15C22DA02D95A2B300270813 /* CombineCocoa */ = {
 			isa = XCSwiftPackageProductDependency;

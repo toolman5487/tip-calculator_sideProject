@@ -20,6 +20,10 @@ struct ConsumptionBreakdownCategoryRowDisplay {
 @MainActor
 final class ConsumptionBreakdownViewModel {
 
+    private static let labelOrder: [String] = Category.mainGridCategories.map(\.displayName)
+        + Category.sheetCategories.map(\.displayName)
+        + ["未知"]
+
     let detailItem: ConsumptionBreakdownItem
 
     @Published private(set) var selectedCategory: ConsumptionBreakdownCategoryOption = .all
@@ -77,14 +81,10 @@ final class ConsumptionBreakdownViewModel {
         let filtered = filteredRecords()
         var sums: [String: Double] = [:]
         for record in filtered {
-            let amount = record.totalBill
             let key = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "未知"
-            sums[key, default: 0] += amount
+            sums[key, default: 0] += record.totalBill
         }
-        let labelOrder = Category.mainGridCategories.map(\.displayName)
-            + Category.sheetCategories.map(\.displayName)
-            + ["未知"]
-        pieChartData = labelOrder
+        pieChartData = Self.labelOrder
             .compactMap { label -> PieChartSliceItem? in
                 let v = sums[label] ?? 0
                 return v > 0 ? PieChartSliceItem(label: label, value: v) : nil
