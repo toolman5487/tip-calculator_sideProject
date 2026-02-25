@@ -68,5 +68,6 @@ final class ConsumptionBreakdownPieChart: UICollectionReusableView {
         let chartData = PieChartData(dataSet: set)
         chartView.data = chartData
         chartData.setValueFormatter(DefaultValueFormatter(formatter: formatter))
+        chartView.animate(yAxisDuration: 0.5, easingOption: .easeOutExpo)
     }
 }

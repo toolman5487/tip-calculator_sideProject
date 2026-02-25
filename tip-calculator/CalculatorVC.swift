@@ -17,14 +17,7 @@ final class CalculatorVC: BaseViewController {
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
-
-    private lazy var refreshBarItem: UIBarButtonItem = {
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config)
-        let item = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
-        item.accessibilityIdentifier = "refreshButton"
-        return item
-    }()
+    private let logoViewTapSubject = PassthroughSubject<Void, Never>()
 
     private let cells = CalculatorCells()
 
@@ -61,7 +54,10 @@ final class CalculatorVC: BaseViewController {
     private func setupNavigation() {
         title = "消費計算機"
         navigationItem.backButtonDisplayMode = .minimal
-        navigationItem.rightBarButtonItem = refreshBarItem
+        navigationItem.rightBarButtonItem = .refreshBarButton(
+            onTap: { [weak self] in self?.logoViewTapSubject.send(()) },
+            accessibilityIdentifier: "refreshButton"
+        )
     }
 
     private func setupLayout() {
@@ -97,9 +93,7 @@ final class CalculatorVC: BaseViewController {
             splitPublisher: cells.splitInput.splitInputView.valuePublisher,
             mainGridCategoryTapPublisher: cells.categoriesInput.mainGridCategoryTapPublisher,
             sheetCategorySelectPublisher: sheetCategorySelectSubject.eraseToAnyPublisher(),
-            logoViewTapPublisher: refreshBarItem.tapPublisher
-                .map { _ in () }
-                .eraseToAnyPublisher(),
+            logoViewTapPublisher: logoViewTapSubject.eraseToAnyPublisher(),
             confirmTapPublisher: confirmTapSubject.eraseToAnyPublisher(),
             moreOptionsTapPublisher: moreOptionsTapSubject.eraseToAnyPublisher(),
             resultDismissedPublisher: resultDismissedSubject.eraseToAnyPublisher()

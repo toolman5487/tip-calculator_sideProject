@@ -30,13 +30,9 @@ final class MainIllustrationViewController: MainBaseViewController {
 
     private func setupNavigation() {
         title = "統計資料"
-        let refreshItem = UIBarButtonItem(
-            image: UIImage(systemName: "arrow.clockwise"),
-            style: .plain,
-            target: self,
-            action: #selector(refreshButtonTapped)
-        )
-        navigationItem.rightBarButtonItem = refreshItem
+        navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
+            self?.triggerRefresh()
+        }
     }
 
     private func setupCollectionView() {
@@ -74,10 +70,6 @@ final class MainIllustrationViewController: MainBaseViewController {
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
-    }
-
-    @objc private func refreshButtonTapped() {
-        triggerRefresh()
     }
 }
 

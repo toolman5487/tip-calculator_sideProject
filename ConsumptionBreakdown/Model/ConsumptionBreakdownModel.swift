@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum ConsumptionBreakdownItem {
+    case timeChart(title: String, timeFilter: IllustrationTimeFilterOption, records: [ConsumptionRecord])
+    case amountRangeChart(title: String, records: [ConsumptionRecord])
+}
+
 struct PieChartSliceItem {
     let label: String
     let value: Double

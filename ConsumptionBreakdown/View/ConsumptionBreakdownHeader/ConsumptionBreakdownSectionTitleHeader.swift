@@ -20,6 +20,10 @@ final class ConsumptionBreakdownSectionTitleHeader: BaseBlurSectionHeaderView {
         return label
     }()
 
+    func configure(title: String) {
+        titleLabel.text = title
+    }
+
     override func setupContent() {
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in

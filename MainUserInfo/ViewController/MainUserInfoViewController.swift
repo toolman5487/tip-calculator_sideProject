@@ -100,12 +100,9 @@ final class MainUserInfoViewController: MainBaseViewController {
             target: self,
             action: #selector(deleteButtonTapped)
         )
-        let refreshItem = UIBarButtonItem(
-            image: UIImage(systemName: "arrow.clockwise", withConfiguration: config),
-            style: .plain,
-            target: self,
-            action: #selector(refreshButtonTapped)
-        )
+        let refreshItem = UIBarButtonItem.refreshBarButton { [weak self] in
+            self?.triggerRefresh()
+        }
         navigationItem.rightBarButtonItems = [refreshItem, trashItem]
     }
 
@@ -123,10 +120,6 @@ final class MainUserInfoViewController: MainBaseViewController {
             self?.viewModel.deleteAllRecords()
         })
         present(alert, animated: true)
-    }
-
-    @objc private func refreshButtonTapped() {
-        triggerRefresh()
     }
 }
 

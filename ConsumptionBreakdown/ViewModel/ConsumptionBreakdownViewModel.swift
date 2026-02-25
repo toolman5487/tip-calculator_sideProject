@@ -8,6 +8,13 @@
 import Foundation
 import Combine
 
+struct ConsumptionBreakdownRankItemDisplay {
+    let title: String
+    let dateText: String
+    let amountText: String
+    let peopleText: String
+}
+
 struct ConsumptionBreakdownCategoryRowDisplay {
     let labelText: String
     let amountText: String
@@ -26,8 +33,30 @@ final class ConsumptionBreakdownViewModel {
 
     let detailItem: ConsumptionBreakdownItem
 
-    @Published private(set) var selectedCategory: ConsumptionBreakdownCategoryOption = .all
     @Published private(set) var pieChartData: [PieChartSliceItem] = []
+
+    var shouldShowRankList: Bool { !top10RankDisplays.isEmpty }
+
+    var rankListSectionTitle: String { "消費 Top 10" }
+    var categoryListSectionTitle: String { "消費分類" }
+
+    var top10Records: [ConsumptionRecord] {
+        let filtered = filteredRecords()
+        return Array(filtered.sorted { $0.totalBill > $1.totalBill }.prefix(10))
+    }
+
+    var top10RankDisplays: [ConsumptionBreakdownRankItemDisplay] {
+        top10Records.compactMap { record -> ConsumptionBreakdownRankItemDisplay? in
+            guard let date = record.createdAt else { return nil }
+            let categoryName = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "未知"
+            return ConsumptionBreakdownRankItemDisplay(
+                title: categoryName,
+                dateText: AppDateFormatters.list.string(from: date),
+                amountText: record.totalBill.currencyFormatted,
+                peopleText: "\(record.split) 人"
+            )
+        }
+    }
 
     var categoryRowDisplays: [ConsumptionBreakdownCategoryRowDisplay] {
         let data = pieChartData
@@ -54,14 +83,18 @@ final class ConsumptionBreakdownViewModel {
         }
     }
 
+    func recordDisplayItem(forRankIndex index: Int) -> RecordDisplayItem? {
+        let records = top10Records
+        guard index >= 0, index < records.count else { return nil }
+        return RecordDisplayItem.from(records[index], dateFormatter: AppDateFormatters.detail)
+    }
+
     init(detailItem: ConsumptionBreakdownItem) {
         self.detailItem = detailItem
         buildPieChartData()
     }
 
-    func selectCategory(_ category: ConsumptionBreakdownCategoryOption) {
-        guard selectedCategory != category else { return }
-        selectedCategory = category
+    func reload() {
         buildPieChartData()
     }
 
@@ -72,9 +105,7 @@ final class ConsumptionBreakdownViewModel {
     }
 
     private func filteredRecords() -> [ConsumptionRecord] {
-        let base = records
-        guard let id = selectedCategory.identifier else { return base }
-        return base.filter { $0.categoryIdentifier == id }
+        records
     }
 
     private func buildPieChartData() {

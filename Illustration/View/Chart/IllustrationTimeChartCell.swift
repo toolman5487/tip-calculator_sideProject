@@ -58,6 +58,7 @@ final class IllustrationTimeChartCell: UICollectionViewCell {
         set.drawValuesEnabled = false
         let chartData = BarChartData(dataSet: set)
         chartView.data = chartData
+        chartView.animate(yAxisDuration: 0.5, easingOption: .easeOutQuart)
         chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.label })
         chartView.xAxis.granularity = 1
         chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 8)

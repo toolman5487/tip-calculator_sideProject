@@ -59,6 +59,7 @@ final class IllustrationAmountRangeChartCell: UICollectionViewCell {
         set.valueFont = UIFont.systemFont(ofSize: 8)
         let chartData = BarChartData(dataSet: set)
         chartView.data = chartData
+        chartView.animate(yAxisDuration: 0.5, easingOption: .easeOutQuart)
         chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: data.map { $0.rangeLabel })
         chartView.xAxis.granularity = 1
         chartView.xAxis.labelFont = UIFont.systemFont(ofSize: 8)
