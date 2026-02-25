@@ -14,7 +14,21 @@ enum ConsumptionBreakdownItem {
 }
 
 private enum ConsumptionBreakdownSection: Int, CaseIterable {
-    case main
+    case pieChart
+    case categoryList
+
+    var insets: UIEdgeInsets {
+        switch self {
+        case .pieChart:
+            return .zero
+        case .categoryList:
+            return .zero
+        }
+    }
+}
+
+private enum ConsumptionBreakdownCellKind {
+    case categoryList
 }
 
 @MainActor
@@ -55,9 +69,10 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
 
     private func setupCollectionView() {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionHeadersPinToVisibleBounds = false
+            layout.sectionHeadersPinToVisibleBounds = true
         }
         collectionView.register(ConsumptionBreakdownPieChart.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId)
+        collectionView.register(ConsumptionBreakdownSectionTitleHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId)
         collectionView.register(ConsumptionBreakdownCategoryListCell.self, forCellWithReuseIdentifier: ConsumptionBreakdownCategoryListCell.reuseId)
     }
 
@@ -69,6 +84,15 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
             }
             .store(in: &cancellables)
     }
+
+    private func cellKinds(for section: ConsumptionBreakdownSection) -> [ConsumptionBreakdownCellKind] {
+        switch section {
+        case .pieChart:
+            return []
+        case .categoryList:
+            return [.categoryList]
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -79,22 +103,36 @@ extension ConsumptionBreakdownViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+        guard let sec = ConsumptionBreakdownSection(rawValue: section) else { return 0 }
+        return cellKinds(for: sec).count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ConsumptionBreakdownCategoryListCell.reuseId, for: indexPath) as! ConsumptionBreakdownCategoryListCell
-        cell.configure(with: viewModel.categoryRowDisplays)
-        return cell
+        guard let sec = ConsumptionBreakdownSection(rawValue: indexPath.section) else {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
+        }
+        let kind = cellKinds(for: sec)[indexPath.item]
+        switch kind {
+        case .categoryList:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ConsumptionBreakdownCategoryListCell.reuseId, for: indexPath) as! ConsumptionBreakdownCategoryListCell
+            cell.configure(with: viewModel.categoryRowDisplays)
+            return cell
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let sec = ConsumptionBreakdownSection(rawValue: indexPath.section) else {
             return UICollectionReusableView()
         }
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId, for: indexPath) as! ConsumptionBreakdownPieChart
-        header.configure(data: viewModel.pieChartData)
-        return header
+        switch sec {
+        case .pieChart:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId, for: indexPath) as! ConsumptionBreakdownPieChart
+            header.configure(data: viewModel.pieChartData)
+            return header
+        case .categoryList:
+            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId, for: indexPath)
+        }
     }
 
 }
@@ -103,10 +141,17 @@ extension ConsumptionBreakdownViewController {
 
 extension ConsumptionBreakdownViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width
-        let rowHeight: CGFloat = 56
-        let height = rowHeight * CGFloat(max(1, viewModel.categoryRowDisplays.count))
-        return CGSize(width: width, height: height)
+        guard let sec = ConsumptionBreakdownSection(rawValue: indexPath.section) else { return .zero }
+        let kind = cellKinds(for: sec)[indexPath.item]
+        let insets = sec.insets
+        let width = max(0, collectionView.bounds.width - insets.left - insets.right)
+
+        switch kind {
+        case .categoryList:
+            let rowHeight: CGFloat = 56
+            let height = rowHeight * CGFloat(max(1, viewModel.categoryRowDisplays.count))
+            return CGSize(width: width, height: height)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -114,15 +159,17 @@ extension ConsumptionBreakdownViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 280)
+        guard let sec = ConsumptionBreakdownSection(rawValue: section) else { return .zero }
+        switch sec {
+        case .pieChart:
+            return CGSize(width: collectionView.bounds.width, height: 280)
+        case .categoryList:
+            return CGSize(width: collectionView.bounds.width, height: 44)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        switch ConsumptionBreakdownSection(rawValue: section) {
-        case .main:
-            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        case .none:
-            return .zero
-        }
+        guard let sec = ConsumptionBreakdownSection(rawValue: section) else { return .zero }
+        return sec.insets
     }
 }

@@ -16,8 +16,7 @@ final class ConsumptionBreakdownCategoryListCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .clear
-        view.layer.cornerRadius = 8
+        view.backgroundColor = .systemBackground
         return view
     }()
 
@@ -26,14 +25,12 @@ final class ConsumptionBreakdownCategoryListCell: UICollectionViewCell {
         tv.backgroundColor = .clear
         tv.isScrollEnabled = false
         tv.separatorStyle = .singleLine
-        tv.layer.cornerRadius = 32
-        tv.clipsToBounds = true
         return tv
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .clear
         setupUI()
     }
 
@@ -59,7 +56,7 @@ final class ConsumptionBreakdownCategoryListCell: UICollectionViewCell {
     }
 
     func configure(with displays: [ConsumptionBreakdownCategoryRowDisplay]) {
-        self.displays = displays
+        self.displays = displays.sorted { $0.progressValue > $1.progressValue }
         tableView.reloadData()
     }
 }
@@ -72,15 +69,21 @@ extension ConsumptionBreakdownCategoryListCell: UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let reuseId = "ConsumptionBreakdownCategoryListRow"
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseId)
-            ?? UITableViewCell(style: .subtitle, reuseIdentifier: reuseId)
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+            ?? UITableViewCell(style: .value1, reuseIdentifier: "Cell")
         let display = displays[indexPath.row]
-        cell.textLabel?.text = display.labelText
-        cell.detailTextLabel?.text = "\(display.percentText) · \(display.amountText)"
+        cell.imageView?.image = display.iconName.flatMap { UIImage(systemName: $0) }
+        cell.imageView?.tintColor = .secondaryLabel
+        let full = "\(display.labelText): \(display.percentText)"
+        let attr = NSMutableAttributedString(string: full)
+        attr.addAttribute(.foregroundColor, value: UIColor.label, range: NSRange(location: 0, length: attr.length))
+        let percentRange = (full as NSString).range(of: display.percentText)
+        if percentRange.location != NSNotFound {
+            attr.addAttribute(.foregroundColor, value: ThemeColor.secondary, range: percentRange)
+        }
+        cell.textLabel?.attributedText = attr
+        cell.detailTextLabel?.text = display.amountText
         cell.selectionStyle = .none
-
         return cell
     }
 }

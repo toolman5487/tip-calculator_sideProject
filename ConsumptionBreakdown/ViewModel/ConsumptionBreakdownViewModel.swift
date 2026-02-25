@@ -38,10 +38,11 @@ final class ConsumptionBreakdownViewModel {
                 percent: percent,
                 iconName: iconName
             )
+            let percentText = String(format: "%.2f%%", item.percent * 100)
             return ConsumptionBreakdownCategoryRowDisplay(
                 labelText: item.label,
                 amountText: item.value.currencyFormatted,
-                percentText: String(format: "%.0f%%", item.percent * 100),
+                percentText: percentText,
                 progressValue: min(1, max(0, item.percent)),
                 colorIndex: index,
                 iconName: item.iconName
@@ -77,12 +78,12 @@ final class ConsumptionBreakdownViewModel {
         var sums: [String: Double] = [:]
         for record in filtered {
             let amount = record.totalBill
-            let key = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "無"
+            let key = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "未知"
             sums[key, default: 0] += amount
         }
         let labelOrder = Category.mainGridCategories.map(\.displayName)
             + Category.sheetCategories.map(\.displayName)
-            + ["無"]
+            + ["未知"]
         pieChartData = labelOrder
             .compactMap { label -> PieChartSliceItem? in
                 let v = sums[label] ?? 0

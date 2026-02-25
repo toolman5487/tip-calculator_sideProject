@@ -125,6 +125,12 @@
 		159BB1222F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */; };
 		159BB1232F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */; };
 		159BB1242F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */; };
+		159BB1A62F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1A52F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift */; };
+		159BB1A72F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1A52F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift */; };
+		159BB1A82F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1A52F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift */; };
+		159BB1AC2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
+		159BB1AD2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
+		159BB1AE2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
 		15B9F2D82F4C489F00B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
 		15B9F2DC2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */; };
 		15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */; };
@@ -207,6 +213,8 @@
 		157A6E722F4E0000005D8554 /* ConsumptionBreakdownPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownPieChart.swift; sourceTree = "<group>"; };
 		157A6E732F4E0000005D8554 /* ConsumptionBreakdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownViewController.swift; sourceTree = "<group>"; };
 		159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownCategoryListCell.swift; sourceTree = "<group>"; };
+		159BB1A52F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownSectionTitleHeader.swift; sourceTree = "<group>"; };
+		159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBlurSectionHeaderView.swift; sourceTree = "<group>"; };
 		15B9F2D72F4C489F00B0A364 /* CategoryPickerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetViewController.swift; sourceTree = "<group>"; };
 		15B9F2DB2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetViewModel.swift; sourceTree = "<group>"; };
 		15B9F4DE2F4D54A600B0A364 /* CategoryPickerSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerSheetModel.swift; sourceTree = "<group>"; };
@@ -302,8 +310,8 @@
 		150DB7F92F46EEF0008209A1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				157A6E722F4E0000005D8554 /* ConsumptionBreakdownPieChart.swift */,
-				159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */,
+				159BB1AA2F4E950A00572631 /* PeiChart */,
+				159BB1A92F4E94F500572631 /* CategoryList */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -463,6 +471,7 @@
 		156C71202F39988600F0C0A9 /* BaseView */ = {
 			isa = PBXGroup;
 			children = (
+				159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */,
 				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
 				156C71252F3998E400F0C0A9 /* BaseViewController.swift */,
 			);
@@ -601,6 +610,23 @@
 				157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		159BB1A92F4E94F500572631 /* CategoryList */ = {
+			isa = PBXGroup;
+			children = (
+				159BB1A52F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift */,
+				159BB1212F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift */,
+			);
+			path = CategoryList;
+			sourceTree = "<group>";
+		};
+		159BB1AA2F4E950A00572631 /* PeiChart */ = {
+			isa = PBXGroup;
+			children = (
+				157A6E722F4E0000005D8554 /* ConsumptionBreakdownPieChart.swift */,
+			);
+			path = PeiChart;
 			sourceTree = "<group>";
 		};
 		15B9F2D92F4C492D00B0A364 /* CategoryPickerSheet */ = {
@@ -868,11 +894,13 @@
 				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
 				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				150DB7F52F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift in Sources */,
+				159BB1A82F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
 				150DB7F62F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
 				156C73FD2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				156C51602F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
 				159BB1222F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */,
+				159BB1AE2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
 				156C5C682F3ED5A500F0C0A9 /* ConsumptionBreakdownViewController.swift in Sources */,
 				156C51662F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				156C51742F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
@@ -901,6 +929,7 @@
 				156C747A2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				156C1AFD2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
+				159BB1A72F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				156C516C2F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				150DB7F32F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift in Sources */,
@@ -913,6 +942,7 @@
 				156C71282F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
 				156C6FBB2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
 				156C6FB72F35EA7A00F0C0A9 /* ResultDeetailTableViewCell.swift in Sources */,
+				159BB1AC2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
@@ -961,6 +991,7 @@
 				156C75012F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
 				156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
+				159BB1A62F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
 				156C73FB2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				156C515F2F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
 				156C71242F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
@@ -984,6 +1015,7 @@
 				159BB1242F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */,
 				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				150DB7F72F459FE8008209A1 /* IllustrationAmountRangeChartCell.swift in Sources */,
+				159BB1AD2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
 				150DB7F82F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
 				156C6F172F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				150DB80C2F470EC0008209A1 /* ConsumptionBreakdownModel.swift in Sources */,

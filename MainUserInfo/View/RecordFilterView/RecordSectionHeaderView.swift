@@ -6,14 +6,11 @@
 import UIKit
 import SnapKit
 
-final class RecordSectionHeaderView: UICollectionReusableView {
+final class RecordSectionHeaderView: BaseBlurSectionHeaderView {
 
     static let reuseId = "RecordSectionHeaderView"
 
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .systemUltraThinMaterialLight)
-        return UIVisualEffectView(effect: blur)
-    }()
+    override var blurStyle: UIBlurEffect.Style { .systemUltraThinMaterialLight }
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -22,22 +19,13 @@ final class RecordSectionHeaderView: UICollectionReusableView {
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-        addSubview(blurView)
-        addSubview(titleLabel)
-        blurView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview()
-        }
+    override func setupContent() {
+        contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
     }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     func configure(title: String) {
         titleLabel.text = title

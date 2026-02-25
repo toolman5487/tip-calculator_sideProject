@@ -34,7 +34,7 @@ extension IllustrationFilterHeaderViewModel {
 struct IllustrationKPIDisplay {
     let totalRecordsText: String
     let averagePerPersonText: String
-    let averageTipText: String
+    let personalConsumptionTotalText: String
 }
 
 @MainActor
@@ -77,7 +77,7 @@ final class MainIllustrationViewModel {
         kpiDisplay = IllustrationKPIDisplay(
             totalRecordsText: Double(summary.totalRecords).abbreviatedFormatted,
             averagePerPersonText: summary.averagePerRecord.currencyAbbreviatedFormatted,
-            averageTipText: summary.averageTip.currencyAbbreviatedFormatted
+            personalConsumptionTotalText: summary.totalAmount.currencyAbbreviatedFormatted
         )
         timeChartData = buildTimeChartData(from: records)
         amountRangeData = buildAmountRangeData(from: filtered)
