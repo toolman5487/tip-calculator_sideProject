@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HeaderView:UIView{
+final class HeaderView:UIView{
     
     private let topLabel:UILabel = {
         LabelFactory.build(

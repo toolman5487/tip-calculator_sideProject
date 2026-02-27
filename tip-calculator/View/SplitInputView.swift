@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-class SplitInputView: UIView {
+final class SplitInputView: UIView {
     
     private let controlHeight: CGFloat = 48
     

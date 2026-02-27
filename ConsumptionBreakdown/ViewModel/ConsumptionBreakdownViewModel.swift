@@ -43,7 +43,7 @@ final class ConsumptionBreakdownViewModel {
 
     var top10Records: [ConsumptionRecord] {
         let filtered = filteredRecords()
-        return Array(filtered.sorted { $0.totalBill > $1.totalBill }.prefix(10))
+        return Array(filtered.sorted { $0.amountPerPerson > $1.amountPerPerson }.prefix(10))
     }
 
     var top10RankDisplays: [ConsumptionBreakdownRankItemDisplay] {
@@ -53,7 +53,7 @@ final class ConsumptionBreakdownViewModel {
             return ConsumptionBreakdownRankItemDisplay(
                 title: categoryName,
                 dateText: AppDateFormatters.list.string(from: date),
-                amountText: record.totalBill.currencyFormatted,
+                amountText: record.amountPerPerson.currencyFormatted,
                 peopleText: "\(record.split) 人"
             )
         }
@@ -123,7 +123,7 @@ final class ConsumptionBreakdownViewModel {
         var sums: [String: Double] = [:]
         for record in filtered {
             let key = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "未知"
-            sums[key, default: 0] += record.totalBill
+            sums[key, default: 0] += record.amountPerPerson
         }
         pieChartData = Self.labelOrder
             .compactMap { label -> PieChartSliceItem? in

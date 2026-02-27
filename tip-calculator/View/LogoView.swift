@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LogoView: UIView {
+final class LogoView: UIView {
     
     private let imageView: UIImageView = {
         let view = UIImageView(image: .init(named: "icCalculatorBW"))

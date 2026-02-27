@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class AmountView: UIView{
+final class AmountView: UIView{
     
     private let title:String
     private let textAlignment:NSTextAlignment
@@ -22,6 +22,8 @@ class AmountView: UIView{
         let label = UILabel()
         label.textAlignment = textAlignment
         label.textColor = ThemeColor.primary
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         let text = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
         text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSRange(location: 0, length: 1))
         label.attributedText = text

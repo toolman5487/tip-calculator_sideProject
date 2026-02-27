@@ -164,7 +164,7 @@ final class CalculatorVC: BaseViewController {
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
+            sheet.selectedDetentIdentifier = .large
             sheet.prefersGrabberVisible = true
         }
         present(nav, animated: true)

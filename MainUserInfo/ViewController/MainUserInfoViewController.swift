@@ -65,9 +65,11 @@ final class MainUserInfoViewController: MainBaseViewController {
 
     private func setupEmptyStateView() {
         view.addSubview(emptyStateView)
+        let filterHeaderHeight: CGFloat = 56
         emptyStateView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalTo(360)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(filterHeaderHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.centerX.equalToSuperview()
         }
     }
 
@@ -112,7 +114,6 @@ final class MainUserInfoViewController: MainBaseViewController {
 
     private func updateEmptyState(isEmpty: Bool) {
         emptyStateView.isHidden = !isEmpty
-        collectionView.isHidden = isEmpty
         if isEmpty {
             view.bringSubviewToFront(emptyStateView)
             emptyStateView.play()
