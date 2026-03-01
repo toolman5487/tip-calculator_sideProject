@@ -22,7 +22,7 @@ enum Category: Int, CaseIterable {
     case themePark
     case boardGame
     case gift
-    case insurance
+    case generalExpense
     case medical
     case consultation
     case medicine
@@ -68,7 +68,7 @@ enum Category: Int, CaseIterable {
         .themePark: .init(displayName: "遊樂園", icon: "ticket.fill", sectionTitle: "娛樂"),
         .boardGame: .init(displayName: "桌遊", icon: "puzzlepiece.fill", sectionTitle: "娛樂"),
         .gift: .init(displayName: "禮物", icon: "gift.fill", sectionTitle: "日常消費"),
-        .insurance: .init(displayName: "保險", icon: "shield.fill", sectionTitle: "日常消費"),
+        .generalExpense: .init(displayName: "一般消費", icon: "bag.fill", sectionTitle: "日常消費"),
         .medical: .init(displayName: "醫療", icon: "cross.case.fill", sectionTitle: "健康"),
         .consultation: .init(displayName: "看診", icon: "stethoscope", sectionTitle: "健康"),
         .medicine: .init(displayName: "藥品", icon: "pill.fill", sectionTitle: "健康"),
@@ -79,9 +79,9 @@ enum Category: Int, CaseIterable {
         .ballSports: .init(displayName: "球類", icon: "basketball.fill", sectionTitle: "運動"),
         .child: .init(displayName: "育兒", icon: "figure.2.and.child.holdinghands", sectionTitle: "家庭"),
         .pet: .init(displayName: "寵物", icon: "pawprint.fill", sectionTitle: "家庭"),
-        .taxi: .init(displayName: "計程車", icon: "car.fill", sectionTitle: "交通"),
+        .taxi: .init(displayName: "汽車", icon: "car.fill", sectionTitle: "交通"),
         .bus: .init(displayName: "巴士", icon: "bus.fill", sectionTitle: "交通"),
-        .train: .init(displayName: "火車", icon: "tram.fill", sectionTitle: "交通"),
+        .train: .init(displayName: "火車", icon: "train.side.front.car", sectionTitle: "交通"),
         .airplane: .init(displayName: "飛機", icon: "airplane", sectionTitle: "交通"),
         .metro: .init(displayName: "地鐵/捷運", icon: "tram.fill.tunnel", sectionTitle: "交通"),
         .ferry: .init(displayName: "航運", icon: "ferry", sectionTitle: "交通"),
