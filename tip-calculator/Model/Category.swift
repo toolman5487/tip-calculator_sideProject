@@ -26,8 +26,6 @@ enum Category: Int, CaseIterable {
     case medical
     case consultation
     case medicine
-    case dental
-    case vision
     case running
     case swimming
     case cycling
@@ -39,6 +37,10 @@ enum Category: Int, CaseIterable {
     case bus
     case train
     case airplane
+    case metro
+    case ferry
+    case motorcycle
+    case fuel
 
     static let mainGridCategories: [Category] = [.food, .clothing, .housing, .transport]
     static let sheetCategories: [Category] = allCases.filter { $0 != .none && !mainGridCategories.contains($0) }
@@ -70,8 +72,6 @@ enum Category: Int, CaseIterable {
         .medical: .init(displayName: "醫療", icon: "cross.case.fill", sectionTitle: "健康"),
         .consultation: .init(displayName: "看診", icon: "stethoscope", sectionTitle: "健康"),
         .medicine: .init(displayName: "藥品", icon: "pill.fill", sectionTitle: "健康"),
-        .dental: .init(displayName: "牙科", icon: "mouth.fill", sectionTitle: "健康"),
-        .vision: .init(displayName: "視力", icon: "eyeglasses", sectionTitle: "健康"),
         .running: .init(displayName: "跑步", icon: "figure.run", sectionTitle: "運動"),
         .swimming: .init(displayName: "游泳", icon: "figure.pool.swim", sectionTitle: "運動"),
         .cycling: .init(displayName: "騎車", icon: "bicycle", sectionTitle: "運動"),
@@ -83,6 +83,10 @@ enum Category: Int, CaseIterable {
         .bus: .init(displayName: "巴士", icon: "bus.fill", sectionTitle: "交通"),
         .train: .init(displayName: "火車", icon: "tram.fill", sectionTitle: "交通"),
         .airplane: .init(displayName: "飛機", icon: "airplane", sectionTitle: "交通"),
+        .metro: .init(displayName: "地鐵/捷運", icon: "tram.fill.tunnel", sectionTitle: "交通"),
+        .ferry: .init(displayName: "航運", icon: "ferry", sectionTitle: "交通"),
+        .motorcycle: .init(displayName: "摩托車", icon: "motorcycle.fill", sectionTitle: "交通"),
+        .fuel: .init(displayName: "加油", icon: "fuelpump.fill", sectionTitle: "交通"),
     ]
 
     var displayName: String        { Self.infoTable[self]!.displayName }
