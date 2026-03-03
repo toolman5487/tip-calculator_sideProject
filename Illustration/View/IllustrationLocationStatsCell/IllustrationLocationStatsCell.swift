@@ -105,6 +105,8 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
         nameLabel.text = name
         nameLabel.font = .systemFont(ofSize: 12)
         nameLabel.textColor = .label
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.8
         nameLabel.lineBreakMode = .byTruncatingTail
         nameLabel.snp.makeConstraints { make in
             make.width.equalTo(90)
@@ -133,7 +135,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
         let row = UIStackView(arrangedSubviews: [nameLabel, barBg, valueLabel])
         row.axis = .horizontal
-        row.spacing = 10
+        row.spacing = 8
         row.alignment = .center
         row.distribution = .fill
 

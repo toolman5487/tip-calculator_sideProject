@@ -87,7 +87,7 @@ final class TotalResultViewModel {
     func refreshLocation() {
         isLocationLoading = true
         guard let location = locationProvider.lastLocation else {
-            locationDisplayText = "無法定位"
+            locationDisplayText = locationErrorMessage
             isLocationLoading = false
             locationNameForRecord = nil
             return
@@ -95,8 +95,17 @@ final class TotalResultViewModel {
         resolveCityDistrict(location: location)
     }
 
+    private var locationErrorMessage: String {
+        switch locationProvider.authorizationStatus {
+        case .denied, .restricted:
+            return "請開啟定位權限"
+        default:
+            return "無法定位"
+        }
+    }
+
     private func locationString(from place: CLPlacemark) -> String? {
-        LocationAddressFormatter.format(place)
+        LocationAddressFormatter.full.format(place)
     }
 
     private static func nativeLocale(for isoCountryCode: String?) -> Locale {

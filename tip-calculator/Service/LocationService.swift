@@ -7,6 +7,7 @@ import CoreLocation
 
 protocol LocationProviding: AnyObject {
     var lastLocation: CLLocation? { get }
+    var authorizationStatus: CLAuthorizationStatus { get }
 }
 
 final class LocationService: NSObject, LocationProviding {
@@ -16,6 +17,7 @@ final class LocationService: NSObject, LocationProviding {
     private let manager = CLLocationManager()
 
     private(set) var lastLocation: CLLocation?
+    var authorizationStatus: CLAuthorizationStatus { manager.authorizationStatus }
 
     override init() {
         super.init()
@@ -65,5 +67,9 @@ extension LocationService: CLLocationManagerDelegate {
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        if (error as? CLError)?.code == .denied {
+            lastLocation = nil
+        }
+    }
 }

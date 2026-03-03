@@ -149,7 +149,12 @@ final class MainIllustrationViewModel {
         var counts: [String: Int] = [:]
         for record in records {
             let raw = record.locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            let key = raw.isEmpty ? "未知地區" : raw
+            let key: String
+            if raw.isEmpty {
+                key = "未知地區"
+            } else {
+                key = LocationAddressFormatter.district.format(raw)
+            }
             counts[key, default: 0] += 1
         }
         return counts

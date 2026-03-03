@@ -38,6 +38,11 @@ final class GoogleGeocodingService {
         self.apiKey = apiKey?.isEmpty == true ? nil : apiKey
     }
 
+    static func makeFromBundle() -> GoogleGeocodingService? {
+        let apiKey = (Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        return apiKey.map { GoogleGeocodingService(apiKey: $0) }
+    }
+
     func reverseGeocode(latitude: Double, longitude: Double, language: String? = nil) async -> String? {
         guard let apiKey = apiKey else { return nil }
         let lang = language ?? Locale.current.language.languageCode?.identifier ?? "en"

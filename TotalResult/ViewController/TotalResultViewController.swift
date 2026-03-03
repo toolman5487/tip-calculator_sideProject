@@ -52,12 +52,10 @@ final class TotalResultViewController: UIViewController {
 
     init(result: Result, locationProvider: LocationProviding = LocationService.shared) {
         self.locationProvider = locationProvider
-        let apiKey = (Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-        let googleService = apiKey.map { GoogleGeocodingService(apiKey: $0) }
         self.viewModel = TotalResultViewModel(
             result: result,
             locationProvider: locationProvider,
-            googleGeocodingService: googleService
+            googleGeocodingService: GoogleGeocodingService.makeFromBundle()
         )
         super.init(nibName: nil, bundle: nil)
     }
@@ -83,6 +81,14 @@ final class TotalResultViewController: UIViewController {
 
     private func setupNavigation() {
         navigationItem.largeTitleDisplayMode = .never
+        let closeConfig = UIImage.SymbolConfiguration(weight: .bold)
+        let closeItem = UIBarButtonItem(
+            image: UIImage(systemName: "xmark", withConfiguration: closeConfig),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose)
+        )
+        navigationItem.leftBarButtonItem = closeItem
         let locationItem = UIBarButtonItem(
             image: UIImage(systemName: "location.fill"),
             style: .plain,
@@ -102,6 +108,10 @@ final class TotalResultViewController: UIViewController {
     }
 
     // MARK: - Actions
+
+    @objc private func didTapClose() {
+        handleDismiss()
+    }
 
     @objc private func didTapLocation() {
         viewModel.refreshLocation()

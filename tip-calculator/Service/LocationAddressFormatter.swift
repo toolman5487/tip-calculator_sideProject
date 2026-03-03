@@ -8,20 +8,36 @@ import Foundation
 
 enum LocationAddressFormatter {
 
-    static func format(_ place: CLPlacemark) -> String? {
-        guard let countryCode = place.isoCountryCode else { return nil }
-        let formatter: (CLPlacemark) -> String?
-        switch countryCode {
-        case "TW":
-            formatter = formatTaiwan
-        case "JP":
-            formatter = formatJapan
-        case "CN", "HK", "MO":
-            formatter = formatGreaterChina
-        default:
-            formatter = formatGeneric
+    case full
+    case district
+
+    func format(_ place: CLPlacemark) -> String? {
+        let raw = LocationAddressFormatter.formatFull(place)
+        guard let raw else { return nil }
+        return applyStyle(to: raw)
+    }
+
+    func format(_ address: String) -> String {
+        let trimmed = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return trimmed }
+        return applyStyle(to: trimmed)
+    }
+
+    private func applyStyle(to address: String) -> String {
+        switch self {
+        case .full: return address
+        case .district: return Self.truncateToDistrict(address)
         }
-        return formatter(place)
+    }
+
+    private static func formatFull(_ place: CLPlacemark) -> String? {
+        guard let countryCode = place.isoCountryCode else { return nil }
+        switch countryCode {
+        case "TW": return formatTaiwan(place)
+        case "JP": return formatJapan(place)
+        case "CN", "HK", "MO": return formatGreaterChina(place)
+        default: return formatGeneric(place)
+        }
     }
 
     private static func formatTaiwan(_ place: CLPlacemark) -> String? {
@@ -75,5 +91,40 @@ enum LocationAddressFormatter {
         let thoroughfare = place.thoroughfare ?? ""
         let parts = [locality, adminArea, subLocality, thoroughfare].filter { !$0.isEmpty }
         return parts.isEmpty ? nil : parts.joined(separator: ", ")
+    }
+
+    private static func truncateToDistrict(_ address: String) -> String {
+        let trimmed = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return trimmed }
+        if let cjk = truncateCJK(toDistrict: trimmed) { return cjk }
+        if let western = truncateWestern(toDistrict: trimmed) { return western }
+        return trimmed
+    }
+
+    private static func truncateCJK(toDistrict address: String) -> String? {
+        let suffixes = ["區", "区", "鄉", "鎮", "町", "村"]
+        var endIndex: String.Index?
+        for suffix in suffixes {
+            guard let range = address.range(of: suffix, options: .backwards) else { continue }
+            let end = address.index(after: range.lowerBound)
+            if let current = endIndex, end <= current { continue }
+            endIndex = end
+        }
+        if let end = endIndex {
+            return String(address[..<end]).trimmingCharacters(in: .whitespaces)
+        }
+        let parts = address.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+        if parts.count >= 2, parts[1].hasSuffix("市") {
+            return parts.prefix(2).joined(separator: " ")
+        }
+        return nil
+    }
+
+    private static func truncateWestern(toDistrict address: String) -> String? {
+        guard address.contains(",") else { return nil }
+        let parts = address.split(separator: ",", maxSplits: 2, omittingEmptySubsequences: true)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+        guard parts.count >= 2 else { return nil }
+        return parts.prefix(2).joined(separator: ", ")
     }
 }
