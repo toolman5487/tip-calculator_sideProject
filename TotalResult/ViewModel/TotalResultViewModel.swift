@@ -92,54 +92,61 @@ final class TotalResultViewModel {
             locationNameForRecord = nil
             return
         }
-        let lat = location.coordinate.latitude
-        let lon = location.coordinate.longitude
-        Task { @MainActor in
-            if let google = googleGeocodingService,
-               let addr = await google.reverseGeocode(latitude: lat, longitude: lon) {
-                print("GoogleGeocodingService 地址：", addr)
-                self.locationDisplayText = addr
-                self.isLocationLoading = false
-                self.resolveCityDistrict(for: location)
-                return
-            }
-            self.fallbackToAppleGeocoder(location: location)
-        }
+        resolveCityDistrict(location: location)
     }
 
-    private func fallbackToAppleGeocoder(location: CLLocation) {
+    private func locationString(from place: CLPlacemark) -> String? {
+        let locality = place.locality ?? ""
+        let adminArea = place.administrativeArea ?? ""
+        let subLoc = place.subLocality ?? ""
+        let street = place.thoroughfare ?? ""
+
+        let city: String
+        let district: String
+        if adminArea.hasSuffix("市") && locality.hasSuffix("區") {
+            city = adminArea
+            district = locality
+        } else if locality.hasSuffix("市") {
+            city = locality
+            district = subLoc
+        } else {
+            city = locality.isEmpty ? adminArea : locality
+            district = subLoc
+        }
+
+        let base = [city, district].filter { !$0.isEmpty }
+        guard !base.isEmpty else { return nil }
+        var parts = base
+        if !street.isEmpty { parts.append(street) }
+        return parts.joined(separator: " ")
+    }
+
+    private func resolveCityDistrict(location: CLLocation) {
         let geocoder = CLGeocoder()
         let locale = Locale(identifier: "zh_TW")
         geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemarks, _ in
             Task { @MainActor in
                 guard let self else { return }
-                self.isLocationLoading = false
-                if let place = placemarks?.first {
-                    let area = place.administrativeArea ?? ""
-                    let district = place.subLocality ?? ""
-                    let street = place.thoroughfare ?? ""
-                    let parts = [area, district, street].filter { !$0.isEmpty }
-                    self.locationDisplayText = parts.isEmpty ? "無法取得地區" : parts.joined(separator: " ")
-                    let nameParts = [area, district].filter { !$0.isEmpty }
-                    self.locationNameForRecord = nameParts.isEmpty ? nil : nameParts.joined(separator: " ")
-                } else {
-                    self.locationDisplayText = "無法取得地區"
-                    self.locationNameForRecord = nil
+                if let place = placemarks?.first,
+                   let text = self.locationString(from: place) {
+                    self.isLocationLoading = false
+                    self.locationDisplayText = text
+                    self.locationNameForRecord = text
+                    return
                 }
-            }
-        }
-    }
-
-    private func resolveCityDistrict(for location: CLLocation) {
-        let geocoder = CLGeocoder()
-        let locale = Locale(identifier: "zh_TW")
-        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemarks, _ in
-            Task { @MainActor in
-                guard let self, let place = placemarks?.first else { return }
-                let area = place.administrativeArea ?? ""
-                let district = place.subLocality ?? ""
-                let nameParts = [area, district].filter { !$0.isEmpty }
-                self.locationNameForRecord = nameParts.isEmpty ? nil : nameParts.joined(separator: " ")
+                if let google = self.googleGeocodingService,
+                   let addr = await google.reverseGeocode(
+                    latitude: location.coordinate.latitude,
+                    longitude: location.coordinate.longitude
+                   ), !addr.isEmpty {
+                    self.isLocationLoading = false
+                    self.locationDisplayText = addr
+                    self.locationNameForRecord = addr
+                    return
+                }
+                self.isLocationLoading = false
+                self.locationDisplayText = "無法取得地區"
+                self.locationNameForRecord = nil
             }
         }
     }

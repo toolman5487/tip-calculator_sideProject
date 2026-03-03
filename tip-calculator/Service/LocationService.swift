@@ -38,7 +38,6 @@ final class LocationService: NSObject, LocationProviding {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             manager.startUpdatingLocation()
-            manager.requestLocation()
         case .notDetermined:
             break
         case .restricted, .denied:

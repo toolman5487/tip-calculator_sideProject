@@ -52,8 +52,8 @@ final class TotalResultViewController: UIViewController {
 
     init(result: Result, locationProvider: LocationProviding = LocationService.shared) {
         self.locationProvider = locationProvider
-        let apiKey = Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String
-        let googleService = (apiKey?.isEmpty == false) ? GoogleGeocodingService(apiKey: apiKey!) : nil
+        let apiKey = (Bundle.main.infoDictionary?["GoogleGeocodingAPIKey"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        let googleService = apiKey.map { GoogleGeocodingService(apiKey: $0) }
         self.viewModel = TotalResultViewModel(
             result: result,
             locationProvider: locationProvider,

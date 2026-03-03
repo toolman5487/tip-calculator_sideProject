@@ -68,8 +68,7 @@ final class EmptyStateView: UIView {
             make.edges.equalToSuperview()
         }
         labelContainerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(60)
+            make.center.equalToSuperview()
         }
         blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

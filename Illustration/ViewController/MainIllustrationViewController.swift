@@ -179,10 +179,7 @@ extension MainIllustrationViewController {
         case .timeChart:
             return CGSize(width: width, height: 260)
         case .locationStats:
-            let rowHeight = IllustrationLocationStatsCell.rowHeight
-            let rows = max(1, min(IllustrationLocationStatsCell.maxRows, viewModel.locationStats.count))
-            let height = rowHeight * CGFloat(rows)
-            return CGSize(width: width, height: height)
+            return CGSize(width: width, height: IllustrationLocationStatsCell.chartHeight)
         case .none:
             return CGSize(width: width, height: 44)
         }
