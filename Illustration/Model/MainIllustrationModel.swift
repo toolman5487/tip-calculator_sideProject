@@ -5,6 +5,13 @@
 
 import Foundation
 
+enum IllustrationSection: Int, CaseIterable {
+    case filterHeader
+    case kpi
+    case timeChart
+    case locationStats
+}
+
 enum IllustrationTimeFilterOption: Int, CaseIterable {
     case day
     case week

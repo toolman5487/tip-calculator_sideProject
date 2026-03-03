@@ -6,13 +6,6 @@
 import Foundation
 import Combine
 
-enum IllustrationSection: Int, CaseIterable {
-    case filterHeader
-    case kpi
-    case timeChart
-    case locationStats
-}
-
 struct IllustrationFilterHeaderViewModel {
     let selected: IllustrationTimeFilterOption
     let options: [IllustrationTimeFilterOption]
@@ -67,6 +60,23 @@ final class MainIllustrationViewModel {
         guard option != selectedTimeFilter else { return }
         selectedTimeFilter = option
         load()
+    }
+
+    var kpiCardItems: [KPICardItem] {
+        let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
+        return [
+            KPICardItem(title: "總消費筆數", value: display.totalRecordsText),
+            KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText),
+            KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText)
+        ]
+    }
+
+    func sectionHeaderTitle(for section: IllustrationSection) -> String? {
+        switch section {
+        case .filterHeader, .kpi: return nil
+        case .timeChart: return "消費趨勢"
+        case .locationStats: return "消費地區"
+        }
     }
 
     private func applyAggregation(from records: [ConsumptionRecord]) {

@@ -105,13 +105,13 @@ extension MainIllustrationViewController {
             return header
         case .kpi:
             return UICollectionReusableView()
-        case .timeChart:
+        case .timeChart, .locationStats:
+            guard let section = IllustrationSection(rawValue: indexPath.section),
+                  let title = viewModel.sectionHeaderTitle(for: section) else {
+                return UICollectionReusableView()
+            }
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "消費趨勢")
-            return header
-        case .locationStats:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "消費地區")
+            header.configure(title: title)
             return header
         case .none:
             return UICollectionReusableView()
@@ -125,13 +125,7 @@ extension MainIllustrationViewController {
 
         case .kpi:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICarouselCell.reuseId, for: indexPath) as! KPICarouselCell
-            let display = viewModel.kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
-            let items: [KPICardItem] = [
-                KPICardItem(title: "總消費筆數", value: display.totalRecordsText),
-                KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText),
-                KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText)
-            ]
-            cell.configure(items: items)
+            cell.configure(items: viewModel.kpiCardItems)
             return cell
 
         case .timeChart:
@@ -155,7 +149,8 @@ extension MainIllustrationViewController {
         guard let section = IllustrationSection(rawValue: indexPath.section) else { return }
         switch section {
         case .timeChart:
-            let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: "消費趨勢", timeFilter: viewModel.selectedTimeFilter))
+            let title = viewModel.sectionHeaderTitle(for: .timeChart) ?? "消費趨勢"
+            let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: title, timeFilter: viewModel.selectedTimeFilter))
             navigationController?.pushViewController(vc, animated: true)
         case .locationStats, .filterHeader, .kpi:
             break
@@ -179,7 +174,8 @@ extension MainIllustrationViewController {
         case .timeChart:
             return CGSize(width: width, height: 260)
         case .locationStats:
-            return CGSize(width: width, height: IllustrationLocationStatsCell.chartHeight)
+            let count = viewModel.locationStats.isEmpty ? 0 : min(5, viewModel.locationStats.count)
+            return CGSize(width: width, height: IllustrationLocationStatsCell.preferredHeight(itemCount: count))
         case .none:
             return CGSize(width: width, height: 44)
         }

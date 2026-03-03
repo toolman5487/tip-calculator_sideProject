@@ -5,14 +5,20 @@
 //  Created by Willy Hsu on 2026/3/2.
 //
 
-import DGCharts
 import UIKit
 import SnapKit
 
 final class IllustrationLocationStatsCell: UICollectionViewCell {
 
     static let reuseId = "IllustrationLocationStatsCell"
-    static let chartHeight: CGFloat = 220
+
+    static func preferredHeight(itemCount: Int) -> CGFloat {
+        if itemCount == 0 { return 180 }
+        let rowHeight: CGFloat = 28
+        let spacing: CGFloat = 10
+        let inset: CGFloat = 32
+        return inset + CGFloat(itemCount) * rowHeight + CGFloat(max(0, itemCount - 1)) * spacing
+    }
 
     private let containerView: UIView = {
         let view = UIView()
@@ -28,33 +34,26 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
         return v
     }()
 
-    private let chartView: PieChartView = {
-        let chart = PieChartView()
-        chart.legend.enabled = false
-        chart.drawHoleEnabled = true
-        chart.holeRadiusPercent = 0.5
-        chart.transparentCircleRadiusPercent = 0.55
-        chart.transparentCircleColor = UIColor.systemBackground
-        chart.usePercentValuesEnabled = true
-        chart.highlightPerTapEnabled = false
-        chart.rotationEnabled = false
-        chart.isUserInteractionEnabled = false
-        return chart
+    private let rowsStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.spacing = 10
+        v.alignment = .fill
+        v.distribution = .fillEqually
+        return v
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
-        containerView.addSubview(chartView)
+        containerView.addSubview(rowsStackView)
         containerView.addSubview(emptyStateView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        chartView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.left.right.equalToSuperview().inset(16)
-            make.top.bottom.equalToSuperview().inset(8)
+        rowsStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(16)
         }
         emptyStateView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -71,8 +70,9 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
     }
 
     func configure(data: [LocationStatItem]) {
-        let hasData = !data.isEmpty
-        chartView.isHidden = !hasData
+        let top5 = Array(data.prefix(5))
+        let hasData = !top5.isEmpty
+        rowsStackView.isHidden = !hasData
         emptyStateView.isHidden = hasData
 
         guard hasData else {
@@ -82,25 +82,65 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
         emptyStateView.stop()
 
+        let totalCount = max(1, data.reduce(0) { $0 + $1.count })
         let colors: [UIColor] = [
-            .systemRed, .systemOrange, .systemYellow, .systemGreen,
-            .systemTeal, .systemBlue, .systemPurple, .systemPink
+            .systemBlue, .systemGreen, .systemPurple, .systemOrange, .systemTeal
         ]
-        let entries = data.map { PieChartDataEntry(value: Double($0.count), label: $0.name) }
-        let set = PieChartDataSet(entries: entries)
-        set.colors = (0..<entries.count).map { colors[$0 % colors.count] }
-        set.drawValuesEnabled = true
-        set.valueFont = .systemFont(ofSize: 10)
-        set.valueTextColor = .label
 
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .percent
-        formatter.maximumFractionDigits = 0
-        formatter.multiplier = 1.0
+        rowsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        let chartData = PieChartData(dataSet: set)
-        chartView.data = chartData
-        chartData.setValueFormatter(DefaultValueFormatter(formatter: formatter))
-        chartView.animate(yAxisDuration: 0.5, easingOption: .easeOutExpo)
+        for (index, item) in top5.enumerated() {
+            let row = makeRow(
+                name: item.name,
+                count: item.count,
+                totalCount: totalCount,
+                color: colors[index % colors.count]
+            )
+            rowsStackView.addArrangedSubview(row)
+        }
+    }
+
+    private func makeRow(name: String, count: Int, totalCount: Int, color: UIColor) -> UIView {
+        let nameLabel = UILabel()
+        nameLabel.text = name
+        nameLabel.font = .systemFont(ofSize: 12)
+        nameLabel.textColor = .label
+        nameLabel.lineBreakMode = .byTruncatingTail
+        nameLabel.snp.makeConstraints { make in
+            make.width.equalTo(90)
+        }
+
+        let valueLabel = UILabel()
+        valueLabel.text = "\(count) 筆"
+        valueLabel.font = .systemFont(ofSize: 12)
+        valueLabel.textColor = .secondaryLabel
+        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
+
+        let barBg = UIView()
+        barBg.backgroundColor = .quaternarySystemFill
+        barBg.layer.cornerRadius = 4
+        barBg.clipsToBounds = true
+
+        let barFill = UIView()
+        barFill.backgroundColor = color
+        barFill.layer.cornerRadius = 4
+
+        barBg.addSubview(barFill)
+        barFill.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview()
+            make.width.equalTo(barBg.snp.width).multipliedBy(CGFloat(count) / CGFloat(totalCount))
+        }
+
+        let row = UIStackView(arrangedSubviews: [nameLabel, barBg, valueLabel])
+        row.axis = .horizontal
+        row.spacing = 10
+        row.alignment = .center
+        row.distribution = .fill
+
+        barBg.snp.makeConstraints { make in
+            make.height.equalTo(20)
+        }
+
+        return row
     }
 }
