@@ -43,12 +43,12 @@ struct MonthlyChartItem {
     let totalAmount: Double
 }
 
-struct AmountRangeChartItem {
-    let rangeLabel: String
-    let count: Int
-}
-
 struct TrendChartItem {
     let label: String
     let totalAmount: Double
+}
+
+struct LocationStatItem {
+    let name: String
+    let count: Int
 }

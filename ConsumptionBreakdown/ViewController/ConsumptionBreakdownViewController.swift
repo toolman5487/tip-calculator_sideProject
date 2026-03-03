@@ -68,7 +68,7 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         super.setupNavigationBar()
         navigationItem.largeTitleDisplayMode = .never
         switch viewModel.detailItem {
-        case .timeChart(let title, _), .amountRangeChart(let title, _):
+        case .timeChart(let title, _):
             self.title = title
         }
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in

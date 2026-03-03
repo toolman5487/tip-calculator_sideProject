@@ -102,7 +102,7 @@ final class ConsumptionBreakdownViewModel {
 
     private var timeFilter: IllustrationTimeFilterOption {
         switch detailItem {
-        case .timeChart(_, let f), .amountRangeChart(_, let f): return f
+        case .timeChart(_, let f): return f
         }
     }
 

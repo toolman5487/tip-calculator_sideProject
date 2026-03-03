@@ -167,7 +167,8 @@ extension TotalResultViewController: UICollectionViewDataSource {
                 let success = self.viewModel.saveRecord(
                     latitude: loc?.coordinate.latitude,
                     longitude: loc?.coordinate.longitude,
-                    address: self.viewModel.locationDisplayText.isEmpty ? nil : self.viewModel.locationDisplayText
+                    address: self.viewModel.locationDisplayText.isEmpty ? nil : self.viewModel.locationDisplayText,
+                    locationName: self.viewModel.locationNameForRecord
                 )
                 if success {
                     ToastView.show(

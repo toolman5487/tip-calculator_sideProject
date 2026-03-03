@@ -70,6 +70,7 @@ final class TotalResultViewModel {
 
     @Published private(set) var locationDisplayText: String = ""
     @Published private(set) var isLocationLoading = true
+    @Published private(set) var locationNameForRecord: String?
 
     init(
         result: Result,
@@ -88,6 +89,7 @@ final class TotalResultViewModel {
         guard let location = locationProvider.lastLocation else {
             locationDisplayText = "無法定位"
             isLocationLoading = false
+            locationNameForRecord = nil
             return
         }
         let lat = location.coordinate.latitude
@@ -98,6 +100,7 @@ final class TotalResultViewModel {
                 print("GoogleGeocodingService 地址：", addr)
                 self.locationDisplayText = addr
                 self.isLocationLoading = false
+                self.resolveCityDistrict(for: location)
                 return
             }
             self.fallbackToAppleGeocoder(location: location)
@@ -117,16 +120,40 @@ final class TotalResultViewModel {
                     let street = place.thoroughfare ?? ""
                     let parts = [area, district, street].filter { !$0.isEmpty }
                     self.locationDisplayText = parts.isEmpty ? "無法取得地區" : parts.joined(separator: " ")
+                    let nameParts = [area, district].filter { !$0.isEmpty }
+                    self.locationNameForRecord = nameParts.isEmpty ? nil : nameParts.joined(separator: " ")
                 } else {
                     self.locationDisplayText = "無法取得地區"
+                    self.locationNameForRecord = nil
                 }
             }
         }
     }
 
+    private func resolveCityDistrict(for location: CLLocation) {
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "zh_TW")
+        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemarks, _ in
+            Task { @MainActor in
+                guard let self, let place = placemarks?.first else { return }
+                let area = place.administrativeArea ?? ""
+                let district = place.subLocality ?? ""
+                let nameParts = [area, district].filter { !$0.isEmpty }
+                self.locationNameForRecord = nameParts.isEmpty ? nil : nameParts.joined(separator: " ")
+            }
+        }
+    }
+
     @discardableResult
-    func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil) -> Bool {
-        let success = store.save(result: result, latitude: latitude, longitude: longitude, address: address, categoryIdentifier: result.categoryIdentifier)
+    func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil, locationName: String? = nil) -> Bool {
+        let success = store.save(
+            result: result,
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            locationName: locationName,
+            categoryIdentifier: result.categoryIdentifier
+        )
         if success {
             TabBarBadgePublisher.increment(on: .userInfo)
         }

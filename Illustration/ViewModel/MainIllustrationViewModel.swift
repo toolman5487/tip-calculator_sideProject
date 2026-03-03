@@ -10,7 +10,7 @@ enum IllustrationSection: Int, CaseIterable {
     case filterHeader
     case kpi
     case timeChart
-    case amountRangeChart
+    case locationStats
 }
 
 struct IllustrationFilterHeaderViewModel {
@@ -46,7 +46,7 @@ final class MainIllustrationViewModel {
     @Published private(set) var kpi: IllustrationKPISummary?
     @Published private(set) var kpiDisplay: IllustrationKPIDisplay?
     @Published private(set) var timeChartData: [TrendChartItem] = []
-    @Published private(set) var amountRangeData: [AmountRangeChartItem] = []
+    @Published private(set) var locationStats: [LocationStatItem] = []
     @Published private(set) var filteredRecords: [ConsumptionRecord] = []
 
     init(store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
@@ -80,7 +80,7 @@ final class MainIllustrationViewModel {
             personalConsumptionTotalText: summary.totalAmount.currencyAbbreviatedFormatted
         )
         timeChartData = buildTimeChartData(from: records)
-        amountRangeData = buildAmountRangeData(from: filtered)
+        locationStats = buildLocationStats(from: filtered)
     }
 
     private func buildKPI(from records: [ConsumptionRecord]) -> IllustrationKPISummary {
@@ -135,28 +135,16 @@ final class MainIllustrationViewModel {
         }
     }
 
-    private func buildAmountRangeData(from records: [ConsumptionRecord]) -> [AmountRangeChartItem] {
-        let rangeDefs: [(min: Double, max: Double, label: String)] = [
-            (0, 500, "0-500"),
-            (500, 1000, "500-1K"),
-            (1000, 2000, "1K-2K"),
-            (2000, 5000, "2K-5K"),
-            (5000, Double.infinity, "5K+")
-        ]
-
-        var counts: [String: Int] = Dictionary(uniqueKeysWithValues: rangeDefs.map { ($0.label, 0) })
+    private func buildLocationStats(from records: [ConsumptionRecord]) -> [LocationStatItem] {
+        var counts: [String: Int] = [:]
         for record in records {
-            let amount = record.totalBill
-            for def in rangeDefs {
-                if amount >= def.min && amount < def.max {
-                    counts[def.label, default: 0] += 1
-                    break
-                }
-            }
+            let raw = record.locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let key = raw.isEmpty ? "未知地區" : raw
+            counts[key, default: 0] += 1
         }
-
-        return rangeDefs.map { def in
-            AmountRangeChartItem(rangeLabel: def.label, count: counts[def.label] ?? 0)
-        }
+        return counts
+            .map { LocationStatItem(name: $0.key, count: $0.value) }
+            .sorted { $0.count == $1.count ? $0.name < $1.name : $0.count > $1.count }
     }
+
 }

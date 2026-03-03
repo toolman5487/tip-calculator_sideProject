@@ -21,8 +21,8 @@ enum Category: Int, CaseIterable {
     case ktv
     case themePark
     case boardGame
+    case fmcg
     case gift
-    case generalExpense
     case medical
     case consultation
     case medicine
@@ -67,8 +67,8 @@ enum Category: Int, CaseIterable {
         .ktv: .init(displayName: "KTV", icon: "music.mic", sectionTitle: "娛樂"),
         .themePark: .init(displayName: "遊樂園", icon: "ticket.fill", sectionTitle: "娛樂"),
         .boardGame: .init(displayName: "桌遊", icon: "puzzlepiece.fill", sectionTitle: "娛樂"),
+        .fmcg: .init(displayName: "民生消費", icon: "bag.fill", sectionTitle: "日常消費"),
         .gift: .init(displayName: "禮物", icon: "gift.fill", sectionTitle: "日常消費"),
-        .generalExpense: .init(displayName: "一般消費", icon: "bag.fill", sectionTitle: "日常消費"),
         .medical: .init(displayName: "醫療", icon: "cross.case.fill", sectionTitle: "健康"),
         .consultation: .init(displayName: "看診", icon: "stethoscope", sectionTitle: "健康"),
         .medicine: .init(displayName: "藥品", icon: "pill.fill", sectionTitle: "健康"),

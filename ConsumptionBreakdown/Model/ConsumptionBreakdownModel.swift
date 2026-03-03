@@ -9,7 +9,6 @@ import Foundation
 
 enum ConsumptionBreakdownItem {
     case timeChart(title: String, timeFilter: IllustrationTimeFilterOption)
-    case amountRangeChart(title: String, timeFilter: IllustrationTimeFilterOption)
 }
 
 struct PieChartSliceItem {

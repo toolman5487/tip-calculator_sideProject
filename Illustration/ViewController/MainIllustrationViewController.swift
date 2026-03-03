@@ -39,12 +39,12 @@ final class MainIllustrationViewController: MainBaseViewController {
         collectionView.register(IllustrationFilterHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationFilterHeaderView.reuseId)
-        collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
-        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
-        collectionView.register(IllustrationAmountRangeChartCell.self, forCellWithReuseIdentifier: IllustrationAmountRangeChartCell.reuseId)
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
+        collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
+        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
+        collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
     }
 
     private func bindingViewModel() {
@@ -64,7 +64,7 @@ final class MainIllustrationViewController: MainBaseViewController {
         viewModel.$kpiDisplay
             .map { _ in }
             .merge(with: viewModel.$timeChartData.map { _ in })
-            .merge(with: viewModel.$amountRangeData.map { _ in })
+            .merge(with: viewModel.$locationStats.map { _ in })
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
@@ -84,7 +84,8 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader: return 0
         case .kpi: return 1
-        case .timeChart, .amountRangeChart: return 1
+        case .timeChart: return 1
+        case .locationStats: return 1
         case .none: return 0
         }
     }
@@ -108,9 +109,9 @@ extension MainIllustrationViewController {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
             header.configure(title: "消費趨勢")
             return header
-        case .amountRangeChart:
+        case .locationStats:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
-            header.configure(title: "消費金額區間")
+            header.configure(title: "消費地區")
             return header
         case .none:
             return UICollectionReusableView()
@@ -137,10 +138,9 @@ extension MainIllustrationViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationTimeChartCell.reuseId, for: indexPath) as! IllustrationTimeChartCell
             cell.configure(data: viewModel.timeChartData)
             return cell
-
-        case .amountRangeChart:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationAmountRangeChartCell.reuseId, for: indexPath) as! IllustrationAmountRangeChartCell
-            cell.configure(data: viewModel.amountRangeData)
+        case .locationStats:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationLocationStatsCell.reuseId, for: indexPath) as! IllustrationLocationStatsCell
+            cell.configure(data: viewModel.locationStats)
             return cell
         case .none:
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
@@ -157,10 +157,7 @@ extension MainIllustrationViewController {
         case .timeChart:
             let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: "消費趨勢", timeFilter: viewModel.selectedTimeFilter))
             navigationController?.pushViewController(vc, animated: true)
-        case .amountRangeChart:
-            let vc = ConsumptionBreakdownViewController(detailItem: .amountRangeChart(title: "消費金額區間", timeFilter: viewModel.selectedTimeFilter))
-            navigationController?.pushViewController(vc, animated: true)
-        case .filterHeader, .kpi:
+        case .locationStats, .filterHeader, .kpi:
             break
         }
     }
@@ -179,8 +176,13 @@ extension MainIllustrationViewController {
             let spacing: CGFloat = 8 * 2
             let cellSide = width > 0 ? max(0, (width - inset - spacing) / 3) : 100
             return CGSize(width: width, height: cellSide)
-        case .timeChart, .amountRangeChart:
+        case .timeChart:
             return CGSize(width: width, height: 260)
+        case .locationStats:
+            let rowHeight = IllustrationLocationStatsCell.rowHeight
+            let rows = max(1, min(IllustrationLocationStatsCell.maxRows, viewModel.locationStats.count))
+            let height = rowHeight * CGFloat(rows)
+            return CGSize(width: width, height: height)
         case .none:
             return CGSize(width: width, height: 44)
         }

@@ -20,24 +20,50 @@ final class LocationService: NSObject, LocationProviding {
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        manager.distanceFilter = kCLDistanceFilterNone
+        manager.activityType = .other
     }
 
     func start() {
         manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
+        startLocationUpdatesIfAuthorized()
     }
 
     func stop() {
         manager.stopUpdatingLocation()
     }
+
+    private func startLocationUpdatesIfAuthorized() {
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            manager.startUpdatingLocation()
+            manager.requestLocation()
+        case .notDetermined:
+            break
+        case .restricted, .denied:
+            lastLocation = nil
+        @unknown default:
+            break
+        }
+    }
 }
 
 extension LocationService: CLLocationManagerDelegate {
 
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        startLocationUpdatesIfAuthorized()
+    }
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        lastLocation = location
+        let freshLocations = locations.filter { $0.horizontalAccuracy > 0 }
+        guard let best = freshLocations.sorted(by: { $0.horizontalAccuracy < $1.horizontalAccuracy }).first else {
+            return
+        }
+        lastLocation = best
+        if best.horizontalAccuracy <= 100 {
+            manager.stopUpdatingLocation()
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
