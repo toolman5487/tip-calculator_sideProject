@@ -162,6 +162,9 @@ final class LocationCell: BaseResultInfoCell {
         titleLabel.text = "消費地點"
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
+        valueLabel.adjustsFontSizeToFitWidth = true
+        valueLabel.minimumScaleFactor = 0.5
+        valueLabel.numberOfLines = 1
         if isLoading {
             valueLabel.text = "取得定位中"
             activityIndicator.startAnimating()

@@ -38,11 +38,12 @@ final class GoogleGeocodingService {
         self.apiKey = apiKey?.isEmpty == true ? nil : apiKey
     }
 
-    func reverseGeocode(latitude: Double, longitude: Double) async -> String? {
+    func reverseGeocode(latitude: Double, longitude: Double, language: String? = nil) async -> String? {
         guard let apiKey = apiKey else { return nil }
-        let key = cacheKey(lat: latitude, lon: longitude)
+        let lang = language ?? Locale.current.language.languageCode?.identifier ?? "en"
+        let key = cacheKey(lat: latitude, lon: longitude, lang: lang)
         if let cached = cache[key] { return cached }
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)&language=zh-TW") else {
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)&language=\(lang)") else {
             return nil
         }
         do {
@@ -75,10 +76,10 @@ final class GoogleGeocodingService {
         return withoutNumber.trimmingCharacters(in: .whitespaces)
     }
 
-    private func cacheKey(lat: Double, lon: Double) -> String {
+    private func cacheKey(lat: Double, lon: Double, lang: String = "en") -> String {
         let scale = pow(10.0, Double(cachePrecision))
         let latR = (lat * scale).rounded() / scale
         let lonR = (lon * scale).rounded() / scale
-        return "\(latR)_\(lonR)"
+        return "\(latR)_\(lonR)_\(lang)"
     }
 }
