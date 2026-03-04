@@ -71,6 +71,7 @@ final class LocationDetailViewController: UIViewController {
                 updateAnnotations(annotations)
                 let isEmpty = annotations.isEmpty
                 emptyStateView.isHidden = !isEmpty
+                mapView.isHidden = isEmpty
                 isEmpty ? emptyStateView.play() : emptyStateView.stop()
             }
             .store(in: &cancellables)
