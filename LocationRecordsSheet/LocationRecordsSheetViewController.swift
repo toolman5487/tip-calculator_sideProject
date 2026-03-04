@@ -83,9 +83,9 @@ extension LocationRecordsSheetViewController: UICollectionViewDelegate, UICollec
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let detailVC = ResultDetailViewController(item: viewModel.items[indexPath.item])
+        let detailVC = ResultDetailViewController(item: viewModel.items[indexPath.item], mode: ResultDetailMode.readOnly)
         let nav = UINavigationController(rootViewController: detailVC)
-        nav.modalPresentationStyle = .fullScreen
+        nav.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         detailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(image: Self.backButtonImage, style: .plain, target: self, action: #selector(dismissDetail))
         present(nav, animated: true)
     }
