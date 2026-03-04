@@ -22,4 +22,9 @@ extension ConsumptionRecord {
         guard let lat = latitude?.doubleValue, let lon = longitude?.doubleValue else { return nil }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
+
+    var districtKey: String {
+        let raw = locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return raw.isEmpty ? "未知地區" : LocationAddressFormatter.district.format(raw)
+    }
 }

@@ -53,8 +53,7 @@ final class LocationDetailViewModel {
         var byDistrict: [String: DistrictGroup] = [:]
 
         for record in records {
-            let raw = record.locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            let key = raw.isEmpty ? "未知地區" : LocationAddressFormatter.district.format(raw)
+            let key = record.districtKey
             let coord = record.coordinate
 
             if var group = byDistrict[key] {
@@ -78,15 +77,7 @@ final class LocationDetailViewModel {
     }
 
     private func filteredRecordsByTime() -> [ConsumptionRecord] {
-        let all = store.fetchAll()
-        let calendar = Calendar.current
-        let now = Date()
-        let timeRange = timeFilter.consumptionTimeRange
-        guard let r = timeRange.range(calendar: calendar, now: now) else { return [] }
-        return all.filter {
-            guard let d = $0.createdAt else { return false }
-            return timeRange.contains(d, range: r)
-        }
+        timeFilter.consumptionTimeRange.filter(store.fetchAll())
     }
 
     private func fittedMapRect(for coordinates: [CLLocationCoordinate2D]) -> MKMapRect? {

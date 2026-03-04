@@ -99,7 +99,6 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
 
     private func binding() {
         viewModel.$pieChartData
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] data in
                 self?.collectionView.reloadData()
                 self?.updateEmptyState(isEmpty: data.isEmpty)

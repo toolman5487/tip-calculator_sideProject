@@ -68,6 +68,14 @@ enum ConsumptionTimeRange {
         }
     }
 
+    func filter(_ records: [ConsumptionRecord], calendar: Calendar = .current, now: Date = Date()) -> [ConsumptionRecord] {
+        guard let r = range(calendar: calendar, now: now) else { return [] }
+        return records.filter {
+            guard let d = $0.createdAt else { return false }
+            return contains(d, range: r)
+        }
+    }
+
     func bucketIndex(for date: Date, periods: Int, calendar: Calendar = .current, now: Date = Date()) -> Int? {
         switch self {
         case .day:

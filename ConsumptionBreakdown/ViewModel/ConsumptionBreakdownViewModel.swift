@@ -41,10 +41,9 @@ final class ConsumptionBreakdownViewModel {
     var rankListSectionTitle: String { "消費 Top 10" }
     var categoryListSectionTitle: String { "消費分類" }
 
-    var top10Records: [ConsumptionRecord] {
-        let filtered = filteredRecords()
-        return Array(filtered.sorted { $0.amountPerPerson > $1.amountPerPerson }.prefix(10))
-    }
+    private(set) lazy var top10Records: [ConsumptionRecord] = {
+        Array(filteredRecords().sorted { $0.amountPerPerson > $1.amountPerPerson }.prefix(10))
+    }()
 
     var top10RankDisplays: [ConsumptionBreakdownRankItemDisplay] {
         top10Records.compactMap { record -> ConsumptionBreakdownRankItemDisplay? in
@@ -97,6 +96,7 @@ final class ConsumptionBreakdownViewModel {
     }
 
     func reload() {
+        top10Records = Array(filteredRecords().sorted { $0.amountPerPerson > $1.amountPerPerson }.prefix(10))
         buildPieChartData()
     }
 
@@ -107,15 +107,7 @@ final class ConsumptionBreakdownViewModel {
     }
 
     private func filteredRecords() -> [ConsumptionRecord] {
-        let all = store.fetchAll()
-        let calendar = Calendar.current
-        let now = Date()
-        let timeRange = timeFilter.consumptionTimeRange
-        guard let r = timeRange.range(calendar: calendar, now: now) else { return [] }
-        return all.filter {
-            guard let d = $0.createdAt else { return false }
-            return timeRange.contains(d, range: r)
-        }
+        timeFilter.consumptionTimeRange.filter(store.fetchAll())
     }
 
     private func buildPieChartData() {

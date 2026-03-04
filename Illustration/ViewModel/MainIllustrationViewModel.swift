@@ -36,7 +36,7 @@ final class MainIllustrationViewModel {
     private let store: ConsumptionRecordStoring
 
     @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .day
-    @Published private(set) var kpi: IllustrationKPISummary?
+    private(set) var kpi: IllustrationKPISummary?
     @Published private(set) var kpiDisplay: IllustrationKPIDisplay?
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var locationStats: [LocationStatItem] = []
@@ -106,14 +106,7 @@ final class MainIllustrationViewModel {
     }
 
     private func filterRecordsByTimeDimension(_ records: [ConsumptionRecord]) -> [ConsumptionRecord] {
-        let calendar = Calendar.current
-        let now = Date()
-        let timeRange = selectedTimeFilter.consumptionTimeRange
-        guard let r = timeRange.range(calendar: calendar, now: now) else { return [] }
-        return records.filter {
-            guard let d = $0.createdAt else { return false }
-            return timeRange.contains(d, range: r)
-        }
+        selectedTimeFilter.consumptionTimeRange.filter(records)
     }
 
     private func buildTimeChartData(from records: [ConsumptionRecord]) -> [TrendChartItem] {
@@ -148,14 +141,7 @@ final class MainIllustrationViewModel {
     private func buildLocationStats(from records: [ConsumptionRecord]) -> [LocationStatItem] {
         var counts: [String: Int] = [:]
         for record in records {
-            let raw = record.locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            let key: String
-            if raw.isEmpty {
-                key = "未知地區"
-            } else {
-                key = LocationAddressFormatter.district.format(raw)
-            }
-            counts[key, default: 0] += 1
+            counts[record.districtKey, default: 0] += 1
         }
         return counts
             .map { LocationStatItem(name: $0.key, count: $0.value) }
