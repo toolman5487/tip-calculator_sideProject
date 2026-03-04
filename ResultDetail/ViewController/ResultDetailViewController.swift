@@ -48,10 +48,10 @@ final class ResultDetailViewController: BaseViewController {
 
     private lazy var shareButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("分享", for: .normal)
-        button.titleLabel?.font = ThemeFont.bold(Ofsize: 18)
+        let config = UIImage.SymbolConfiguration(weight: .semibold)
+        button.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
+        button.tintColor = .systemBackground
         button.backgroundColor = ThemeColor.secondary
-        button.setTitleColor(.white, for: .normal)
         button.addCornerRadius(radius: 8)
         button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
@@ -72,7 +72,7 @@ final class ResultDetailViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGroupedBackground
+        view.backgroundColor = .systemBackground
         title = "消費明細"
         navigationItem.largeTitleDisplayMode = .never
 

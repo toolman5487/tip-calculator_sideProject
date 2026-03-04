@@ -14,9 +14,18 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
     private static let emptyHeight: CGFloat = 260
 
+    private static let threshold = 0.01
+
+    static func displayItems(from data: [LocationStatItem]) -> [LocationStatItem] {
+        let totalCount = max(1, data.reduce(0) { $0 + $1.count })
+        let main = data.filter { Double($0.count) / Double(totalCount) >= threshold }
+        let othersCount = data.filter { Double($0.count) / Double(totalCount) < threshold }.reduce(0) { $0 + $1.count }
+        return othersCount > 0 ? main + [LocationStatItem(name: "其他", count: othersCount)] : main
+    }
+
     static func preferredHeight(itemCount: Int) -> CGFloat {
         if itemCount == 0 { return emptyHeight }
-        let rowHeight: CGFloat = 28
+        let rowHeight: CGFloat = 20
         let spacing: CGFloat = 10
         let inset: CGFloat = 32
         return inset + CGFloat(itemCount) * rowHeight + CGFloat(max(0, itemCount - 1)) * spacing
@@ -41,7 +50,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
         v.axis = .vertical
         v.spacing = 10
         v.alignment = .fill
-        v.distribution = .fillEqually
+        v.distribution = .fill
         return v
     }()
 
@@ -72,8 +81,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
     }
 
     func configure(data: [LocationStatItem]) {
-        let top5 = Array(data.prefix(5))
-        let hasData = !top5.isEmpty
+        let hasData = !data.isEmpty
         rowsStackView.isHidden = !hasData
         emptyStateView.isHidden = hasData
 
@@ -84,6 +92,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
         emptyStateView.stop()
 
+        let displayItems = Self.displayItems(from: data)
         let totalCount = max(1, data.reduce(0) { $0 + $1.count })
         let colors: [UIColor] = [
             .systemBlue, .systemGreen, .systemPurple, .systemOrange, .systemTeal
@@ -91,7 +100,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
         rowsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        for (index, item) in top5.enumerated() {
+        for (index, item) in displayItems.enumerated() {
             let row = makeRow(
                 name: item.name,
                 count: item.count,

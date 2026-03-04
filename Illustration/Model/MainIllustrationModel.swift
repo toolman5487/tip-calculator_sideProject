@@ -8,8 +8,8 @@ import Foundation
 enum IllustrationSection: Int, CaseIterable {
     case filterHeader
     case kpi
-    case timeChart
     case locationStats
+    case timeChart
 }
 
 enum IllustrationTimeFilterOption: Int, CaseIterable {

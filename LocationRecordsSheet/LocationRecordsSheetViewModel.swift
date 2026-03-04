@@ -18,8 +18,4 @@ final class LocationRecordsSheetViewModel {
         self.items = items
     }
 
-    func item(at index: Int) -> RecordDisplayItem? {
-        guard index >= 0, index < items.count else { return nil }
-        return items[index]
-    }
 }

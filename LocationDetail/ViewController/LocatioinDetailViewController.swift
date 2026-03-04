@@ -66,21 +66,16 @@ final class LocationDetailViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.$annotations
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] annotations in
-                self?.updateAnnotations(annotations)
+                guard let self else { return }
+                updateAnnotations(annotations)
                 let isEmpty = annotations.isEmpty
-                self?.emptyStateView.isHidden = !isEmpty
-                if isEmpty {
-                    self?.emptyStateView.play()
-                } else {
-                    self?.emptyStateView.stop()
-                }
+                emptyStateView.isHidden = !isEmpty
+                isEmpty ? emptyStateView.play() : emptyStateView.stop()
             }
             .store(in: &cancellables)
 
         viewModel.$region
-            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] rect in
                 self?.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
@@ -89,21 +84,13 @@ final class LocationDetailViewController: UIViewController {
     }
 
     private func updateAnnotations(_ annotations: [LocationMapAnnotation]) {
-        mapView.removeAnnotations(mapView.annotations.filter { $0 is LocationPinAnnotation })
-        let mkAnnotations = annotations.map { item in
-            LocationPinAnnotation(
-                coordinate: item.coordinate,
-                title: item.title,
-                subtitle: item.subtitle,
-                records: item.records
-            )
-        }
-        mapView.addAnnotations(mkAnnotations)
+        mapView.removeAnnotations(mapView.annotations.filter { $0 is LocationMapAnnotation })
+        mapView.addAnnotations(annotations)
     }
 
-    private func presentRecordsSheet(for annotation: LocationPinAnnotation) {
-        let content = viewModel.sheetContent(for: annotation.records, title: annotation.title)
-        let sheetViewModel = LocationRecordsSheetViewModel(locationTitle: content.title, items: content.items)
+    private func presentRecordsSheet(for annotation: LocationMapAnnotation) {
+        let items = annotation.records.map { RecordDisplayItem.from($0, dateFormatter: AppDateFormatters.detail) }
+        let sheetViewModel = LocationRecordsSheetViewModel(locationTitle: annotation.title ?? "消費紀錄", items: items)
         let listVC = LocationRecordsSheetViewController(viewModel: sheetViewModel)
         let nav = UINavigationController(rootViewController: listVC)
         nav.modalPresentationStyle = .pageSheet
@@ -122,7 +109,7 @@ final class LocationDetailViewController: UIViewController {
 extension LocationDetailViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        guard let pin = view.annotation as? LocationPinAnnotation else { return }
+        guard let pin = view.annotation as? LocationMapAnnotation else { return }
         presentRecordsSheet(for: pin)
         mapView.deselectAnnotation(pin, animated: false)
     }

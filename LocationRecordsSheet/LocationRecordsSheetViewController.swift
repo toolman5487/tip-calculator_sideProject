@@ -44,6 +44,12 @@ final class LocationRecordsSheetViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = viewModel.locationTitle
         navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            style: .plain,
+            target: self,
+            action: #selector(closeButtonTapped)
+        )
 
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -66,9 +72,7 @@ extension LocationRecordsSheetViewController: UICollectionViewDataSource {
             withReuseIdentifier: ResultsFilterCell.reuseId,
             for: indexPath
         ) as! ResultsFilterCell
-        if let item = viewModel.item(at: indexPath.item) {
-            cell.configure(with: item)
-        }
+        cell.configure(with: viewModel.items[indexPath.item])
         return cell
     }
 }
@@ -79,17 +83,19 @@ extension LocationRecordsSheetViewController: UICollectionViewDelegate, UICollec
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        guard let item = viewModel.item(at: indexPath.item) else { return }
-        let detailVC = ResultDetailViewController(item: item)
+        let detailVC = ResultDetailViewController(item: viewModel.items[indexPath.item])
         let nav = UINavigationController(rootViewController: detailVC)
         nav.modalPresentationStyle = .fullScreen
-        let closeItem = UIBarButtonItem(image: Self.backButtonImage, style: .plain, target: self, action: #selector(dismissFullScreenDetail))
-        detailVC.navigationItem.leftBarButtonItem = closeItem
+        detailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(image: Self.backButtonImage, style: .plain, target: self, action: #selector(dismissDetail))
         present(nav, animated: true)
     }
 
-    @objc private func dismissFullScreenDetail() {
-        presentedViewController?.dismiss(animated: true)
+    @objc private func closeButtonTapped() {
+        navigationController?.dismiss(animated: true)
+    }
+
+    @objc private func dismissDetail() {
+        dismiss(animated: true)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

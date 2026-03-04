@@ -177,8 +177,8 @@ extension MainIllustrationViewController {
         case .timeChart:
             return CGSize(width: width, height: 260)
         case .locationStats:
-            let count = viewModel.locationStats.isEmpty ? 0 : min(5, viewModel.locationStats.count)
-            return CGSize(width: width, height: IllustrationLocationStatsCell.preferredHeight(itemCount: count))
+            let displayCount = IllustrationLocationStatsCell.displayItems(from: viewModel.locationStats).count
+            return CGSize(width: width, height: IllustrationLocationStatsCell.preferredHeight(itemCount: displayCount))
         case .none:
             return CGSize(width: width, height: 44)
         }

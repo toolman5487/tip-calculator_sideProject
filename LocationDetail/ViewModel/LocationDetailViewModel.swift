@@ -9,8 +9,7 @@ import CoreLocation
 import Foundation
 import MapKit
 
-/// 自訂 MKAnnotation，用來在 mapView(_:didSelect:) 時取得對應的消費紀錄
-final class LocationPinAnnotation: NSObject, MKAnnotation {
+final class LocationMapAnnotation: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     let title: String?
     let subtitle: String?
@@ -22,13 +21,6 @@ final class LocationPinAnnotation: NSObject, MKAnnotation {
         self.subtitle = subtitle
         self.records = records
     }
-}
-
-struct LocationMapAnnotation {
-    let coordinate: CLLocationCoordinate2D
-    let title: String?
-    let subtitle: String?
-    let records: [ConsumptionRecord]
 }
 
 @MainActor
@@ -47,39 +39,42 @@ final class LocationDetailViewModel {
     }
 
     func load() {
-        let allFiltered = filteredRecordsByTime()
-        var byDistrict: [String: (CLLocationCoordinate2D?, String, [ConsumptionRecord])] = [:]
-        for record in allFiltered {
+        annotations = buildAnnotations(from: filteredRecordsByTime())
+        region = fittedMapRect(for: annotations.map(\.coordinate))
+    }
+
+    private struct DistrictGroup {
+        var coordinate: CLLocationCoordinate2D?
+        let name: String
+        var records: [ConsumptionRecord]
+    }
+
+    private func buildAnnotations(from records: [ConsumptionRecord]) -> [LocationMapAnnotation] {
+        var byDistrict: [String: DistrictGroup] = [:]
+
+        for record in records {
             let raw = record.locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            let key: String = raw.isEmpty ? "未知地區" : LocationAddressFormatter.district.format(raw)
-            let coord: CLLocationCoordinate2D?
-            if let lat = record.latitude?.doubleValue, let lon = record.longitude?.doubleValue {
-                coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            let key = raw.isEmpty ? "未知地區" : LocationAddressFormatter.district.format(raw)
+            let coord = record.coordinate
+
+            if var group = byDistrict[key] {
+                group.records.append(record)
+                if group.coordinate == nil { group.coordinate = coord }
+                byDistrict[key] = group
             } else {
-                coord = nil
-            }
-            if var existing = byDistrict[key] {
-                existing.2.append(record)
-                if existing.0 == nil, let c = coord {
-                    existing.0 = c
-                }
-                byDistrict[key] = existing
-            } else {
-                byDistrict[key] = (coord, key, [record])
+                byDistrict[key] = DistrictGroup(coordinate: coord, name: key, records: [record])
             }
         }
-        annotations = byDistrict
-            .compactMap { _, value -> LocationMapAnnotation? in
-                let (coord, name, recs) = value
-                guard let coord else { return nil }
-                return LocationMapAnnotation(
-                    coordinate: coord,
-                    title: "\(name) (\(recs.count))",
-                    subtitle: nil,
-                    records: recs
-                )
-            }
-        region = fittedMapRect(for: annotations.map(\.coordinate))
+
+        return byDistrict.values.compactMap { group in
+            guard let coord = group.coordinate else { return nil }
+            return LocationMapAnnotation(
+                coordinate: coord,
+                title: "\(group.name) (\(group.records.count))",
+                subtitle: nil,
+                records: group.records
+            )
+        }
     }
 
     private func filteredRecordsByTime() -> [ConsumptionRecord] {
@@ -92,12 +87,6 @@ final class LocationDetailViewModel {
             guard let d = $0.createdAt else { return false }
             return timeRange.contains(d, range: r)
         }
-    }
-
-    /// 將消費紀錄轉為 sheet 所需之顯示資料
-    func sheetContent(for records: [ConsumptionRecord], title: String?) -> (title: String, items: [RecordDisplayItem]) {
-        let items = records.map { RecordDisplayItem.from($0, dateFormatter: AppDateFormatters.detail) }
-        return (title ?? "消費紀錄", items)
     }
 
     private func fittedMapRect(for coordinates: [CLLocationCoordinate2D]) -> MKMapRect? {
