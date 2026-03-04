@@ -122,7 +122,6 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
-
         case .kpi:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICarouselCell.reuseId, for: indexPath) as! KPICarouselCell
             cell.configure(items: viewModel.kpiCardItems)
@@ -152,7 +151,11 @@ extension MainIllustrationViewController {
             let title = viewModel.sectionHeaderTitle(for: .timeChart) ?? "消費趨勢"
             let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: title, timeFilter: viewModel.selectedTimeFilter))
             navigationController?.pushViewController(vc, animated: true)
-        case .locationStats, .filterHeader, .kpi:
+        case .locationStats:
+            let title = viewModel.sectionHeaderTitle(for: .locationStats) ?? "消費地區"
+            let vc = LocationDetailViewController(title: title, timeFilter: viewModel.selectedTimeFilter)
+            navigationController?.pushViewController(vc, animated: true)
+        case .filterHeader, .kpi:
             break
         }
     }

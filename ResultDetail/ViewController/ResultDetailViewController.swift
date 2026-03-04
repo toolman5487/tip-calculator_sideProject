@@ -46,6 +46,17 @@ final class ResultDetailViewController: BaseViewController {
         return table
     }()
 
+    private lazy var shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("分享", for: .normal)
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 18)
+        button.backgroundColor = ThemeColor.secondary
+        button.setTitleColor(.white, for: .normal)
+        button.addCornerRadius(radius: 8)
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     // MARK: - Init
 
     init(item: RecordDisplayItem) {
@@ -74,19 +85,19 @@ final class ResultDetailViewController: BaseViewController {
 
     private func setupNavigation() {
         let config = UIImage.SymbolConfiguration(weight: .bold)
-        let shareImage = UIImage(systemName: "square.and.arrow.up", withConfiguration: config)
         let deleteImage = UIImage(systemName: "trash", withConfiguration: config)
+        let sliderImage = UIImage(systemName: "slider.horizontal.3", withConfiguration: config)
 
-        let shareItem = UIBarButtonItem(image: shareImage,
-                                        style: .plain,
-                                        target: self,
-                                        action: #selector(shareButtonTapped))
         let deleteItem = UIBarButtonItem(image: deleteImage,
                                          style: .plain,
                                          target: self,
                                          action: #selector(deleteButtonTapped))
+        let editItem = UIBarButtonItem(image: sliderImage,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(sliderButtonTapped))
 
-        navigationItem.rightBarButtonItems = [deleteItem, shareItem]
+        navigationItem.rightBarButtonItems = [editItem, deleteItem]
     }
 
     private func setupTableViewLayout() {
@@ -96,8 +107,16 @@ final class ResultDetailViewController: BaseViewController {
         tableView.register(ResultDetailImageValueCell.self, forCellReuseIdentifier: ResultDetailImageValueCell.reuseId)
         tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
         view.addSubview(tableView)
+        view.addSubview(shareButton)
+
+        shareButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            make.height.equalTo(52)
+        }
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(shareButton.snp.top).offset(-16)
         }
     }
 
@@ -135,12 +154,17 @@ final class ResultDetailViewController: BaseViewController {
 
     // MARK: - Actions
 
+    @objc private func sliderButtonTapped() {
+        print("Tap Edit Btn")
+    }
+
     @objc private func shareButtonTapped() {
         let text = shareText
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
 
         if let popover = activityVC.popoverPresentationController {
-            popover.barButtonItem = navigationItem.rightBarButtonItem
+            popover.sourceView = shareButton
+            popover.sourceRect = shareButton.bounds
         }
 
         present(activityVC, animated: true)

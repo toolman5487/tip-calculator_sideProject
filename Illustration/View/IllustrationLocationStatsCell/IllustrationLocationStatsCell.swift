@@ -12,8 +12,10 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
     static let reuseId = "IllustrationLocationStatsCell"
 
+    private static let emptyHeight: CGFloat = 260
+
     static func preferredHeight(itemCount: Int) -> CGFloat {
-        if itemCount == 0 { return 180 }
+        if itemCount == 0 { return emptyHeight }
         let rowHeight: CGFloat = 28
         let spacing: CGFloat = 10
         let inset: CGFloat = 32

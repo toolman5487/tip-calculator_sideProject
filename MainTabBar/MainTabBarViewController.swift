@@ -22,6 +22,10 @@ final class MainTabBarViewController: UITabBarController {
     }
 
     private func setupTabs() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithDefaultBackground()
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
         tabBar.tintColor = ThemeColor.primary
         viewControllers = MainTabBarTab.allCases.map { tab in
             let vc = tab.viewController
