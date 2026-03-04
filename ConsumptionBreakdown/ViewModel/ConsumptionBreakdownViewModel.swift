@@ -47,7 +47,7 @@ final class ConsumptionBreakdownViewModel {
 
     var top10RankDisplays: [ConsumptionBreakdownRankItemDisplay] {
         top10Records.compactMap { record -> ConsumptionBreakdownRankItemDisplay? in
-            guard let date = record.createdAt else { return nil }
+            guard let date = record.effectiveConsumptionTime else { return nil }
             let categoryName = record.categoryIdentifier.flatMap { Category(identifier: $0)?.displayName } ?? "未知"
             return ConsumptionBreakdownRankItemDisplay(
                 title: categoryName,

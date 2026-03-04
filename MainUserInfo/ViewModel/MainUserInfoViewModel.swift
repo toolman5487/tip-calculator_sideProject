@@ -75,7 +75,7 @@ struct RecordSnapshot {
 
     init(_ record: ConsumptionRecord) {
         id = record.id
-        createdAt = record.createdAt
+        createdAt = record.effectiveConsumptionTime
         bill = record.bill
         totalTip = record.totalTip
         totalBill = record.totalBill

@@ -22,7 +22,7 @@ enum ResultDetailRow {
 final class ResultDetailViewModel {
 
     private let store: ConsumptionRecordStoring
-    private let item: RecordDisplayItem
+    private(set) var item: RecordDisplayItem
     let mode: ResultDetailMode
 
     init(item: RecordDisplayItem, mode: ResultDetailMode = .editable, store: ConsumptionRecordStoring = ConsumptionRecordStore()) {

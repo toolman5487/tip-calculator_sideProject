@@ -24,10 +24,30 @@ protocol ConsumptionRecordStoring {
     func fetchAll() -> [ConsumptionRecord]
 
     @MainActor
+    func fetch(id: UUID) -> ConsumptionRecord?
+
+    @MainActor
+    @discardableResult
+    func update(
+        id: UUID,
+        result: Result,
+        latitude: Double?,
+        longitude: Double?,
+        address: String?,
+        locationName: String?,
+        categoryIdentifier: String?,
+        consumptionTime: Date?
+    ) -> Bool
+
+    @MainActor
     func delete(id: UUID)
 
     @MainActor
     func deleteAll()
+
+    @MainActor
+    @discardableResult
+    func updateConsumptionTime(id: UUID, consumptionTime: Date) -> Bool
 }
 
 struct ConsumptionRecordStore: ConsumptionRecordStoring {
@@ -47,6 +67,7 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         let record = ConsumptionRecord(context: context)
         record.id = UUID()
         record.createdAt = Date()
+        record.consumptionTime = Date()
         record.bill = result.bill
         record.totalTip = result.totalTip
         record.totalBill = result.totalBill
@@ -67,10 +88,59 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
         let request = ConsumptionRecord.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ConsumptionRecord.createdAt, ascending: false)]
         do {
-            return try CoreDataStack.viewContext.fetch(request)
+            let records = try CoreDataStack.viewContext.fetch(request)
+            return records.sorted { ($0.effectiveConsumptionTime ?? .distantPast) > ($1.effectiveConsumptionTime ?? .distantPast) }
         } catch {
             return []
         }
+    }
+
+    @MainActor
+    func fetch(id: UUID) -> ConsumptionRecord? {
+        let request = ConsumptionRecord.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        do {
+            return try CoreDataStack.viewContext.fetch(request).first
+        } catch {
+            return nil
+        }
+    }
+
+    @MainActor
+    @discardableResult
+    func update(
+        id: UUID,
+        result: Result,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        address: String? = nil,
+        locationName: String? = nil,
+        categoryIdentifier: String? = nil,
+        consumptionTime: Date? = nil
+    ) -> Bool {
+        guard let record = fetch(id: id) else { return false }
+        record.bill = result.bill
+        record.totalTip = result.totalTip
+        record.totalBill = result.totalBill
+        record.amountPerPerson = result.amountPerPerson
+        record.split = Int16(result.split)
+        record.tipRawValue = result.tip.stringValue
+        record.categoryIdentifier = categoryIdentifier?.isEmpty == true ? nil : categoryIdentifier
+        record.latitude = latitude.map { NSNumber(value: $0) }
+        record.longitude = longitude.map { NSNumber(value: $0) }
+        record.address = address?.isEmpty == true ? nil : address
+        record.locationName = locationName?.isEmpty == true ? nil : locationName
+        if let consumptionTime { record.consumptionTime = consumptionTime }
+        return CoreDataStack.saveContext()
+    }
+
+    @MainActor
+    @discardableResult
+    func updateConsumptionTime(id: UUID, consumptionTime: Date) -> Bool {
+        guard let record = fetch(id: id) else { return false }
+        record.consumptionTime = consumptionTime
+        return CoreDataStack.saveContext()
     }
 
     @MainActor

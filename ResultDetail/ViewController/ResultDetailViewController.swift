@@ -140,7 +140,16 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Actions
 
     @objc private func editButtonTapped() {
-        print("Tap Edit Btn")
+        guard let id = viewModel.item.id else { return }
+        let editVC = ResultDetailEditViewController(recordId: id)
+        let nav = UINavigationController(rootViewController: editVC)
+        nav.modalPresentationStyle = UIModalPresentationStyle.pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .large
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 
     @objc private func shareButtonTapped() {

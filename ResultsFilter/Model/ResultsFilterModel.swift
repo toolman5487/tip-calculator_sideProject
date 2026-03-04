@@ -57,7 +57,7 @@ struct RecordDisplayItem: Hashable {
 
     static func from(_ record: ConsumptionRecord, dateFormatter: DateFormatter, dateText: String? = nil) -> RecordDisplayItem {
         let snapshot = RecordSnapshot(record)
-        let resolvedDateText = dateText ?? record.createdAt.map { dateFormatter.string(from: $0) } ?? ""
+        let resolvedDateText = dateText ?? record.effectiveConsumptionTime.map { dateFormatter.string(from: $0) } ?? ""
         return from(snapshot, dateText: resolvedDateText)
     }
 }

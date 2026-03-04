@@ -18,6 +18,10 @@ public class ConsumptionRecord: NSManagedObject {
 }
 
 extension ConsumptionRecord {
+    var effectiveConsumptionTime: Date? {
+        consumptionTime ?? createdAt
+    }
+
     var coordinate: CLLocationCoordinate2D? {
         guard let lat = latitude?.doubleValue, let lon = longitude?.doubleValue else { return nil }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)

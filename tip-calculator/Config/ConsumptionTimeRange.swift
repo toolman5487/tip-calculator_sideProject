@@ -71,7 +71,7 @@ enum ConsumptionTimeRange {
     func filter(_ records: [ConsumptionRecord], calendar: Calendar = .current, now: Date = Date()) -> [ConsumptionRecord] {
         guard let r = range(calendar: calendar, now: now) else { return [] }
         return records.filter {
-            guard let d = $0.createdAt else { return false }
+            guard let d = $0.effectiveConsumptionTime else { return false }
             return contains(d, range: r)
         }
     }

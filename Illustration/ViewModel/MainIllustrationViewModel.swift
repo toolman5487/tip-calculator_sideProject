@@ -127,7 +127,7 @@ final class MainIllustrationViewModel {
         let ranges = timeRange.rangesForChart(periods: periods, calendar: calendar, now: now)
         var sums = Dictionary(uniqueKeysWithValues: ranges.map { ($0.start, 0.0) })
         for record in records {
-            guard let date = record.createdAt else { continue }
+            guard let date = record.effectiveConsumptionTime else { continue }
             guard let idx = timeRange.bucketIndex(for: date, periods: periods, calendar: calendar, now: now),
                   idx < ranges.count else { continue }
             let key = ranges[idx].start

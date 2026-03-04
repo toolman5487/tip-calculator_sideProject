@@ -19,6 +19,7 @@ extension ConsumptionRecord {
     }
 
     @NSManaged public var id: UUID?
+    @NSManaged public var consumptionTime: Date?
     @NSManaged public var createdAt: Date?
     @NSManaged public var address: String?
     @NSManaged public var locationName: String?
