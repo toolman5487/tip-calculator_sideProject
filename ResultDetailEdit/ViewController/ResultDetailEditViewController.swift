@@ -47,6 +47,16 @@ final class ResultDetailEditViewController: BaseViewController {
 
     private func setNavigationBar() {
         title = "編輯消費紀錄"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            style: .plain,
+            target: self,
+            action: #selector(closeButtonTapped)
+        )
+    }
+
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
 
     private func setupTableView() {

@@ -121,10 +121,24 @@ final class MapLocationPickerViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "選擇地點"
+        setNavigationBar()
         setupLayout()
         bindViewModel()
         centerOnInitialOrUser()
+    }
+
+    private func setNavigationBar() {
+        title = "選擇地點"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            style: .plain,
+            target: self,
+            action: #selector(closeButtonTapped)
+        )
+    }
+
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
 
     // MARK: - Setup

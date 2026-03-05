@@ -43,32 +43,37 @@ final class LocationDetailViewModel {
         region = fittedMapRect(for: annotations.map(\.coordinate))
     }
 
-    private struct DistrictGroup {
-        var coordinate: CLLocationCoordinate2D?
+    private struct LocationGroup {
+        let coordinate: CLLocationCoordinate2D
         let name: String
         var records: [ConsumptionRecord]
     }
 
     private func buildAnnotations(from records: [ConsumptionRecord]) -> [LocationMapAnnotation] {
-        var byDistrict: [String: DistrictGroup] = [:]
+        let roundedPrecision: Double = 3e-4 // ~30m（1° ≈ 111km）
+        func roundedCoord(_ c: CLLocationCoordinate2D) -> (lat: Double, lon: Double) {
+            (lat: (c.latitude / roundedPrecision).rounded() * roundedPrecision,
+             lon: (c.longitude / roundedPrecision).rounded() * roundedPrecision)
+        }
+
+        var byLocation: [String: LocationGroup] = [:]
 
         for record in records {
-            let key = record.districtKey
-            let coord = record.coordinate
+            guard let coord = record.coordinate else { continue }
+            let key = "\(roundedCoord(coord).lat),\(roundedCoord(coord).lon)"
+            let districtName = record.districtKey
 
-            if var group = byDistrict[key] {
+            if var group = byLocation[key] {
                 group.records.append(record)
-                if group.coordinate == nil { group.coordinate = coord }
-                byDistrict[key] = group
+                byLocation[key] = group
             } else {
-                byDistrict[key] = DistrictGroup(coordinate: coord, name: key, records: [record])
+                byLocation[key] = LocationGroup(coordinate: coord, name: districtName, records: [record])
             }
         }
 
-        return byDistrict.values.compactMap { group in
-            guard let coord = group.coordinate else { return nil }
-            return LocationMapAnnotation(
-                coordinate: coord,
+        return byLocation.values.map { group in
+            LocationMapAnnotation(
+                coordinate: group.coordinate,
                 title: "\(group.name) (\(group.records.count))",
                 subtitle: nil,
                 records: group.records
