@@ -27,13 +27,6 @@ final class LocationDetailViewController: UIViewController {
         return map
     }()
 
-    private let emptyStateView: EmptyStateView = {
-        let v = EmptyStateView()
-        v.label.text = "尚無含座標的地區紀錄"
-        v.isHidden = true
-        return v
-    }()
-
     init(title: String, timeFilter: IllustrationTimeFilterOption) {
         self.viewModel = LocationDetailViewModel(timeFilter: timeFilter)
         super.init(nibName: nil, bundle: nil)
@@ -49,11 +42,7 @@ final class LocationDetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemBackground
         view.addSubview(mapView)
-        view.addSubview(emptyStateView)
         mapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        emptyStateView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         bindViewModel()
@@ -69,10 +58,7 @@ final class LocationDetailViewController: UIViewController {
             .sink { [weak self] annotations in
                 guard let self else { return }
                 updateAnnotations(annotations)
-                let isEmpty = annotations.isEmpty
-                emptyStateView.isHidden = !isEmpty
-                mapView.isHidden = isEmpty
-                isEmpty ? emptyStateView.play() : emptyStateView.stop()
+                if annotations.isEmpty { view.showToast(message: "尚無消費紀錄", position: .center) }
             }
             .store(in: &cancellables)
 

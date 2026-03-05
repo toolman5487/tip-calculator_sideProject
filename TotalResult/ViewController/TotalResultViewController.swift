@@ -180,25 +180,9 @@ extension TotalResultViewController: UICollectionViewDataSource {
                     address: self.viewModel.locationDisplayText.isEmpty ? nil : self.viewModel.locationDisplayText,
                     locationName: self.viewModel.locationNameForRecord
                 )
-                if success {
-                    ToastView.show(
-                        message: "儲存成功",
-                        in: self.view,
-                        autoDismissAfter: 1,
-                        systemImageName: "tray.and.arrow.down",
-                        tintColor: .systemGreen
-                    ) { [weak self] in
-                        self?.handleDismiss()
-                    }
-                } else {
-                    ToastView.show(
-                        message: "儲存失敗",
-                        in: self.view,
-                        autoDismissAfter: 1,
-                        tintColor: .systemRed
-                    ) { [weak self] in
-                        self?.handleDismiss()
-                    }
+                let message = success ? "儲存成功" : "儲存失敗"
+                view.showToast(message: message, position: .center, displayDuration: 1) { [weak self] in
+                    self?.handleDismiss()
                 }
             }
             return cell

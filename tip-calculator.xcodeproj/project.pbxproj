@@ -299,6 +299,7 @@
 			membershipExceptions = (
 				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
+				Factory/ToastView.swift,
 				Model/ScreenIdentifier1.swift,
 			);
 			target = 15C22D8A2D95A29A00270813 /* tip-calculatorUITests */;
@@ -308,6 +309,7 @@
 			membershipExceptions = (
 				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
+				Factory/ToastView.swift,
 			);
 			target = 15C22D802D95A29A00270813 /* tip-calculatorTests */;
 		};
