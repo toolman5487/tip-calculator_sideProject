@@ -26,7 +26,7 @@ final class MainTabBarViewController: UITabBarController {
         appearance.configureWithDefaultBackground()
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        tabBar.tintColor = ThemeColor.primary
+        tabBar.tintColor = ThemeColor.secondary
         viewControllers = MainTabBarTab.allCases.map { tab in
             let vc = tab.viewController
             vc.tabBarItem = tab.tabBarItem

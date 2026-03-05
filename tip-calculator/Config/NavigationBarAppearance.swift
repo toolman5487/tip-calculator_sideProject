@@ -12,7 +12,7 @@ enum NavigationBarAppearance {
     static func apply() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = .label
+        appearance.backgroundColor = ThemeColor.secondary
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
         appearance.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
 

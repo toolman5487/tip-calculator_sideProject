@@ -256,8 +256,8 @@ final class ConfirmButtonCell: UITableViewCell {
     private(set) lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("確認", for: .normal)
-        button.titleLabel?.font = ThemeFont.bold(Ofsize: 18)
-        button.backgroundColor = ThemeColor.secondary
+        button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
+        button.backgroundColor = .label
         button.setTitleColor(.white, for: .normal)
         button.addCornerRadius(radius: 8)
         return button

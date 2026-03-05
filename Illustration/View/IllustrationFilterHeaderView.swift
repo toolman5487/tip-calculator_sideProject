@@ -146,7 +146,7 @@ final class IllustrationFilterOptionCell: UICollectionViewCell {
 
     func setSelected(_ selected: Bool) {
         if selected {
-            contentView.backgroundColor = .label
+            contentView.backgroundColor = ThemeColor.secondary
             titleLabel.textColor = .systemBackground
         } else {
             contentView.backgroundColor = .systemBackground
