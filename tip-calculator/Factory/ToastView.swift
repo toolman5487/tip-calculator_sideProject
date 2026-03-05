@@ -59,7 +59,7 @@ extension UIView {
         let label: UILabel = {
             let l = UILabel()
             l.text = message
-            l.font = .preferredFont(forTextStyle: .title3)
+            l.font = ThemeFont.bold(Ofsize: 20)
             l.textColor = .secondaryLabel
             l.textAlignment = .center
             l.numberOfLines = 1

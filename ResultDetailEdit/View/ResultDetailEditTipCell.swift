@@ -3,35 +3,12 @@
 //  tip-calculator
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
-final class ResultDetailEditTipCell: UITableViewCell {
+final class ResultDetailEditTipCell: ResultDetailEditBaseCell {
 
     static let reuseId = "ResultDetailEditTipCell"
-
-    private let iconContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .label
-        return imageView
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 16)
-        label.textColor = .secondaryLabel
-        label.text = "小費"
-        return label
-    }()
 
     private let valueLabel: UILabel = {
         let label = UILabel()
@@ -60,35 +37,20 @@ final class ResultDetailEditTipCell: UITableViewCell {
     }
 
     private func setupViews() {
-        selectionStyle = .none
+        titleLabel.text = "小費"
         iconImageView.image = UIImage(systemName: "percent")
-        contentView.addSubview(iconContainerView)
-        iconContainerView.addSubview(iconImageView)
-        contentView.addSubview(titleLabel)
         contentView.addSubview(valueLabel)
         contentView.addSubview(accessoryImageView)
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         contentView.addGestureRecognizer(tap)
 
-        iconContainerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(32)
-        }
-        iconImageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.height.equalTo(16)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
-            make.centerY.equalToSuperview()
-        }
         accessoryImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(12)
         }
         valueLabel.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
             make.trailing.equalTo(accessoryImageView.snp.leading).offset(-8)
             make.centerY.equalToSuperview()
         }

@@ -53,6 +53,8 @@ final class ResultDetailEditViewModel {
     var split: Int
     var categoryIdentifier: String?
     var address: String
+    var latitude: Double?
+    var longitude: Double?
 
     private var record: ConsumptionRecord?
 
@@ -65,6 +67,8 @@ final class ResultDetailEditViewModel {
         self.split = 1
         self.categoryIdentifier = nil
         self.address = ""
+        self.latitude = nil
+        self.longitude = nil
         load()
     }
 
@@ -80,6 +84,8 @@ final class ResultDetailEditViewModel {
         split = Int(record.split)
         categoryIdentifier = record.categoryIdentifier
         address = record.address ?? ""
+        latitude = record.latitude?.doubleValue
+        longitude = record.longitude?.doubleValue
         buildRows()
     }
 
@@ -113,6 +119,13 @@ final class ResultDetailEditViewModel {
         buildRows()
     }
 
+    func updateLocation(address: String, latitude: Double, longitude: Double) {
+        self.address = address
+        self.latitude = latitude
+        self.longitude = longitude
+        buildRows()
+    }
+
     func save() -> Bool {
         let totalTip = getTipAmount(bill: bill, tip: tip)
         let totalBill = bill + totalTip
@@ -126,15 +139,15 @@ final class ResultDetailEditViewModel {
             split: split,
             categoryIdentifier: categoryIdentifier?.isEmpty == true ? nil : categoryIdentifier
         )
-        let lat = record?.latitude?.doubleValue
-        let lon = record?.longitude?.doubleValue
+        let lat = latitude ?? record?.latitude?.doubleValue
+        let lon = longitude ?? record?.longitude?.doubleValue
         return store.update(
             id: recordId,
             result: result,
             latitude: lat,
             longitude: lon,
             address: address.isEmpty ? nil : address,
-            locationName: record?.locationName,
+            locationName: address.isEmpty ? record?.locationName : address,
             categoryIdentifier: categoryIdentifier,
             consumptionTime: selectedConsumptionTime
         )

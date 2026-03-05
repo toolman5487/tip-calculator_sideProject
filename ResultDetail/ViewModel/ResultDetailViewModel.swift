@@ -5,6 +5,8 @@
 //  Created by Willy Hsu on 2026/2/10.
 //
 
+import Combine
+import CoreData
 import Foundation
 
 enum ResultDetailMode {
@@ -22,18 +24,38 @@ enum ResultDetailRow {
 final class ResultDetailViewModel {
 
     private let store: ConsumptionRecordStoring
-    private(set) var item: RecordDisplayItem
+    @Published private(set) var item: RecordDisplayItem
     let mode: ResultDetailMode
+    private var cancellables = Set<AnyCancellable>()
 
     init(item: RecordDisplayItem, mode: ResultDetailMode = .editable, store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
         self.item = item
         self.mode = mode
         self.store = store
+        observeStoreChanges()
     }
 
-    var headerAmountText: String {
-        item.amountPerPersonText
+    // MARK: - Core Data 自動監聽
+
+    private func observeStoreChanges() {
+        guard let id = item.id else { return }
+        NotificationCenter.default
+            .publisher(for: .NSManagedObjectContextDidSave, object: CoreDataStack.viewContext)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.reloadIfNeeded(id: id)
+            }
+            .store(in: &cancellables)
     }
+
+    private func reloadIfNeeded(id: UUID) {
+        guard let record = store.fetch(id: id) else { return }
+        item = RecordDisplayItem.from(record, dateFormatter: AppDateFormatters.detail)
+    }
+
+    // MARK: - Display
+
+    var headerAmountText: String { item.amountPerPersonText }
 
     var shareText: String {
         var lines = [
@@ -46,23 +68,19 @@ final class ResultDetailViewModel {
             "分攤人數：\(item.splitText)",
             "小費設定：\(item.tipDisplayText)"
         ]
-        if item.categoryDisplayText != "—" {
-            lines.append("消費種類：\(item.categoryDisplayText)")
-        }
-        if !item.addressText.isEmpty {
-            lines.append("消費地點：\(item.addressText)")
-        }
+        if item.categoryDisplayText != "—" { lines.append("消費種類：\(item.categoryDisplayText)") }
+        if !item.addressText.isEmpty { lines.append("消費地點：\(item.addressText)") }
         return lines.joined(separator: "\n")
     }
 
     var rows: [ResultDetailRow] {
         var result: [ResultDetailRow] = [
-            .value(title: "時間", value: item.dateText, icon: "clock"),
-            .value(title: "總金額", value: item.totalBillText, icon: "dollarsign.circle.fill"),
-            .value(title: "帳單金額", value: item.billText, icon: "doc.text.fill"),
-            .value(title: "小費", value: item.totalTipText, icon: "percent"),
-            .value(title: "分攤人數", value: item.splitText, icon: "person.3.fill"),
-            .value(title: "小費設定", value: item.tipDisplayText, icon: "slider.horizontal.3")
+            .value(title: "時間",     value: item.dateText,            icon: "clock"),
+            .value(title: "總金額",   value: item.totalBillText,       icon: "dollarsign.circle.fill"),
+            .value(title: "帳單金額", value: item.billText,            icon: "doc.text.fill"),
+            .value(title: "小費",     value: item.totalTipText,        icon: "percent"),
+            .value(title: "分攤人數", value: item.splitText,           icon: "person.3.fill"),
+            .value(title: "小費設定", value: item.tipDisplayText,      icon: "slider.horizontal.3")
         ]
         if item.categoryDisplayText != "—" {
             let imageName = Category.allCases.first { $0.displayName == item.categoryDisplayText }?.systemImageName
@@ -70,15 +88,17 @@ final class ResultDetailViewModel {
             result.append(.category(title: "消費種類", imageName: imageName))
         }
         if !(item.addressText.isEmpty && item.latitude == nil && item.longitude == nil) {
-            let value = item.addressText.isEmpty ? "未紀錄" : item.addressText
-            result.append(.location(title: "消費地點", value: value, latitude: item.latitude, longitude: item.longitude))
+            result.append(.location(title: "消費地點",
+                                    value: item.addressText.isEmpty ? "未紀錄" : item.addressText,
+                                    latitude: item.latitude,
+                                    longitude: item.longitude))
         }
         return result
     }
 
-    var canDelete: Bool {
-        item.id != nil
-    }
+    // MARK: - Actions
+
+    var canDelete: Bool { item.id != nil }
 
     func deleteRecord() {
         guard let id = item.id else { return }

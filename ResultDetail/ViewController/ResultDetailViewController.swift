@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import SnapKit
+import Combine
 import MapKit
+import SnapKit
 
 @MainActor
 final class ResultDetailViewController: BaseViewController {
@@ -15,6 +16,8 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Properties
 
     private let viewModel: ResultDetailViewModel
+    private var cancellables = Set<AnyCancellable>()
+    private var headerAmountLabel: UILabel?
 
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
@@ -58,6 +61,21 @@ final class ResultDetailViewController: BaseViewController {
         setupNavigation()
         setupTableView()
         setupHeaderView()
+        bindViewModel()
+    }
+
+    // MARK: - Binding
+
+    private func bindViewModel() {
+        viewModel.$item
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] item in
+                guard let self else { return }
+                headerAmountLabel?.text = item.amountPerPersonText
+                tableView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Setup
@@ -121,6 +139,7 @@ final class ResultDetailViewController: BaseViewController {
         amountLabel.font = UIFont.systemFont(ofSize: 60, weight: .bold, width: .condensed)
         amountLabel.textColor = ThemeColor.primary
         amountLabel.textAlignment = .center
+        headerAmountLabel = amountLabel
 
         headerView.addSubview(titleLabel)
         headerView.addSubview(amountLabel)
@@ -143,7 +162,7 @@ final class ResultDetailViewController: BaseViewController {
         guard let id = viewModel.item.id else { return }
         let editVC = ResultDetailEditViewController(recordId: id)
         let nav = UINavigationController(rootViewController: editVC)
-        nav.modalPresentationStyle = UIModalPresentationStyle.pageSheet
+        nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .large
@@ -163,12 +182,7 @@ final class ResultDetailViewController: BaseViewController {
 
     @objc private func deleteButtonTapped() {
         guard viewModel.canDelete else { return }
-
-        let alert = UIAlertController(
-            title: "刪除紀錄",
-            message: "刪除後無法復原，確定要刪除這筆紀錄嗎？",
-            preferredStyle: .alert
-        )
+        let alert = UIAlertController(title: "刪除紀錄", message: "刪除後無法復原，確定要刪除這筆紀錄嗎？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel))
         alert.addAction(UIAlertAction(title: "刪除", style: .destructive) { [weak self] _ in
             self?.viewModel.deleteRecord()
@@ -187,9 +201,7 @@ final class ResultDetailViewController: BaseViewController {
 
 extension ResultDetailViewController: UITableViewDataSource {
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
+    func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.rows.count
@@ -211,12 +223,7 @@ extension ResultDetailViewController: UITableViewDataSource {
 
         case .location(let title, let value, let lat, let lon):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailLocationCell.locationReuseId, for: indexPath) as! ResultDetailLocationCell
-            let coord: CLLocationCoordinate2D?
-            if let lat, let lon {
-                coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            } else {
-                coord = nil
-            }
+            let coord: CLLocationCoordinate2D? = (lat != nil && lon != nil) ? CLLocationCoordinate2D(latitude: lat!, longitude: lon!) : nil
             cell.configure(title: title, value: value, coordinate: coord)
             return cell
         }

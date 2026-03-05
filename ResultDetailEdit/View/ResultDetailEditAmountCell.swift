@@ -3,35 +3,12 @@
 //  tip-calculator
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
-final class ResultDetailEditAmountCell: UITableViewCell {
+final class ResultDetailEditAmountCell: ResultDetailEditBaseCell {
 
     static let reuseId = "ResultDetailEditAmountCell"
-
-    private let iconContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .label
-        return imageView
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 16)
-        label.textColor = .secondaryLabel
-        label.text = "帳單金額"
-        return label
-    }()
 
     private lazy var textField: UITextField = {
         let field = UITextField()
@@ -60,27 +37,11 @@ final class ResultDetailEditAmountCell: UITableViewCell {
     }
 
     private func setupViews() {
-        selectionStyle = .none
+        titleLabel.text = "帳單金額"
         iconImageView.image = UIImage(systemName: "doc.text.fill")
-        contentView.addSubview(iconContainerView)
-        iconContainerView.addSubview(iconImageView)
-        contentView.addSubview(titleLabel)
         contentView.addSubview(textField)
-        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingDidEnd)
 
-        iconContainerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(32)
-        }
-        iconImageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.height.equalTo(16)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
-            make.centerY.equalToSuperview()
-        }
         textField.snp.makeConstraints { make in
             make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
             make.trailing.equalToSuperview().offset(-16)
@@ -93,7 +54,7 @@ final class ResultDetailEditAmountCell: UITableViewCell {
         textField.text = value > 0 ? String(format: "%.0f", value) : ""
     }
 
-    @objc private func textFieldDidChange() {
+    @objc private func textFieldDidEndEditing() {
         let value = Double(textField.text ?? "") ?? 0
         onValueChanged?(value)
     }

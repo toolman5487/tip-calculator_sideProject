@@ -146,6 +146,27 @@
 		1590CB002F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB012F582C07004C66B4 /* ResultDetailEditAddressCell.swift */; };
 		1590CB022F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB012F582C07004C66B4 /* ResultDetailEditAddressCell.swift */; };
 		1590CB032F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB012F582C07004C66B4 /* ResultDetailEditAddressCell.swift */; };
+		1590CB042F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB052F582C08004C66B4 /* ResultDetailEditBaseCell.swift */; };
+		1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB052F582C08004C66B4 /* ResultDetailEditBaseCell.swift */; };
+		1590CB072F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CB052F582C08004C66B4 /* ResultDetailEditBaseCell.swift */; };
+		1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6AE2F595481004C66B4 /* MapLocationPickerViewController.swift */; };
+		1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6AE2F595481004C66B4 /* MapLocationPickerViewController.swift */; };
+		1590D6B12F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6AE2F595481004C66B4 /* MapLocationPickerViewController.swift */; };
+		1590D6B22F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6B52F595490004C66B4 /* MapLocationPickerViewModel.swift */; };
+		1590D6B32F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6B52F595490004C66B4 /* MapLocationPickerViewModel.swift */; };
+		1590D6B42F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6B52F595490004C66B4 /* MapLocationPickerViewModel.swift */; };
+		1590D6C02F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C12F5954A0004C66B4 /* MapLocationPickerModel.swift */; };
+		1590D6C22F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C12F5954A0004C66B4 /* MapLocationPickerModel.swift */; };
+		1590D6C32F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C12F5954A0004C66B4 /* MapLocationPickerModel.swift */; };
+		1590D6C42F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */; };
+		1590D6C62F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */; };
+		1590D6C72F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */; };
+		1590D6C82F5954A0004C66B4 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */; };
+		1590D6CA2F5954A0004C66B4 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */; };
+		1590D6CB2F5954A0004C66B4 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */; };
+		1590D6D02F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
+		1590D6D22F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
+		1590D6D32F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
 		159B35E92F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
 		159B35EA2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
 		159B35EB2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
@@ -271,6 +292,13 @@
 		1590CAF92F582C05004C66B4 /* ResultDetailEditSplitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditSplitCell.swift; sourceTree = "<group>"; };
 		1590CAFD2F582C06004C66B4 /* ResultDetailEditCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditCategoryCell.swift; sourceTree = "<group>"; };
 		1590CB012F582C07004C66B4 /* ResultDetailEditAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditAddressCell.swift; sourceTree = "<group>"; };
+		1590CB052F582C08004C66B4 /* ResultDetailEditBaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditBaseCell.swift; sourceTree = "<group>"; };
+		1590D6AE2F595481004C66B4 /* MapLocationPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerViewController.swift; sourceTree = "<group>"; };
+		1590D6B52F595490004C66B4 /* MapLocationPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerViewModel.swift; sourceTree = "<group>"; };
+		1590D6C12F5954A0004C66B4 /* MapLocationPickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerModel.swift; sourceTree = "<group>"; };
+		1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationAnnotation.swift; sourceTree = "<group>"; };
+		1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
+		1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerSearchResultCell.swift; sourceTree = "<group>"; };
 		159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocatioinDetailViewController.swift; sourceTree = "<group>"; };
 		159B35ED2F57DA1D00572631 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		159B35F12F57DA1E00572631 /* LocationRecordsSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRecordsSheetViewController.swift; sourceTree = "<group>"; };
@@ -725,6 +753,7 @@
 		1590CAEE2F582C02004C66B4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1590CB052F582C08004C66B4 /* ResultDetailEditBaseCell.swift */,
 				1590CAEA2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift */,
 				1590CAF12F582C03004C66B4 /* ResultDetailEditAmountCell.swift */,
 				1590CAF52F582C04004C66B4 /* ResultDetailEditTipCell.swift */,
@@ -733,6 +762,59 @@
 				1590CB012F582C07004C66B4 /* ResultDetailEditAddressCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		1590D6AC2F595459004C66B4 /* MapLocationPicker */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6AD2F595468004C66B4 /* ViewController */,
+				1590D6B62F595490004C66B4 /* ViewModel */,
+				1590D6D42F5954A0004C66B4 /* Model */,
+				1590D6D52F5954A0004C66B4 /* View */,
+				1590D6D62F5954A0004C66B4 /* Service */,
+			);
+			path = MapLocationPicker;
+			sourceTree = "<group>";
+		};
+		1590D6AD2F595468004C66B4 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6AE2F595481004C66B4 /* MapLocationPickerViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		1590D6B62F595490004C66B4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6B52F595490004C66B4 /* MapLocationPickerViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1590D6D42F5954A0004C66B4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6C12F5954A0004C66B4 /* MapLocationPickerModel.swift */,
+				1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1590D6D52F5954A0004C66B4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1590D6D62F5954A0004C66B4 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		159B35E72F57DA1D00572631 /* ViewController */ = {
@@ -858,6 +940,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				1590D6AC2F595459004C66B4 /* MapLocationPicker */,
 				1590CADF2F582ADB004C66B4 /* ResultDetailEdit */,
 				159B3B822F57E18100572631 /* LocationRecordsSheet */,
 				159B35E82F57DA1D00572631 /* LocationDetail */,
@@ -1073,6 +1156,12 @@
 				159B35EB2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */,
 				159B35F42F57DA1E00572631 /* LocationRecordsSheetViewController.swift in Sources */,
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
+				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
+				1590D6B22F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
+				1590D6C02F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
+				1590D6C42F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
+				1590D6C82F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
+				1590D6D02F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				159B35EF2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				156C6FB12F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				15B9F2D82F4C489F00B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
@@ -1118,6 +1207,7 @@
 				150DBCD32F483CBD008209A1 /* ConsumptionBreakdownViewModel.swift in Sources */,
 				1590CAE22F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */,
 				1590CAE52F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
+				1590CB042F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAE92F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF02F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				1590CAF42F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
@@ -1164,9 +1254,16 @@
 				159B35F72F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590CAE32F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */,
 				1590CAE72F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
+				1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEB2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
+				1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
+				1590D6B32F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
+				1590D6C22F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
+				1590D6C62F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
+				1590D6CA2F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
+				1590D6D22F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				1590CAFA2F582C05004C66B4 /* ResultDetailEditSplitCell.swift in Sources */,
 				1590CAFE2F582C06004C66B4 /* ResultDetailEditCategoryCell.swift in Sources */,
 				1590CB022F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */,
@@ -1216,8 +1313,15 @@
 				159B35F22F57DA1E00572631 /* LocationRecordsSheetViewController.swift in Sources */,
 				159B35F62F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				159B35EC2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
+				1590D6B12F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
+				1590D6B42F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
+				1590D6C32F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
+				1590D6C72F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
+				1590D6CB2F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
+				1590D6D32F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				1590CAE42F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */,
 				1590CAE82F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
+				1590CB072F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEC2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF32F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				1590CAF72F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,

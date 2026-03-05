@@ -3,35 +3,12 @@
 //  tip-calculator
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
-final class ResultDetailEditSplitCell: UITableViewCell {
+final class ResultDetailEditSplitCell: ResultDetailEditBaseCell {
 
     static let reuseId = "ResultDetailEditSplitCell"
-
-    private let iconContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .label
-        return imageView
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = ThemeFont.demiBold(Ofsize: 16)
-        label.textColor = .secondaryLabel
-        label.text = "分攤人數"
-        return label
-    }()
 
     private let stepper: UIStepper = {
         let s = UIStepper()
@@ -60,33 +37,18 @@ final class ResultDetailEditSplitCell: UITableViewCell {
     }
 
     private func setupViews() {
-        selectionStyle = .none
+        titleLabel.text = "分攤人數"
         iconImageView.image = UIImage(systemName: "person.3.fill")
-        contentView.addSubview(iconContainerView)
-        iconContainerView.addSubview(iconImageView)
-        contentView.addSubview(titleLabel)
         contentView.addSubview(stepper)
         contentView.addSubview(valueLabel)
         stepper.addTarget(self, action: #selector(stepperChanged), for: .valueChanged)
 
-        iconContainerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(32)
-        }
-        iconImageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.height.equalTo(16)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
-            make.centerY.equalToSuperview()
-        }
         stepper.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalToSuperview()
         }
         valueLabel.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
             make.trailing.equalTo(stepper.snp.leading).offset(-12)
             make.centerY.equalToSuperview()
         }

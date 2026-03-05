@@ -66,7 +66,7 @@ final class TotalResultViewModel {
     let rows: [TotalResultRow] = TotalResultRow.allCases
     private let store: ConsumptionRecordStoring
     private let locationProvider: LocationProviding
-    private let googleGeocodingService: GoogleGeocodingService?
+    private let reverseGeocodeService: ReverseGeocoding
 
     @Published private(set) var locationDisplayText: String = ""
     @Published private(set) var isLocationLoading = true
@@ -76,12 +76,12 @@ final class TotalResultViewModel {
         result: Result,
         store: ConsumptionRecordStoring = ConsumptionRecordStore(),
         locationProvider: LocationProviding = LocationService.shared,
-        googleGeocodingService: GoogleGeocodingService? = nil
+        reverseGeocodeService: ReverseGeocoding = ReverseGeocodeService()
     ) {
         self.result = result
         self.store = store
         self.locationProvider = locationProvider
-        self.googleGeocodingService = googleGeocodingService
+        self.reverseGeocodeService = reverseGeocodeService
     }
 
     func refreshLocation() {
@@ -92,7 +92,17 @@ final class TotalResultViewModel {
             locationNameForRecord = nil
             return
         }
-        resolveCityDistrict(location: location)
+        reverseGeocodeService.reverseGeocode(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude) { [weak self] addr in
+            guard let self else { return }
+            self.isLocationLoading = false
+            if let addr = addr, !addr.isEmpty {
+                self.locationDisplayText = addr
+                self.locationNameForRecord = addr
+            } else {
+                self.locationDisplayText = "無法取得地區"
+                self.locationNameForRecord = nil
+            }
+        }
     }
 
     private var locationErrorMessage: String {
@@ -102,80 +112,6 @@ final class TotalResultViewModel {
         default:
             return "無法定位"
         }
-    }
-
-    private func locationString(from place: CLPlacemark) -> String? {
-        LocationAddressFormatter.full.format(place)
-    }
-
-    private static func nativeLocale(for isoCountryCode: String?) -> Locale {
-        switch isoCountryCode {
-        case "TW", "HK", "MO": return Locale(identifier: "zh_TW")
-        case "CN":              return Locale(identifier: "zh_CN")
-        case "JP":              return Locale(identifier: "ja_JP")
-        case "KR":              return Locale(identifier: "ko_KR")
-        default:                return Locale.current
-        }
-    }
-
-    private func resolveCityDistrict(location: CLLocation) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location, preferredLocale: Locale.current) { [weak self] placemarks, _ in
-            Task { @MainActor in
-                guard let self else { return }
-                guard let place = placemarks?.first else {
-                    await self.applyGoogleFallback(location: location)
-                    return
-                }
-
-                let native = Self.nativeLocale(for: place.isoCountryCode)
-                let currentLang = String(Locale.current.identifier.prefix(2))
-                let nativeLang  = String(native.identifier.prefix(2))
-
-                if currentLang == nativeLang {
-                    if let text = self.locationString(from: place) {
-                        self.isLocationLoading = false
-                        self.locationDisplayText = text
-                        self.locationNameForRecord = text
-                    } else {
-                        await self.applyGoogleFallback(location: location, locale: native)
-                    }
-                    return
-                }
-
-                geocoder.reverseGeocodeLocation(location, preferredLocale: native) { [weak self] placemarks2, _ in
-                    Task { @MainActor in
-                        guard let self else { return }
-                        let finalPlace = placemarks2?.first ?? place
-                        if let text = self.locationString(from: finalPlace) {
-                            self.isLocationLoading = false
-                            self.locationDisplayText = text
-                            self.locationNameForRecord = text
-                        } else {
-                            await self.applyGoogleFallback(location: location, locale: native)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private func applyGoogleFallback(location: CLLocation, locale: Locale = Locale.current) async {
-        let lang = locale.identifier.replacingOccurrences(of: "_", with: "-")
-        if let google = googleGeocodingService,
-           let addr = await google.reverseGeocode(
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude,
-            language: lang
-           ), !addr.isEmpty {
-            isLocationLoading = false
-            locationDisplayText = addr
-            locationNameForRecord = addr
-            return
-        }
-        isLocationLoading = false
-        locationDisplayText = "無法取得地區"
-        locationNameForRecord = nil
     }
 
     @discardableResult

@@ -28,7 +28,7 @@ extension ConsumptionRecord {
     }
 
     var districtKey: String {
-        let raw = locationName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let raw = (locationName ?? address)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return raw.isEmpty ? "未知地區" : LocationAddressFormatter.district.format(raw)
     }
 }

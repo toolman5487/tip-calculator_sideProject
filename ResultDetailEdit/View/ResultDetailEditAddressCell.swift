@@ -10,6 +10,8 @@ final class ResultDetailEditAddressCell: UITableViewCell {
 
     static let reuseId = "ResultDetailEditAddressCell"
 
+    var onTap: (() -> Void)?
+
     private let iconContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondarySystemBackground
@@ -33,21 +35,20 @@ final class ResultDetailEditAddressCell: UITableViewCell {
         return label
     }()
 
-    private lazy var textField: UITextField = {
-        let field = UITextField()
-        field.font = ThemeFont.bold(Ofsize: 16)
-        field.textColor = ThemeColor.text
-        field.placeholder = "未紀錄"
-        field.returnKeyType = .done
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 36))
-        toolbar.sizeToFit()
-        let done = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(dismissKeyboard))
-        toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), done]
-        field.inputAccessoryView = toolbar
-        return field
+    private let valueLabel: UILabel = {
+        let label = UILabel()
+        label.font = ThemeFont.bold(Ofsize: 16)
+        label.textColor = ThemeColor.text
+        label.numberOfLines = 2
+        return label
     }()
 
-    var onValueChanged: ((String) -> Void)?
+    private let accessoryImageView: UIImageView = {
+        let iv = UIImageView(image: UIImage(systemName: "chevron.right"))
+        iv.tintColor = .tertiaryLabel
+        iv.contentMode = .scaleAspectFit
+        return iv
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,8 +65,10 @@ final class ResultDetailEditAddressCell: UITableViewCell {
         contentView.addSubview(iconContainerView)
         iconContainerView.addSubview(iconImageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(textField)
-        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        contentView.addSubview(valueLabel)
+        contentView.addSubview(accessoryImageView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        contentView.addGestureRecognizer(tap)
 
         iconContainerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
@@ -77,26 +80,28 @@ final class ResultDetailEditAddressCell: UITableViewCell {
             make.width.height.equalTo(16)
         }
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
+            make.leading.equalTo(iconContainerView.snp.trailing).offset(8)
             make.centerY.equalTo(iconContainerView)
         }
-        textField.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel)
+        accessoryImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(12)
+        }
+        valueLabel.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel)
+            make.trailing.equalTo(accessoryImageView.snp.leading).offset(-8)
             make.top.equalTo(iconContainerView.snp.bottom).offset(12)
             make.bottom.equalToSuperview().offset(-16)
         }
     }
 
     func configure(value: String) {
-        textField.text = value.isEmpty ? "" : value
+        valueLabel.text = value.isEmpty ? "未紀錄" : value
+        valueLabel.textColor = value.isEmpty ? .tertiaryLabel : ThemeColor.text
     }
 
-    @objc private func textFieldDidChange() {
-        onValueChanged?(textField.text ?? "")
-    }
-
-    @objc private func dismissKeyboard() {
-        textField.resignFirstResponder()
+    @objc private func handleTap() {
+        onTap?()
     }
 }

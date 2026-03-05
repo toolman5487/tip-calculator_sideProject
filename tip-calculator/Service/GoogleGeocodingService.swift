@@ -43,6 +43,48 @@ final class GoogleGeocodingService {
         return apiKey.map { GoogleGeocodingService(apiKey: $0) }
     }
 
+    func reverseGeocode(latitude: Double, longitude: Double, language: String? = nil, completion: @escaping (String?) -> Void) {
+        guard let apiKey = apiKey else {
+            DispatchQueue.main.async { completion(nil) }
+            return
+        }
+        let lang = language ?? Locale.current.language.languageCode?.identifier ?? "en"
+        let key = cacheKey(lat: latitude, lon: longitude, lang: lang)
+        if let cached = cache[key] {
+            DispatchQueue.main.async { completion(cached) }
+            return
+        }
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)&language=\(lang)") else {
+            DispatchQueue.main.async { completion(nil) }
+            return
+        }
+        session.dataTask(with: url) { [weak self] data, _, _ in
+            guard let self = self, let data = data else {
+                DispatchQueue.main.async { completion(nil) }
+                return
+            }
+            do {
+                let decoded = try JSONDecoder().decode(GoogleGeocodingResponse.self, from: data)
+                guard decoded.status == "OK",
+                      let first = decoded.results?.first,
+                      let rawAddr = first.formattedAddress, !rawAddr.isEmpty else {
+                    DispatchQueue.main.async { completion(nil) }
+                    return
+                }
+                let addr = Self.shortenedAddress(rawAddr)
+                if self.cacheOrder.count >= self.maxCacheSize, let oldKey = self.cacheOrder.first {
+                    self.cacheOrder.removeFirst()
+                    self.cache.removeValue(forKey: oldKey)
+                }
+                self.cache[key] = addr
+                self.cacheOrder.append(key)
+                DispatchQueue.main.async { completion(addr) }
+            } catch {
+                DispatchQueue.main.async { completion(nil) }
+            }
+        }.resume()
+    }
+
     func reverseGeocode(latitude: Double, longitude: Double, language: String? = nil) async -> String? {
         guard let apiKey = apiKey else { return nil }
         let lang = language ?? Locale.current.language.languageCode?.identifier ?? "en"

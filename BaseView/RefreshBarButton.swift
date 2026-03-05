@@ -28,6 +28,11 @@ final class RefreshBarButton: UIButton {
     private enum Constant {
         static let rotationDuration: CFTimeInterval = 0.4
         static let rotationKey = "rotation"
+        static let buttonSize: CGFloat = 20
+    }
+
+    override var intrinsicContentSize: CGSize {
+        CGSize(width: Constant.buttonSize, height: Constant.buttonSize)
     }
 
     init(frame: CGRect = .zero, debounceInterval: TimeInterval = 0.5) {
@@ -43,8 +48,10 @@ final class RefreshBarButton: UIButton {
     }
 
     private func commonInit() {
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-        setImage(UIImage(systemName: "arrow.clockwise", withConfiguration: config), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        let image = UIImage(systemName: "arrow.trianglehead.counterclockwise", withConfiguration: config)
+            ?? UIImage(systemName: "arrow.clockwise", withConfiguration: config)
+        setImage(image, for: .normal)
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
 

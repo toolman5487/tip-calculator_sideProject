@@ -27,7 +27,7 @@ final class ResultDetailEditViewController: BaseViewController {
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .insetGrouped)
         table.rowHeight = UITableView.automaticDimension
-        table.estimatedRowHeight = 44
+        table.estimatedRowHeight = 56
         return table
     }()
 
@@ -47,12 +47,6 @@ final class ResultDetailEditViewController: BaseViewController {
 
     private func setNavigationBar() {
         title = "編輯消費紀錄"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "儲存",
-            style: .done,
-            target: self,
-            action: #selector(saveButtonTapped)
-        )
     }
 
     private func setupTableView() {
@@ -64,6 +58,29 @@ final class ResultDetailEditViewController: BaseViewController {
         tableView.register(ResultDetailEditSplitCell.self, forCellReuseIdentifier: ResultDetailEditSplitCell.reuseId)
         tableView.register(ResultDetailEditCategoryCell.self, forCellReuseIdentifier: ResultDetailEditCategoryCell.reuseId)
         tableView.register(ResultDetailEditAddressCell.self, forCellReuseIdentifier: ResultDetailEditAddressCell.reuseId)
+        setupTableFooterView()
+    }
+
+    private func setupTableFooterView() {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 84))
+        footerView.backgroundColor = .clear
+
+        let saveButton = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        saveButton.setImage(UIImage(systemName: "square.and.arrow.down", withConfiguration: config), for: .normal)
+        saveButton.tintColor = .systemBackground
+        saveButton.backgroundColor = ThemeColor.secondary
+        saveButton.addCornerRadius(radius: 8)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+
+        footerView.addSubview(saveButton)
+        saveButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview()
+            make.height.equalTo(52)
+        }
+
+        tableView.tableFooterView = footerView
     }
 
     private func setupLayout() {
@@ -71,8 +88,7 @@ final class ResultDetailEditViewController: BaseViewController {
         containerView.addSubview(tableView)
 
         containerView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.edges.equalToSuperview()
         }
 
         tableView.snp.makeConstraints { make in
@@ -91,7 +107,9 @@ final class ResultDetailEditViewController: BaseViewController {
 
     @objc private func saveButtonTapped() {
         guard viewModel.save() else { return }
-        dismiss(animated: true)
+        view.showToast(message: "編輯成功", position: .bottom(offset: 16), displayDuration: 1) { [weak self] in
+            self?.dismiss(animated: true)
+        }
     }
 
     private func showTipPicker() {
@@ -144,6 +162,24 @@ final class ResultDetailEditViewController: BaseViewController {
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true)
     }
+
+    private func showLocationPicker() {
+        let vc = MapLocationPickerViewController(
+            initialAddress: viewModel.address.isEmpty ? nil : viewModel.address,
+            latitude: viewModel.latitude,
+            longitude: viewModel.longitude
+        )
+        vc.onSelect = { [weak self] address, lat, lon in
+            self?.viewModel.updateLocation(address: address, latitude: lat, longitude: lon)
+        }
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
 }
 
 extension ResultDetailEditViewController: UITableViewDelegate, UITableViewDataSource {
@@ -189,7 +225,7 @@ extension ResultDetailEditViewController: UITableViewDelegate, UITableViewDataSo
         case .address(let value):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditAddressCell.reuseId, for: indexPath) as! ResultDetailEditAddressCell
             cell.configure(value: value)
-            cell.onValueChanged = { [weak self] v in self?.viewModel.updateAddress(v) }
+            cell.onTap = { [weak self] in self?.showLocationPicker() }
             return cell
         }
     }

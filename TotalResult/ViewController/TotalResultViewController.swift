@@ -52,11 +52,7 @@ final class TotalResultViewController: UIViewController {
 
     init(result: Result, locationProvider: LocationProviding = LocationService.shared) {
         self.locationProvider = locationProvider
-        self.viewModel = TotalResultViewModel(
-            result: result,
-            locationProvider: locationProvider,
-            googleGeocodingService: GoogleGeocodingService.makeFromBundle()
-        )
+        self.viewModel = TotalResultViewModel(result: result, locationProvider: locationProvider)
         super.init(nibName: nil, bundle: nil)
     }
 
