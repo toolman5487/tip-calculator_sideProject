@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreLocation
 import MapKit
 import SnapKit
 import UIKit
@@ -39,7 +40,7 @@ final class LocationDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.largeTitleDisplayMode = .never
+        setNavigationBar()
         view.backgroundColor = .systemBackground
         view.addSubview(mapView)
         mapView.snp.makeConstraints { make in
@@ -51,6 +52,16 @@ final class LocationDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.load()
+    }
+
+    private func setNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "location.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)),
+            style: .plain,
+            target: self,
+            action: #selector(centerOnUserLocationTapped)
+        )
     }
 
     private func bindViewModel() {
@@ -73,6 +84,19 @@ final class LocationDetailViewController: UIViewController {
     private func updateAnnotations(_ annotations: [LocationMapAnnotation]) {
         mapView.removeAnnotations(mapView.annotations.filter { $0 is LocationMapAnnotation })
         mapView.addAnnotations(annotations)
+    }
+
+    @objc private func centerOnUserLocationTapped() {
+        if let location = mapView.userLocation.location {
+            let region = MKCoordinateRegion(
+                center: location.coordinate,
+                latitudinalMeters: 1000,
+                longitudinalMeters: 1000
+            )
+            mapView.setRegion(region, animated: true)
+        } else {
+            view.showToast(message: "定位中，請稍候", position: .center)
+        }
     }
 
     private func presentRecordsSheet(for annotation: LocationMapAnnotation) {

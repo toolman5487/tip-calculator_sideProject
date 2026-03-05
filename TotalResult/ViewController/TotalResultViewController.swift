@@ -110,7 +110,26 @@ final class TotalResultViewController: UIViewController {
     }
 
     @objc private func didTapLocation() {
-        viewModel.refreshLocation()
+        showMapLocationPicker()
+    }
+
+    private func showMapLocationPicker() {
+        let initial = viewModel.initialLocationForMapPicker
+        let vc = MapLocationPickerViewController(
+            initialAddress: initial.address,
+            latitude: initial.latitude,
+            longitude: initial.longitude
+        )
+        vc.onSelect = { [weak self] address, lat, lon in
+            self?.viewModel.updateLocationFromMapPicker(address: address, latitude: lat, longitude: lon)
+        }
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -169,13 +188,7 @@ extension TotalResultViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SaveRecordCell.reuseId, for: indexPath) as! SaveRecordCell
             cell.onTap = { [weak self] in
                 guard let self else { return }
-                let loc = self.locationProvider.lastLocation
-                let success = self.viewModel.saveRecord(
-                    latitude: loc?.coordinate.latitude,
-                    longitude: loc?.coordinate.longitude,
-                    address: self.viewModel.locationDisplayText.isEmpty ? nil : self.viewModel.locationDisplayText,
-                    locationName: self.viewModel.locationNameForRecord
-                )
+                let success = self.viewModel.saveRecord()
                 let message = success ? "儲存成功" : "儲存失敗"
                 view.showToast(message: message, position: .center, displayDuration: 1) { [weak self] in
                     self?.handleDismiss()

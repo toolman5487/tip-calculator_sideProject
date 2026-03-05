@@ -72,6 +72,8 @@ final class TotalResultViewModel {
     @Published private(set) var isLocationLoading = true
     @Published private(set) var locationNameForRecord: String?
 
+    private var mapPickedLocation: (address: String, latitude: Double, longitude: Double)?
+
     init(
         result: Result,
         store: ConsumptionRecordStoring = ConsumptionRecordStore(),
@@ -84,7 +86,34 @@ final class TotalResultViewModel {
         self.reverseGeocodeService = reverseGeocodeService
     }
 
+    func updateLocationFromMapPicker(address: String, latitude: Double, longitude: Double) {
+        mapPickedLocation = (address, latitude, longitude)
+        locationDisplayText = address
+        locationNameForRecord = address
+        isLocationLoading = false
+    }
+
+    var latitudeForSave: Double? {
+        mapPickedLocation?.latitude ?? locationProvider.lastLocation?.coordinate.latitude
+    }
+
+    var longitudeForSave: Double? {
+        mapPickedLocation?.longitude ?? locationProvider.lastLocation?.coordinate.longitude
+    }
+
+    var initialLocationForMapPicker: (address: String?, latitude: Double?, longitude: Double?) {
+        let addr = locationDisplayText.isEmpty || locationDisplayText == "無法定位" || locationDisplayText == "請開啟定位權限"
+            ? nil
+            : locationDisplayText
+        return (
+            addr,
+            mapPickedLocation?.latitude ?? locationProvider.lastLocation?.coordinate.latitude,
+            mapPickedLocation?.longitude ?? locationProvider.lastLocation?.coordinate.longitude
+        )
+    }
+
     func refreshLocation() {
+        guard mapPickedLocation == nil else { return }
         isLocationLoading = true
         guard let location = locationProvider.lastLocation else {
             locationDisplayText = locationErrorMessage
@@ -115,13 +144,14 @@ final class TotalResultViewModel {
     }
 
     @discardableResult
-    func saveRecord(latitude: Double? = nil, longitude: Double? = nil, address: String? = nil, locationName: String? = nil) -> Bool {
+    func saveRecord() -> Bool {
+        let address = locationDisplayText.isEmpty ? nil : locationDisplayText
         let success = store.save(
             result: result,
-            latitude: latitude,
-            longitude: longitude,
+            latitude: latitudeForSave,
+            longitude: longitudeForSave,
             address: address,
-            locationName: locationName,
+            locationName: locationNameForRecord,
             categoryIdentifier: result.categoryIdentifier
         )
         if success {
