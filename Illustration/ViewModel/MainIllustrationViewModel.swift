@@ -78,7 +78,7 @@ final class MainIllustrationViewModel {
         personalTotalText: String, personalTotalTrend: KPITrend?
     ) {
         let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
-        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerRecord: 0, averageTip: 0)
+        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, personalConsumptionTotal: 0, averagePerRecord: 0, averageTip: 0)
         let calendar = Calendar.current
         let now = Date()
         let timeRange = selectedTimeFilter.consumptionTimeRange
@@ -88,19 +88,19 @@ final class MainIllustrationViewModel {
         let allRecords = store.fetchAll()
         let prevRecords = allRecords.filter {
             guard let d = $0.effectiveConsumptionTime else { return false }
-            return d >= prevRange.start && d <= prevRange.end
+            return d >= prevRange.start && d < prevRange.end
         }
         let prevSummary = buildKPI(from: prevRecords)
         let recordDelta = currentSummary.totalRecords - prevSummary.totalRecords
         let averageDelta = currentSummary.averagePerRecord - prevSummary.averagePerRecord
-        let totalDelta = currentSummary.totalAmount - prevSummary.totalAmount
+        let personalDelta = currentSummary.personalConsumptionTotal - prevSummary.personalConsumptionTotal
         return (
             formatDelta(recordDelta, isCurrency: false),
             compare(currentSummary.totalRecords, prevSummary.totalRecords),
             formatDelta(averageDelta, isCurrency: true),
             compare(currentSummary.averagePerRecord, prevSummary.averagePerRecord),
-            formatDelta(totalDelta, isCurrency: true),
-            compare(currentSummary.totalAmount, prevSummary.totalAmount)
+            formatDelta(personalDelta, isCurrency: true),
+            compare(currentSummary.personalConsumptionTotal, prevSummary.personalConsumptionTotal)
         )
     }
 
@@ -139,7 +139,7 @@ final class MainIllustrationViewModel {
         kpiDisplay = IllustrationKPIDisplay(
             totalRecordsText: Double(summary.totalRecords).abbreviatedFormatted,
             averagePerPersonText: summary.averagePerRecord.currencyAbbreviatedFormatted,
-            personalConsumptionTotalText: summary.totalAmount.currencyAbbreviatedFormatted
+            personalConsumptionTotalText: summary.personalConsumptionTotal.currencyAbbreviatedFormatted
         )
         timeChartData = buildTimeChartData(from: records)
         locationStats = buildLocationStats(from: filtered)
@@ -148,11 +148,13 @@ final class MainIllustrationViewModel {
     private func buildKPI(from records: [ConsumptionRecord]) -> IllustrationKPISummary {
         let totalRecords = records.count
         let totalAmount = records.reduce(0) { $0 + $1.totalBill }
+        let personalConsumptionTotal = records.reduce(0) { $0 + $1.amountPerPerson }
         let totalTip = records.reduce(0) { $0 + $1.totalTip }
         return IllustrationKPISummary(
             totalRecords: totalRecords,
             totalAmount: totalAmount,
-            averagePerRecord: totalRecords > 0 ? totalAmount / Double(totalRecords) : 0,
+            personalConsumptionTotal: personalConsumptionTotal,
+            averagePerRecord: totalRecords > 0 ? personalConsumptionTotal / Double(totalRecords) : 0,
             averageTip: totalRecords > 0 ? totalTip / Double(totalRecords) : 0
         )
     }
@@ -183,7 +185,7 @@ final class MainIllustrationViewModel {
             guard let idx = timeRange.bucketIndex(for: date, periods: periods, calendar: calendar, now: now),
                   idx < ranges.count else { continue }
             let key = ranges[idx].start
-            sums[key, default: 0] += record.totalBill
+            sums[key, default: 0] += record.amountPerPerson 
         }
         return ranges.map { r in
             TrendChartItem(label: formatter.string(from: r.start), totalAmount: sums[r.start] ?? 0)

@@ -41,6 +41,7 @@ enum IllustrationTimeFilterOption: Int, CaseIterable {
 struct IllustrationKPISummary {
     let totalRecords: Int
     let totalAmount: Double
+    let personalConsumptionTotal: Double  // 個人消費總和 = 每筆 amountPerPerson 加總（已除人均）
     let averagePerRecord: Double
     let averageTip: Double
 }
