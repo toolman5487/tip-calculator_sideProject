@@ -106,7 +106,7 @@ final class IllustrationResultCell: UICollectionViewCell {
 
     func configure(items: [KPICardItem]) {
         guard items.count >= 3 else { return }
-        let mainValue = items[2].value
+        let mainValue = items[1].actualValue
         let attributedText = NSMutableAttributedString(
             string: mainValue,
             attributes: [.font: ThemeFont.bold(Ofsize: 48), .foregroundColor: UIColor.label]
@@ -115,8 +115,8 @@ final class IllustrationResultCell: UICollectionViewCell {
             attributedText.addAttributes([.font: ThemeFont.bold(Ofsize: 24)], range: NSRange(location: 0, length: 1))
         }
         mainValueLabel.attributedText = attributedText
-        averagePerRecordView.configure(value: items[1].value)
-        recordCountView.configure(value: items[0].value)
+        averagePerRecordView.configure(value: items[0].actualValue)
+        recordCountView.configure(value: items[2].actualValue)
     }
 
     private func buildSpaceView(height: CGFloat) -> UIView {

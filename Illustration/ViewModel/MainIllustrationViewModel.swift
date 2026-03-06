@@ -64,22 +64,26 @@ final class MainIllustrationViewModel {
 
     var kpiCardItems: [KPICardItem] {
         let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
-        let trends = kpiComparisonTrends
+        let comparison = kpiComparison
         return [
-            KPICardItem(title: "總消費筆數", value: display.totalRecordsText, trend: trends.recordCount),
-            KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText, trend: trends.averagePerRecord),
-            KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText, trend: trends.personalTotal)
+            KPICardItem(title: "平均每筆消費", value: comparison.averagePerRecordText, actualValue: display.averagePerPersonText, trend: comparison.averagePerRecordTrend),
+            KPICardItem(title: "個人消費總和", value: comparison.personalTotalText, actualValue: display.personalConsumptionTotalText, trend: comparison.personalTotalTrend),
+            KPICardItem(title: "總消費筆數", value: comparison.recordCountText, actualValue: display.totalRecordsText, trend: comparison.recordCountTrend)
         ]
     }
 
-    /// 與前一期的比較趨勢（較昨天/上週/上個月/去年）
-    var kpiComparisonTrends: (recordCount: KPITrend?, averagePerRecord: KPITrend?, personalTotal: KPITrend?) {
+    private var kpiComparison: (
+        recordCountText: String, recordCountTrend: KPITrend?,
+        averagePerRecordText: String, averagePerRecordTrend: KPITrend?,
+        personalTotalText: String, personalTotalTrend: KPITrend?
+    ) {
+        let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
+        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerRecord: 0, averageTip: 0)
         let calendar = Calendar.current
         let now = Date()
         let timeRange = selectedTimeFilter.consumptionTimeRange
-        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerRecord: 0, averageTip: 0)
         guard let prevRange = timeRange.previousPeriodRange(calendar: calendar, now: now) else {
-            return (nil, nil, nil)
+            return (display.totalRecordsText, nil, display.averagePerPersonText, nil, display.personalConsumptionTotalText, nil)
         }
         let allRecords = store.fetchAll()
         let prevRecords = allRecords.filter {
@@ -87,11 +91,30 @@ final class MainIllustrationViewModel {
             return d >= prevRange.start && d <= prevRange.end
         }
         let prevSummary = buildKPI(from: prevRecords)
+        let recordDelta = currentSummary.totalRecords - prevSummary.totalRecords
+        let averageDelta = currentSummary.averagePerRecord - prevSummary.averagePerRecord
+        let totalDelta = currentSummary.totalAmount - prevSummary.totalAmount
         return (
+            formatDelta(recordDelta, isCurrency: false),
             compare(currentSummary.totalRecords, prevSummary.totalRecords),
+            formatDelta(averageDelta, isCurrency: true),
             compare(currentSummary.averagePerRecord, prevSummary.averagePerRecord),
+            formatDelta(totalDelta, isCurrency: true),
             compare(currentSummary.totalAmount, prevSummary.totalAmount)
         )
+    }
+
+    private func formatDelta(_ delta: Double, isCurrency: Bool) -> String {
+        let absDelta = abs(delta)
+        if isCurrency {
+            return absDelta.currencyAbbreviatedFormatted
+        } else {
+            return "\(Int(absDelta))"
+        }
+    }
+
+    private func formatDelta(_ delta: Int, isCurrency: Bool) -> String {
+        formatDelta(Double(delta), isCurrency: isCurrency)
     }
 
     private func compare<T: Comparable>(_ current: T, _ previous: T) -> KPITrend {

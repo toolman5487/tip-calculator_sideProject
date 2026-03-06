@@ -15,6 +15,7 @@ enum KPITrend {
 struct KPICardItem {
     let title: String
     let value: String
+    let actualValue: String    
     let trend: KPITrend?
 }
 
