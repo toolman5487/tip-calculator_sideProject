@@ -42,6 +42,7 @@ final class MainIllustrationViewController: MainBaseViewController {
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
+        collectionView.register(IllustrationResultCell.self, forCellWithReuseIdentifier: IllustrationResultCell.reuseId)
         collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
         collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
         collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
@@ -83,6 +84,7 @@ extension MainIllustrationViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader: return 0
+        case .result: return 1
         case .kpi: return 1
         case .timeChart: return 1
         case .locationStats: return 1
@@ -103,6 +105,8 @@ extension MainIllustrationViewController {
             )
             header.configure(with: filterVM)
             return header
+        case .result:
+            return UICollectionReusableView()
         case .kpi:
             return UICollectionReusableView()
         case .timeChart, .locationStats:
@@ -122,9 +126,14 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             return collectionView.dequeueReusableCell(withReuseIdentifier: MainBaseViewController.defaultCellReuseId, for: indexPath)
+        case .result:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationResultCell.reuseId, for: indexPath) as! IllustrationResultCell
+            cell.configure(items: viewModel.kpiCardItems)
+            return cell
         case .kpi:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICarouselCell.reuseId, for: indexPath) as! KPICarouselCell
-            cell.configure(items: viewModel.kpiCardItems)
+            let comparisonLabel = viewModel.selectedTimeFilter.consumptionTimeRange.comparisonPeriodLabel
+            cell.configure(items: viewModel.kpiCardItems, comparisonLabel: comparisonLabel)
             return cell
 
         case .timeChart:
@@ -155,7 +164,7 @@ extension MainIllustrationViewController {
             let title = viewModel.sectionHeaderTitle(for: .locationStats) ?? "消費地區"
             let vc = LocationDetailViewController(title: title, timeFilter: viewModel.selectedTimeFilter)
             navigationController?.pushViewController(vc, animated: true)
-        case .filterHeader, .kpi:
+        case .filterHeader, .result, .kpi:
             break
         }
     }
@@ -169,6 +178,11 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             return .zero
+        case .result:
+            let horizontalInset: CGFloat = 16 * 2
+            let cellWidth = max(0, width - horizontalInset)
+            let cellHeight = cellWidth * 0.6
+            return CGSize(width: cellWidth, height: cellHeight)
         case .kpi:
             let inset: CGFloat = 12 * 2
             let spacing: CGFloat = 8 * 2
@@ -188,6 +202,8 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return CGSize(width: collectionView.bounds.width, height: 56)
+        case .result:
+            return CGSize(width: collectionView.bounds.width, height: 0)
         case .kpi:
             return CGSize(width: collectionView.bounds.width, height: 0)
         default:
@@ -199,6 +215,8 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        case .result:
+            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         case .kpi:
             return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         default:

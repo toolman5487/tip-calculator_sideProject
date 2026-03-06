@@ -68,6 +68,45 @@ enum ConsumptionTimeRange {
         }
     }
 
+    /// 取得前一期的時間範圍，用於比較
+    /// - 每日: 昨天
+    /// - 每週: 上週（前 7 天）
+    /// - 每月: 上個月
+    /// - 每年: 去年
+    func previousPeriodRange(calendar: Calendar = .current, now: Date = Date()) -> (start: Date, end: Date)? {
+        switch self {
+        case .day:
+            guard let yesterday = calendar.date(byAdding: .day, value: -1, to: now) else { return nil }
+            let start = calendar.startOfDay(for: yesterday)
+            let end = calendar.date(byAdding: .day, value: 1, to: start) ?? start
+            return (start, end)
+        case .week:
+            guard let thirteenDaysAgo = calendar.date(byAdding: .day, value: -13, to: now) else { return nil }
+            let start = calendar.startOfDay(for: thirteenDaysAgo)
+            let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: now) ?? now
+            let end = calendar.startOfDay(for: sixDaysAgo)
+            return (start, end)
+        case .month:
+            guard let twoMonthsAgo = calendar.date(byAdding: .month, value: -2, to: now),
+                  let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: now) else { return nil }
+            return (twoMonthsAgo, oneMonthAgo)
+        case .year:
+            guard let twoYearsAgo = calendar.date(byAdding: .year, value: -2, to: now),
+                  let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: now) else { return nil }
+            return (twoYearsAgo, oneYearAgo)
+        }
+    }
+
+    /// 比較期標籤：昨天、上週、上個月、去年
+    var comparisonPeriodLabel: String {
+        switch self {
+        case .day: return "較昨天"
+        case .week: return "較上週"
+        case .month: return "較上個月"
+        case .year: return "較去年"
+        }
+    }
+
     func filter(_ records: [ConsumptionRecord], calendar: Calendar = .current, now: Date = Date()) -> [ConsumptionRecord] {
         guard let r = range(calendar: calendar, now: now) else { return [] }
         return records.filter {

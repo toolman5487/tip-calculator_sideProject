@@ -6,9 +6,16 @@
 import UIKit
 import SnapKit
 
+enum KPITrend {
+    case up
+    case down
+    case equal
+}
+
 struct KPICardItem {
     let title: String
     let value: String
+    let trend: KPITrend?
 }
 
 final class KPICarouselCell: UICollectionViewCell {
@@ -19,6 +26,7 @@ final class KPICarouselCell: UICollectionViewCell {
     private let spacing: CGFloat = 8
 
     private var items: [KPICardItem] = []
+    private var comparisonPeriodLabel: String?
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -50,8 +58,9 @@ final class KPICarouselCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(items: [KPICardItem]) {
+    func configure(items: [KPICardItem], comparisonLabel: String? = nil) {
         self.items = items
+        self.comparisonPeriodLabel = comparisonLabel
         collectionView.reloadData()
     }
 }
@@ -67,7 +76,7 @@ extension KPICarouselCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KPICardCell.reuseId, for: indexPath) as! KPICardCell
         guard indexPath.item < items.count else { return cell }
         let item = items[indexPath.item]
-        cell.configure(title: item.title, value: item.value)
+        cell.configure(title: item.title, value: item.value, trend: item.trend, comparisonLabel: comparisonPeriodLabel)
         return cell
     }
 }

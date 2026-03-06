@@ -7,6 +7,7 @@ import Foundation
 
 enum IllustrationSection: Int, CaseIterable {
     case filterHeader
+    case result
     case kpi
     case locationStats
     case timeChart

@@ -64,16 +64,45 @@ final class MainIllustrationViewModel {
 
     var kpiCardItems: [KPICardItem] {
         let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
+        let trends = kpiComparisonTrends
         return [
-            KPICardItem(title: "總消費筆數", value: display.totalRecordsText),
-            KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText),
-            KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText)
+            KPICardItem(title: "總消費筆數", value: display.totalRecordsText, trend: trends.recordCount),
+            KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText, trend: trends.averagePerRecord),
+            KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText, trend: trends.personalTotal)
         ]
+    }
+
+    /// 與前一期的比較趨勢（較昨天/上週/上個月/去年）
+    var kpiComparisonTrends: (recordCount: KPITrend?, averagePerRecord: KPITrend?, personalTotal: KPITrend?) {
+        let calendar = Calendar.current
+        let now = Date()
+        let timeRange = selectedTimeFilter.consumptionTimeRange
+        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, averagePerRecord: 0, averageTip: 0)
+        guard let prevRange = timeRange.previousPeriodRange(calendar: calendar, now: now) else {
+            return (nil, nil, nil)
+        }
+        let allRecords = store.fetchAll()
+        let prevRecords = allRecords.filter {
+            guard let d = $0.effectiveConsumptionTime else { return false }
+            return d >= prevRange.start && d <= prevRange.end
+        }
+        let prevSummary = buildKPI(from: prevRecords)
+        return (
+            compare(currentSummary.totalRecords, prevSummary.totalRecords),
+            compare(currentSummary.averagePerRecord, prevSummary.averagePerRecord),
+            compare(currentSummary.totalAmount, prevSummary.totalAmount)
+        )
+    }
+
+    private func compare<T: Comparable>(_ current: T, _ previous: T) -> KPITrend {
+        if current > previous { return .up }
+        if current < previous { return .down }
+        return .equal
     }
 
     func sectionHeaderTitle(for section: IllustrationSection) -> String? {
         switch section {
-        case .filterHeader, .kpi: return nil
+        case .filterHeader, .result, .kpi: return nil
         case .timeChart: return "消費趨勢"
         case .locationStats: return "消費地區"
         }

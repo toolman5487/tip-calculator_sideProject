@@ -24,7 +24,7 @@ final class KPICardCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = ThemeFont.regular(Ofsize: 15)
+        label.font = ThemeFont.regular(Ofsize: 16)
         label.textColor = .secondaryLabel
         return label
     }()
@@ -33,6 +33,12 @@ final class KPICardCell: UICollectionViewCell {
         let label = UILabel()
         label.font = ThemeFont.bold(Ofsize: 24)
         label.textColor = .label
+        return label
+    }()
+
+    private let trendLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
         return label
     }()
 
@@ -52,6 +58,7 @@ final class KPICardCell: UICollectionViewCell {
         containerView.addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(valueLabel)
+        stackView.addArrangedSubview(trendLabel)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -70,8 +77,62 @@ final class KPICardCell: UICollectionViewCell {
         containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: 12).cgPath
     }
 
-    func configure(title: String, value: String) {
+    func configure(title: String, value: String, trend: KPITrend? = nil, comparisonLabel: String? = nil) {
         titleLabel.text = title
         valueLabel.text = value
+        if let trend = trend {
+            trendLabel.isHidden = false
+            trendLabel.attributedText = makeTrendAttributedString(trend: trend, comparisonText: comparisonLabel)
+            valueLabel.textColor = trendColor(trend)
+        } else {
+            trendLabel.isHidden = true
+            valueLabel.textColor = .label
+        }
+    }
+
+    private func makeTrendAttributedString(trend: KPITrend, comparisonText: String?) -> NSAttributedString {
+        let config = UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold)
+        let iconName: String
+        let color: UIColor
+        switch trend {
+        case .up:
+            iconName = "arrowtriangle.up.fill"
+            color = ThemeColor.trendUp
+        case .down:
+            iconName = "arrowtriangle.down.fill"
+            color = ThemeColor.trendDown
+        case .equal:
+            iconName = "equal"
+            color = ThemeColor.trendFlat
+        }
+        guard let iconImage = UIImage(systemName: iconName, withConfiguration: config)?
+            .withTintColor(color, renderingMode: .alwaysOriginal) else {
+            return NSAttributedString(string: comparisonText ?? "")
+        }
+        let font = ThemeFont.regular(Ofsize: 12)
+        let textColor = UIColor.tertiaryLabel
+        let iconSize = CGSize(width: 12, height: 12)
+        let attachment = NSTextAttachment()
+        attachment.image = iconImage
+        attachment.bounds = CGRect(origin: CGPoint(x: 0, y: -2), size: iconSize)
+        let iconAttr = NSAttributedString(attachment: attachment)
+        let spacer = NSAttributedString(string: " ", attributes: [.font: font])
+        let textAttr = NSAttributedString(
+            string: comparisonText ?? "",
+            attributes: [.font: font, .foregroundColor: textColor]
+        )
+        let result = NSMutableAttributedString()
+        result.append(iconAttr)
+        result.append(spacer)
+        result.append(textAttr)
+        return result
+    }
+
+    private func trendColor(_ trend: KPITrend) -> UIColor {
+        switch trend {
+        case .up: return ThemeColor.trendUp
+        case .down: return ThemeColor.trendDown
+        case .equal: return ThemeColor.trendFlat
+        }
     }
 }
