@@ -3,26 +3,8 @@
 //  tip-calculator
 //
 
-import Foundation
 import Combine
-
-struct IllustrationFilterHeaderViewModel {
-    let selected: IllustrationTimeFilterOption
-    let options: [IllustrationTimeFilterOption]
-    let onSelect: (IllustrationTimeFilterOption) -> Void
-
-    init(selected: IllustrationTimeFilterOption, onSelect: @escaping (IllustrationTimeFilterOption) -> Void) {
-        self.selected = selected
-        self.options = IllustrationTimeFilterOption.allCases
-        self.onSelect = onSelect
-    }
-}
-
-extension IllustrationFilterHeaderViewModel {
-    static func == (lhs: IllustrationFilterHeaderViewModel, rhs: IllustrationFilterHeaderViewModel) -> Bool {
-        lhs.selected == rhs.selected
-    }
-}
+import Foundation
 
 struct IllustrationKPIDisplay {
     let totalRecordsText: String
@@ -62,6 +44,11 @@ final class MainIllustrationViewModel {
         guard option != selectedTimeFilter else { return }
         selectedTimeFilter = option
         load()
+    }
+
+    var personalConsumptionTrend: KPITrend? {
+        guard kpiCardItems.count > 1 else { return nil }
+        return kpiCardItems[1].trend
     }
 
     private func buildKpiCardItems(

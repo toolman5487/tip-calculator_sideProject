@@ -66,7 +66,7 @@ final class IllustrationTimeChartCell: UICollectionViewCell {
         emptyStateView.stop()
     }
 
-    func configure(data: [TrendChartItem]) {
+    func configure(data: [TrendChartItem], barColor: UIColor? = nil) {
         let hasData = !data.isEmpty && data.contains { $0.totalAmount > 0 }
         chartView.isHidden = !hasData
         emptyStateView.isHidden = hasData
@@ -75,7 +75,7 @@ final class IllustrationTimeChartCell: UICollectionViewCell {
             emptyStateView.stop()
             let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: $0.element.totalAmount) }
             let set = BarChartDataSet(entries: entries)
-            set.colors = [ThemeColor.secondary]
+            set.colors = [barColor ?? ThemeColor.secondary]
             set.drawValuesEnabled = false
             let chartData = BarChartData(dataSet: set)
             chartView.data = chartData

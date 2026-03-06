@@ -61,3 +61,16 @@ struct LocationStatItem {
     let name: String
     let count: Int
 }
+
+enum KPITrend {
+    case up
+    case down
+    case equal
+}
+
+struct KPICardItem {
+    let title: String
+    let value: String
+    let actualValue: String
+    let trend: KPITrend?
+}

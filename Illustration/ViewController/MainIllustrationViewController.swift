@@ -12,11 +12,13 @@ final class MainIllustrationViewController: MainBaseViewController {
 
     private var cancellables = Set<AnyCancellable>()
     private let viewModel = MainIllustrationViewModel()
+    private var cachedNavBarAppearance: UINavigationBarAppearance?
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.resetFilterToDefault()
         viewModel.load()
+        applyNavigationBarTrendColor()
     }
 
     override func viewDidLoad() {
@@ -32,6 +34,33 @@ final class MainIllustrationViewController: MainBaseViewController {
         title = "統計資料"
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
             self?.triggerRefresh()
+        }
+    }
+
+    private func applyNavigationBarTrendColor() {
+        let color = trendColor(for: viewModel.personalConsumptionTrend)
+        let appearance = cachedNavBarAppearance ?? {
+            let a = UINavigationBarAppearance()
+            a.configureWithDefaultBackground()
+            a.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+            a.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+            cachedNavBarAppearance = a
+            return a
+        }()
+        if appearance.backgroundColor != color {
+            appearance.backgroundColor = color
+        }
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = .systemBackground
+    }
+
+    private func trendColor(for trend: KPITrend?) -> UIColor {
+        switch trend {
+        case .up: return ThemeColor.trendUp
+        case .down: return ThemeColor.trendDown
+        case .equal, .none: return ThemeColor.trendFlat
         }
     }
 
@@ -57,8 +86,8 @@ final class MainIllustrationViewController: MainBaseViewController {
 
         viewModel.$dataVersion
             .dropFirst()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
+                self?.applyNavigationBarTrendColor()
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
@@ -92,6 +121,7 @@ extension MainIllustrationViewController {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationFilterHeaderView.reuseId, for: indexPath) as! IllustrationFilterHeaderView
             let filterVM = IllustrationFilterHeaderViewModel(
                 selected: viewModel.selectedTimeFilter,
+                selectedColor: trendColor(for: viewModel.personalConsumptionTrend),
                 onSelect: { [weak self] option in self?.viewModel.changeFilter(option) }
             )
             header.configure(with: filterVM)
@@ -129,7 +159,7 @@ extension MainIllustrationViewController {
 
         case .timeChart:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationTimeChartCell.reuseId, for: indexPath) as! IllustrationTimeChartCell
-            cell.configure(data: viewModel.timeChartData)
+            cell.configure(data: viewModel.timeChartData, barColor: trendColor(for: viewModel.personalConsumptionTrend))
             return cell
         case .locationStats:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationLocationStatsCell.reuseId, for: indexPath) as! IllustrationLocationStatsCell

@@ -6,6 +6,29 @@
 import UIKit
 import SnapKit
 
+struct IllustrationFilterHeaderViewModel: Equatable {
+    let selected: IllustrationTimeFilterOption
+    let options: [IllustrationTimeFilterOption]
+    let selectedColor: UIColor?
+    let onSelect: (IllustrationTimeFilterOption) -> Void
+
+    init(selected: IllustrationTimeFilterOption, selectedColor: UIColor? = nil, onSelect: @escaping (IllustrationTimeFilterOption) -> Void) {
+        self.selected = selected
+        self.options = IllustrationTimeFilterOption.allCases
+        self.selectedColor = selectedColor
+        self.onSelect = onSelect
+    }
+
+    static func == (lhs: IllustrationFilterHeaderViewModel, rhs: IllustrationFilterHeaderViewModel) -> Bool {
+        guard lhs.selected == rhs.selected else { return false }
+        switch (lhs.selectedColor, rhs.selectedColor) {
+        case (nil, nil): return true
+        case let (l?, r?): return l.isEqual(r)
+        default: return false
+        }
+    }
+}
+
 final class IllustrationFilterHeaderView: UICollectionReusableView {
 
     static let reuseId = "IllustrationFilterHeaderView"
@@ -40,12 +63,9 @@ final class IllustrationFilterHeaderView: UICollectionReusableView {
     }
 
     func configure(with viewModel: IllustrationFilterHeaderViewModel) {
-        let previousSelected = self.viewModel?.selected
+        guard self.viewModel != viewModel else { return }
         self.viewModel = viewModel
-        
-        if previousSelected != viewModel.selected {
-            horizontalCollectionView.reloadData()
-        }
+        horizontalCollectionView.reloadData()
     }
 }
 
@@ -60,7 +80,7 @@ extension IllustrationFilterHeaderView: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationFilterOptionCell.reuseId, for: indexPath) as! IllustrationFilterOptionCell
         guard let vm = viewModel, indexPath.item < vm.options.count else { return cell }
         let option = vm.options[indexPath.item]
-        cell.configure(title: option.title, isSelected: option == vm.selected)
+        cell.configure(title: option.title, isSelected: option == vm.selected, selectedColor: vm.selectedColor)
         return cell
     }
 }
@@ -92,7 +112,7 @@ extension IllustrationFilterHeaderView: UICollectionViewDelegateFlowLayout {
         
         guard option != vm.selected else { return }
         
-        let updatedViewModel = IllustrationFilterHeaderViewModel(selected: option, onSelect: vm.onSelect)
+        let updatedViewModel = IllustrationFilterHeaderViewModel(selected: option, selectedColor: vm.selectedColor, onSelect: vm.onSelect)
         self.viewModel = updatedViewModel
         horizontalCollectionView.reloadData()
         
@@ -139,14 +159,17 @@ final class IllustrationFilterOptionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, isSelected: Bool) {
+    func configure(title: String, isSelected: Bool, selectedColor: UIColor? = nil) {
         titleLabel.text = title
+        self.selectedColor = selectedColor ?? ThemeColor.secondary
         setSelected(isSelected)
     }
 
+    private var selectedColor: UIColor = ThemeColor.secondary
+
     func setSelected(_ selected: Bool) {
         if selected {
-            contentView.backgroundColor = ThemeColor.secondary
+            contentView.backgroundColor = selectedColor
             titleLabel.textColor = .systemBackground
         } else {
             contentView.backgroundColor = .systemBackground

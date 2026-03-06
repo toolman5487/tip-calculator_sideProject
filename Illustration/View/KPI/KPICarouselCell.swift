@@ -6,19 +6,6 @@
 import UIKit
 import SnapKit
 
-enum KPITrend {
-    case up
-    case down
-    case equal
-}
-
-struct KPICardItem {
-    let title: String
-    let value: String
-    let actualValue: String    
-    let trend: KPITrend?
-}
-
 final class KPICarouselCell: UICollectionViewCell {
 
     static let reuseId = "KPICarouselCell"
@@ -60,9 +47,15 @@ final class KPICarouselCell: UICollectionViewCell {
     }
 
     func configure(items: [KPICardItem], comparisonLabel: String? = nil) {
+        let itemsChanged = self.items.count != items.count
+            || !zip(self.items, items).allSatisfy { l, r in
+                l.title == r.title && l.value == r.value && l.actualValue == r.actualValue && l.trend == r.trend
+            }
         self.items = items
         self.comparisonPeriodLabel = comparisonLabel
-        collectionView.reloadData()
+        if itemsChanged {
+            collectionView.reloadData()
+        }
     }
 }
 

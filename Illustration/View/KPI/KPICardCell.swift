@@ -86,7 +86,7 @@ final class KPICardCell: UICollectionViewCell {
     }
 
     private func makeTrendAttributedString(trend: KPITrend, comparisonText: String?) -> NSAttributedString {
-        let config = UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold)
+        let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .bold)
         let iconName: String
         let color: UIColor
         switch trend {
