@@ -38,9 +38,11 @@ final class MainIllustrationViewModel {
     @Published private(set) var selectedTimeFilter: IllustrationTimeFilterOption = .day
     private(set) var kpi: IllustrationKPISummary?
     @Published private(set) var kpiDisplay: IllustrationKPIDisplay?
+    @Published private(set) var kpiCardItems: [KPICardItem] = []
     @Published private(set) var timeChartData: [TrendChartItem] = []
     @Published private(set) var locationStats: [LocationStatItem] = []
     @Published private(set) var filteredRecords: [ConsumptionRecord] = []
+    @Published private(set) var dataVersion: UInt = 0
 
     init(store: ConsumptionRecordStoring = ConsumptionRecordStore()) {
         self.store = store
@@ -62,30 +64,21 @@ final class MainIllustrationViewModel {
         load()
     }
 
-    var kpiCardItems: [KPICardItem] {
-        let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
-        let comparison = kpiComparison
-        return [
-            KPICardItem(title: "平均每筆消費", value: comparison.averagePerRecordText, actualValue: display.averagePerPersonText, trend: comparison.averagePerRecordTrend),
-            KPICardItem(title: "個人消費總和", value: comparison.personalTotalText, actualValue: display.personalConsumptionTotalText, trend: comparison.personalTotalTrend),
-            KPICardItem(title: "總消費筆數", value: comparison.recordCountText, actualValue: display.totalRecordsText, trend: comparison.recordCountTrend)
-        ]
-    }
-
-    private var kpiComparison: (
-        recordCountText: String, recordCountTrend: KPITrend?,
-        averagePerRecordText: String, averagePerRecordTrend: KPITrend?,
-        personalTotalText: String, personalTotalTrend: KPITrend?
-    ) {
-        let display = kpiDisplay ?? IllustrationKPIDisplay(totalRecordsText: "0", averagePerPersonText: "$0", personalConsumptionTotalText: "$0")
-        let currentSummary = kpi ?? IllustrationKPISummary(totalRecords: 0, totalAmount: 0, personalConsumptionTotal: 0, averagePerRecord: 0, averageTip: 0)
+    private func buildKpiCardItems(
+        display: IllustrationKPIDisplay,
+        currentSummary: IllustrationKPISummary,
+        allRecords: [ConsumptionRecord]
+    ) -> [KPICardItem] {
         let calendar = Calendar.current
         let now = Date()
         let timeRange = selectedTimeFilter.consumptionTimeRange
         guard let prevRange = timeRange.previousPeriodRange(calendar: calendar, now: now) else {
-            return (display.totalRecordsText, nil, display.averagePerPersonText, nil, display.personalConsumptionTotalText, nil)
+            return [
+                KPICardItem(title: "平均每筆消費", value: display.averagePerPersonText, actualValue: display.averagePerPersonText, trend: nil),
+                KPICardItem(title: "個人消費總和", value: display.personalConsumptionTotalText, actualValue: display.personalConsumptionTotalText, trend: nil),
+                KPICardItem(title: "總消費筆數", value: display.totalRecordsText, actualValue: display.totalRecordsText, trend: nil)
+            ]
         }
-        let allRecords = store.fetchAll()
         let prevRecords = allRecords.filter {
             guard let d = $0.effectiveConsumptionTime else { return false }
             return d >= prevRange.start && d < prevRange.end
@@ -94,14 +87,26 @@ final class MainIllustrationViewModel {
         let recordDelta = currentSummary.totalRecords - prevSummary.totalRecords
         let averageDelta = currentSummary.averagePerRecord - prevSummary.averagePerRecord
         let personalDelta = currentSummary.personalConsumptionTotal - prevSummary.personalConsumptionTotal
-        return (
-            formatDelta(recordDelta, isCurrency: false),
-            compare(currentSummary.totalRecords, prevSummary.totalRecords),
-            formatDelta(averageDelta, isCurrency: true),
-            compare(currentSummary.averagePerRecord, prevSummary.averagePerRecord),
-            formatDelta(personalDelta, isCurrency: true),
-            compare(currentSummary.personalConsumptionTotal, prevSummary.personalConsumptionTotal)
-        )
+        return [
+            KPICardItem(
+                title: "平均每筆消費",
+                value: formatDelta(averageDelta, isCurrency: true),
+                actualValue: display.averagePerPersonText,
+                trend: compare(currentSummary.averagePerRecord, prevSummary.averagePerRecord)
+            ),
+            KPICardItem(
+                title: "個人消費總和",
+                value: formatDelta(personalDelta, isCurrency: true),
+                actualValue: display.personalConsumptionTotalText,
+                trend: compare(currentSummary.personalConsumptionTotal, prevSummary.personalConsumptionTotal)
+            ),
+            KPICardItem(
+                title: "總消費筆數",
+                value: formatDelta(recordDelta, isCurrency: false),
+                actualValue: display.totalRecordsText,
+                trend: compare(currentSummary.totalRecords, prevSummary.totalRecords)
+            )
+        ]
     }
 
     private func formatDelta(_ delta: Double, isCurrency: Bool) -> String {
@@ -136,20 +141,23 @@ final class MainIllustrationViewModel {
         filteredRecords = filtered
         let summary = buildKPI(from: filtered)
         kpi = summary
-        kpiDisplay = IllustrationKPIDisplay(
+        let display = IllustrationKPIDisplay(
             totalRecordsText: Double(summary.totalRecords).abbreviatedFormatted,
             averagePerPersonText: summary.averagePerRecord.currencyAbbreviatedFormatted,
             personalConsumptionTotalText: summary.personalConsumptionTotal.currencyAbbreviatedFormatted
         )
+        kpiDisplay = display
+        kpiCardItems = buildKpiCardItems(display: display, currentSummary: summary, allRecords: records)
         timeChartData = buildTimeChartData(from: records)
         locationStats = buildLocationStats(from: filtered)
+        dataVersion += 1
     }
 
     private func buildKPI(from records: [ConsumptionRecord]) -> IllustrationKPISummary {
+        let (totalAmount, personalConsumptionTotal, totalTip) = records.reduce((0.0, 0.0, 0.0)) { acc, r in
+            (acc.0 + r.totalBill, acc.1 + r.amountPerPerson, acc.2 + r.totalTip)
+        }
         let totalRecords = records.count
-        let totalAmount = records.reduce(0) { $0 + $1.totalBill }
-        let personalConsumptionTotal = records.reduce(0) { $0 + $1.amountPerPerson }
-        let totalTip = records.reduce(0) { $0 + $1.totalTip }
         return IllustrationKPISummary(
             totalRecords: totalRecords,
             totalAmount: totalAmount,
@@ -163,11 +171,18 @@ final class MainIllustrationViewModel {
         selectedTimeFilter.consumptionTimeRange.filter(records)
     }
 
+    private static let chartDateFormatters: [String: DateFormatter] = {
+        ["M/d", "M月", "yyyy年"].reduce(into: [:]) { acc, format in
+            let f = DateFormatter()
+            f.locale = Locale(identifier: "zh_TW")
+            f.dateFormat = format
+            acc[format] = f
+        }
+    }()
+
     private func buildTimeChartData(from records: [ConsumptionRecord]) -> [TrendChartItem] {
         let calendar = Calendar.current
         let now = Date()
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "zh_TW")
         let timeRange = selectedTimeFilter.consumptionTimeRange
         let (periods, dateFormat): (Int, String) = {
             switch selectedTimeFilter {
@@ -177,7 +192,8 @@ final class MainIllustrationViewModel {
             case .year: return (5, "yyyy年")
             }
         }()
-        formatter.dateFormat = dateFormat
+        let formatter = Self.chartDateFormatters[dateFormat]
+            ?? { let f = DateFormatter(); f.locale = Locale(identifier: "zh_TW"); f.dateFormat = dateFormat; return f }()
         let ranges = timeRange.rangesForChart(periods: periods, calendar: calendar, now: now)
         var sums = Dictionary(uniqueKeysWithValues: ranges.map { ($0.start, 0.0) })
         for record in records {

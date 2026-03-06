@@ -55,17 +55,8 @@ final class MainIllustrationViewController: MainBaseViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.$selectedTimeFilter
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        viewModel.$kpiDisplay
-            .map { _ in }
-            .merge(with: viewModel.$timeChartData.map { _ in })
-            .merge(with: viewModel.$locationStats.map { _ in })
+        viewModel.$dataVersion
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()

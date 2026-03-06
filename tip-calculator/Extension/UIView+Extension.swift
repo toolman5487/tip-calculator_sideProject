@@ -32,4 +32,13 @@ extension UIView{
         layer.cornerRadius = radius
         layer.maskedCorners = [corners]
     }
+
+    func applyCardShadowStyle() {
+        layer.cornerRadius = 12
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.label.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 0.08
+        layer.shadowRadius = 6
+    }
 }
