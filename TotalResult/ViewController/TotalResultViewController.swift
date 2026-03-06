@@ -64,9 +64,8 @@ final class TotalResultViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "消費結果"
         view.backgroundColor = ThemeColor.bg
-        setupNavigation()
+        setNavigationBar()
         bindViewModel()
 
         view.addSubview(collectionView)
@@ -75,7 +74,8 @@ final class TotalResultViewController: UIViewController {
         }
     }
 
-    private func setupNavigation() {
+    private func setNavigationBar() {
+        title = "消費結果"
         navigationItem.largeTitleDisplayMode = .never
         let closeConfig = UIImage.SymbolConfiguration(weight: .bold)
         let closeItem = UIBarButtonItem(

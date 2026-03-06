@@ -184,7 +184,7 @@ final class SaveRecordCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setTitle("儲存這筆消費紀錄", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
-        button.backgroundColor = ThemeColor.primary
+        button.backgroundColor = ThemeColor.secondary
         button.tintColor = .white
         button.layer.cornerRadius = 12
         button.layer.masksToBounds = true

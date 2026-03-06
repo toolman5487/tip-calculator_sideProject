@@ -43,8 +43,8 @@ final class MainIllustrationViewController: MainBaseViewController {
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
         collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
-        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
         collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
+        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
     }
 
     private func bindingViewModel() {
