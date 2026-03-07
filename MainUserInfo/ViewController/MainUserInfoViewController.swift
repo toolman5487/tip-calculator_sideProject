@@ -10,7 +10,7 @@ import SnapKit
 import Combine
 
 @MainActor
-final class MainUserInfoViewController: MainBaseViewController {
+final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshable {
 
     // MARK: - Properties
 
@@ -142,6 +142,10 @@ final class MainUserInfoViewController: MainBaseViewController {
     }
 
     // MARK: - Actions
+
+    func refreshContent() {
+        viewModel.refresh()
+    }
 
     @objc private func deleteButtonTapped() {
         let content = viewModel.deleteAllAlertContent

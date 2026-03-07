@@ -8,7 +8,7 @@ import UIKit
 import SnapKit
 
 @MainActor
-final class MainIllustrationViewController: MainBaseViewController {
+final class MainIllustrationViewController: MainBaseViewController, TabBarRefreshable {
 
     private var cancellables = Set<AnyCancellable>()
     private let viewModel = MainIllustrationViewModel()
@@ -28,6 +28,10 @@ final class MainIllustrationViewController: MainBaseViewController {
         bindingViewModel()
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+
+    func refreshContent() {
+        viewModel.load()
     }
 
     private func setupNavigation() {

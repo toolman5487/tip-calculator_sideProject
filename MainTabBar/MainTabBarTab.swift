@@ -48,4 +48,14 @@ enum MainTabBarTab: CaseIterable {
     var tabBarItem: UITabBarItem {
         UITabBarItem(title: title, image: image, selectedImage: selectedImage)
     }
+
+    var customTabBarItem: TabBarItem {
+        TabBarItem(
+            title: title,
+            icon: image,
+            selectedIcon: selectedImage,
+            displayMode: .iconOnly,
+            animationStyle: self == .userInfo ? .animated(.pulse) : .none
+        )
+    }
 }

@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         NavigationBarAppearance.apply()
         let window = UIWindow(windowScene: windowScene)
         window.overrideUserInterfaceStyle = .light  
-        let tabBar = MainTabBarViewController()
+        let tabBar = TipCalculatorTabBarConfiguration.makeTabBarController()
         window.rootViewController = tabBar
         self.window = window
         window.makeKeyAndVisible()

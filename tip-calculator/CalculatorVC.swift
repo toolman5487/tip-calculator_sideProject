@@ -11,7 +11,7 @@ import CombineCocoa
 import SnapKit
 
 @MainActor
-final class CalculatorVC: BaseViewController {
+final class CalculatorVC: BaseViewController, TabBarRefreshable {
 
     // MARK: - Properties
 
@@ -50,6 +50,8 @@ final class CalculatorVC: BaseViewController {
     }
 
     // MARK: - Setup
+
+    func refreshContent() {}
 
     private func setupNavigation() {
         title = "消費計算機"

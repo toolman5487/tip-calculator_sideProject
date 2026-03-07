@@ -116,6 +116,24 @@
 		157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
+		15F1A0112F5B0001005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
+		15F1A0122F5B0002005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
+		15F1A0132F5B0003005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
+		15F1A0212F5B0001005D8554 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0022F5B0002005D8554 /* TabBarModel.swift */; };
+		15F1A0222F5B0002005D8554 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0022F5B0002005D8554 /* TabBarModel.swift */; };
+		15F1A0232F5B0003005D8554 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0022F5B0002005D8554 /* TabBarModel.swift */; };
+		15F1A0312F5B0001005D8554 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */; };
+		15F1A0322F5B0002005D8554 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */; };
+		15F1A0332F5B0003005D8554 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */; };
+		15F1A0412F5B0001005D8554 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0042F5B0004005D8554 /* CustomTabBar.swift */; };
+		15F1A0422F5B0002005D8554 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0042F5B0004005D8554 /* CustomTabBar.swift */; };
+		15F1A0432F5B0003005D8554 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0042F5B0004005D8554 /* CustomTabBar.swift */; };
+		15F1A0512F5B0001005D8554 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0052F5B0005005D8554 /* CustomTabBarController.swift */; };
+		15F1A0522F5B0002005D8554 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0052F5B0005005D8554 /* CustomTabBarController.swift */; };
+		15F1A0532F5B0003005D8554 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0052F5B0005005D8554 /* CustomTabBarController.swift */; };
+		15F1A0612F5B0001005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0062F5B0006005D8554 /* TipCalculatorTabBarConfiguration.swift */; };
+		15F1A0622F5B0002005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0062F5B0006005D8554 /* TipCalculatorTabBarConfiguration.swift */; };
+		15F1A0632F5B0003005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0062F5B0006005D8554 /* TipCalculatorTabBarConfiguration.swift */; };
 		157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
 		157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E5A2F347015005D8554 /* TotalResultViewController.swift */; };
@@ -281,6 +299,12 @@
 		157A6E4E2F343658005D8554 /* MainUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainUserInfoViewController.swift; sourceTree = "<group>"; };
 		157A6E532F343600005D8555 /* MainTabBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarTab.swift; sourceTree = "<group>"; };
 		157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarBadgePublisher.swift; sourceTree = "<group>"; };
+		15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarDelegate.swift; sourceTree = "<group>"; };
+		15F1A0022F5B0002005D8554 /* TabBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarModel.swift; sourceTree = "<group>"; };
+		15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
+		15F1A0042F5B0004005D8554 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		15F1A0052F5B0005005D8554 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		15F1A0062F5B0006005D8554 /* TipCalculatorTabBarConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorTabBarConfiguration.swift; sourceTree = "<group>"; };
 		157A6E5A2F347015005D8554 /* TotalResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewController.swift; sourceTree = "<group>"; };
 		157A6E5F2F347B64005D8554 /* TotalResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultsCell.swift; sourceTree = "<group>"; };
 		157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalResultViewModel.swift; sourceTree = "<group>"; };
@@ -685,11 +709,73 @@
 		157A6E472F343483005D8554 /* MainTabBar */ = {
 			isa = PBXGroup;
 			children = (
+				15F1A0702F5B0001005D8554 /* CustomTabBar */,
 				157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */,
 				157A6E532F343600005D8555 /* MainTabBarTab.swift */,
 				157A6E482F343524005D8554 /* MainTabBarViewController.swift */,
 			);
 			path = MainTabBar;
+			sourceTree = "<group>";
+		};
+		15F1A0702F5B0001005D8554 /* CustomTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0712F5B0001005D8554 /* Config */,
+				15F1A0722F5B0002005D8554 /* Controller */,
+				15F1A0732F5B0003005D8554 /* Delegate */,
+				15F1A0742F5B0004005D8554 /* Model */,
+				15F1A0752F5B0005005D8554 /* View */,
+				15F1A0762F5B0006005D8554 /* ViewModel */,
+			);
+			path = CustomTabBar;
+			sourceTree = "<group>";
+		};
+		15F1A0712F5B0001005D8554 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0062F5B0006005D8554 /* TipCalculatorTabBarConfiguration.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		15F1A0722F5B0002005D8554 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0052F5B0005005D8554 /* CustomTabBarController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		15F1A0732F5B0003005D8554 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		15F1A0742F5B0004005D8554 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0022F5B0002005D8554 /* TabBarModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		15F1A0752F5B0005005D8554 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0042F5B0004005D8554 /* CustomTabBar.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		15F1A0762F5B0006005D8554 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		157A6E4C2F343634005D8554 /* MainUserInfo */ = {
@@ -1199,6 +1285,12 @@
 				157579C92F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */,
 				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0112F5B0001005D8554 /* CustomTabBarDelegate.swift in Sources */,
+				15F1A0212F5B0001005D8554 /* TabBarModel.swift in Sources */,
+				15F1A0312F5B0001005D8554 /* TabBarViewModel.swift in Sources */,
+				15F1A0412F5B0001005D8554 /* CustomTabBar.swift in Sources */,
+				15F1A0512F5B0001005D8554 /* CustomTabBarController.swift in Sources */,
+				15F1A0612F5B0001005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */,
 				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				159BB1B42F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */,
 				1562E7F52F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */,
@@ -1293,6 +1385,12 @@
 				159B35EE2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
 				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0122F5B0002005D8554 /* CustomTabBarDelegate.swift in Sources */,
+				15F1A0222F5B0002005D8554 /* TabBarModel.swift in Sources */,
+				15F1A0322F5B0002005D8554 /* TabBarViewModel.swift in Sources */,
+				15F1A0422F5B0002005D8554 /* CustomTabBar.swift in Sources */,
+				15F1A0522F5B0002005D8554 /* CustomTabBarController.swift in Sources */,
+				15F1A0622F5B0002005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */,
 				157579C82F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				156C1AEC2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
@@ -1373,6 +1471,12 @@
 				157A6E552F343600005D8557 /* MainTabBarTab.swift in Sources */,
 				15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0132F5B0003005D8554 /* CustomTabBarDelegate.swift in Sources */,
+				15F1A0232F5B0003005D8554 /* TabBarModel.swift in Sources */,
+				15F1A0332F5B0003005D8554 /* TabBarViewModel.swift in Sources */,
+				15F1A0432F5B0003005D8554 /* CustomTabBar.swift in Sources */,
+				15F1A0532F5B0003005D8554 /* CustomTabBarController.swift in Sources */,
+				15F1A0632F5B0003005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */,
 				157579CA2F444C2500DE7163 /* ResultDetailImageValueCell.swift in Sources */,
 				156C6FAD2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
