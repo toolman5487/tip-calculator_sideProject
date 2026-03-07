@@ -11,15 +11,20 @@ enum NavigationBarAppearance {
 
     static func apply() {
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = ThemeColor.secondary
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+        if UIAccessibility.isReduceTransparencyEnabled || infoReduceEffects {
+            appearance.configureWithDefaultBackground()
+        } else {
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = .clear
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = .systemBackground
+        UINavigationBar.appearance().tintColor = .label
     }
 
     private static var infoReduceEffects: Bool {

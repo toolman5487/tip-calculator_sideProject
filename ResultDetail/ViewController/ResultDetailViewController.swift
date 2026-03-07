@@ -106,20 +106,21 @@ final class ResultDetailViewController: BaseViewController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
         tableView.register(ResultDeetailTableViewCell.self, forCellReuseIdentifier: ResultDeetailTableViewCell.reuseId)
         tableView.register(ResultDetailImageValueCell.self, forCellReuseIdentifier: ResultDetailImageValueCell.reuseId)
         tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
-        view.addSubview(tableView)
-        view.addSubview(shareButton)
+
+        [tableView, shareButton].forEach { view.addSubview($0) }
+
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         shareButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.height.equalTo(52)
-        }
-        tableView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(shareButton.snp.top).offset(-16)
         }
     }
 

@@ -64,7 +64,7 @@ final class CalculatorVC: BaseViewController {
         view.backgroundColor = ThemeColor.bg
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview()
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
         }
