@@ -33,7 +33,7 @@ final class ResultDetailViewController: BaseViewController {
         let config = UIImage.SymbolConfiguration(weight: .semibold)
         button.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
         button.tintColor = .systemBackground
-        button.backgroundColor = ThemeColor.secondary
+        button.backgroundColor = ThemeColor.selected
         button.addCornerRadius(radius: 8)
         button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
@@ -219,7 +219,7 @@ extension ResultDetailViewController: UITableViewDataSource {
 
         case .category(let title, let imageName):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailImageValueCell.reuseId, for: indexPath) as! ResultDetailImageValueCell
-            cell.configure(title: title, systemImageName: "tag.fill", valueImageName: imageName, valueImageTintColor: ThemeColor.secondary)
+            cell.configure(title: title, systemImageName: "tag.fill", valueImageName: imageName, valueImageTintColor: ThemeColor.selected)
             return cell
 
         case .location(let title, let value, let lat, let lon):

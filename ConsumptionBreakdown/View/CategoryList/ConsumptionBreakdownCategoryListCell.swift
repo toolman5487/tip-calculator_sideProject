@@ -79,7 +79,7 @@ extension ConsumptionBreakdownCategoryListCell: UITableViewDataSource, UITableVi
         attr.addAttribute(.foregroundColor, value: UIColor.label, range: NSRange(location: 0, length: attr.length))
         let percentRange = (full as NSString).range(of: display.percentText)
         if percentRange.location != NSNotFound {
-            attr.addAttribute(.foregroundColor, value: ThemeColor.secondary, range: percentRange)
+            attr.addAttribute(.foregroundColor, value: ThemeColor.selected, range: percentRange)
         }
         cell.textLabel?.attributedText = attr
         cell.detailTextLabel?.text = display.amountText

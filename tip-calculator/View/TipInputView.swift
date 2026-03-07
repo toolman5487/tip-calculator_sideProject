@@ -153,20 +153,20 @@ final class TipInputView: UIView {
             switch tip {
             case .none:
                 if isFreeSelected {
-                    freeTipButton.backgroundColor = ThemeColor.secondary
+                    freeTipButton.backgroundColor = ThemeColor.selected
                 }
             case .tenPercent:
                 isFreeSelected = false
-                tenPercentTipButton.backgroundColor = ThemeColor.secondary
+                tenPercentTipButton.backgroundColor = ThemeColor.selected
             case .fifteenPercent:
                 isFreeSelected = false
-                fifteenPercentTipButton.backgroundColor = ThemeColor.secondary
+                fifteenPercentTipButton.backgroundColor = ThemeColor.selected
             case .twentyPercent:
                 isFreeSelected = false
-                twentyPercentTipButton.backgroundColor = ThemeColor.secondary
+                twentyPercentTipButton.backgroundColor = ThemeColor.selected
             case .custom(value: let value):
                 isFreeSelected = false
-                customButton.backgroundColor = ThemeColor.secondary
+                customButton.backgroundColor = ThemeColor.selected
                 let text  = NSMutableAttributedString(string: "$\(value)", attributes: [.font:ThemeFont.bold(Ofsize: 20)])
                 text.setAttributes([.font:ThemeFont.bold(Ofsize: 14)], range: NSMakeRange(0, 1))
                 customButton.setAttributedTitle(text, for: .normal)

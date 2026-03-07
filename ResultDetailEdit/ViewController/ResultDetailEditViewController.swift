@@ -79,7 +79,7 @@ final class ResultDetailEditViewController: BaseViewController {
         let config = UIImage.SymbolConfiguration(weight: .bold)
         saveButton.setImage(UIImage(systemName: "square.and.arrow.down", withConfiguration: config), for: .normal)
         saveButton.tintColor = .systemBackground
-        saveButton.backgroundColor = ThemeColor.secondary
+        saveButton.backgroundColor = ThemeColor.selected
         saveButton.addCornerRadius(radius: 8)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
 

@@ -110,7 +110,7 @@ final class TipCell: BaseResultInfoCell {
         let text = result.tip.stringValue.isEmpty ? "無" : result.tip.stringValue
         valueLabel.text = text
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
-        valueLabel.textColor = ThemeColor.secondary
+        valueLabel.textColor = ThemeColor.selected
     }
 }
 
@@ -184,7 +184,7 @@ final class SaveRecordCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setTitle("儲存這筆消費紀錄", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
-        button.backgroundColor = ThemeColor.secondary
+        button.backgroundColor = ThemeColor.selected
         button.tintColor = .white
         button.layer.cornerRadius = 12
         button.layer.masksToBounds = true

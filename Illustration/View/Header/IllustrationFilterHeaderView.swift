@@ -161,11 +161,11 @@ final class IllustrationFilterOptionCell: UICollectionViewCell {
 
     func configure(title: String, isSelected: Bool, selectedColor: UIColor? = nil) {
         titleLabel.text = title
-        self.selectedColor = selectedColor ?? ThemeColor.secondary
+        self.selectedColor = selectedColor ?? ThemeColor.selected
         setSelected(isSelected)
     }
 
-    private var selectedColor: UIColor = ThemeColor.secondary
+    private var selectedColor: UIColor = ThemeColor.selected
 
     func setSelected(_ selected: Bool) {
         if selected {

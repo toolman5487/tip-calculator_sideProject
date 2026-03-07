@@ -52,7 +52,7 @@ final class DateCapsuleCell: UICollectionViewCell {
 
     func setSelected(_ selected: Bool) {
         if selected {
-            contentView.backgroundColor = ThemeColor.secondary
+            contentView.backgroundColor = ThemeColor.selected
             label.textColor = .systemBackground
         } else {
             contentView.backgroundColor = .systemBackground

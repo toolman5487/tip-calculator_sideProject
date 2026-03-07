@@ -257,7 +257,7 @@ final class ConfirmButtonCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.setTitle("確認", for: .normal)
         button.titleLabel?.font = ThemeFont.bold(Ofsize: 20)
-        button.backgroundColor = ThemeColor.secondary
+        button.backgroundColor = ThemeColor.selected
         button.setTitleColor(.white, for: .normal)
         button.addCornerRadius(radius: 8)
         return button

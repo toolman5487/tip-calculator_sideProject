@@ -75,7 +75,7 @@ final class IllustrationTimeChartCell: UICollectionViewCell {
             emptyStateView.stop()
             let entries = data.enumerated().map { BarChartDataEntry(x: Double($0.offset), y: $0.element.totalAmount) }
             let set = BarChartDataSet(entries: entries)
-            set.colors = [barColor ?? ThemeColor.secondary]
+            set.colors = [barColor ?? ThemeColor.selected]
             set.drawValuesEnabled = false
             let chartData = BarChartData(dataSet: set)
             chartView.data = chartData

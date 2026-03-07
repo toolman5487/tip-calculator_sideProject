@@ -34,7 +34,7 @@ class BaseImageResultInfoCell: UICollectionViewCell {
     let valueImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = ThemeColor.secondary
+        iv.tintColor = ThemeColor.selected
         return iv
     }()
 

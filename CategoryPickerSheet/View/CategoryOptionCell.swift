@@ -66,6 +66,6 @@ final class CategoryOptionCell: UICollectionViewCell {
         let imageName = category.systemImageName ?? "xmark.circle"
         iconImageView.image = UIImage(systemName: imageName, withConfiguration: Self.iconConfig)
         titleLabel.text = category.displayName
-        iconContainerView.backgroundColor = isSelected ? ThemeColor.secondary : ThemeColor.primary
+        iconContainerView.backgroundColor = isSelected ? ThemeColor.selected : ThemeColor.primary
     }
 }

@@ -89,10 +89,10 @@ final class CategoryInputView: UIView {
         for (index, button) in categoryButtons.enumerated() {
             guard index < Self.displayCategories.count else { continue }
             let isSelected = Self.displayCategories[index] == selected
-            button.backgroundColor = isSelected ? ThemeColor.secondary : ThemeColor.primary
+            button.backgroundColor = isSelected ? ThemeColor.selected : ThemeColor.primary
         }
         let isMoreSelected = Category.sheetCategories.contains(selected)
-        moreButton.backgroundColor = isMoreSelected ? ThemeColor.secondary : ThemeColor.primary
+        moreButton.backgroundColor = isMoreSelected ? ThemeColor.selected : ThemeColor.primary
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         let imageName = isMoreSelected ? (selected.systemImageName ?? "ellipsis") : "ellipsis"
         moreButton.setImage(UIImage(systemName: imageName, withConfiguration: config), for: .normal)
