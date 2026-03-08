@@ -141,6 +141,11 @@ final class CustomTabBarController: UIViewController {
         }
         return nil
     }
+
+    private func popToRootIfNeeded(from viewController: UIViewController) {
+        guard let nav = viewController as? UINavigationController, nav.viewControllers.count > 1 else { return }
+        nav.popToRootViewController(animated: true)
+    }
 }
 
 // MARK: - CustomTabBarDelegate
@@ -154,6 +159,7 @@ extension CustomTabBarController: CustomTabBarDelegate {
         }
 
         if viewController === currentViewController {
+            popToRootIfNeeded(from: viewController)
             if let refreshable = Self.refreshableViewController(from: viewController) {
                 refreshable.refreshContent()
             }

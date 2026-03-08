@@ -122,7 +122,7 @@ final class CustomTabBar: UIView {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] tab, count in
                 guard let self else { return }
-                let index = MainTabBarTab.allCases.firstIndex(of: tab) ?? -1
+                let index = self.viewModel?.index(for: tab) ?? -1
                 guard index >= 0, index < self.stackView.arrangedSubviews.count,
                       let button = self.stackView.arrangedSubviews[index] as? UIButton else { return }
                 self.updateBadge(count: count, at: index)
