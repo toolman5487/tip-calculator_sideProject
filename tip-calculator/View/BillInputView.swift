@@ -52,9 +52,9 @@ final class BillInputView: UIView {
         textField.textColor = ThemeColor.text
         textField.accessibilityIdentifier = ScreenIdentifier1.BillInputView.textField.rawValue
         
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 36))
+        let width = UIScreen.main.bounds.width
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: width, height: 44))
         toolbar.barStyle = .default
-        toolbar.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(doneButtonTapped))
         toolbar.items = [

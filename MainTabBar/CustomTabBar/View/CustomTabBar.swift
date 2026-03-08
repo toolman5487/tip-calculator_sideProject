@@ -103,11 +103,7 @@ final class CustomTabBar: UIView {
 
         guard let viewModel = viewModel else { return }
 
-        Publishers.CombineLatest(viewModel.$visitedTabs, viewModel.$notifications)
-            .sink { [weak self] _, _ in
-                self?.updateTabAnimationsForAllButtons()
-            }
-            .store(in: &cancellables)
+        bindBadgePublisher()
 
         viewModel.$selectedTab
             .dropFirst()
@@ -117,6 +113,24 @@ final class CustomTabBar: UIView {
                       let index = self.viewModel?.index(for: tab),
                       index != self.selectedIndex else { return }
                 self.selectedIndex = index
+            }
+            .store(in: &cancellables)
+    }
+
+    private func bindBadgePublisher() {
+        TabBarBadgePublisher.updates
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] tab, count in
+                guard let self else { return }
+                let index = MainTabBarTab.allCases.firstIndex(of: tab) ?? -1
+                guard index >= 0, index < self.stackView.arrangedSubviews.count,
+                      let button = self.stackView.arrangedSubviews[index] as? UIButton else { return }
+                self.updateBadge(count: count, at: index)
+                if count > 0, case .animated(let kind) = tab.customTabBarItem.animationStyle {
+                    self.startAnimation(for: kind, on: button, at: index)
+                } else {
+                    self.stopAnimation(on: button, at: index)
+                }
             }
             .store(in: &cancellables)
     }
@@ -174,9 +188,6 @@ final class CustomTabBar: UIView {
             updateSelection(from: -1, to: selectedIndex)
         }
 
-        DispatchQueue.main.async { [weak self] in
-            self?.updateTabAnimationsForAllButtons()
-        }
     }
 
     private func updateButton(_ button: UIButton, with item: TabBarItem, at index: Int) {
@@ -193,6 +204,7 @@ final class CustomTabBar: UIView {
         guard index >= 0 && index < items.count else { return }
         selectedIndex = index
     }
+
 
     // MARK: - Badge
 
@@ -266,19 +278,11 @@ final class CustomTabBar: UIView {
         configuration.baseForegroundColor = TabBarAppearance.normalColor
         button.configuration = configuration
 
-        button.configurationUpdateHandler = { [weak self] btn in
+        button.configurationUpdateHandler = { btn in
             var config = btn.configuration
             let isSelected = btn.isSelected
             config?.image = isSelected ? (item.selectedIcon ?? item.icon) : item.icon
-
-            if let self = self,
-               let tab = self.viewModel?.tab(at: index),
-               self.viewModel?.isColorAnimating(tab) == true {
-                config?.baseForegroundColor = TabBarAppearance.animationPrimaryColor
-            } else {
-                config?.baseForegroundColor = isSelected ? TabBarAppearance.selectedColor : TabBarAppearance.normalColor
-            }
-
+            config?.baseForegroundColor = isSelected ? TabBarAppearance.selectedColor : TabBarAppearance.normalColor
             config?.background.backgroundColor = .clear
             btn.configuration = config
         }
@@ -315,16 +319,7 @@ final class CustomTabBar: UIView {
                     : .identity
             }
 
-            guard let viewModel = viewModel else { return }
-            let needsAnim = viewModel.needsAnimation(at: index)
-
-            if needsAnim {
-                if shouldBeSelected {
-                    stopAnimation(on: button, at: index)
-                } else if let tab = viewModel.tab(at: index), let kind = viewModel.animationKind(for: tab) {
-                    startAnimation(for: kind, on: button, at: index)
-                }
-            } else {
+            if shouldBeSelected {
                 stopAnimation(on: button, at: index)
             }
         }
@@ -356,26 +351,12 @@ final class CustomTabBar: UIView {
     }
 
     private func startContinuousColorChangeAnimation(on button: UIButton, at index: Int) {
-        guard let viewModel = viewModel, let tab = viewModel.tab(at: index) else { return }
-        guard !viewModel.isColorAnimating(tab) else { return }
-
         stopContinuousPulseAnimation(on: button, at: index)
-        if let imageView = button.imageView {
-            imageView.layer.removeAllAnimations()
-            imageView.layer.transform = CATransform3DIdentity
-        }
-
-        viewModel.startColorAnimation(for: tab)
+        button.layer.removeAllAnimations()
         button.setNeedsUpdateConfiguration()
-        button.imageView?.tintColor = TabBarAppearance.animationPrimaryColor
     }
 
     private func stopContinuousColorChangeAnimation(on button: UIButton, at index: Int) {
-        guard let viewModel = viewModel,
-              let tab = viewModel.tab(at: index),
-              viewModel.isColorAnimating(tab) else { return }
-
-        viewModel.stopColorAnimation(for: tab)
         button.setNeedsUpdateConfiguration()
         button.layer.removeAllAnimations()
     }
@@ -394,21 +375,4 @@ final class CustomTabBar: UIView {
         stopContinuousColorChangeAnimation(on: button, at: index)
     }
 
-    private func updateTabAnimationsForAllButtons() {
-        guard let viewModel = viewModel else { return }
-
-        stackView.arrangedSubviews.enumerated().forEach { index, subview in
-            guard let button = subview as? UIButton,
-                  index < items.count else { return }
-
-            let isSelected = button.isSelected
-            let shouldAnimate = viewModel.needsAnimation(at: index) && !isSelected
-
-            if shouldAnimate, let tab = viewModel.tab(at: index), let kind = viewModel.animationKind(for: tab) {
-                startAnimation(for: kind, on: button, at: index)
-            } else {
-                stopAnimation(on: button, at: index)
-            }
-        }
-    }
 }

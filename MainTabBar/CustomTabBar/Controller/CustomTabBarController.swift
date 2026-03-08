@@ -39,7 +39,6 @@ final class CustomTabBarController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupBadgeBinding()
     }
 
     override func viewDidLayoutSubviews() {
@@ -73,21 +72,6 @@ final class CustomTabBarController: UIViewController {
         customTabBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
-    }
-
-    private func setupBadgeBinding() {
-        TabBarBadgePublisher.updates
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] tab, count in
-                self?.updateBadge(count: count, on: tab)
-            }
-            .store(in: &cancellables)
-    }
-
-    private func updateBadge(count: Int, on tab: MainTabBarTab) {
-        guard let index = MainTabBarTab.allCases.firstIndex(of: tab) else { return }
-        viewModel.setNotification(for: tab, hasNotification: count > 0)
-        customTabBar.updateBadge(count: count, at: index)
     }
 
     // MARK: - Public Methods

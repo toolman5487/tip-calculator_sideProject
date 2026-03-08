@@ -17,8 +17,8 @@ final class ResultDetailEditAmountCell: ResultDetailEditBaseCell {
         field.keyboardType = .decimalPad
         field.textAlignment = .right
         field.placeholder = "0"
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 36))
-        toolbar.sizeToFit()
+        let width = UIScreen.main.bounds.width
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: width, height: 44))
         let done = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(dismissKeyboard))
         toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), done]
         field.inputAccessoryView = toolbar
