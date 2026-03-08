@@ -61,6 +61,7 @@ final class ResultDetailViewController: BaseViewController {
         setupNavigation()
         setupTableView()
         setupHeaderView()
+        setupFooterView()
         bindViewModel()
     }
 
@@ -106,21 +107,14 @@ final class ResultDetailViewController: BaseViewController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
         tableView.register(ResultDeetailTableViewCell.self, forCellReuseIdentifier: ResultDeetailTableViewCell.reuseId)
         tableView.register(ResultDetailImageValueCell.self, forCellReuseIdentifier: ResultDetailImageValueCell.reuseId)
         tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
 
-        [tableView, shareButton].forEach { view.addSubview($0) }
+        view.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-
-        shareButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
-            make.height.equalTo(52)
         }
     }
 
@@ -155,6 +149,22 @@ final class ResultDetailViewController: BaseViewController {
         }
 
         tableView.tableHeaderView = headerView
+    }
+
+    private func setupFooterView() {
+        let footerHeight: CGFloat = 88
+        let width = UIScreen.main.bounds.width
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: footerHeight))
+        footerView.backgroundColor = .clear
+
+        footerView.addSubview(shareButton)
+        shareButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(16)
+            make.height.equalTo(52)
+        }
+
+        tableView.tableFooterView = footerView
     }
 
     // MARK: - Actions

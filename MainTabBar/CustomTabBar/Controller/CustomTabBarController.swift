@@ -21,6 +21,7 @@ final class CustomTabBarController: UIViewController {
     private var currentViewController: UIViewController?
 
     private var cancellables = Set<AnyCancellable>()
+    private var lastAppliedTabBarHeight: CGFloat = 0
 
     // MARK: - UI Components
 
@@ -43,14 +44,16 @@ final class CustomTabBarController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.bringSubviewToFront(customTabBar)
-        updateChildContentInset()
+        updateChildContentInsetIfNeeded()
     }
 
-    private func updateChildContentInset() {
+    private func updateChildContentInsetIfNeeded() {
         let tabBarHeight = customTabBar.intrinsicContentSize.height
-        cachedViewControllers.values.forEach { vc in
-            vc.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: tabBarHeight, right: 0)
+        guard tabBarHeight != lastAppliedTabBarHeight, !cachedViewControllers.isEmpty else { return }
+        lastAppliedTabBarHeight = tabBarHeight
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: tabBarHeight, right: 0)
+        for vc in cachedViewControllers.values {
+            vc.additionalSafeAreaInsets = insets
         }
     }
 
@@ -110,7 +113,8 @@ final class CustomTabBarController: UIViewController {
         newVC.didMove(toParent: self)
 
         newVC.view.isHidden = true
-        updateChildContentInset()
+        lastAppliedTabBarHeight = 0
+        updateChildContentInsetIfNeeded()
 
         return newVC
     }

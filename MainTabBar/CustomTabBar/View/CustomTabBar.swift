@@ -69,7 +69,7 @@ final class CustomTabBar: UIView {
     }()
 
     private let backgroundView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .systemMaterial)
+        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
         let view = UIVisualEffectView(effect: blurEffect)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
@@ -226,14 +226,13 @@ final class CustomTabBar: UIView {
             label.layer.cornerRadius = 8
             label.clipsToBounds = true
             button.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.centerX.equalTo(imageView.snp.trailing)
+                make.centerY.equalTo(imageView.snp.top)
+                make.width.height.greaterThanOrEqualTo(16)
+            }
             return label
         }()
-
-        badgeLabel.snp.remakeConstraints { make in
-            make.centerX.equalTo(imageView.snp.trailing)
-            make.centerY.equalTo(imageView.snp.top)
-            make.width.height.greaterThanOrEqualTo(16)
-        }
 
         if count > 0 {
             badgeLabel.text = count > 99 ? "99+" : "\(count)"
@@ -300,31 +299,25 @@ final class CustomTabBar: UIView {
     }
 
     private func updateSelection(from oldIndex: Int, to newIndex: Int) {
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(TabBarAppearance.animationDuration)
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+        let duration = TabBarAppearance.animationDuration
+        let scale = TabBarAppearance.selectionScale
 
-        stackView.arrangedSubviews.enumerated().forEach { index, subview in
-            guard let button = subview as? UIButton else { return }
-            let shouldBeSelected = (index == newIndex)
+        UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState]) {
+            for (index, subview) in self.stackView.arrangedSubviews.enumerated() {
+                guard let button = subview as? UIButton else { continue }
+                let shouldBeSelected = (index == newIndex)
+                guard button.isSelected != shouldBeSelected else { continue }
 
-            guard button.isSelected != shouldBeSelected else { return }
-
-            button.isSelected = shouldBeSelected
-
-            UIView.animate(withDuration: TabBarAppearance.animationDuration, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState]) {
-                let scale = TabBarAppearance.selectionScale
-                button.transform = shouldBeSelected
-                    ? CGAffineTransform(scaleX: scale, y: scale)
-                    : .identity
+                button.isSelected = shouldBeSelected
+                button.transform = shouldBeSelected ? CGAffineTransform(scaleX: scale, y: scale) : .identity
             }
-
-            if shouldBeSelected {
-                stopAnimation(on: button, at: index)
+        } completion: { [weak self] _ in
+            guard let self else { return }
+            if newIndex >= 0 && newIndex < self.stackView.arrangedSubviews.count,
+               let button = self.stackView.arrangedSubviews[newIndex] as? UIButton {
+                self.stopAnimation(on: button, at: newIndex)
             }
         }
-
-        CATransaction.commit()
     }
 
     private func startContinuousPulseAnimation(on button: UIButton, at index: Int) {
@@ -371,8 +364,9 @@ final class CustomTabBar: UIView {
     }
 
     private func stopAnimation(on button: UIButton, at index: Int) {
-        stopContinuousPulseAnimation(on: button, at: index)
-        stopContinuousColorChangeAnimation(on: button, at: index)
+        pulseAnimationKeys.removeValue(forKey: index)
+        button.layer.removeAllAnimations()
+        button.setNeedsUpdateConfiguration()
     }
 
 }
