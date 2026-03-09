@@ -10,7 +10,7 @@ import SnapKit
 
 class BaseBlurSectionHeaderView: UICollectionReusableView {
 
-    var blurStyle: UIBlurEffect.Style { .systemMaterial }
+    var blurStyle: UIBlurEffect.Style { .systemUltraThinMaterialLight }
 
     private(set) lazy var blurView: UIVisualEffectView = {
         UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
