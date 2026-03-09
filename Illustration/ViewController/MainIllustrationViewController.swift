@@ -30,6 +30,33 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
         collectionView.delegate = self
     }
 
+    private func shareButtonTapped(sourceView: UIView) {
+        let kpiCardItems = viewModel.kpiCardItems
+        let timeChartData = viewModel.timeChartData
+        let locationStats = viewModel.locationStats
+        let selectedTimeFilter = viewModel.selectedTimeFilter
+
+        Task {
+            let data = await Task.detached(priority: .userInitiated) {
+                IllustrationPDFGenerator.generate(
+                    kpiCardItems: kpiCardItems,
+                    timeChartData: timeChartData,
+                    locationStats: locationStats,
+                    selectedTimeFilter: selectedTimeFilter
+                )
+            }.value
+            let fileName = "統計報表_\(Int(Date().timeIntervalSince1970)).pdf"
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+            try? data.write(to: tempURL)
+            let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = sourceView
+                popover.sourceRect = sourceView.bounds
+            }
+            present(activityVC, animated: true)
+        }
+    }
+
     func refreshContent() {
         viewModel.load()
     }
@@ -75,6 +102,9 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
         collectionView.register(IllustrationSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
+        collectionView.register(IllustrationShareFooterView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: IllustrationShareFooterView.reuseId)
         collectionView.register(IllustrationResultCell.self, forCellWithReuseIdentifier: IllustrationResultCell.reuseId)
         collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
         collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
@@ -117,11 +147,9 @@ extension MainIllustrationViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
+            guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationFilterHeaderView.reuseId, for: indexPath) as! IllustrationFilterHeaderView
             let filterVM = IllustrationFilterHeaderViewModel(
                 selected: viewModel.selectedTimeFilter,
@@ -130,13 +158,24 @@ extension MainIllustrationViewController {
             )
             header.configure(with: filterVM)
             return header
-        case .result:
+        case .result, .kpi:
             return UICollectionReusableView()
-        case .kpi:
-            return UICollectionReusableView()
-        case .timeChart, .locationStats:
-            guard let section = IllustrationSection(rawValue: indexPath.section),
-                  let title = viewModel.sectionHeaderTitle(for: section) else {
+        case .locationStats:
+            guard kind == UICollectionView.elementKindSectionHeader,
+                  let title = viewModel.sectionHeaderTitle(for: .locationStats) else {
+                return UICollectionReusableView()
+            }
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
+            header.configure(title: title)
+            return header
+        case .timeChart:
+            if kind == UICollectionView.elementKindSectionFooter {
+                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationShareFooterView.reuseId, for: indexPath) as! IllustrationShareFooterView
+                footer.configure(onTap: { [weak self] sourceView in self?.shareButtonTapped(sourceView: sourceView) })
+                return footer
+            }
+            guard kind == UICollectionView.elementKindSectionHeader,
+                  let title = viewModel.sectionHeaderTitle(for: .timeChart) else {
                 return UICollectionReusableView()
             }
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
@@ -234,6 +273,13 @@ extension MainIllustrationViewController {
         default:
             return CGSize(width: collectionView.bounds.width, height: 44)
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard IllustrationSection(rawValue: section) == .timeChart else {
+            return .zero
+        }
+        return CGSize(width: collectionView.bounds.width, height: 88)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
