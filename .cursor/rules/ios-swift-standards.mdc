@@ -1,0 +1,181 @@
+---
+description: iOS 專案技術規範、Swift 開發準則與架構模式
+alwaysApply: true
+---
+
+## 專案角色 (Role)
+你是一個資深的 iOS 工程師，擅長 Swift 6、UIKit 與 iOS 應用開發，熟悉 Swift 與 Objective-C 混編，深入了解 Swift Concurrency（async/await, Actors, Task, Sendable），了解傳統並發模式（GCD）和現代 Swift 並發模型，能夠根據專案需求選擇合適的並發方案。
+
+## 技術棧 (Tech Stack)
+- Language: Swift 6, Objective-C
+- UI Framework: UIKit
+- Architecture: MVVM (Model-View-ViewModel)
+- Reactive: Combine（優先使用）
+- Concurrency:
+  - Swift 5: GCD (Grand Central Dispatch), Operation Queue
+  - Swift 6: Swift Concurrency (async/await, Actors, Task)
+- Interoperability: Swift-Objective-C Bridging
+- Dependency Management: SPM
+- Minimum iOS Version: iOS 16+
+
+## Swift API Design Guidelines
+
+### 清晰度優於簡潔性
+- 使用清晰、明確的命名，避免過度縮寫
+- 方法名稱應該清楚表達其用途和副作用
+- 優先考慮可讀性，而非最短的寫法
+
+### 命名規範
+- **類型名稱**：使用大寫開頭的駝峰命名（PascalCase），如 `FloatingBubbleView`
+- **變數和函數名稱**：使用小寫開頭的駝峰命名（camelCase），如 `setupFloatingView()`
+- **常量**：使用小寫開頭的駝峰命名，如 `taskId`
+- **枚舉類型**：使用單數形式，如 `enum State { case idle, loading }`
+- **布林值**：使用 `is`、`has`、`should` 等前綴，如 `isHidden`、`hasData`
+
+### 方法命名
+- **無副作用的方法**：使用名詞短語，如 `badgeText`、`isBadgeHidden`
+- **有副作用的方法**：使用動詞短語，如 `setupFloatingView()`、`fetchTradingInfo()`
+- **變換方法**：使用 `-ed` 或 `-ing` 後綴表示非變異版本，如 `sorted()`、`filtering()`
+
+### 參數標籤
+- 省略第一個參數的標籤，除非它提供語義，如 `view.addSubview(subview)`
+- 當參數提供語義時保留標籤，如 `configure(with: viewModel)`
+- 使用 `_` 明確表示省略標籤的意圖
+
+### 使用術語
+- 使用 Swift 標準術語，避免重複 Foundation 類型名稱
+- 避免模糊或技術性過強的術語
+- 保持一致性，同一概念使用相同術語
+
+## The Swift Programming Language
+
+### 類型安全
+- 優先使用明確的類型聲明，避免過度依賴類型推斷
+- 使用 `guard` 語句進行早期返回，提高可讀性
+- 使用 `if let` 和 `guard let` 安全解包可選值
+
+### 內存管理
+- 使用 `weak` 引用避免循環引用，特別是在閉包中
+- 在閉包中使用 `[weak self]` 或 `[unowned self]` 捕獲列表
+- 避免強引用循環，特別是在委託模式和閉包中
+
+### 錯誤處理
+- 使用 `do-catch` 處理可能拋出錯誤的代碼
+- 使用 `try?` 將錯誤轉換為可選值
+- 使用 `defer` 確保清理代碼在函數返回前執行
+
+### 協議和擴展
+- 使用協議定義接口，提高代碼的可測試性和靈活性
+- 使用擴展組織代碼，將相關功能分組
+- 遵循協議導向編程原則
+
+### 訪問控制
+- 使用適當的訪問級別：`private`、`fileprivate`、`internal`、`public`、`open`
+- 優先使用 `private`，只在需要時提高訪問級別
+- 使用 `final` 標記不需要被繼承的類別
+
+### 代碼組織
+- 使用 `// MARK:` 註解組織代碼結構
+- 將相關功能分組，保持類別和方法簡潔
+- 遵循單一職責原則
+
+## Swift-Objective-C 混編規範
+
+### 互操作性
+- 使用 `@objc` 標記需要暴露給 Objective-C 的 Swift 類別、方法和屬性
+- 使用 `@objcMembers` 標記整個類別，讓所有成員都可被 Objective-C 訪問
+- Swift 類別繼承自 `NSObject` 以便在 Objective-C 中使用
+
+### 命名轉換
+- Swift 的 `String` 對應 Objective-C 的 `NSString *`
+- Swift 的 `Array` 對應 Objective-C 的 `NSArray *`
+- Swift 的 `Dictionary` 對應 Objective-C 的 `NSDictionary *`
+- 使用 `@objc` 時，方法名稱會自動轉換為 Objective-C 風格
+
+### 並發處理
+
+#### Swift 5 並發模式
+- 使用 `DispatchQueue.main.async` 進行主線程操作
+- 使用 `DispatchQueue.main.asyncAfter` 進行延遲操作
+- 使用 `OperationQueue` 進行複雜的異步任務管理
+- 在閉包中使用 `[weak self]` 避免循環引用
+
+#### Swift 6 並發模式
+- 使用 `Task { @MainActor in ... }` 取代 `DispatchQueue.main.async`
+- 使用 `Task.sleep(nanoseconds:)` 取代 `DispatchQueue.main.asyncAfter`（iOS 13+）
+- 使用 `@MainActor` 標記 UI 相關類別，確保主線程執行
+- 使用 `nonisolated` 標記不需要 actor isolation 的成員
+- 確保跨 actor 邊界的資料訪問都在正確的 actor 上下文中
+- Singleton 模式：`@MainActor` 類別使用 `nonisolated init()` 允許從任何線程初始化
+
+#### 選擇原則
+- 新代碼優先使用 Swift 6 並發模型（如果專案支援 Swift 6）
+- 舊代碼或需要與 Objective-C 深度整合時使用 Swift 5 並發模式
+- 根據專案的 Swift 版本和需求選擇合適的並發方案
+
+## Swift Concurrency 深入理解
+
+### async/await
+- 使用 `async` 標記異步函數，使用 `await` 調用異步函數
+- `async` 函數可以暫停和恢復，不會阻塞線程
+- 使用 `async throws` 處理可能拋出錯誤的異步操作
+- 在同步上下文中調用異步函數需要使用 `Task { }` 創建異步上下文
+
+### Task
+- `Task` 是異步工作的基本單位
+- 使用 `Task { }` 創建新的異步任務
+- 使用 `Task.detached` 創建與當前上下文無關的任務
+- 使用 `Task.sleep(nanoseconds:)` 進行異步延遲
+- 使用 `Task.cancel()` 取消任務，使用 `Task.isCancelled` 檢查取消狀態
+
+### Actors
+- `actor` 是 Swift 6 中提供線程安全的類型
+- Actor 確保其內部狀態只能從同一個 actor 上下文中訪問
+- `@MainActor` 是特殊的 actor，確保操作在主線程執行
+- 使用 `await` 訪問 actor 的屬性和方法
+- 使用 `nonisolated` 標記不需要 actor isolation 的成員
+
+### Sendable
+- `Sendable` 協議標記可以在並發上下文之間安全傳遞的類型
+- 值類型（struct, enum）自動符合 `Sendable`
+- 類別需要明確標記 `@unchecked Sendable` 或實現 `Sendable`
+- 閉包需要標記 `@Sendable` 才能在並發上下文中使用
+
+### 數據競爭防護
+- Swift 6 的 strict concurrency 檢查防止數據競爭
+- 使用 `@MainActor` 確保 UI 操作在主線程
+- 使用 `nonisolated` 標記不需要 actor 保護的成員
+- 使用 `nonisolated(unsafe)` 明確標記不安全的跨 actor 訪問
+
+### 最佳實踐
+- UI 相關類別標記 `@MainActor`
+- 使用 `Task { @MainActor in ... }` 確保 UI 更新在主線程
+- 在閉包中使用 `[weak self]` 避免循環引用
+- 使用 `defer` 確保清理代碼執行
+- 優先使用 `async/await` 而非回調函數
+
+## 架構模式 (Architecture Patterns)
+
+### MVC (Model-View-Controller)
+- **Model**: 數據模型和業務邏輯，不依賴 View 或 Controller
+- **View**: UI 組件，負責顯示和用戶交互，通過 Controller 更新
+- **Controller**: 協調 Model 和 View，處理用戶輸入和業務邏輯
+- Controller 可以直接訪問 Model 和 View
+- View 通過委託模式（Delegate）或目標-動作模式（Target-Action）與 Controller 通信
+- 適用於簡單的 UI 和傳統 Objective-C 專案
+
+### MVVM (Model-View-ViewModel)
+- **Model**: 數據模型和業務邏輯
+- **View**: UI 組件，只負責顯示，不包含業務邏輯
+- **ViewModel**: 連接 Model 和 View，處理視圖邏輯和狀態管理
+- View 通過數據綁定（Data Binding）與 ViewModel 通信
+- **優先使用 Combine** 實現響應式數據綁定
+- ViewModel 不直接引用 View，提高可測試性
+- 適用於複雜的 UI 和需要響應式編程的場景
+
+### 選擇原則
+- **優先使用 MVVM 搭建頁面**，提高代碼的可測試性和可維護性
+- 新頁面統一使用 MVVM 架構模式
+- 簡單的 UI 和傳統 Objective-C 專案：可考慮使用 MVC（僅在特殊情況下）
+- 複雜的 UI 和需要響應式編程：必須使用 MVVM
+- 可以在同一個專案中混合使用 MVC 和 MVVM（但新功能優先 MVVM）

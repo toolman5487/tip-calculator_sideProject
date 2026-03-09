@@ -12,7 +12,7 @@ final class TabBarViewModel: ObservableObject {
     // MARK: - Published Properties
 
     @Published private(set) var tabTypes: [MainTabBarTab] = []
-    @Published var selectedTab: MainTabBarTab?
+    @Published private(set) var selectedTab: MainTabBarTab?
 
     // MARK: - Private Properties
 
@@ -23,6 +23,23 @@ final class TabBarViewModel: ObservableObject {
     func configure(with tabTypes: [MainTabBarTab]) {
         self.tabTypes = tabTypes
         tabTypeToIndex = Dictionary(uniqueKeysWithValues: tabTypes.enumerated().map { ($0.element, $0.offset) })
+    }
+
+    // MARK: - Selection (Single Source of Truth)
+
+    func loadInitialTab(validRange: Range<Int>) -> MainTabBarTab? {
+        let index = TabBarRestoration.loadSelectedIndex(validRange: validRange)
+        return tab(at: index)
+    }
+
+    func selectTab(at index: Int) {
+        guard let tab = tab(at: index) else { return }
+        selectedTab = tab
+        TabBarRestoration.saveSelectedIndex(index)
+    }
+
+    func setSelectedTab(_ tab: MainTabBarTab?) {
+        selectedTab = tab
     }
 
     // MARK: - Index Mapping

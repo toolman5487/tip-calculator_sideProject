@@ -1,22 +1,9 @@
 //
-//  TabBarModel.swift
+//  TabBarItem.swift
 //  tip-calculator
 //
 
 import UIKit
-
-// MARK: - Appearance
-
-enum TabBarAppearance {
-    static let selectedColor: UIColor = ThemeColor.selected
-    static let normalColor: UIColor = .label
-    static let animationPrimaryColor: UIColor = .systemRed
-    static let separatorColor: UIColor = .separator
-    static let selectionScale: CGFloat = 1.1
-    static let animationDuration: TimeInterval = 0.2
-    static let pulseScale: CGFloat = 1.15
-    static let pulseDuration: TimeInterval = 0.8
-}
 
 // MARK: - Display Mode
 

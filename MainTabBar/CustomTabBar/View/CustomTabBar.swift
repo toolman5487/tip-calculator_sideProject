@@ -15,25 +15,16 @@ final class CustomTabBar: UIView {
     weak var delegate: CustomTabBarDelegate?
 
     var viewModel: TabBarViewModel? {
-        didSet {
-            bindViewModel()
-            if let viewModel = viewModel,
-               let tab = viewModel.tab(at: selectedIndex) {
-                viewModel.selectedTab = tab
-            }
-        }
+        didSet { bindViewModel() }
     }
 
     private var cancellables = Set<AnyCancellable>()
 
     private var items: [TabBarItem] = []
+
     private var selectedIndex: Int = 0 {
         didSet {
             guard selectedIndex != oldValue else { return }
-            if let viewModel = viewModel,
-               let tab = viewModel.tab(at: selectedIndex) {
-                viewModel.selectedTab = tab
-            }
             updateSelection(from: oldValue, to: selectedIndex)
         }
     }
@@ -69,7 +60,7 @@ final class CustomTabBar: UIView {
     }()
 
     private let backgroundView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         let view = UIVisualEffectView(effect: blurEffect)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
@@ -106,10 +97,9 @@ final class CustomTabBar: UIView {
         bindBadgePublisher()
 
         viewModel.$selectedTab
-            .dropFirst()
+            .compactMap { $0 }
             .sink { [weak self] tab in
                 guard let self = self,
-                      let tab = tab,
                       let index = self.viewModel?.index(for: tab),
                       index != self.selectedIndex else { return }
                 self.selectedIndex = index
@@ -119,12 +109,12 @@ final class CustomTabBar: UIView {
 
     private func bindBadgePublisher() {
         TabBarBadgePublisher.updates
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] tab, count in
                 guard let self else { return }
                 let index = self.viewModel?.index(for: tab) ?? -1
-                guard index >= 0, index < self.stackView.arrangedSubviews.count,
-                      let button = self.stackView.arrangedSubviews[index] as? UIButton else { return }
+                guard index >= 0, index < self.stackView.arrangedSubviews.count else { return }
+                let container = self.stackView.arrangedSubviews[index]
+                guard let button = container.subviews.compactMap({ $0 as? UIButton }).first else { return }
                 self.updateBadge(count: count, at: index)
                 if count > 0, case .animated(let kind) = tab.customTabBarItem.animationStyle {
                     self.startAnimation(for: kind, on: button, at: index)
@@ -170,20 +160,24 @@ final class CustomTabBar: UIView {
 
         if oldCount == items.count && oldCount > 0 {
             items.enumerated().forEach { index, item in
-                guard index < stackView.arrangedSubviews.count,
-                      let button = stackView.arrangedSubviews[index] as? UIButton else { return }
+                guard index < stackView.arrangedSubviews.count else { return }
+                let container = stackView.arrangedSubviews[index]
+                guard let button = container.subviews.compactMap({ $0 as? UIButton }).first else { return }
                 updateButton(button, with: item, at: index)
             }
         } else {
             stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
             items.enumerated().forEach { index, item in
-                let button = createTabButton(for: item, at: index)
-                stackView.addArrangedSubview(button)
+                let container = createTabItemContainer(for: item, at: index)
+                stackView.addArrangedSubview(container)
             }
         }
 
         if selectedIndex >= items.count {
             selectedIndex = 0
+            if let tab = viewModel?.tab(at: 0) {
+                viewModel?.setSelectedTab(tab)
+            }
         } else {
             updateSelection(from: -1, to: selectedIndex)
         }
@@ -200,32 +194,31 @@ final class CustomTabBar: UIView {
         button.configuration = config
     }
 
-    func selectTab(at index: Int) {
-        guard index >= 0 && index < items.count else { return }
-        selectedIndex = index
-    }
-
-
     // MARK: - Badge
 
+    private enum BadgeConstants {
+        static let tag = 999
+    }
+
     func updateBadge(count: Int, at index: Int) {
-        guard index >= 0 && index < stackView.arrangedSubviews.count,
-              let button = stackView.arrangedSubviews[index] as? UIButton,
+        guard index >= 0 && index < stackView.arrangedSubviews.count else { return }
+        let container = stackView.arrangedSubviews[index]
+        guard let button = container.subviews.compactMap({ $0 as? UIButton }).first,
               let imageView = button.imageView else { return }
 
         let badgeLabel: UILabel = {
-            if let existing = button.viewWithTag(999) as? UILabel {
+            if let existing = container.viewWithTag(BadgeConstants.tag) as? UILabel {
                 return existing
             }
             let label = UILabel()
-            label.tag = 999
+            label.tag = BadgeConstants.tag
             label.backgroundColor = .systemRed
-            label.textColor = .white
-            label.font = .systemFont(ofSize: 10, weight: .bold)
+            label.textColor = .systemBackground
+            label.font = .systemFont(ofSize: 12, weight: .bold)
             label.textAlignment = .center
             label.layer.cornerRadius = 8
             label.clipsToBounds = true
-            button.addSubview(label)
+            container.addSubview(label)
             label.snp.makeConstraints { make in
                 make.centerX.equalTo(imageView.snp.trailing)
                 make.centerY.equalTo(imageView.snp.top)
@@ -243,6 +236,19 @@ final class CustomTabBar: UIView {
     }
 
     // MARK: - Private Methods
+
+    private func createTabItemContainer(for item: TabBarItem, at index: Int) -> UIView {
+        let container = UIView()
+        container.backgroundColor = .clear
+
+        let button = createTabButton(for: item, at: index)
+        container.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        return container
+    }
 
     private func createTabButton(for item: TabBarItem, at index: Int) -> UIButton {
         var configuration = UIButton.Configuration.plain()
@@ -290,12 +296,8 @@ final class CustomTabBar: UIView {
     }
 
     @objc private func tabButtonTapped(_ sender: UIButton) {
-        let index = sender.tag
-        delegate?.didSelectTab(at: index)
+        delegate?.didSelectTab(at: sender.tag)
         feedbackGenerator.impactOccurred()
-
-        guard index != selectedIndex else { return }
-        selectedIndex = index
     }
 
     private func updateSelection(from oldIndex: Int, to newIndex: Int) {
@@ -303,8 +305,8 @@ final class CustomTabBar: UIView {
         let scale = TabBarAppearance.selectionScale
 
         UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState]) {
-            for (index, subview) in self.stackView.arrangedSubviews.enumerated() {
-                guard let button = subview as? UIButton else { continue }
+            for (index, container) in self.stackView.arrangedSubviews.enumerated() {
+                guard let button = container.subviews.compactMap({ $0 as? UIButton }).first else { continue }
                 let shouldBeSelected = (index == newIndex)
                 guard button.isSelected != shouldBeSelected else { continue }
 
@@ -313,9 +315,11 @@ final class CustomTabBar: UIView {
             }
         } completion: { [weak self] _ in
             guard let self else { return }
-            if newIndex >= 0 && newIndex < self.stackView.arrangedSubviews.count,
-               let button = self.stackView.arrangedSubviews[newIndex] as? UIButton {
-                self.stopAnimation(on: button, at: newIndex)
+            if newIndex >= 0 && newIndex < self.stackView.arrangedSubviews.count {
+                let container = self.stackView.arrangedSubviews[newIndex]
+                if let button = container.subviews.compactMap({ $0 as? UIButton }).first {
+                    self.stopAnimation(on: button, at: newIndex)
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ enum NavigationBarAppearance {
         } else {
             appearance.configureWithTransparentBackground()
             appearance.backgroundColor = .clear
-            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         }
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
         appearance.titleTextAttributes = [.foregroundColor: UIColor.label]

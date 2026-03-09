@@ -75,6 +75,20 @@ final class CustomTabBarController: UIViewController {
         customTabBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
+
+        bindSelectedTab()
+    }
+
+    private func bindSelectedTab() {
+        viewModel.$selectedTab
+            .compactMap { $0 }
+            .sink { [weak self] tab in
+                guard let self = self,
+                      let index = self.viewModel.index(for: tab),
+                      let vc = self.getOrCreateViewController(at: index) else { return }
+                self.showViewController(vc, animated: self.currentViewController != nil)
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Public Methods
@@ -82,15 +96,11 @@ final class CustomTabBarController: UIViewController {
     func setViewControllers(factories: [() -> UIViewController], tabBarItems: [TabBarItem], tabTypes: [MainTabBarTab]) {
         viewControllerFactories = factories
         viewModel.configure(with: tabTypes)
-        customTabBar.configure(with: tabBarItems)
 
-        if let firstTab = tabTypes.first {
-            viewModel.selectedTab = firstTab
-
-            if let firstVC = getOrCreateViewController(at: 0) {
-                showViewController(firstVC)
-            }
+        if let initialTab = viewModel.loadInitialTab(validRange: 0 ..< tabTypes.count) {
+            viewModel.setSelectedTab(initialTab)
         }
+        customTabBar.configure(with: tabBarItems)
     }
 
     // MARK: - Private Methods
@@ -119,18 +129,56 @@ final class CustomTabBarController: UIViewController {
         return newVC
     }
 
-    private func showViewController(_ viewController: UIViewController) {
+    private func showViewController(_ viewController: UIViewController, animated: Bool = true) {
         guard viewController !== currentViewController else { return }
 
-        currentViewController?.view.isHidden = true
+        let outgoingVC = currentViewController
+        currentViewController = viewController
 
         viewController.view.isHidden = false
         containerView.bringSubviewToFront(viewController.view)
 
-        currentViewController = viewController
+        if animated,
+           let outgoingView = outgoingVC?.view,
+           let incomingView = viewController.view,
+           let fromIndex = cachedViewControllers.first(where: { $0.value === outgoingVC })?.key,
+           let toIndex = cachedViewControllers.first(where: { $0.value === viewController })?.key {
+            prepareForTransition(outgoing: outgoingVC, incoming: viewController)
+            TabBarContentTransition.performSlide(
+                from: fromIndex,
+                to: toIndex,
+                outgoingView: outgoingView,
+                incomingView: incomingView,
+                containerWidth: containerView.bounds.width,
+                duration: TabBarAppearance.tabTransitionDuration
+            ) { [weak self] in
+                guard let self else { return }
+                guard self.currentViewController === viewController else { return }
+                outgoingView.transform = .identity
+                self.syncViewVisibilityToCurrent()
+            }
+        } else {
+            syncViewVisibilityToCurrent()
+        }
 
         if let refreshable = Self.refreshableViewController(from: viewController) {
             refreshable.refreshContent()
+        }
+    }
+
+    private func syncViewVisibilityToCurrent() {
+        guard let current = currentViewController else { return }
+        for vc in cachedViewControllers.values {
+            vc.viewIfLoaded?.isHidden = (vc !== current)
+        }
+    }
+
+    private func prepareForTransition(outgoing: UIViewController?, incoming: UIViewController) {
+        for vc in cachedViewControllers.values {
+            guard let v = vc.viewIfLoaded else { continue }
+            v.layer.removeAllAnimations()
+            v.transform = .identity
+            v.isHidden = (vc !== outgoing && vc !== incoming)
         }
     }
 
@@ -166,14 +214,6 @@ extension CustomTabBarController: CustomTabBarDelegate {
             return
         }
 
-        showViewController(viewController)
-        customTabBar.selectTab(at: index)
+        viewModel.selectTab(at: index)
     }
-}
-
-// MARK: - TabBarRefreshable Protocol
-
-@MainActor
-protocol TabBarRefreshable {
-    func refreshContent()
 }
