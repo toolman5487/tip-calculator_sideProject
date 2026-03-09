@@ -127,7 +127,7 @@ enum IllustrationPDFGenerator {
         let gap: CGFloat = 12
         let cardWidth = (contentWidth - gap * CGFloat(cardCount - 1)) / CGFloat(cardCount)
         let cardHeight: CGFloat = 70
-        var y = startY
+        let y = startY
 
         for i in 0..<cardCount {
             let item = items[i]
@@ -135,7 +135,7 @@ enum IllustrationPDFGenerator {
             let rect = CGRect(x: x, y: y, width: cardWidth, height: cardHeight)
 
             let path = UIBezierPath(roundedRect: rect, cornerRadius: cardCornerRadius)
-            ctx.setFillColor(UIColor.systemBackground.cgColor)
+            ctx.setFillColor(UIColor.white.cgColor)
             ctx.addPath(path.cgPath)
             ctx.fillPath()
 
