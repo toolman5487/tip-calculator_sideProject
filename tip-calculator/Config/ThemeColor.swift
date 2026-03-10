@@ -17,5 +17,5 @@ struct ThemeColor {
 
     static let trendUp = UIColor(hexString: "D32F2F")
     static let trendDown = UIColor(hexString: "137333")
-    static let trendFlat = UIColor(hexString: "E67E22")
+    static let trendFlat = UIColor.systemBlue
 }
