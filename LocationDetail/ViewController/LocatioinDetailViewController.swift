@@ -14,8 +14,15 @@ import UIKit
 @MainActor
 final class LocationDetailViewController: UIViewController {
 
+    // MARK: - Dependencies
+
     private let viewModel: LocationDetailViewModel
+
+    // MARK: - State
+
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - UI Components
 
     private lazy var mapView: MKMapView = {
         let map = MKMapView()
@@ -28,6 +35,8 @@ final class LocationDetailViewController: UIViewController {
         return map
     }()
 
+    // MARK: - Init
+
     init(title: String, timeFilter: IllustrationTimeFilterOption) {
         self.viewModel = LocationDetailViewModel(timeFilter: timeFilter)
         super.init(nibName: nil, bundle: nil)
@@ -38,20 +47,30 @@ final class LocationDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBar()
-        view.backgroundColor = .systemBackground
-        view.addSubview(mapView)
-        mapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        bindViewModel()
+        setupUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.load()
+    }
+
+    // MARK: - Setup
+
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+
+        view.addSubview(mapView)
+        mapView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        setNavigationBar()
+        bindViewModel()
     }
 
     private func setNavigationBar() {
@@ -63,6 +82,8 @@ final class LocationDetailViewController: UIViewController {
             action: #selector(centerOnUserLocationTapped)
         )
     }
+
+    // MARK: - Binding
 
     private func bindViewModel() {
         viewModel.$annotations
@@ -81,10 +102,14 @@ final class LocationDetailViewController: UIViewController {
             .store(in: &cancellables)
     }
 
+    // MARK: - Helpers
+
     private func updateAnnotations(_ annotations: [LocationMapAnnotation]) {
         mapView.removeAnnotations(mapView.annotations.filter { $0 is LocationMapAnnotation })
         mapView.addAnnotations(annotations)
     }
+
+    // MARK: - Actions
 
     @objc private func centerOnUserLocationTapped() {
         if let location = mapView.userLocation.location {
@@ -98,6 +123,8 @@ final class LocationDetailViewController: UIViewController {
             view.showToast(message: "定位中，請稍候", position: .center)
         }
     }
+
+    // MARK: - Presentation
 
     private func presentRecordsSheet(for annotation: LocationMapAnnotation) {
         let items = annotation.records.map { RecordDisplayItem.from($0, dateFormatter: AppDateFormatters.detail) }
@@ -118,7 +145,6 @@ final class LocationDetailViewController: UIViewController {
 // MARK: - MKMapViewDelegate
 
 extension LocationDetailViewController: MKMapViewDelegate {
-
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let pin = view.annotation as? LocationMapAnnotation else { return }
         presentRecordsSheet(for: pin)

@@ -2,35 +2,42 @@
 //  TotalResultViewController.swift
 //  tip-calculator
 //
-//  Created by Willy Hsu on 2026/2/5.
-//
 
-import Foundation
-import UIKit
-import SnapKit
 import Combine
 import CoreLocation
+import Foundation
+import SnapKit
+import UIKit
 
 @MainActor
 final class TotalResultViewController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - Dependencies
 
     private let viewModel: TotalResultViewModel
     private let locationProvider: LocationProviding
+
+    // MARK: - State
+
     private let dismissedSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - Public API
+
     var dismissedPublisher: AnyPublisher<Void, Never> {
         dismissedSubject.eraseToAnyPublisher()
     }
+
     var onDismiss: (() -> Void)?
+
+    // MARK: - UI Components
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 12
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        
+
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.dataSource = self
         collection.delegate = self
@@ -64,19 +71,32 @@ final class TotalResultViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.refreshLocation()
+    }
+
+    // MARK: - Setup
+
+    private func setupUI() {
         view.backgroundColor = ThemeColor.bg
         setNavigationBar()
-        bindViewModel()
 
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+
+        bindViewModel()
     }
 
     private func setNavigationBar() {
         title = "消費結果"
         navigationItem.largeTitleDisplayMode = .never
+
         let closeConfig = UIImage.SymbolConfiguration(weight: .bold)
         let closeItem = UIBarButtonItem(
             image: UIImage(systemName: "xmark", withConfiguration: closeConfig),
@@ -85,6 +105,7 @@ final class TotalResultViewController: UIViewController {
             action: #selector(didTapClose)
         )
         navigationItem.leftBarButtonItem = closeItem
+
         let locationItem = UIBarButtonItem(
             image: UIImage(systemName: "location.fill"),
             style: .plain,
@@ -93,6 +114,8 @@ final class TotalResultViewController: UIViewController {
         )
         navigationItem.rightBarButtonItem = locationItem
     }
+
+    // MARK: - Binding
 
     private func bindViewModel() {
         Publishers.CombineLatest(viewModel.$locationDisplayText, viewModel.$isLocationLoading)
@@ -113,6 +136,8 @@ final class TotalResultViewController: UIViewController {
         showMapLocationPicker()
     }
 
+    // MARK: - Presentation
+
     private func showMapLocationPicker() {
         let initial = viewModel.initialLocationForMapPicker
         let vc = MapLocationPickerViewController(
@@ -132,16 +157,15 @@ final class TotalResultViewController: UIViewController {
         present(nav, animated: true)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.refreshLocation()
-    }
+    // MARK: - Dismiss
 
     private func handleDismiss() {
         dismissedSubject.send(())
         dismiss(animated: true)
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension TotalResultViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -199,30 +223,23 @@ extension TotalResultViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension TotalResultViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let row = viewModel.rows[indexPath.item]
         let width = collectionView.bounds.width - 32
-        
+
         switch row {
-        case .amountPerPerson:
-            return CGSize(width: width, height: 120)
-        case .totalBill:
-            return CGSize(width: width, height: 100)
-        case .totalTip:
-            return CGSize(width: width, height: 100)
-        case .bill:
-            return CGSize(width: width, height: 100)
-        case .tip:
-            return CGSize(width: width, height: 100)
-        case .split:
-            return CGSize(width: width, height: 100)
-        case .category:
-            return CGSize(width: width, height: 100)
-        case .location:
-            return CGSize(width: width, height: 100)
-        case .save:
-            return CGSize(width: width, height: 64)
+        case .amountPerPerson: return CGSize(width: width, height: 120)
+        case .totalBill: return CGSize(width: width, height: 100)
+        case .totalTip: return CGSize(width: width, height: 100)
+        case .bill: return CGSize(width: width, height: 100)
+        case .tip: return CGSize(width: width, height: 100)
+        case .split: return CGSize(width: width, height: 100)
+        case .category: return CGSize(width: width, height: 100)
+        case .location: return CGSize(width: width, height: 100)
+        case .save: return CGSize(width: width, height: 64)
         }
     }
 }

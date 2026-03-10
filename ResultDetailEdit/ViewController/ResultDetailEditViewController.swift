@@ -5,24 +5,22 @@
 //  Created by Willy Hsu on 2026/3/4.
 //
 
-import UIKit
-import SnapKit
 import Combine
+import SnapKit
+import UIKit
 
 @MainActor
 final class ResultDetailEditViewController: BaseViewController {
 
-    init(recordId: UUID) {
-        self.viewModel = ResultDetailEditViewModel(recordId: recordId)
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Dependencies
 
     private let viewModel: ResultDetailEditViewModel
+
+    // MARK: - State
+
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - UI Components
 
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .insetGrouped)
@@ -37,12 +35,31 @@ final class ResultDetailEditViewController: BaseViewController {
         return view
     }()
 
+    // MARK: - Init
+
+    init(recordId: UUID) {
+        self.viewModel = ResultDetailEditViewModel(recordId: recordId)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupEditContent()
+    }
+
+    // MARK: - Setup
+
+    private func setupEditContent() {
         setNavigationBar()
         setupTableView()
         setupLayout()
-        setupBinding()
+        bind()
     }
 
     private func setNavigationBar() {
@@ -53,10 +70,6 @@ final class ResultDetailEditViewController: BaseViewController {
             target: self,
             action: #selector(closeButtonTapped)
         )
-    }
-
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
     }
 
     private func setupTableView() {
@@ -106,7 +119,9 @@ final class ResultDetailEditViewController: BaseViewController {
         }
     }
 
-    private func setupBinding() {
+    // MARK: - Binding
+
+    private func bind() {
         viewModel.$rows
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -115,12 +130,20 @@ final class ResultDetailEditViewController: BaseViewController {
             .store(in: &cancellables)
     }
 
+    // MARK: - Actions
+
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
+    }
+
     @objc private func saveButtonTapped() {
         guard viewModel.save() else { return }
         view.showToast(message: "編輯成功", position: .bottom(offset: 16), displayDuration: 1) { [weak self] in
             self?.dismiss(animated: true)
         }
     }
+
+    // MARK: - Presentation
 
     private func showTipPicker() {
         let alert = UIAlertController(title: "選擇小費", message: nil, preferredStyle: .actionSheet)
@@ -192,8 +215,9 @@ final class ResultDetailEditViewController: BaseViewController {
     }
 }
 
-extension ResultDetailEditViewController: UITableViewDelegate, UITableViewDataSource {
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
+extension ResultDetailEditViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.rows.count
     }
@@ -206,32 +230,27 @@ extension ResultDetailEditViewController: UITableViewDelegate, UITableViewDataSo
             cell.configure(date: date)
             cell.onDateChanged = { [weak self] d in self?.viewModel.updateConsumptionTime(d) }
             return cell
-
         case .amount(let value):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditAmountCell.reuseId, for: indexPath) as! ResultDetailEditAmountCell
             cell.configure(value: value)
             cell.onValueChanged = { [weak self] v in self?.viewModel.updateBill(v) }
             return cell
-
         case .tip(let tip):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditTipCell.reuseId, for: indexPath) as! ResultDetailEditTipCell
             cell.configure(tip: tip)
             cell.onTap = { [weak self] in self?.showTipPicker() }
             return cell
-
         case .split(let value):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditSplitCell.reuseId, for: indexPath) as! ResultDetailEditSplitCell
             cell.configure(value: value)
             cell.onValueChanged = { [weak self] v in self?.viewModel.updateSplit(v) }
             return cell
-
         case .category(let identifier):
             let cat = identifier.flatMap { Category(identifier: $0) } ?? .none
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditCategoryCell.reuseId, for: indexPath) as! ResultDetailEditCategoryCell
             cell.configure(categoryDisplayName: cat.displayName, systemImageName: cat.systemImageName)
             cell.onTap = { [weak self] in self?.showCategoryPicker() }
             return cell
-
         case .address(let value):
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailEditAddressCell.reuseId, for: indexPath) as! ResultDetailEditAddressCell
             cell.configure(value: value)

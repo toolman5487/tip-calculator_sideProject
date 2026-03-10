@@ -5,18 +5,20 @@
 //  Created by Willy Hsu on 2026/2/5.
 //
 
-import UIKit
-import SnapKit
 import Combine
+import SnapKit
+import UIKit
 
 @MainActor
 final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshable {
 
-    // MARK: - Properties
+    // MARK: - View Model & State
 
+    private let viewModel = MainUserInfoViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let searchSubject = PassthroughSubject<String, Never>()
-    private let viewModel = MainUserInfoViewModel()
+
+    // MARK: - UI Components
 
     private let emptyStateView: EmptyStateView = {
         let v = EmptyStateView()
@@ -38,6 +40,11 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
 
     // MARK: - Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupMainUserInfoContent()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.refresh()
@@ -48,20 +55,19 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
         emptyStateView.stop()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
+    // MARK: - Setup
+
+    private func setupMainUserInfoContent() {
         setupEmptyStateView()
         setupNavigation()
         setupCollectionView()
-        bindingViewModel()
+        bind()
+
         collectionView.dataSource = self
         collectionView.delegate = self
-        bindToViewModel()
+
         viewModel.load()
     }
-
-    // MARK: - Setup
 
     private func setupEmptyStateView() {
         view.addSubview(emptyStateView)
@@ -74,17 +80,51 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
     }
 
     private func setupCollectionView() {
-        collectionView.register(RecordFilterHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: RecordFilterHeaderView.reuseId)
-        collectionView.register(RecordSectionHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: RecordSectionHeaderView.reuseId)
-        collectionView.register(PerCapitaRecordCell.self,
-                                forCellWithReuseIdentifier: PerCapitaRecordCell.reuseId)
+        collectionView.register(
+            RecordFilterHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: RecordFilterHeaderView.reuseId
+        )
+        collectionView.register(
+            RecordSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: RecordSectionHeaderView.reuseId
+        )
+        collectionView.register(
+            PerCapitaRecordCell.self,
+            forCellWithReuseIdentifier: PerCapitaRecordCell.reuseId
+        )
     }
 
-    private func bindingViewModel() {
+    private func setupNavigation() {
+        title = "消費紀錄"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+
+        let config = UIImage.SymbolConfiguration(weight: .bold)
+        let trashItem = UIBarButtonItem(
+            image: UIImage(systemName: "trash", withConfiguration: config),
+            style: .plain,
+            target: self,
+            action: #selector(deleteButtonTapped)
+        )
+        let refreshItem = UIBarButtonItem.refreshBarButton { [weak self] in
+            self?.triggerRefresh()
+        }
+        navigationItem.rightBarButtonItems = [refreshItem, trashItem]
+    }
+
+    // MARK: - TabBarRefreshable
+
+    func refreshContent() {
+        viewModel.refresh()
+    }
+
+    // MARK: - Binding
+
+    private func bind() {
         refreshPublisher
             .sink { [weak self] _ in
                 self?.viewModel.refresh()
@@ -99,9 +139,7 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
                 resultsVC.filter(keyword: keyword)
             }
             .store(in: &cancellables)
-    }
 
-    private func bindToViewModel() {
         viewModel.$displaySections
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -111,6 +149,8 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
             }
             .store(in: &cancellables)
     }
+
+    // MARK: - Helpers
 
     private func updateEmptyState(isEmpty: Bool) {
         emptyStateView.isHidden = !isEmpty
@@ -122,30 +162,7 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
         }
     }
 
-    private func setupNavigation() {
-        title = "消費紀錄"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        definesPresentationContext = true
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-        let trashItem = UIBarButtonItem(
-            image: UIImage(systemName: "trash", withConfiguration: config),
-            style: .plain,
-            target: self,
-            action: #selector(deleteButtonTapped)
-        )
-        let refreshItem = UIBarButtonItem.refreshBarButton { [weak self] in
-            self?.triggerRefresh()
-        }
-        navigationItem.rightBarButtonItems = [refreshItem, trashItem]
-    }
-
     // MARK: - Actions
-
-    func refreshContent() {
-        viewModel.refresh()
-    }
 
     @objc private func deleteButtonTapped() {
         let content = viewModel.deleteAllAlertContent
@@ -159,6 +176,13 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
             self?.viewModel.deleteAllRecords()
         })
         present(alert, animated: true)
+    }
+
+    // MARK: - Navigation
+
+    private func pushResultDetail(for item: RecordDisplayItem) {
+        let detailVC = ResultDetailViewController(item: item)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -192,11 +216,19 @@ extension MainUserInfoViewController {
         let sectionVM = viewModel.displaySections[indexPath.section]
         switch sectionVM.kind {
         case .filterHeader(let filterVM):
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordFilterHeaderView.reuseId, for: indexPath) as! RecordFilterHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: RecordFilterHeaderView.reuseId,
+                for: indexPath
+            ) as! RecordFilterHeaderView
             header.configure(with: filterVM)
             return header
         case .recordGroup(let title, _):
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecordSectionHeaderView.reuseId, for: indexPath) as! RecordSectionHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: RecordSectionHeaderView.reuseId,
+                for: indexPath
+            ) as! RecordSectionHeaderView
             header.configure(title: title)
             return header
         }
@@ -211,6 +243,17 @@ extension MainUserInfoViewController {
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let sectionVM = viewModel.displaySections[indexPath.section]
+        guard case .recordGroup(_, let items) = sectionVM.kind,
+              indexPath.item < items.count else { return }
+        pushResultDetail(for: items[indexPath.item].detail)
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension MainUserInfoViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
         return CGSize(width: width, height: 120)
@@ -224,13 +267,5 @@ extension MainUserInfoViewController {
         case .recordGroup(let title, _): height = title.isEmpty ? 0 : 40
         }
         return CGSize(width: collectionView.bounds.width, height: height)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let sectionVM = viewModel.displaySections[indexPath.section]
-        guard case .recordGroup(_, let items) = sectionVM.kind,
-              indexPath.item < items.count else { return }
-        let detailVC = ResultDetailViewController(item: items[indexPath.item].detail)
-        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

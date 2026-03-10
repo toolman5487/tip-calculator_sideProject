@@ -14,26 +14,19 @@ import UIKit
 @MainActor
 final class MapLocationPickerViewController: BaseViewController {
 
+    // MARK: - Public API
+
     var onSelect: ((String, Double, Double) -> Void)?
 
+    // MARK: - Dependencies
+
     private let viewModel: MapLocationPickerViewModel
+
+    // MARK: - State
+
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: MapLocationPickerViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    convenience init(initialAddress: String? = nil, latitude: Double? = nil, longitude: Double? = nil) {
-        let vm = MapLocationPickerViewModel(initialAddress: initialAddress, latitude: latitude, longitude: longitude)
-        self.init(viewModel: vm)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Subviews
+    // MARK: - UI Components
 
     private lazy var mapView: MKMapView = {
         let map = MKMapView()
@@ -117,17 +110,33 @@ final class MapLocationPickerViewController: BaseViewController {
         return btn
     }()
 
+    // MARK: - Init
+
+    init(viewModel: MapLocationPickerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    convenience init(initialAddress: String? = nil, latitude: Double? = nil, longitude: Double? = nil) {
+        let vm = MapLocationPickerViewModel(initialAddress: initialAddress, latitude: latitude, longitude: longitude)
+        self.init(viewModel: vm)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBar()
-        setupLayout()
-        bindViewModel()
+        setupMapPickerContent()
         centerOnInitialOrUser()
     }
 
-    private func setNavigationBar() {
+    // MARK: - Setup
+
+    private func setupMapPickerContent() {
         title = "選擇地點"
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
@@ -135,20 +144,13 @@ final class MapLocationPickerViewController: BaseViewController {
             target: self,
             action: #selector(closeButtonTapped)
         )
-    }
 
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
-    }
-
-    // MARK: - Setup
-
-    private func setupLayout() {
         setupMap()
         setupSearchBar()
         setupResultsTable()
         setupBottomCard()
         addMapTapGesture()
+        bindViewModel()
     }
 
     private func setupMap() {
@@ -222,6 +224,8 @@ final class MapLocationPickerViewController: BaseViewController {
         mapView.addGestureRecognizer(tap)
     }
 
+    // MARK: - Binding
+
     private func bindViewModel() {
         viewModel.$addressDisplayText
             .sink { [weak self] text in self?.addressLabel.text = text }
@@ -245,6 +249,8 @@ final class MapLocationPickerViewController: BaseViewController {
             }
             .store(in: &cancellables)
     }
+
+    // MARK: - Helpers
 
     private func updatePin(for coord: CLLocationCoordinate2D?) {
         mapView.removeAnnotations(mapView.annotations.filter { $0 is SelectedLocationAnnotation })
@@ -270,16 +276,13 @@ final class MapLocationPickerViewController: BaseViewController {
 
     // MARK: - Actions
 
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
+    }
+
     @objc private func searchFieldDidChange() {
         let center = mapView.userLocation.location?.coordinate ?? mapView.region.center
         viewModel.search(query: searchField.text ?? "", regionCenter: center)
-    }
-
-    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let center = mapView.userLocation.location?.coordinate ?? mapView.region.center
-        viewModel.searchImmediate(query: searchField.text ?? "", regionCenter: center)
-        textField.resignFirstResponder()
-        return true
     }
 
     @objc private func mapTapped(_ gesture: UITapGestureRecognizer) {
@@ -295,11 +298,20 @@ final class MapLocationPickerViewController: BaseViewController {
         onSelect?(result.address, result.lat, result.lon)
         dismiss(animated: true)
     }
+
+    // MARK: - UITextFieldDelegate
+
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let center = mapView.userLocation.location?.coordinate ?? mapView.region.center
+        viewModel.searchImmediate(query: searchField.text ?? "", regionCenter: center)
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
-// MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDataSource
 
-extension MapLocationPickerViewController: UITableViewDelegate, UITableViewDataSource {
+extension MapLocationPickerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.searchResults.count
     }
@@ -311,9 +323,13 @@ extension MapLocationPickerViewController: UITableViewDelegate, UITableViewDataS
             return cell
         }
         resultCell.configure(with: viewModel.searchResults[indexPath.row])
-        return resultCell
+        return cell
     }
+}
 
+// MARK: - UITableViewDelegate
+
+extension MapLocationPickerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard viewModel.searchResults.indices.contains(indexPath.row) else { return }

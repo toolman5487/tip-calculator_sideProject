@@ -3,22 +3,29 @@
 //  tip-calculator
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 final class CategorySectionCell: UICollectionViewCell {
 
+    // MARK: - Static
+
     static let reuseId = "CategorySectionCell"
+
+    // MARK: - State
 
     private var onSelect: ((Category) -> Void)?
     private var categories: [Category] = []
     private var selectedCategory: Category?
+
+    // MARK: - UI Components
 
     private lazy var innerCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = CategoryPickerSheetViewController.spacing
         layout.minimumLineSpacing = CategoryPickerSheetViewController.spacing
+
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
         cv.isScrollEnabled = false
@@ -28,8 +35,20 @@ final class CategorySectionCell: UICollectionViewCell {
         return cv
     }()
 
+    // MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Setup
+
+    private func setupUI() {
         contentView.addSubview(innerCollectionView)
         innerCollectionView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
@@ -38,9 +57,7 @@ final class CategorySectionCell: UICollectionViewCell {
         }
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Public API
 
     func configure(categories: [Category], selectedCategory: Category, onSelect: @escaping (Category) -> Void) {
         self.categories = categories
@@ -50,7 +67,9 @@ final class CategorySectionCell: UICollectionViewCell {
     }
 }
 
-extension CategorySectionCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+// MARK: - UICollectionViewDataSource
+
+extension CategorySectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         categories.count
     }
@@ -63,15 +82,23 @@ extension CategorySectionCell: UICollectionViewDataSource, UICollectionViewDeleg
         optionCell.configure(category: category, isSelected: category == selectedCategory)
         return cell
     }
+}
 
+// MARK: - UICollectionViewDelegate
+
+extension CategorySectionCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.item < categories.count else { return }
+        onSelect?(categories[indexPath.item])
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension CategorySectionCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let availableWidth = max(1, collectionView.bounds.width)
         let width = CategoryPickerSheetViewController.cellWidth(containerWidth: availableWidth)
         return CGSize(width: width, height: width)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard indexPath.item < categories.count else { return }
-        onSelect?(categories[indexPath.item])
     }
 }

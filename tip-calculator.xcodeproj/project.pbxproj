@@ -125,8 +125,11 @@
 		157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
 		157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */; };
+		15F1A0D12F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0D02F5B0002005D8554 /* CustomTabBarControllerDelegate.swift */; };
 		15F1A0112F5B0001005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
+		15F1A0D22F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0D02F5B0002005D8554 /* CustomTabBarControllerDelegate.swift */; };
 		15F1A0122F5B0002005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
+		15F1A0D32F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0D02F5B0002005D8554 /* CustomTabBarControllerDelegate.swift */; };
 		15F1A0132F5B0003005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
 		15F1A0812F5B0008005D8554 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0802F5B0008005D8554 /* TabBarItem.swift */; };
 		15F1A0822F5B0008005D8554 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0802F5B0008005D8554 /* TabBarItem.swift */; };
@@ -321,6 +324,7 @@
 		15F1A07A2F5B0007005D8554 /* TabBarRefreshable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRefreshable.swift; sourceTree = "<group>"; };
 		157A6E572F343700005D8558 /* TabBarBadgePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarBadgePublisher.swift; sourceTree = "<group>"; };
 		15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarDelegate.swift; sourceTree = "<group>"; };
+		15F1A0D02F5B0002005D8554 /* CustomTabBarControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarControllerDelegate.swift; sourceTree = "<group>"; };
 		15F1A0802F5B0008005D8554 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
 		15F1A0842F5B0008005D8554 /* TabBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAppearance.swift; sourceTree = "<group>"; };
 		15F1A0882F5B0008005D8554 /* TabBarRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRestoration.swift; sourceTree = "<group>"; };
@@ -800,6 +804,7 @@
 		15F1A0732F5B0003005D8554 /* Delegate */ = {
 			isa = PBXGroup;
 			children = (
+				15F1A0D02F5B0002005D8554 /* CustomTabBarControllerDelegate.swift */,
 				15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */,
 			);
 			path = Delegate;
@@ -1339,6 +1344,7 @@
 				157A6E522F343600005D8555 /* MainTabBarTab.swift in Sources */,
 				15F1A07B2F5B0007005D8554 /* TabBarRefreshable.swift in Sources */,
 				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0D12F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */,
 				15F1A0112F5B0001005D8554 /* CustomTabBarDelegate.swift in Sources */,
 				15F1A0812F5B0008005D8554 /* TabBarItem.swift in Sources */,
 				15F1A0852F5B0008005D8554 /* TabBarAppearance.swift in Sources */,
@@ -1447,6 +1453,7 @@
 				157A6E542F343600005D8556 /* MainTabBarTab.swift in Sources */,
 				15F1A07C2F5B0007005D8554 /* TabBarRefreshable.swift in Sources */,
 				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0D22F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */,
 				15F1A0122F5B0002005D8554 /* CustomTabBarDelegate.swift in Sources */,
 				15F1A0822F5B0008005D8554 /* TabBarItem.swift in Sources */,
 				15F1A0862F5B0008005D8554 /* TabBarAppearance.swift in Sources */,
@@ -1538,6 +1545,7 @@
 				15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				15F1A07D2F5B0007005D8554 /* TabBarRefreshable.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
+				15F1A0D32F5B0002005D8554 /* CustomTabBarControllerDelegate.swift in Sources */,
 				15F1A0132F5B0003005D8554 /* CustomTabBarDelegate.swift in Sources */,
 				15F1A0832F5B0008005D8554 /* TabBarItem.swift in Sources */,
 				15F1A0872F5B0008005D8554 /* TabBarAppearance.swift in Sources */,

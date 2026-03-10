@@ -1,23 +1,23 @@
 //
-//  ViewController.swift
+//  CalculatorVC.swift
 //  tip-calculator
 //
-//  Created by Willy Hsu on 2025/3/27.
-//
 
-import UIKit
 import Combine
 import CombineCocoa
 import SnapKit
+import UIKit
 
 @MainActor
 final class CalculatorVC: BaseViewController, TabBarRefreshable {
 
-    // MARK: - Properties
+    // MARK: - View Model & State
 
     private let vm = CalculatorVM()
     private var cancellables = Set<AnyCancellable>()
     private let logoViewTapSubject = PassthroughSubject<Void, Never>()
+
+    // MARK: - Cells & Data
 
     private let cells = CalculatorCells()
 
@@ -29,6 +29,8 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
         case splitInput
         case confirmButton
     }
+
+    // MARK: - UI Components
 
     private lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -51,8 +53,6 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
 
     // MARK: - Setup
 
-    func refreshContent() {}
-
     private func setupNavigation() {
         title = "消費計算機"
         navigationItem.backButtonDisplayMode = .minimal
@@ -71,6 +71,10 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
             make.bottom.equalToSuperview()
         }
     }
+
+    // MARK: - TabBarRefreshable
+
+    func refreshContent() {}
 
     // MARK: - Binding
 
@@ -135,6 +139,14 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
             .store(in: &cancellables)
     }
 
+    // MARK: - Actions
+
+    private func resetInputCells() {
+        cells.resettables.forEach { $0.reset() }
+    }
+
+    // MARK: - Presentation
+
     private func presentCategoryOptionsSheet(currentCategory: Category, onSelect: @escaping (Category) -> Void) {
         let viewModel = CategoryPickerSheetViewModel(currentCategory: currentCategory)
         let pickerVC = CategoryPickerSheetViewController(viewModel: viewModel)
@@ -147,12 +159,6 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
             sheet.prefersGrabberVisible = true
         }
         present(nav, animated: true)
-    }
-
-    // MARK: - Actions
-
-    private func resetInputCells() {
-        cells.resettables.forEach { $0.reset() }
     }
 
     private func presentTotalResult(result: Result, onDismiss: @escaping () -> Void) {
@@ -183,12 +189,12 @@ extension CalculatorVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let row = Row(rawValue: indexPath.row) else { return UITableViewCell() }
         switch row {
-        case .result:       return cells.result
-        case .billInput:    return cells.billInput
+        case .result:          return cells.result
+        case .billInput:       return cells.billInput
         case .categoriesInput: return cells.categoriesInput
-        case .tipInput:     return cells.tipInput
-        case .splitInput:   return cells.splitInput
-        case .confirmButton: return cells.confirmButton
+        case .tipInput:        return cells.tipInput
+        case .splitInput:      return cells.splitInput
+        case .confirmButton:   return cells.confirmButton
         }
     }
 }
@@ -198,13 +204,13 @@ extension CalculatorVC: UITableViewDataSource {
 extension CalculatorVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch Row(rawValue: indexPath.row) {
-        case .result: return 260
-        case .billInput: return 92
+        case .result:          return 260
+        case .billInput:       return 92
         case .categoriesInput: return 152
-        case .tipInput: return 152
-        case .splitInput: return 92
-        case .confirmButton: return 68
-        case .none: return 0
+        case .tipInput:        return 152
+        case .splitInput:      return 92
+        case .confirmButton:   return 68
+        case .none:            return 0
         }
     }
 }

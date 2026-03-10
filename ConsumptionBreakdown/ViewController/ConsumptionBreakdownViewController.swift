@@ -9,6 +9,8 @@ import Combine
 import SnapKit
 import UIKit
 
+// MARK: - Data
+
 private enum ConsumptionBreakdownSection: Int, CaseIterable {
     case pieChart
     case categoryList
@@ -34,8 +36,15 @@ private enum ConsumptionBreakdownCellKind {
 @MainActor
 final class ConsumptionBreakdownViewController: MainBaseViewController {
 
+    // MARK: - Dependencies
+
     private let viewModel: ConsumptionBreakdownViewModel
+
+    // MARK: - State
+
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - UI Components
 
     private let emptyStateView: EmptyStateView = {
         let v = EmptyStateView()
@@ -43,6 +52,8 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         v.isHidden = true
         return v
     }()
+
+    // MARK: - Init
 
     init(detailItem: ConsumptionBreakdownItem) {
         self.viewModel = ConsumptionBreakdownViewModel(detailItem: detailItem)
@@ -53,10 +64,11 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
-        binding()
+        setupBreakdownContent()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,8 +76,9 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         emptyStateView.stop()
     }
 
-    override func setupNavigationBar() {
-        super.setupNavigationBar()
+    // MARK: - Setup
+
+    private func setupBreakdownContent() {
         navigationItem.largeTitleDisplayMode = .never
         switch viewModel.detailItem {
         case .timeChart(let title, _):
@@ -74,12 +87,16 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
             self?.viewModel.reload()
         }
-    }
 
-    override func setupUI() {
-        super.setupUI()
         view.backgroundColor = .systemGroupedBackground
         collectionView.backgroundColor = .clear
+
+        setupEmptyStateView()
+        setupCollectionView()
+        bind()
+    }
+
+    private func setupEmptyStateView() {
         view.addSubview(emptyStateView)
         emptyStateView.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -91,13 +108,23 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionHeadersPinToVisibleBounds = true
         }
-        collectionView.register(ConsumptionBreakdownPieChart.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId)
-        collectionView.register(ConsumptionBreakdownSectionTitleHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId)
+        collectionView.register(
+            ConsumptionBreakdownPieChart.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId
+        )
+        collectionView.register(
+            ConsumptionBreakdownSectionTitleHeader.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId
+        )
         collectionView.register(ConsumptionBreakdownRankListCell.self, forCellWithReuseIdentifier: ConsumptionBreakdownRankListCell.reuseId)
         collectionView.register(ConsumptionBreakdownCategoryListCell.self, forCellWithReuseIdentifier: ConsumptionBreakdownCategoryListCell.reuseId)
     }
 
-    private func binding() {
+    // MARK: - Binding
+
+    private func bind() {
         viewModel.$pieChartData
             .sink { [weak self] data in
                 self?.collectionView.reloadData()
@@ -105,6 +132,8 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
             }
             .store(in: &cancellables)
     }
+
+    // MARK: - Helpers
 
     private func updateEmptyState(isEmpty: Bool) {
         emptyStateView.isHidden = !isEmpty
@@ -126,6 +155,13 @@ final class ConsumptionBreakdownViewController: MainBaseViewController {
         case .categoryList:
             return [.categoryList]
         }
+    }
+
+    // MARK: - Navigation
+
+    private func pushResultDetail(for item: RecordDisplayItem) {
+        let vc = ResultDetailViewController(item: item)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -152,8 +188,7 @@ extension ConsumptionBreakdownViewController {
             cell.configure(with: viewModel.top10RankDisplays)
             cell.onRowTap = { [weak self] index in
                 guard let self, let detailItem = self.viewModel.recordDisplayItem(forRankIndex: index) else { return }
-                let vc = ResultDetailViewController(item: detailItem)
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.pushResultDetail(for: detailItem)
             }
             return cell
         case .categoryList:
@@ -170,20 +205,31 @@ extension ConsumptionBreakdownViewController {
         }
         switch sec {
         case .pieChart:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId, for: indexPath) as! ConsumptionBreakdownPieChart
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: ConsumptionBreakdownPieChart.reuseId,
+                for: indexPath
+            ) as! ConsumptionBreakdownPieChart
             header.configure(data: viewModel.pieChartData)
             return header
         case .rankList:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId, for: indexPath) as! ConsumptionBreakdownSectionTitleHeader
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId,
+                for: indexPath
+            ) as! ConsumptionBreakdownSectionTitleHeader
             header.configure(title: viewModel.rankListSectionTitle)
             return header
         case .categoryList:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId, for: indexPath) as! ConsumptionBreakdownSectionTitleHeader
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: ConsumptionBreakdownSectionTitleHeader.reuseId,
+                for: indexPath
+            ) as! ConsumptionBreakdownSectionTitleHeader
             header.configure(title: viewModel.categoryListSectionTitle)
             return header
         }
     }
-
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

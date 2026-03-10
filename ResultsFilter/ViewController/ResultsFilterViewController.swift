@@ -5,23 +5,37 @@
 //  Created by Willy Hsu on 2026/2/5.
 //
 
-import UIKit
-import SnapKit
 import Combine
 import CombineCocoa
+import SnapKit
+import UIKit
 
 @MainActor
 final class ResultsFilterViewController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - Dependencies
 
     private let viewModel: ResultsFilterViewModel
+
+    // MARK: - State
+
     private var cancellables = Set<AnyCancellable>()
     private var dataSource: UICollectionViewDiffableDataSource<Section, RecordDisplayItem>!
+
+    // MARK: - Data
 
     private enum Section: Hashable {
         case main
     }
+
+    // MARK: - UI Components
+
+    private let refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = .white
+        control.backgroundColor = .clear
+        return control
+    }()
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,18 +43,12 @@ final class ResultsFilterViewController: UIViewController {
         layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
+
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = ThemeColor.bg
         cv.alwaysBounceVertical = true
         cv.refreshControl = refreshControl
         return cv
-    }()
-
-    private let refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        control.tintColor = .white
-        control.backgroundColor = .clear
-        return control
     }()
 
     // MARK: - Init
@@ -59,19 +67,17 @@ final class ResultsFilterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+
+    // MARK: - Setup
+
+    private func setupUI() {
         view.backgroundColor = .systemBackground
         setupCollectionView()
         bindViewModel()
         viewModel.loadRecords()
     }
-
-    // MARK: - Public
-
-    func filter(keyword: String) {
-        viewModel.filter(keyword: keyword)
-    }
-
-    // MARK: - Setup
 
     private func setupCollectionView() {
         collectionView.delegate = self
@@ -96,7 +102,13 @@ final class ResultsFilterViewController: UIViewController {
         }
     }
 
-    // MARK: - Bindings
+    // MARK: - Public API
+
+    func filter(keyword: String) {
+        viewModel.filter(keyword: keyword)
+    }
+
+    // MARK: - Binding
 
     private func bindViewModel() {
         viewModel.$recordDisplayItems
@@ -112,23 +124,15 @@ final class ResultsFilterViewController: UIViewController {
             .store(in: &cancellables)
     }
 
-    @objc
-    private func didPullToRefresh() {
+    // MARK: - Actions
+
+    @objc private func didPullToRefresh() {
         viewModel.refresh()
     }
-}
 
-// MARK: - UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+    // MARK: - Presentation
 
-extension ResultsFilterViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        viewModel.loadMoreIfNeeded(currentIndex: indexPath.item)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        let item = viewModel.recordDisplayItems[indexPath.item]
+    private func presentResultDetail(for item: RecordDisplayItem) {
         let detailVC = ResultDetailViewController(item: item)
         let nav = UINavigationController(rootViewController: detailVC)
         nav.modalPresentationStyle = .pageSheet
@@ -140,7 +144,25 @@ extension ResultsFilterViewController: UICollectionViewDelegate, UICollectionVie
         }
         present(nav, animated: true)
     }
+}
 
+// MARK: - UICollectionViewDelegate
+
+extension ResultsFilterViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        viewModel.loadMoreIfNeeded(currentIndex: indexPath.item)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let item = viewModel.recordDisplayItems[indexPath.item]
+        presentResultDetail(for: item)
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension ResultsFilterViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let w = collectionView.bounds.width
         return CGSize(width: w, height: 120)

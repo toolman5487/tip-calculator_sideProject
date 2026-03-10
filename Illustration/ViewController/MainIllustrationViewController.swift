@@ -4,15 +4,24 @@
 //
 
 import Combine
-import UIKit
 import SnapKit
+import UIKit
 
 @MainActor
 final class MainIllustrationViewController: MainBaseViewController, TabBarRefreshable {
 
-    private var cancellables = Set<AnyCancellable>()
+    // MARK: - View Model & State
+
     private let viewModel = MainIllustrationViewModel()
+    private var cancellables = Set<AnyCancellable>()
     private var cachedNavBarAppearance: UINavigationBarAppearance?
+
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupIllustrationContent()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -21,14 +30,100 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
         applyNavigationBarTrendColor()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: - Setup
+
+    private func setupIllustrationContent() {
         setupNavigation()
         setupCollectionView()
-        bindingViewModel()
+        bind()
+
         collectionView.dataSource = self
         collectionView.delegate = self
     }
+
+    private func setupNavigation() {
+        title = "統計資料"
+        navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
+            self?.triggerRefresh()
+        }
+    }
+
+    private func setupCollectionView() {
+        collectionView.register(
+            IllustrationFilterHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: IllustrationFilterHeaderView.reuseId
+        )
+        collectionView.register(
+            IllustrationSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: IllustrationSectionHeaderView.reuseId
+        )
+        collectionView.register(
+            IllustrationShareFooterView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: IllustrationShareFooterView.reuseId
+        )
+        collectionView.register(IllustrationResultCell.self, forCellWithReuseIdentifier: IllustrationResultCell.reuseId)
+        collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
+        collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
+        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
+    }
+
+    // MARK: - TabBarRefreshable
+
+    func refreshContent() {
+        viewModel.load()
+    }
+
+    // MARK: - Binding
+
+    private func bind() {
+        refreshPublisher
+            .sink { [weak self] _ in
+                self?.viewModel.load()
+            }
+            .store(in: &cancellables)
+
+        viewModel.$dataVersion
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.applyNavigationBarTrendColor()
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Helpers
+
+    private func trendColor(for trend: KPITrend?) -> UIColor {
+        switch trend {
+        case .up: return ThemeColor.trendUp
+        case .down: return ThemeColor.trendDown
+        case .equal, .none: return ThemeColor.trendFlat
+        }
+    }
+
+    private func applyNavigationBarTrendColor() {
+        let color = trendColor(for: viewModel.personalConsumptionTrend)
+        let appearance = cachedNavBarAppearance ?? {
+            let a = UINavigationBarAppearance()
+            a.configureWithDefaultBackground()
+            a.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+            a.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+            cachedNavBarAppearance = a
+            return a
+        }()
+        if appearance.backgroundColor != color {
+            appearance.backgroundColor = color
+        }
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = .systemBackground
+    }
+
+    // MARK: - Actions
 
     private func shareButtonTapped(sourceView: UIView) {
         let kpiCardItems = viewModel.kpiCardItems
@@ -57,74 +152,18 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
         }
     }
 
-    func refreshContent() {
-        viewModel.load()
+    // MARK: - Navigation
+
+    private func pushConsumptionBreakdown() {
+        let title = viewModel.sectionHeaderTitle(for: .timeChart) ?? "消費趨勢"
+        let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: title, timeFilter: viewModel.selectedTimeFilter))
+        navigationController?.pushViewController(vc, animated: true)
     }
 
-    private func setupNavigation() {
-        title = "統計資料"
-        navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
-            self?.triggerRefresh()
-        }
-    }
-
-    private func applyNavigationBarTrendColor() {
-        let color = trendColor(for: viewModel.personalConsumptionTrend)
-        let appearance = cachedNavBarAppearance ?? {
-            let a = UINavigationBarAppearance()
-            a.configureWithDefaultBackground()
-            a.largeTitleTextAttributes = [.foregroundColor: UIColor.systemBackground]
-            a.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
-            cachedNavBarAppearance = a
-            return a
-        }()
-        if appearance.backgroundColor != color {
-            appearance.backgroundColor = color
-        }
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = .systemBackground
-    }
-
-    private func trendColor(for trend: KPITrend?) -> UIColor {
-        switch trend {
-        case .up: return ThemeColor.trendUp
-        case .down: return ThemeColor.trendDown
-        case .equal, .none: return ThemeColor.trendFlat
-        }
-    }
-
-    private func setupCollectionView() {
-        collectionView.register(IllustrationFilterHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: IllustrationFilterHeaderView.reuseId)
-        collectionView.register(IllustrationSectionHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: IllustrationSectionHeaderView.reuseId)
-        collectionView.register(IllustrationShareFooterView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                withReuseIdentifier: IllustrationShareFooterView.reuseId)
-        collectionView.register(IllustrationResultCell.self, forCellWithReuseIdentifier: IllustrationResultCell.reuseId)
-        collectionView.register(KPICarouselCell.self, forCellWithReuseIdentifier: KPICarouselCell.reuseId)
-        collectionView.register(IllustrationLocationStatsCell.self, forCellWithReuseIdentifier: IllustrationLocationStatsCell.reuseId)
-        collectionView.register(IllustrationTimeChartCell.self, forCellWithReuseIdentifier: IllustrationTimeChartCell.reuseId)
-    }
-
-    private func bindingViewModel() {
-        refreshPublisher
-            .sink { [weak self] _ in
-                self?.viewModel.load()
-            }
-            .store(in: &cancellables)
-
-        viewModel.$dataVersion
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.applyNavigationBarTrendColor()
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancellables)
+    private func pushLocationDetail() {
+        let title = viewModel.sectionHeaderTitle(for: .locationStats) ?? "消費地區"
+        let vc = LocationDetailViewController(title: title, timeFilter: viewModel.selectedTimeFilter)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -150,7 +189,11 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: indexPath.section) {
         case .filterHeader:
             guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationFilterHeaderView.reuseId, for: indexPath) as! IllustrationFilterHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: IllustrationFilterHeaderView.reuseId,
+                for: indexPath
+            ) as! IllustrationFilterHeaderView
             let filterVM = IllustrationFilterHeaderViewModel(
                 selected: viewModel.selectedTimeFilter,
                 selectedColor: trendColor(for: viewModel.personalConsumptionTrend),
@@ -165,12 +208,20 @@ extension MainIllustrationViewController {
                   let title = viewModel.sectionHeaderTitle(for: .locationStats) else {
                 return UICollectionReusableView()
             }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: IllustrationSectionHeaderView.reuseId,
+                for: indexPath
+            ) as! IllustrationSectionHeaderView
             header.configure(title: title)
             return header
         case .timeChart:
             if kind == UICollectionView.elementKindSectionFooter {
-                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationShareFooterView.reuseId, for: indexPath) as! IllustrationShareFooterView
+                let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: IllustrationShareFooterView.reuseId,
+                    for: indexPath
+                ) as! IllustrationShareFooterView
                 footer.configure(onTap: { [weak self] sourceView in self?.shareButtonTapped(sourceView: sourceView) })
                 return footer
             }
@@ -178,7 +229,11 @@ extension MainIllustrationViewController {
                   let title = viewModel.sectionHeaderTitle(for: .timeChart) else {
                 return UICollectionReusableView()
             }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: IllustrationSectionHeaderView.reuseId, for: indexPath) as! IllustrationSectionHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: IllustrationSectionHeaderView.reuseId,
+                for: indexPath
+            ) as! IllustrationSectionHeaderView
             header.configure(title: title)
             return header
         case .none:
@@ -199,7 +254,6 @@ extension MainIllustrationViewController {
             let comparisonLabel = viewModel.selectedTimeFilter.consumptionTimeRange.comparisonPeriodLabel
             cell.configure(items: viewModel.kpiCardItems, comparisonLabel: comparisonLabel)
             return cell
-
         case .timeChart:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IllustrationTimeChartCell.reuseId, for: indexPath) as! IllustrationTimeChartCell
             cell.configure(data: viewModel.timeChartData, barColor: trendColor(for: viewModel.personalConsumptionTrend))
@@ -221,13 +275,9 @@ extension MainIllustrationViewController {
         guard let section = IllustrationSection(rawValue: indexPath.section) else { return }
         switch section {
         case .timeChart:
-            let title = viewModel.sectionHeaderTitle(for: .timeChart) ?? "消費趨勢"
-            let vc = ConsumptionBreakdownViewController(detailItem: .timeChart(title: title, timeFilter: viewModel.selectedTimeFilter))
-            navigationController?.pushViewController(vc, animated: true)
+            pushConsumptionBreakdown()
         case .locationStats:
-            let title = viewModel.sectionHeaderTitle(for: .locationStats) ?? "消費地區"
-            let vc = LocationDetailViewController(title: title, timeFilter: viewModel.selectedTimeFilter)
-            navigationController?.pushViewController(vc, animated: true)
+            pushLocationDetail()
         case .filterHeader, .result, .kpi:
             break
         }
@@ -266,9 +316,7 @@ extension MainIllustrationViewController {
         switch IllustrationSection(rawValue: section) {
         case .filterHeader:
             return CGSize(width: collectionView.bounds.width, height: 56)
-        case .result:
-            return CGSize(width: collectionView.bounds.width, height: 0)
-        case .kpi:
+        case .result, .kpi:
             return CGSize(width: collectionView.bounds.width, height: 0)
         default:
             return CGSize(width: collectionView.bounds.width, height: 44)

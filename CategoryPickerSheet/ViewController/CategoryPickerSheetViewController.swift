@@ -3,20 +3,28 @@
 //  tip-calculator
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 @MainActor
 final class CategoryPickerSheetViewController: MainBaseViewController {
 
-    var onSelect: ((Category) -> Void)?
-
-    private let viewModel: CategoryPickerSheetViewModel
+    // MARK: - Static
 
     static let columns: CGFloat = 4
     static let spacing: CGFloat = 12
     static let cellInset: CGFloat = 16
     static let headerHeight: CGFloat = 36
+
+    // MARK: - Public API
+
+    var onSelect: ((Category) -> Void)?
+
+    // MARK: - Dependencies
+
+    private let viewModel: CategoryPickerSheetViewModel
+
+    // MARK: - Init
 
     init(viewModel: CategoryPickerSheetViewModel) {
         self.viewModel = viewModel
@@ -27,17 +35,21 @@ final class CategoryPickerSheetViewController: MainBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setupUI() {
-        super.setupUI()
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupCategoryPickerContent()
+    }
+
+    // MARK: - Setup
+
+    private func setupCategoryPickerContent() {
         view.backgroundColor = .systemBackground
+
         setupNavigation()
+        setupCollectionView()
         bindViewModel()
-        collectionView.register(CategorySectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategorySectionHeaderView.reuseId)
-        collectionView.register(CategorySectionCell.self, forCellWithReuseIdentifier: CategorySectionCell.reuseId)
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
-            layout.minimumLineSpacing = Self.spacing
-        }
     }
 
     private func setupNavigation() {
@@ -51,15 +63,47 @@ final class CategoryPickerSheetViewController: MainBaseViewController {
         )
     }
 
-    @objc private func dismissTapped() {
-        dismiss(animated: true)
+    private func setupCollectionView() {
+        collectionView.register(
+            CategorySectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: CategorySectionHeaderView.reuseId
+        )
+        collectionView.register(CategorySectionCell.self, forCellWithReuseIdentifier: CategorySectionCell.reuseId)
+
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+            layout.minimumLineSpacing = Self.spacing
+        }
     }
+
+    // MARK: - Binding
 
     private func bindViewModel() {
         viewModel.onSelect = { [weak self] category in
             self?.onSelect?(category)
             self?.dismiss(animated: true)
         }
+    }
+
+    // MARK: - Actions
+
+    @objc private func dismissTapped() {
+        dismiss(animated: true)
+    }
+
+    // MARK: - Helpers
+
+    static func cellWidth(containerWidth: CGFloat) -> CGFloat {
+        (containerWidth - spacing * (columns - 1)) / columns
+    }
+
+    private static func sectionCellHeight(categoryCount: Int, containerWidth: CGFloat) -> CGFloat {
+        let count = CGFloat(categoryCount)
+        let rows = ceil(count / columns)
+        let availableWidth = containerWidth - cellInset * 2
+        let width = cellWidth(containerWidth: availableWidth)
+        return rows * width + spacing * max(0, rows - 1)
     }
 }
 
@@ -83,12 +127,16 @@ extension CategoryPickerSheetViewController {
             selectedCategory: viewModel.currentCategory,
             onSelect: { [weak self] category in self?.viewModel.select(category: category) }
         )
-        return sectionCell
+        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
-              let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategorySectionHeaderView.reuseId, for: indexPath) as? CategorySectionHeaderView,
+              let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: CategorySectionHeaderView.reuseId,
+                for: indexPath
+              ) as? CategorySectionHeaderView,
               let section = viewModel.section(at: indexPath.section) else {
             return UICollectionReusableView()
         }
@@ -110,17 +158,5 @@ extension CategoryPickerSheetViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = max(1, collectionView.bounds.width)
         return CGSize(width: width, height: Self.headerHeight)
-    }
-
-    static func cellWidth(containerWidth: CGFloat) -> CGFloat {
-        (containerWidth - spacing * (columns - 1)) / columns
-    }
-
-    private static func sectionCellHeight(categoryCount: Int, containerWidth: CGFloat) -> CGFloat {
-        let count = CGFloat(categoryCount)
-        let rows = ceil(count / columns)
-        let availableWidth = containerWidth - cellInset * 2
-        let width = cellWidth(containerWidth: availableWidth)
-        return rows * width + spacing * max(0, rows - 1)
     }
 }

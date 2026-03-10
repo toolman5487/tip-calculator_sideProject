@@ -10,18 +10,21 @@ import UIKit
 @MainActor
 final class CustomTabBarController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - Delegate
+
+    weak var delegate: CustomTabBarControllerDelegate?
+
+    // MARK: - View Model & State
 
     private let viewModel = TabBarViewModel()
-
-    private var viewControllerFactories: [() -> UIViewController] = []
-
-    private var cachedViewControllers: [Int: UIViewController] = [:]
-
-    private var currentViewController: UIViewController?
-
     private var cancellables = Set<AnyCancellable>()
     private var lastAppliedTabBarHeight: CGFloat = 0
+
+    // MARK: - View Controller Management
+
+    private var viewControllerFactories: [() -> UIViewController] = []
+    private var cachedViewControllers: [Int: UIViewController] = [:]
+    private var currentViewController: UIViewController?
 
     // MARK: - UI Components
 
@@ -45,16 +48,6 @@ final class CustomTabBarController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateChildContentInsetIfNeeded()
-    }
-
-    private func updateChildContentInsetIfNeeded() {
-        let tabBarHeight = customTabBar.intrinsicContentSize.height
-        guard tabBarHeight != lastAppliedTabBarHeight, !cachedViewControllers.isEmpty else { return }
-        lastAppliedTabBarHeight = tabBarHeight
-        let insets = UIEdgeInsets(top: 0, left: 0, bottom: tabBarHeight, right: 0)
-        for vc in cachedViewControllers.values {
-            vc.additionalSafeAreaInsets = insets
-        }
     }
 
     // MARK: - Setup
@@ -91,7 +84,7 @@ final class CustomTabBarController: UIViewController {
             .store(in: &cancellables)
     }
 
-    // MARK: - Public Methods
+    // MARK: - Public API
 
     func setViewControllers(factories: [() -> UIViewController], tabBarItems: [TabBarItem], tabTypes: [MainTabBarTab]) {
         viewControllerFactories = factories
@@ -103,7 +96,11 @@ final class CustomTabBarController: UIViewController {
         customTabBar.configure(with: tabBarItems)
     }
 
-    // MARK: - Private Methods
+    func tabType(at index: Int) -> MainTabBarTab? {
+        viewModel.tab(at: index)
+    }
+
+    // MARK: - View Controller Lifecycle
 
     private func getOrCreateViewController(at index: Int) -> UIViewController? {
         if let cachedVC = cachedViewControllers[index] {
@@ -156,9 +153,13 @@ final class CustomTabBarController: UIViewController {
                 guard self.currentViewController === viewController else { return }
                 outgoingView.transform = .identity
                 self.syncViewVisibilityToCurrent()
+                self.notifyDidSelect(viewController: viewController, at: toIndex)
             }
         } else {
             syncViewVisibilityToCurrent()
+            if let index = cachedViewControllers.first(where: { $0.value === viewController })?.key {
+                notifyDidSelect(viewController: viewController, at: index)
+            }
         }
 
         if let refreshable = Self.refreshableViewController(from: viewController) {
@@ -182,6 +183,26 @@ final class CustomTabBarController: UIViewController {
         }
     }
 
+    // MARK: - Layout
+
+    private func updateChildContentInsetIfNeeded() {
+        let tabBarHeight = customTabBar.intrinsicContentSize.height
+        guard tabBarHeight != lastAppliedTabBarHeight, !cachedViewControllers.isEmpty else { return }
+        lastAppliedTabBarHeight = tabBarHeight
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: tabBarHeight, right: 0)
+        for vc in cachedViewControllers.values {
+            vc.additionalSafeAreaInsets = insets
+        }
+    }
+
+    // MARK: - Delegate Notification
+
+    private func notifyDidSelect(viewController: UIViewController, at index: Int) {
+        delegate?.tabBarController(self, didSelect: viewController, at: index)
+    }
+
+    // MARK: - Helpers
+
     private static func refreshableViewController(from vc: UIViewController) -> TabBarRefreshable? {
         if let refreshable = vc as? TabBarRefreshable { return refreshable }
         if let nav = vc as? UINavigationController, let root = nav.viewControllers.first as? TabBarRefreshable {
@@ -200,6 +221,7 @@ final class CustomTabBarController: UIViewController {
 
 extension CustomTabBarController: CustomTabBarDelegate {
     func didSelectTab(at index: Int) {
+        guard delegate?.tabBarController(self, shouldSelectTabAt: index) ?? true else { return }
         guard let viewController = getOrCreateViewController(at: index) else { return }
 
         if index < MainTabBarTab.allCases.count {
@@ -211,6 +233,7 @@ extension CustomTabBarController: CustomTabBarDelegate {
             if let refreshable = Self.refreshableViewController(from: viewController) {
                 refreshable.refreshContent()
             }
+            notifyDidSelect(viewController: viewController, at: index)
             return
         }
 
