@@ -5,20 +5,24 @@
 //  Created by Willy Hsu on 2025/3/29.
 //
 
-import Foundation
+import SnapKit
 import UIKit
 
-final class AmountView: UIView{
-    
-    private let title:String
-    private let textAlignment:NSTextAlignment
-    private let amountLabelIdentifier:String
-    
-    private lazy var titleLabel:UILabel = {
+final class AmountView: UIView {
+
+    // MARK: - Properties
+
+    private let title: String
+    private let textAlignment: NSTextAlignment
+    private let amountLabelIdentifier: String
+
+    // MARK: - UI Components
+
+    private lazy var titleLabel: UILabel = {
         LabelFactory.build(text: title, font: ThemeFont.regular(Ofsize: 18), textColor: ThemeColor.text, textAlignment: textAlignment)
     }()
 
-    private lazy var amountLabel:UILabel = {
+    private lazy var amountLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = textAlignment
         label.textColor = ThemeColor.primary
@@ -30,16 +34,8 @@ final class AmountView: UIView{
         label.accessibilityIdentifier = amountLabelIdentifier
         return label
     }()
-    
-    func configure(amount:Double){
-        let text = NSMutableAttributedString(
-            string: amount.currencyFormatted,
-            attributes: [.font: ThemeFont.bold(Ofsize: 24)])
-        text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSMakeRange(0, 1))
-        amountLabel.attributedText = text
-    }
-    
-    private lazy var vStackView:UIStackView = {
+
+    private lazy var vStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             titleLabel,
             amountLabel
@@ -47,25 +43,37 @@ final class AmountView: UIView{
         stack.axis = .vertical
         return stack
     }()
-    
-    private func layout(){
+
+    // MARK: - Lifecycle
+
+    init(title: String, textAlignment: NSTextAlignment, amountLabelIdentifier: String) {
+        self.title = title
+        self.textAlignment = textAlignment
+        self.amountLabelIdentifier = amountLabelIdentifier
+        super.init(frame: .zero)
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure(amount: Double) {
+        let text = NSMutableAttributedString(
+            string: amount.currencyFormatted,
+            attributes: [.font: ThemeFont.bold(Ofsize: 24)])
+        text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSMakeRange(0, 1))
+        amountLabel.attributedText = text
+    }
+
+    // MARK: - Setup
+
+    private func setupLayout() {
         addSubview(vStackView)
         vStackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-    
-    init(title:String, textAlignment:NSTextAlignment, amountLabelIdentifier:String){
-        self.title = title
-        self.textAlignment = textAlignment
-        self.amountLabelIdentifier = amountLabelIdentifier
-        super.init(frame: .zero)
-        layout()
-    }
-    
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }

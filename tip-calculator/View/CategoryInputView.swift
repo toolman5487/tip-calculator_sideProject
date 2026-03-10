@@ -3,19 +3,25 @@
 //  tip-calculator
 //
 
-import UIKit
 import Combine
 import CombineCocoa
 import SnapKit
+import UIKit
 
 final class CategoryInputView: UIView {
 
+    // MARK: - Constants
+
     private static let displayCategories: [Category] = Category.mainGridCategories
+
+    // MARK: - State & Publishers
 
     private var cancellables = Set<AnyCancellable>()
     private let mainGridCategoryTapSubject = PassthroughSubject<Category, Never>()
     var mainGridCategoryTapPublisher: AnyPublisher<Category, Never> { mainGridCategoryTapSubject.eraseToAnyPublisher() }
     var onMoreOptionsTap: (() -> Void)?
+
+    // MARK: - UI Components
 
     private let headerView: HeaderView = {
         let view = HeaderView()
@@ -58,17 +64,53 @@ final class CategoryInputView: UIView {
         return stack
     }()
 
+    // MARK: - Lifecycle
+
     init() {
         super.init(frame: .zero)
         setupLayout()
-        bindButtons()
+        bind()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func bindButtons() {
+    // MARK: - Configuration
+
+    func updateSelection(_ category: Category) {
+        updateButtonSelection(selected: category)
+    }
+
+    func categoryReset() {
+        updateSelection(.none)
+    }
+
+    // MARK: - Setup
+
+    private func setupLayout() {
+        addSubview(headerView)
+        addSubview(contentStackView)
+        contentStackView.snp.makeConstraints { make in
+            make.top.bottom.trailing.equalToSuperview()
+            make.leading.equalTo(headerView.snp.trailing).offset(24)
+        }
+        headerView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.width.equalTo(68)
+            make.centerY.equalTo(contentStackView)
+        }
+        moreButton.snp.makeConstraints { make in
+            make.height.equalTo(44)
+        }
+        categoryButtons.forEach { button in
+            button.snp.makeConstraints { make in
+                make.height.equalTo(button.snp.width).priority(.high)
+            }
+        }
+    }
+
+    private func bind() {
         for (index, button) in categoryButtons.enumerated() {
             guard index < Self.displayCategories.count else { continue }
             let category = Self.displayCategories[index]
@@ -96,35 +138,5 @@ final class CategoryInputView: UIView {
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         let imageName = isMoreSelected ? (selected.systemImageName ?? "ellipsis") : "ellipsis"
         moreButton.setImage(UIImage(systemName: imageName, withConfiguration: config), for: .normal)
-    }
-
-    private func setupLayout() {
-        addSubview(headerView)
-        addSubview(contentStackView)
-        contentStackView.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
-            make.leading.equalTo(headerView.snp.trailing).offset(24)
-        }
-        headerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.width.equalTo(68)
-            make.centerY.equalTo(contentStackView)
-        }
-        moreButton.snp.makeConstraints { make in
-            make.height.equalTo(44)
-        }
-        categoryButtons.forEach { button in
-            button.snp.makeConstraints { make in
-                make.height.equalTo(button.snp.width).priority(.high)
-            }
-        }
-    }
-
-    func updateSelection(_ category: Category) {
-        updateButtonSelection(selected: category)
-    }
-
-    func categoryReset() {
-        updateSelection(.none)
     }
 }

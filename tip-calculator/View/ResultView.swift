@@ -5,60 +5,50 @@
 //  Created by Willy Hsu on 2025/3/28.
 //
 
+import SnapKit
 import UIKit
 
 final class ResultView: UIView {
-    
+
+    // MARK: - UI Components
+
     private let headerLabel: UILabel = {
         LabelFactory.build(text: "每人應付金額", font: ThemeFont.demiBold(Ofsize: 18))
     }()
-    
+
     private let amountPerPersonLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        let text = NSMutableAttributedString(string: "$0", attributes: [.font:ThemeFont.bold(Ofsize: 48), .foregroundColor:UIColor.black])
+        let text = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 48), .foregroundColor: UIColor.black])
         text.addAttributes([.font: ThemeFont.bold(Ofsize: 24)], range: NSMakeRange(0, 1))
         label.attributedText = text
         label.accessibilityIdentifier = ScreenIdentifier1.ResultView.totalAmountPerPersonValueLabel.rawValue
         return label
     }()
-    
-    private let horizentalLine:UIView = {
+
+    private let horizentalLine: UIView = {
         let view = UIView()
         view.backgroundColor = ThemeColor.seperator
         return view
     }()
-    
-    func configure(result:Result){
-        let text = NSMutableAttributedString(
-            string: result.amountPerPerson.currencyFormatted,
-            attributes: [.font:ThemeFont.bold(Ofsize: 48),
-                         .foregroundColor:UIColor.black])
-        text.addAttributes(
-            [.font: ThemeFont.bold(Ofsize: 24)],
-            range: NSMakeRange(0, 1))
-        amountPerPersonLabel.attributedText = text
-        totalBillView.configure(amount: result.totalBill)
-        totalTipView.configure(amount: result.totalTip)
-    }
-    
-    private let totalBillView:AmountView = {
+
+    private let totalBillView: AmountView = {
         let view = AmountView(
             title: "總金額",
             textAlignment: .left,
             amountLabelIdentifier: ScreenIdentifier1.ResultView.totalBillValueLabel.rawValue)
         return view
     }()
-    
-    private let totalTipView:AmountView = {
+
+    private let totalTipView: AmountView = {
         let view = AmountView(
             title: "小費總額",
             textAlignment: .left,
             amountLabelIdentifier: ScreenIdentifier1.ResultView.totalTipValueLabel.rawValue)
         return view
     }()
-    
-    private lazy var hStackView:UIStackView = {
+
+    private lazy var hStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             totalBillView,
             UIView(),
@@ -68,8 +58,8 @@ final class ResultView: UIView {
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
-    private lazy var vStackView:UIStackView = {
+
+    private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             headerLabel,
             amountPerPersonLabel,
@@ -82,7 +72,35 @@ final class ResultView: UIView {
         return stackView
     }()
 
-    private func layout(){
+    // MARK: - Lifecycle
+
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure(result: Result) {
+        let text = NSMutableAttributedString(
+            string: result.amountPerPerson.currencyFormatted,
+            attributes: [.font: ThemeFont.bold(Ofsize: 48),
+                         .foregroundColor: UIColor.black])
+        text.addAttributes(
+            [.font: ThemeFont.bold(Ofsize: 24)],
+            range: NSMakeRange(0, 1))
+        amountPerPersonLabel.attributedText = text
+        totalBillView.configure(amount: result.totalBill)
+        totalTipView.configure(amount: result.totalTip)
+    }
+
+    // MARK: - Setup
+
+    private func setupLayout() {
         backgroundColor = .white
         addSubview(vStackView)
         vStackView.snp.makeConstraints { make in
@@ -99,24 +117,10 @@ final class ResultView: UIView {
                   radius: 12.0,
                   opacity: 0.1)
     }
-    
-    private func buildSpaceView(height:CGFloat) -> UIView {
+
+    private func buildSpaceView(height: CGFloat) -> UIView {
         let view = UIView()
         view.heightAnchor.constraint(equalToConstant: height).isActive = true
         return view
     }
-    
-    init(){
-        super.init(frame: .zero)
-        layout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    
-    
 }
-
-

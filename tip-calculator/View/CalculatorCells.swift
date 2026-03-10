@@ -3,10 +3,10 @@
 //  tip-calculator
 //
 
-import UIKit
-import SnapKit
 import Combine
 import CombineCocoa
+import SnapKit
+import UIKit
 
 private let cellInsetHorizontal: CGFloat = 16
 private let cellInsetVertical: CGFloat = 8
@@ -35,14 +35,22 @@ protocol Resettable: AnyObject {
 }
 
 // MARK: - ResultCell
+
 final class ResultCell: UITableViewCell {
+
     static let reuseId = "ResultCell"
+
+    // MARK: - UI Components
+
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
+
     private(set) lazy var resultView = ResultView()
+
+    // MARK: - Lifecycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -52,7 +60,15 @@ final class ResultCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(containerView)
@@ -65,13 +81,15 @@ final class ResultCell: UITableViewCell {
             make.right.left.bottom.equalToSuperview()
         }
     }
-
-    func configure() {}
 }
 
 // MARK: - BillInputCell
+
 final class BillInputCell: UITableViewCell {
+
     static let reuseId = "BillInputCell"
+
+    // MARK: - UI Components
 
     private let containerView: UIView = {
         let view = UIView()
@@ -80,7 +98,10 @@ final class BillInputCell: UITableViewCell {
         view.layer.masksToBounds = true
         return view
     }()
+
     private(set) lazy var billInputView = BillInputView()
+
+    // MARK: - Lifecycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -90,7 +111,15 @@ final class BillInputCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(containerView)
@@ -102,8 +131,6 @@ final class BillInputCell: UITableViewCell {
             make.edges.equalToSuperview().inset(16)
         }
     }
-
-    func configure() {}
 }
 
 extension BillInputCell: Resettable {
@@ -113,8 +140,12 @@ extension BillInputCell: Resettable {
 }
 
 // MARK: - CategoriesInputCell
+
 final class CategoriesInputCell: UITableViewCell {
+
     static let reuseId = "CategoriesInputCell"
+
+    // MARK: - UI Components
 
     private let containerView: UIView = {
         let view = UIView()
@@ -132,6 +163,8 @@ final class CategoriesInputCell: UITableViewCell {
         set { categoryInputView.onMoreOptionsTap = newValue }
     }
 
+    // MARK: - Lifecycle
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -140,7 +173,15 @@ final class CategoriesInputCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(containerView)
@@ -152,8 +193,6 @@ final class CategoriesInputCell: UITableViewCell {
             make.edges.equalToSuperview().inset(16)
         }
     }
-
-    func configure() {}
 }
 
 extension CategoriesInputCell: Resettable {
@@ -163,8 +202,13 @@ extension CategoriesInputCell: Resettable {
 }
 
 // MARK: - TipInputCell
+
 final class TipInputCell: UITableViewCell {
+
     static let reuseId = "TipInputCell"
+
+    // MARK: - UI Components
+
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -172,7 +216,10 @@ final class TipInputCell: UITableViewCell {
         view.layer.masksToBounds = true
         return view
     }()
+
     private(set) lazy var tipInputView = TipInputView()
+
+    // MARK: - Lifecycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -182,7 +229,15 @@ final class TipInputCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(containerView)
@@ -194,8 +249,6 @@ final class TipInputCell: UITableViewCell {
             make.edges.equalToSuperview().inset(16)
         }
     }
-
-    func configure() {}
 }
 
 extension TipInputCell: Resettable {
@@ -205,8 +258,13 @@ extension TipInputCell: Resettable {
 }
 
 // MARK: - SplitInputCell
+
 final class SplitInputCell: UITableViewCell {
+
     static let reuseId = "SplitInputCell"
+
+    // MARK: - UI Components
+
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -214,7 +272,10 @@ final class SplitInputCell: UITableViewCell {
         view.layer.masksToBounds = true
         return view
     }()
+
     private(set) lazy var splitInputView = SplitInputView()
+
+    // MARK: - Lifecycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -224,7 +285,15 @@ final class SplitInputCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(containerView)
@@ -237,8 +306,6 @@ final class SplitInputCell: UITableViewCell {
             make.top.bottom.equalToSuperview()
         }
     }
-
-    func configure() {}
 }
 
 extension SplitInputCell: Resettable {
@@ -248,11 +315,15 @@ extension SplitInputCell: Resettable {
 }
 
 // MARK: - ConfirmButtonCell
+
 final class ConfirmButtonCell: UITableViewCell {
+
     static let reuseId = "ConfirmButtonCell"
-    
+
     var onTap: (() -> Void)?
-    
+
+    // MARK: - UI Components
+
     private(set) lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("確認", for: .normal)
@@ -263,6 +334,8 @@ final class ConfirmButtonCell: UITableViewCell {
         return button
     }()
 
+    // MARK: - Lifecycle
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -271,7 +344,15 @@ final class ConfirmButtonCell: UITableViewCell {
         setupView()
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure() {}
+
+    // MARK: - Setup
 
     private func setupView() {
         contentView.addSubview(confirmButton)
@@ -281,8 +362,8 @@ final class ConfirmButtonCell: UITableViewCell {
         confirmButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
     }
 
-    func configure() {}
-    
+    // MARK: - Actions
+
     @objc private func didTapConfirm() {
         onTap?()
     }

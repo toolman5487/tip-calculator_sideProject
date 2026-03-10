@@ -5,29 +5,31 @@
 //  Created by Willy Hsu on 2025/3/29.
 //
 
-import Foundation
+import SnapKit
 import UIKit
 
-final class HeaderView:UIView{
-    
-    private let topLabel:UILabel = {
+final class HeaderView: UIView {
+
+    // MARK: - UI Components
+
+    private let topLabel: UILabel = {
         LabelFactory.build(
             text: nil,
             font: ThemeFont.bold(Ofsize: 18)
         )
     }()
-    
-    private let bottomLabel:UILabel = {
+
+    private let bottomLabel: UILabel = {
         LabelFactory.build(
             text: nil,
             font: ThemeFont.regular(Ofsize: 16)
         )
     }()
-    
+
     private let topSpacerView = UIView()
     private let bottomSpacerView = UIView()
-    
-    private lazy var stackView:UIStackView = {
+
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             topSpacerView,
             topLabel,
@@ -39,8 +41,28 @@ final class HeaderView:UIView{
         stackView.spacing = -4
         return stackView
     }()
-    
-    private func layout(){
+
+    // MARK: - Lifecycle
+
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Configuration
+
+    func configure(topText: String, bottomText: String) {
+        topLabel.text = topText
+        bottomLabel.text = bottomText
+    }
+
+    // MARK: - Setup
+
+    private func setupLayout() {
         addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -49,19 +71,4 @@ final class HeaderView:UIView{
             make.height.equalTo(bottomSpacerView)
         }
     }
-    
-    func configure(topText:String, bottomText:String){
-        topLabel.text = topText
-        bottomLabel.text = bottomText
-    }
-    
-    init() {
-        super.init(frame: .zero)
-        layout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }
