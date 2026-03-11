@@ -75,12 +75,7 @@ final class LocationDetailViewController: UIViewController {
 
     private func setNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "location.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)),
-            style: .plain,
-            target: self,
-            action: #selector(centerOnUserLocationTapped)
-        )
+        navigationItem.rightBarButtonItem = .locationButton { [weak self] in self?.centerOnUserLocationTapped() }
     }
 
     // MARK: - Binding
@@ -111,7 +106,7 @@ final class LocationDetailViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func centerOnUserLocationTapped() {
+    private func centerOnUserLocationTapped() {
         if let location = mapView.userLocation.location {
             let region = MKCoordinateRegion(
                 center: location.coordinate,

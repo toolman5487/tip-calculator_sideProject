@@ -13,15 +13,12 @@ protocol ReverseGeocoding {
 
 struct ReverseGeocodeService: ReverseGeocoding {
 
-    private let googleService = GoogleGeocodingService.makeFromBundle()
-
     func reverseGeocode(latitude: Double, longitude: Double, completion: @escaping (String?) -> Void) {
         let location = CLLocation(latitude: latitude, longitude: longitude)
         let geocoder = CLGeocoder()
-        let google = googleService
         geocoder.reverseGeocodeLocation(location, preferredLocale: Locale.current) { placemarks, _ in
             guard let place = placemarks?.first else {
-                Self.applyGoogleFallback(latitude: latitude, longitude: longitude, googleService: google, completion: completion)
+                DispatchQueue.main.async { completion(nil) }
                 return
             }
             let native = Self.nativeLocale(for: place.isoCountryCode)
@@ -36,21 +33,7 @@ struct ReverseGeocodeService: ReverseGeocoding {
                 return
             }
             let text = LocationAddressFormatter.full.format(place) ?? Self.simpleFormat(place)
-            if !text.isEmpty {
-                DispatchQueue.main.async { completion(text) }
-                return
-            }
-            Self.applyGoogleFallback(latitude: latitude, longitude: longitude, googleService: google, completion: completion)
-        }
-    }
-
-    private static func applyGoogleFallback(latitude: Double, longitude: Double, googleService: GoogleGeocodingService?, completion: @escaping (String?) -> Void) {
-        guard let service = googleService else {
-            DispatchQueue.main.async { completion(nil) }
-            return
-        }
-        service.reverseGeocode(latitude: latitude, longitude: longitude) { addr in
-            DispatchQueue.main.async { completion(addr) }
+            DispatchQueue.main.async { completion(text.isEmpty ? nil : text) }
         }
     }
 

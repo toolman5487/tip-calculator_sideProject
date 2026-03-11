@@ -64,12 +64,7 @@ final class ResultDetailEditViewController: BaseViewController {
 
     private func setNavigationBar() {
         title = "編輯消費紀錄"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
-            style: .plain,
-            target: self,
-            action: #selector(closeButtonTapped)
-        )
+        navigationItem.leftBarButtonItem = .closeButton { [weak self] in self?.closeButtonTapped() }
     }
 
     private func setupTableView() {
@@ -132,7 +127,7 @@ final class ResultDetailEditViewController: BaseViewController {
 
     // MARK: - Actions
 
-    @objc private func closeButtonTapped() {
+    private func closeButtonTapped() {
         dismiss(animated: true)
     }
 

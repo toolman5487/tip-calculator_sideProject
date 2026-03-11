@@ -60,13 +60,9 @@ final class BillInputView: UIView {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: width, height: 44))
         toolbar.barStyle = .default
 
-        let doneButton = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(doneButtonTapped))
         toolbar.items = [
-            UIBarButtonItem(
-                barButtonSystemItem: .flexibleSpace,
-                target: nil,
-                action: nil),
-            doneButton
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            .doneToolbarButton { [weak self] in self?.doneButtonTapped() }
         ]
         toolbar.isUserInteractionEnabled = true
         textField.inputAccessoryView = toolbar
@@ -133,7 +129,7 @@ final class BillInputView: UIView {
 
     // MARK: - Actions
 
-    @objc private func doneButtonTapped() {
+    private func doneButtonTapped() {
         textField.endEditing(true)
     }
 }

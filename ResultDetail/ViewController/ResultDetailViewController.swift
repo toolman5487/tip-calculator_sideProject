@@ -28,14 +28,14 @@ final class ResultDetailViewController: BaseViewController {
         return table
     }()
 
-    private lazy var shareButton: UIButton = {
+    private lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         let config = UIImage.SymbolConfiguration(weight: .semibold)
-        button.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
+        button.setImage(UIImage(systemName: "trash", withConfiguration: config), for: .normal)
         button.tintColor = .systemBackground
-        button.backgroundColor = ThemeColor.selected
+        button.backgroundColor = ThemeColor.trendUp
         button.addCornerRadius(radius: 8)
-        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -82,25 +82,16 @@ final class ResultDetailViewController: BaseViewController {
     // MARK: - Setup
 
     private func setupNavigation() {
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-
         switch viewModel.mode {
         case .editable:
-            let editItem = UIBarButtonItem(
-                image: UIImage(systemName: "slider.horizontal.3", withConfiguration: config),
-                style: .plain,
-                target: self,
-                action: #selector(editButtonTapped)
-            )
-            let deleteItem = UIBarButtonItem(
-                image: UIImage(systemName: "trash", withConfiguration: config),
-                style: .plain,
-                target: self,
-                action: #selector(deleteButtonTapped)
-            )
-            navigationItem.rightBarButtonItems = [editItem, deleteItem]
+            navigationItem.rightBarButtonItems = [
+                .editButton { [weak self] in self?.editButtonTapped() },
+                .shareButton { [weak self] in self?.shareButtonTapped() }
+            ]
         case .readOnly:
-            navigationItem.rightBarButtonItems = []
+            navigationItem.rightBarButtonItems = [
+                .shareButton { [weak self] in self?.shareButtonTapped() }
+            ]
         }
     }
 
@@ -152,13 +143,17 @@ final class ResultDetailViewController: BaseViewController {
     }
 
     private func setupFooterView() {
+        guard viewModel.mode == .editable, viewModel.canDelete else {
+            tableView.tableFooterView = nil
+            return
+        }
         let footerHeight: CGFloat = 88
         let width = UIScreen.main.bounds.width
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: footerHeight))
         footerView.backgroundColor = .clear
 
-        footerView.addSubview(shareButton)
-        shareButton.snp.makeConstraints { make in
+        footerView.addSubview(deleteButton)
+        deleteButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalToSuperview().offset(16)
             make.height.equalTo(52)
@@ -169,7 +164,7 @@ final class ResultDetailViewController: BaseViewController {
 
     // MARK: - Actions
 
-    @objc private func editButtonTapped() {
+    private func editButtonTapped() {
         guard let id = viewModel.item.id else { return }
         let editVC = ResultDetailEditViewController(recordId: id)
         let nav = UINavigationController(rootViewController: editVC)
@@ -182,16 +177,17 @@ final class ResultDetailViewController: BaseViewController {
         present(nav, animated: true)
     }
 
-    @objc private func shareButtonTapped() {
+    private func shareButtonTapped() {
         let activityVC = UIActivityViewController(activityItems: [viewModel.shareText], applicationActivities: nil)
-        if let popover = activityVC.popoverPresentationController {
-            popover.sourceView = shareButton
-            popover.sourceRect = shareButton.bounds
+        if let popover = activityVC.popoverPresentationController,
+           let shareItem = navigationItem.rightBarButtonItems?.last {
+            popover.barButtonItem = shareItem
         }
         present(activityVC, animated: true)
     }
 
     @objc private func deleteButtonTapped() {
+        Haptic.barButtonImpact()
         guard viewModel.canDelete else { return }
         let alert = UIAlertController(title: "刪除紀錄", message: "刪除後無法復原，確定要刪除這筆紀錄嗎？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel))

@@ -13,8 +13,6 @@ final class LocationRecordsSheetViewController: UIViewController {
 
     // MARK: - Static
 
-    private static let backButtonImage = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
-
     // MARK: - Dependencies
 
     private let viewModel: LocationRecordsSheetViewModel
@@ -72,21 +70,16 @@ final class LocationRecordsSheetViewController: UIViewController {
 
     private func setupNavigation() {
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
-            style: .plain,
-            target: self,
-            action: #selector(closeButtonTapped)
-        )
+        navigationItem.leftBarButtonItem = .closeButton { [weak self] in self?.closeButtonTapped() }
     }
 
     // MARK: - Actions
 
-    @objc private func closeButtonTapped() {
+    private func closeButtonTapped() {
         navigationController?.dismiss(animated: true)
     }
 
-    @objc private func dismissDetail() {
+    private func dismissDetail() {
         dismiss(animated: true)
     }
 
@@ -94,12 +87,7 @@ final class LocationRecordsSheetViewController: UIViewController {
 
     private func presentResultDetail(for item: RecordDisplayItem) {
         let detailVC = ResultDetailViewController(item: item, mode: ResultDetailMode.readOnly)
-        detailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: Self.backButtonImage,
-            style: .plain,
-            target: self,
-            action: #selector(dismissDetail)
-        )
+        detailVC.navigationItem.leftBarButtonItem = .backButton { [weak self] in self?.dismissDetail() }
         let nav = UINavigationController(rootViewController: detailVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)

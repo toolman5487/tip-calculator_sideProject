@@ -103,17 +103,10 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
 
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-        let trashItem = UIBarButtonItem(
-            image: UIImage(systemName: "trash", withConfiguration: config),
-            style: .plain,
-            target: self,
-            action: #selector(deleteButtonTapped)
-        )
-        let refreshItem = UIBarButtonItem.refreshBarButton { [weak self] in
-            self?.triggerRefresh()
-        }
-        navigationItem.rightBarButtonItems = [refreshItem, trashItem]
+        navigationItem.rightBarButtonItems = [
+            .refreshBarButton { [weak self] in self?.triggerRefresh() },
+            .deleteButton { [weak self] in self?.deleteButtonTapped() }
+        ]
     }
 
     // MARK: - TabBarRefreshable
@@ -164,7 +157,7 @@ final class MainUserInfoViewController: MainBaseViewController, TabBarRefreshabl
 
     // MARK: - Actions
 
-    @objc private func deleteButtonTapped() {
+    private func deleteButtonTapped() {
         let content = viewModel.deleteAllAlertContent
         let alert = UIAlertController(
             title: content.title,

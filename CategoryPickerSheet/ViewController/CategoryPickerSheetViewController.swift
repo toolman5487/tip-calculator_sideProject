@@ -55,12 +55,7 @@ final class CategoryPickerSheetViewController: MainBaseViewController {
     private func setupNavigation() {
         title = "選擇消費種類"
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
-            style: .plain,
-            target: self,
-            action: #selector(dismissTapped)
-        )
+        navigationItem.leftBarButtonItem = .closeButton { [weak self] in self?.dismissTapped() }
     }
 
     private func setupCollectionView() {
@@ -88,7 +83,7 @@ final class CategoryPickerSheetViewController: MainBaseViewController {
 
     // MARK: - Actions
 
-    @objc private func dismissTapped() {
+    private func dismissTapped() {
         dismiss(animated: true)
     }
 

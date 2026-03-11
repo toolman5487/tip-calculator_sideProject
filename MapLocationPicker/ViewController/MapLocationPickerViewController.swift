@@ -138,12 +138,7 @@ final class MapLocationPickerViewController: BaseViewController {
 
     private func setupMapPickerContent() {
         title = "選擇地點"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
-            style: .plain,
-            target: self,
-            action: #selector(closeButtonTapped)
-        )
+        navigationItem.leftBarButtonItem = .closeButton { [weak self] in self?.closeButtonTapped() }
 
         setupMap()
         setupSearchBar()
@@ -276,7 +271,7 @@ final class MapLocationPickerViewController: BaseViewController {
 
     // MARK: - Actions
 
-    @objc private func closeButtonTapped() {
+    private func closeButtonTapped() {
         dismiss(animated: true)
     }
 

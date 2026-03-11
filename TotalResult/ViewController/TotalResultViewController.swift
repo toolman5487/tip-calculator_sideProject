@@ -97,22 +97,8 @@ final class TotalResultViewController: UIViewController {
         title = "消費結果"
         navigationItem.largeTitleDisplayMode = .never
 
-        let closeConfig = UIImage.SymbolConfiguration(weight: .bold)
-        let closeItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark", withConfiguration: closeConfig),
-            style: .plain,
-            target: self,
-            action: #selector(didTapClose)
-        )
-        navigationItem.leftBarButtonItem = closeItem
-
-        let locationItem = UIBarButtonItem(
-            image: UIImage(systemName: "location.fill"),
-            style: .plain,
-            target: self,
-            action: #selector(didTapLocation)
-        )
-        navigationItem.rightBarButtonItem = locationItem
+        navigationItem.leftBarButtonItem = .closeButton { [weak self] in self?.didTapClose() }
+        navigationItem.rightBarButtonItem = .locationButton { [weak self] in self?.didTapLocation() }
     }
 
     // MARK: - Binding
@@ -128,11 +114,11 @@ final class TotalResultViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func didTapClose() {
+    private func didTapClose() {
         handleDismiss()
     }
 
-    @objc private func didTapLocation() {
+    private func didTapLocation() {
         showMapLocationPicker()
     }
 

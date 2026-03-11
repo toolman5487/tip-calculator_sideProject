@@ -62,7 +62,7 @@ final class RefreshBarButton: UIButton {
             lastTapTime = now
         }
 
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        Haptic.barButtonImpact()
         addRotationAnimation()
         onTap?()
     }

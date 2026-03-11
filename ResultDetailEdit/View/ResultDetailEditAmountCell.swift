@@ -19,8 +19,10 @@ final class ResultDetailEditAmountCell: ResultDetailEditBaseCell {
         field.placeholder = "0"
         let width = UIScreen.main.bounds.width
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: width, height: 44))
-        let done = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(dismissKeyboard))
-        toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), done]
+        toolbar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            .doneToolbarButton { [weak self] in self?.dismissKeyboard() }
+        ]
         field.inputAccessoryView = toolbar
         return field
     }()
@@ -59,7 +61,7 @@ final class ResultDetailEditAmountCell: ResultDetailEditBaseCell {
         onValueChanged?(value)
     }
 
-    @objc private func dismissKeyboard() {
+    private func dismissKeyboard() {
         textField.resignFirstResponder()
     }
 }
