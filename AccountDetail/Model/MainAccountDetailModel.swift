@@ -18,6 +18,7 @@ struct AccountDetailOverviewItem {
     let usageDaysText: String
     let topLocationName: String
     let statCardItems: [AccountDetailStatCardItem]
+    let categoryDistributionItems: [AccountDetailCategoryDistributionItem]
 }
 
 // MARK: - Cell 1: Carousel
@@ -28,9 +29,17 @@ struct AccountDetailStatCardItem {
     let systemImageName: String?
 }
 
+struct AccountDetailCategoryDistributionItem {
+    let displayName: String
+    let amount: Double
+    let percentage: Double
+    let systemImageName: String?
+}
+
 // MARK: - Section
 
 enum AccountDetailSection: Int, CaseIterable {
     case header
     case carousel
+    case categoryDistribution
 }
