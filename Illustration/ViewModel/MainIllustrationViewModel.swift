@@ -161,7 +161,7 @@ final class MainIllustrationViewModel {
     private static let chartDateFormatters: [String: DateFormatter] = {
         ["M/d", "M月", "yyyy年"].reduce(into: [:]) { acc, format in
             let f = DateFormatter()
-            f.locale = Locale(identifier: "zh_TW")
+            f.locale = Locale.autoupdatingCurrent
             f.dateFormat = format
             acc[format] = f
         }
@@ -180,7 +180,7 @@ final class MainIllustrationViewModel {
             }
         }()
         let formatter = Self.chartDateFormatters[dateFormat]
-            ?? { let f = DateFormatter(); f.locale = Locale(identifier: "zh_TW"); f.dateFormat = dateFormat; return f }()
+            ?? { let f = DateFormatter(); f.locale = Locale.autoupdatingCurrent; f.dateFormat = dateFormat; return f }()
         let ranges = timeRange.rangesForChart(periods: periods, calendar: calendar, now: now)
         var sums = Dictionary(uniqueKeysWithValues: ranges.map { ($0.start, 0.0) })
         for record in records {

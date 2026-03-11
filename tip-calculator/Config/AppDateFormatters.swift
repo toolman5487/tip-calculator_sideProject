@@ -10,7 +10,7 @@ enum AppDateFormatters {
     static let list: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        formatter.locale = Locale(identifier: "zh_TW")
+        formatter.locale = Locale.autoupdatingCurrent
         return formatter
     }()
 
@@ -18,7 +18,7 @@ enum AppDateFormatters {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        formatter.locale = Locale(identifier: "zh_TW")
+        formatter.locale = Locale.autoupdatingCurrent
         return formatter
     }()
 }

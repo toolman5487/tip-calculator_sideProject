@@ -65,6 +65,7 @@ enum IllustrationPDFGenerator {
 
     fileprivate static func drawFooter(ctx: CGContext, y: CGFloat, pageNum: Int = 1) {
         let formatter = DateFormatter()
+        formatter.locale = Locale.autoupdatingCurrent
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         let dateStr = "產生時間：\(formatter.string(from: Date()))"
         let attr: [NSAttributedString.Key: Any] = [
@@ -314,6 +315,7 @@ enum IllustrationPDFGenerator {
 
     private static func drawFooter(ctx: CGContext, y: CGFloat) {
         let formatter = DateFormatter()
+        formatter.locale = Locale.autoupdatingCurrent
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         let dateStr = "產生時間：\(formatter.string(from: Date()))"
         let attr: [NSAttributedString.Key: Any] = [
