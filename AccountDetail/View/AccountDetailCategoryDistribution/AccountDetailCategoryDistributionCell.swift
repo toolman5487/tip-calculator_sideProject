@@ -22,7 +22,11 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
-        view.applyCardShadowStyle()
+        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowRadius = 8
         return view
     }()
 
@@ -63,12 +67,6 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard containerView.bounds.width > 0, containerView.bounds.height > 0 else { return }
-        containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: 12).cgPath
     }
 
     func configure(items: [AccountDetailCategoryDistributionItem]) {
