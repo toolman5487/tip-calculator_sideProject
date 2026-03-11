@@ -16,7 +16,11 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
     private static let emptyHeight: CGFloat = 120
 
     private static let barColors: [UIColor] = [
-        .systemBlue, .systemGreen, .systemPurple, .systemOrange, .systemTeal
+        ThemeColor.trendUp,
+        ThemeColor.trendDown,
+        ThemeColor.trendFlat,
+        UIColor(hexString: "D97706"),
+        UIColor(hexString: "6366F1")
     ]
 
     private let containerView: UIView = {
