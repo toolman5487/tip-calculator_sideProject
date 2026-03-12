@@ -164,15 +164,17 @@ private extension AccountDetailOverviewUseCase {
     }
 
     static func buildAchievementSections(personalTotal: Double) -> [AccountDetailAchievementSection] {
-        let kTargets: [Double] = [10_000, 100_000, 1_000_000]
-        let mTargets: [Double] = [10_000_000, 100_000_000, 1_000_000_000]
-        let bTargets: [Double] = [10_000_000_000, 100_000_000_000, 1_000_000_000_000]
-        let tTargets: [Double] = [1_000_000_000_000, 10_000_000_000_000, 100_000_000_000_000]
+        let kTargets: [Double] = [10_000, 1_000_000]
+        let mTargets: [Double] = [10_000_000, 1_000_000_000]
+        let bTargets: [Double] = [10_000_000_000, 1_000_000_000_000]
+        let tTargets: [Double] = [1_000_000_000_000, 100_000_000_000_000]
+        let qTargets: [Double] = [1_000_000_000_000_000, 100_000_000_000_000_000]
         return [
-            AccountDetailAchievementSection(title: "K Level", items: kTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000, gaugeProgress: gaugeProgress(targets: kTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: kTargets, personalTotal: personalTotal)),
-            AccountDetailAchievementSection(title: "M Level", items: mTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000_000, gaugeProgress: gaugeProgress(targets: mTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: mTargets, personalTotal: personalTotal)),
-            AccountDetailAchievementSection(title: "B Level", items: bTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000_000_000, gaugeProgress: gaugeProgress(targets: bTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: bTargets, personalTotal: personalTotal)),
-            AccountDetailAchievementSection(title: "T Level", items: tTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 100_000_000_000_000, gaugeProgress: gaugeProgress(targets: tTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: tTargets, personalTotal: personalTotal))
+            AccountDetailAchievementSection(title: "K Level", personalTotal: personalTotal, maxTarget: 1_000_000, gaugeProgress: gaugeProgress(targets: kTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: kTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "M Level", personalTotal: personalTotal, maxTarget: 1_000_000_000, gaugeProgress: gaugeProgress(targets: mTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: mTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "B Level", personalTotal: personalTotal, maxTarget: 1_000_000_000_000, gaugeProgress: gaugeProgress(targets: bTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: bTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "T Level", personalTotal: personalTotal, maxTarget: 100_000_000_000_000, gaugeProgress: gaugeProgress(targets: tTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: tTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "Q Level", personalTotal: personalTotal, maxTarget: 100_000_000_000_000_000, gaugeProgress: gaugeProgress(targets: qTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: qTargets, personalTotal: personalTotal))
         ]
     }
 
@@ -199,32 +201,4 @@ private extension AccountDetailOverviewUseCase {
         return (current, denom)
     }
 
-    private static func makeAchievementItem(target: Double, personalTotal: Double) -> AccountDetailAchievementItem {
-        let displayName = milestoneDisplayName(target: target)
-        let progress = target > 0 ? min(1, personalTotal / target) : 0
-        let isCompleted = personalTotal >= target
-        return AccountDetailAchievementItem(
-            displayName: displayName,
-            targetAmount: target,
-            progress: progress,
-            isCompleted: isCompleted
-        )
-    }
-
-    private static func milestoneDisplayName(target: Double) -> String {
-        switch target {
-        case 10_000: return "10K"
-        case 100_000: return "100K"
-        case 1_000_000: return "1M"
-        case 10_000_000: return "10M"
-        case 100_000_000: return "100M"
-        case 1_000_000_000: return "1B"
-        case 10_000_000_000: return "10B"
-        case 100_000_000_000: return "100B"
-        case 1_000_000_000_000: return "1T"
-        case 10_000_000_000_000: return "10T"
-        case 100_000_000_000_000: return "100T"
-        default: return target.currencyFormatted
-        }
-    }
 }

@@ -101,11 +101,7 @@ final class AchievementTierCell: UICollectionViewCell {
     func configure(section: AccountDetailAchievementSection) {
         titleLabel.text = section.title
         progressRatioLabel.text = section.progressRangeText
-        var progress = section.gaugeProgress
-        if progress > 0, progress < 0.02 {
-            progress = 0.02
-        }
-        let progressClamped = min(1, max(0, progress))
+        let progressClamped = min(1, max(0, section.gaugeProgress))
         let progressColor = section.personalTotal >= section.maxTarget ? ThemeColor.trendDown : .systemBlue
         let (entries, colors): ([PieChartDataEntry], [UIColor]) = switch progressClamped {
         case ...0:

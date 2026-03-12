@@ -24,18 +24,10 @@ struct AccountDetailOverviewItem {
 
 struct AccountDetailAchievementSection: Equatable {
     let title: String
-    let items: [AccountDetailAchievementItem]
     let personalTotal: Double
     let maxTarget: Double
     let gaugeProgress: Double
     let progressRangeText: String
-}
-
-struct AccountDetailAchievementItem: Equatable {
-    let displayName: String
-    let targetAmount: Double
-    let progress: Double
-    let isCompleted: Bool
 }
 
 // MARK: - Cell 1: Carousel
