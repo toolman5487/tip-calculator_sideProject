@@ -19,6 +19,7 @@ struct AccountDetailOverviewItem {
     let topLocationName: String
     let statCardItems: [AccountDetailStatCardItem]
     let categoryDistributionItems: [AccountDetailCategoryDistributionItem]
+    let achievementItems: [AccountDetailAchievementItem]
 }
 
 // MARK: - Cell 1: Carousel
@@ -29,11 +30,18 @@ struct AccountDetailStatCardItem {
     let systemImageName: String?
 }
 
-struct AccountDetailCategoryDistributionItem {
+struct AccountDetailCategoryDistributionItem: Equatable {
     let displayName: String
     let amount: Double
     let percentage: Double
     let systemImageName: String?
+}
+
+struct AccountDetailAchievementItem: Equatable {
+    let displayName: String
+    let targetAmount: Double
+    let progress: Double
+    let isCompleted: Bool
 }
 
 // MARK: - Section
@@ -42,4 +50,5 @@ enum AccountDetailSection: Int, CaseIterable {
     case header
     case carousel
     case categoryDistribution
+    case achievement
 }

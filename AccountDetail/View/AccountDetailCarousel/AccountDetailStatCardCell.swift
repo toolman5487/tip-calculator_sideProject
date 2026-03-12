@@ -10,6 +10,8 @@ final class AccountDetailStatCardCell: UICollectionViewCell {
 
     static let reuseId = "AccountDetailStatCardCell"
 
+    private var lastShadowBounds: CGRect = .zero
+
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -33,6 +35,9 @@ final class AccountDetailStatCardCell: UICollectionViewCell {
         label.textColor = .label
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
+        label.numberOfLines = 1
         return label
     }()
 
@@ -76,6 +81,9 @@ final class AccountDetailStatCardCell: UICollectionViewCell {
         valueImageView.snp.makeConstraints { make in
             make.width.height.equalTo(32)
         }
+        valueLabel.snp.makeConstraints { make in
+            make.leading.trailing.lessThanOrEqualTo(containerView).inset(8)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -84,8 +92,11 @@ final class AccountDetailStatCardCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard containerView.bounds.width > 0, containerView.bounds.height > 0 else { return }
-        containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: 12).cgPath
+        let b = containerView.bounds
+        guard b.width > 0, b.height > 0 else { return }
+        guard b != lastShadowBounds else { return }
+        lastShadowBounds = b
+        containerView.layer.shadowPath = UIBezierPath(roundedRect: b, cornerRadius: 12).cgPath
     }
 
     func configure(title: String, value: String, systemImageName: String? = nil) {

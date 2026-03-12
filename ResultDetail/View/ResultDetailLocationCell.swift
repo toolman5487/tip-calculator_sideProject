@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 import SnapKit
 
-final class ResultDetailLocationCell: ResultDeetailTableViewCell {
+final class ResultDetailLocationCell: ResultDetailTableViewCell {
 
     static let locationReuseId = "ResultDetailLocationCell"
 

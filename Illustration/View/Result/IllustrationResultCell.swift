@@ -31,7 +31,7 @@ final class IllustrationResultCell: UICollectionViewCell {
         text.addAttributes([.font: ThemeFont.bold(Ofsize: 24)], range: NSRange(location: 0, length: 1))
         label.attributedText = text
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.4
         return label
     }()
 
@@ -136,7 +136,7 @@ private final class KPIItemView: UIView {
         let label = UILabel()
         label.textColor = ThemeColor.primary
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.4
         return label
     }()
 

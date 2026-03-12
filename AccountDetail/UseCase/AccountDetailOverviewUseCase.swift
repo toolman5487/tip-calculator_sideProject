@@ -35,8 +35,11 @@ enum AccountDetailOverviewUseCase {
             .filter { $0.key != "未知地區" || agg.locationCounts.count == 1 }
             .max(by: { $0.value < $1.value })?
             .key
-        let topCategory = agg.categoryCounts
-            .max(by: { $0.value < $1.value })
+        let topCategory = agg.categoryAmounts
+            .max(by: { a, b in
+                if a.value != b.value { return a.value < b.value }
+                return a.key > b.key
+            })
             .flatMap { Category(identifier: $0.key) }
 
         var statCardItems: [AccountDetailStatCardItem] = []
@@ -84,6 +87,7 @@ enum AccountDetailOverviewUseCase {
         }
 
         let categoryDistributionItems = buildCategoryDistributionItems(agg: agg)
+        let achievementItems = buildAchievementItems(personalTotal: agg.personalTotal)
         return AccountDetailOverviewItem(
             totalRecordCount: snapshots.count,
             totalRecordCountText: Double(snapshots.count).abbreviatedFormatted,
@@ -93,7 +97,8 @@ enum AccountDetailOverviewUseCase {
             usageDaysText: usageDays.map { "\($0) 天" } ?? "—",
             topLocationName: topLocation ?? "—",
             statCardItems: statCardItems,
-            categoryDistributionItems: categoryDistributionItems
+            categoryDistributionItems: categoryDistributionItems,
+            achievementItems: achievementItems
         )
     }
 }
@@ -160,5 +165,29 @@ private extension AccountDetailOverviewUseCase {
             ))
         }
         return Array(items.prefix(5))
+    }
+
+    static func buildAchievementItems(personalTotal: Double) -> [AccountDetailAchievementItem] {
+        let milestones: [(displayName: String, target: Double)] = [
+            (String(localized: "achievement.milestone.10000"), 10_000),
+            (String(localized: "achievement.milestone.100000"), 100_000),
+            (String(localized: "achievement.milestone.1000000"), 1_000_000),
+            (String(localized: "achievement.milestone.10000000"), 10_000_000),
+            (String(localized: "achievement.milestone.100000000"), 100_000_000),
+            (String(localized: "achievement.milestone.1000000000"), 1_000_000_000),
+            (String(localized: "achievement.milestone.10000000000"), 10_000_000_000),
+            (String(localized: "achievement.milestone.100000000000"), 100_000_000_000),
+            (String(localized: "achievement.milestone.1000000000000"), 1_000_000_000_000)
+        ]
+        return milestones.map { displayName, target in
+            let progress = target > 0 ? min(1, personalTotal / target) : 0
+            let isCompleted = personalTotal >= target
+            return AccountDetailAchievementItem(
+                displayName: displayName,
+                targetAmount: target,
+                progress: progress,
+                isCompleted: isCompleted
+            )
+        }
     }
 }

@@ -20,7 +20,7 @@ final class MainAccountDetailViewModel {
     // MARK: - Published State
 
     @Published private(set) var overviewItem: AccountDetailOverviewItem?
-    @Published private(set) var sectionCount: Int = 3
+    @Published private(set) var sectionCount: Int = 4
     @Published private(set) var dataVersion: UInt = 0
 
     // MARK: - Init

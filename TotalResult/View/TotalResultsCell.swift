@@ -30,6 +30,9 @@ final class AmountPerPersonCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 60, weight: .bold, width: .condensed)
         label.textColor = ThemeColor.primary
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
+        label.numberOfLines = 1
         return label
     }()
 
@@ -43,13 +46,14 @@ final class AmountPerPersonCell: UICollectionViewCell {
         containerView.addSubview(titleLabel)
 
         containerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
 
         valueLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -163,7 +167,7 @@ final class LocationCell: BaseResultInfoCell {
         valueLabel.font = ThemeFont.bold(Ofsize: 20)
         valueLabel.textColor = ThemeColor.text
         valueLabel.adjustsFontSizeToFitWidth = true
-        valueLabel.minimumScaleFactor = 0.5
+        valueLabel.minimumScaleFactor = 0.4
         valueLabel.numberOfLines = 1
         if isLoading {
             valueLabel.text = "取得定位中"

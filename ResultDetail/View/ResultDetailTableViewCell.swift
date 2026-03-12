@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ResultDeetailTableViewCell: UITableViewCell {
+class ResultDetailTableViewCell: UITableViewCell {
 
     static let reuseId = "ResultDeetailTableViewCell"
 

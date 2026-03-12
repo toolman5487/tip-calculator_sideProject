@@ -1,0 +1,57 @@
+---
+description: tip-calculator 專案規範總覽
+alwaysApply: true
+---
+
+# 專案規範
+
+## 專案檔與工程設定
+
+- **不要修改專案工程檔**：如 `.xcodeproj`、`project.pbxproj`、`*.xcworkspace` 等
+- **不要將新檔案加入 Xcode 專案**：建立新檔後，由使用者自行在 Xcode 中加入 target
+- 建立新檔時僅寫入檔案內容，不修改 `project.pbxproj` 或相關工程設定
+
+## 註解規範
+
+- 僅使用 `// MARK: -` 作為區塊分隔
+- 不寫行內小註解（包含 `//`、`///` 單行註解）
+- 程式碼應自解釋，透過命名與結構表達意圖
+
+## SnapKit 約束
+
+- 使用 `inset()` 取代 `offset(-n)`，如 `make.leading.trailing.equalToSuperview().inset(16)`
+
+## 常數撰寫規範
+
+- **不要**在 type 頂部集中宣告 layout 常數（如 `headerHeight`、`rowHeight`、`rowSpacing`、`inset`）
+- **直接帶入數字**，在使用的程式碼處寫 inline literal
+
+```swift
+// ❌ 不要
+private static let headerHeight: CGFloat = 52
+private static let rowHeight: CGFloat = 28
+
+// ✅ 直接帶入數字
+make.height.equalTo(52)
+return CGFloat(itemCount) * 28 + CGFloat(max(0, itemCount - 1)) * 12
+```
+
+## UI 元件設計
+
+- 遵循 [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
+- 觸控目標至少 44×44 pt
+- 間距、padding、尺寸以 **4** 或 **8** 的倍數設計
+
+## 技術棧
+
+- Language: Swift 6, Objective-C
+- UI: UIKit
+- Architecture: MVVM
+- Reactive: Combine
+- Min iOS: 16+
+
+## Swift 規範
+
+- 使用 `guard` 早期返回，`[weak self]` 避免循環引用
+- ViewModel 不 import UIKit
+- 優先使用 MVVM 搭建頁面

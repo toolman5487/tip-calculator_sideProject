@@ -10,11 +10,6 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
 
     static let reuseId = "AccountDetailCategoryDistributionCell"
 
-    private static let rowHeight: CGFloat = 28
-    private static let rowSpacing: CGFloat = 12
-    private static let inset: CGFloat = 16
-    private static let emptyHeight: CGFloat = 120
-
     private static let barColors: [UIColor] = [
         ThemeColor.trendUp,
         ThemeColor.trendDown,
@@ -37,34 +32,34 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
     private let rowsStackView: UIStackView = {
         let v = UIStackView()
         v.axis = .vertical
-        v.spacing = rowSpacing
+        v.spacing = 12
         v.alignment = .fill
         v.distribution = .fillEqually
         return v
     }()
 
-    private let emptyLabel: UILabel = {
-        let label = UILabel()
-        label.text = "尚無消費分布"
-        label.font = ThemeFont.regular(Ofsize: 14)
-        label.textColor = .tertiaryLabel
-        label.textAlignment = .center
-        return label
+    private let emptyStateView: EmptyStateView = {
+        let v = EmptyStateView()
+        v.label.text = "尚無消費分布"
+        return v
     }()
+
+    private var lastDisplayedItems: [AccountDetailCategoryDistributionItem] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         containerView.addSubview(rowsStackView)
-        containerView.addSubview(emptyLabel)
+        containerView.addSubview(emptyStateView)
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview().inset(16)
         }
         rowsStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(AccountDetailCategoryDistributionCell.inset)
+            make.edges.equalToSuperview().inset(16)
         }
-        emptyLabel.snp.makeConstraints { make in
+        emptyStateView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -73,12 +68,24 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        emptyStateView.stop()
+    }
+
     func configure(items: [AccountDetailCategoryDistributionItem]) {
         let displayItems = Array(items.prefix(5))
         let hasData = !displayItems.isEmpty
         rowsStackView.isHidden = !hasData
-        emptyLabel.isHidden = hasData
-        guard hasData else { return }
+        emptyStateView.isHidden = hasData
+        guard hasData else {
+            emptyStateView.play()
+            lastDisplayedItems = []
+            return
+        }
+        emptyStateView.stop()
+        guard displayItems != lastDisplayedItems else { return }
+        lastDisplayedItems = displayItems
         rowsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for (index, item) in displayItems.enumerated() {
             let row = makeRow(
@@ -146,7 +153,7 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
     }
 
     static func preferredHeight(itemCount: Int) -> CGFloat {
-        guard itemCount > 0 else { return inset * 2 + emptyHeight }
-        return inset * 2 + CGFloat(itemCount) * rowHeight + CGFloat(max(0, itemCount - 1)) * rowSpacing
+        guard itemCount > 0 else { return 16 * 2 + 220 }
+        return 16 * 2 + CGFloat(itemCount) * 28 + CGFloat(max(0, itemCount - 1)) * 12
     }
 }

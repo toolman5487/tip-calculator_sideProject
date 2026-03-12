@@ -5,14 +5,14 @@
 //  Created by Willy Hsu on 2026/3/11.
 //
 
+import UIKit
 import Combine
 import SnapKit
-import UIKit
 
 @MainActor
 final class MainAccountDetailViewController: MainBaseViewController, TabBarRefreshable {
 
-    // MARK: - View Model & State
+    // MARK: - Properties
 
     private let viewModel = MainAccountDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
@@ -21,17 +21,6 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupAccountDetailContent()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.load()
-    }
-
-    // MARK: - Setup
-
-    private func setupAccountDetailContent() {
         setupNavigation()
         setupCollectionView()
         bind()
@@ -39,6 +28,30 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
         collectionView.dataSource = self
         collectionView.delegate = self
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.load()
+    }
+
+    // MARK: - Binding
+
+    private func bind() {
+        refreshPublisher
+            .sink { [weak self] _ in
+                self?.refreshContent()
+            }
+            .store(in: &cancellables)
+
+        viewModel.$dataVersion
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.reloadOverviewContent()
+            }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Setup
 
     private func setupNavigation() {
         title = "帳戶總覽"
@@ -65,6 +78,10 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
             forCellWithReuseIdentifier: AccountDetailCategoryDistributionCell.reuseId
         )
         collectionView.register(
+            AccountDetailAchievementCell.self,
+            forCellWithReuseIdentifier: AccountDetailAchievementCell.reuseId
+        )
+        collectionView.register(
             AccountDetailSectionTitleHeader.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId
@@ -75,23 +92,6 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
 
     func refreshContent() {
         viewModel.load()
-    }
-
-    // MARK: - Binding
-
-    private func bind() {
-        refreshPublisher
-            .sink { [weak self] _ in
-                self?.refreshContent()
-            }
-            .store(in: &cancellables)
-
-        viewModel.$dataVersion
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancellables)
     }
 }
 
@@ -123,29 +123,41 @@ extension MainAccountDetailViewController {
             let items = viewModel.overviewItem?.categoryDistributionItems ?? []
             cell.configure(items: items)
             return cell
+        case .achievement:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailAchievementCell.reuseId, for: indexPath) as! AccountDetailAchievementCell
+            let items = viewModel.overviewItem?.achievementItems ?? []
+            cell.configure(items: items)
+            return cell
         case nil:
             fatalError("Invalid section")
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader,
-              AccountDetailSection(rawValue: indexPath.section) == .categoryDistribution else {
+        guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
-            for: indexPath
-        ) as! AccountDetailSectionTitleHeader
-        header.configure(title: Self.categoryDistributionSectionTitle)
-        return header
+        switch AccountDetailSection(rawValue: indexPath.section) {
+        case .categoryDistribution:
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
+                for: indexPath
+            ) as! AccountDetailSectionTitleHeader
+            header.configure(title: Self.categoryDistributionSectionTitle)
+            return header
+        case .achievement:
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
+                for: indexPath
+            ) as! AccountDetailSectionTitleHeader
+            header.configure(title: Self.achievementSectionTitle)
+            return header
+        default:
+            return UICollectionReusableView()
+        }
     }
-}
-
-// MARK: - UICollectionViewDelegate
-
-extension MainAccountDetailViewController {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -167,23 +179,43 @@ extension MainAccountDetailViewController {
             let itemCount = viewModel.overviewItem?.categoryDistributionItems.count ?? 0
             let height = AccountDetailCategoryDistributionCell.preferredHeight(itemCount: itemCount)
             return CGSize(width: width, height: height)
+        case .achievement:
+            let itemCount = viewModel.overviewItem?.achievementItems.count ?? 9
+            let height = AccountDetailAchievementCell.preferredHeight(itemCount: itemCount)
+            return CGSize(width: width, height: height)
         case nil:
             return .zero
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        guard AccountDetailSection(rawValue: section) == .categoryDistribution else {
+        switch AccountDetailSection(rawValue: section) {
+        case .header:
+            return .zero
+        case .carousel:
+            return .zero
+        case .categoryDistribution:
+            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        case .achievement:
+            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        case nil:
             return .zero
         }
-        return UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard AccountDetailSection(rawValue: section) == .categoryDistribution else {
+        switch AccountDetailSection(rawValue: section) {
+        case .header:
+            return .zero
+        case .carousel:
+            return .zero
+        case .categoryDistribution:
+            return CGSize(width: collectionView.bounds.width, height: 44)
+        case .achievement:
+            return CGSize(width: collectionView.bounds.width, height: 44)
+        case nil:
             return .zero
         }
-        return CGSize(width: collectionView.bounds.width, height: 44)
     }
 }
 
@@ -191,4 +223,9 @@ extension MainAccountDetailViewController {
 
 private extension MainAccountDetailViewController {
     static let categoryDistributionSectionTitle = "消費分布"
+    static let achievementSectionTitle = "消費成就"
+
+    func reloadOverviewContent() {
+        collectionView.reloadSections(IndexSet(0..<viewModel.sectionCount))
+    }
 }

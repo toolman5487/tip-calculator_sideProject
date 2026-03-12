@@ -98,7 +98,7 @@ final class ResultDetailViewController: BaseViewController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ResultDeetailTableViewCell.self, forCellReuseIdentifier: ResultDeetailTableViewCell.reuseId)
+        tableView.register(ResultDetailTableViewCell.self, forCellReuseIdentifier: ResultDetailTableViewCell.reuseId)
         tableView.register(ResultDetailImageValueCell.self, forCellReuseIdentifier: ResultDetailImageValueCell.reuseId)
         tableView.register(ResultDetailLocationCell.self, forCellReuseIdentifier: ResultDetailLocationCell.locationReuseId)
 
@@ -125,6 +125,9 @@ final class ResultDetailViewController: BaseViewController {
         amountLabel.font = UIFont.systemFont(ofSize: 60, weight: .bold, width: .condensed)
         amountLabel.textColor = ThemeColor.primary
         amountLabel.textAlignment = .center
+        amountLabel.adjustsFontSizeToFitWidth = true
+        amountLabel.minimumScaleFactor = 0.4
+        amountLabel.numberOfLines = 1
         headerAmountLabel = amountLabel
 
         headerView.addSubview(titleLabel)
@@ -137,6 +140,7 @@ final class ResultDetailViewController: BaseViewController {
         amountLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(titleLabel.snp.top)
+            make.left.right.equalToSuperview().inset(16)
         }
 
         tableView.tableHeaderView = headerView
@@ -219,7 +223,7 @@ extension ResultDetailViewController: UITableViewDataSource {
 
         switch row {
         case .value(let title, let value, let icon):
-            let cell = tableView.dequeueReusableCell(withIdentifier: ResultDeetailTableViewCell.reuseId, for: indexPath) as! ResultDeetailTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResultDetailTableViewCell.reuseId, for: indexPath) as! ResultDetailTableViewCell
             cell.configure(title: title, value: value, systemImageName: icon)
             return cell
 

@@ -27,7 +27,7 @@ final class AmountView: UIView {
         label.textAlignment = textAlignment
         label.textColor = ThemeColor.primary
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.4
         let text = NSMutableAttributedString(string: "$0", attributes: [.font: ThemeFont.bold(Ofsize: 24)])
         text.addAttributes([.font: ThemeFont.bold(Ofsize: 16)], range: NSRange(location: 0, length: 1))
         label.attributedText = text
