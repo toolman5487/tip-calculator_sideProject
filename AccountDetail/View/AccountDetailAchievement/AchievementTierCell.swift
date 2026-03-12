@@ -10,11 +10,11 @@ import SnapKit
 import UIKit
 
 final class AchievementTierCell: UICollectionViewCell {
-
+    
     static let reuseId = "AchievementTierCell"
-
+    
     private var lastShadowBounds: CGRect = .zero
-
+    
     private let containerView: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemGroupedBackground
@@ -22,7 +22,7 @@ final class AchievementTierCell: UICollectionViewCell {
         v.applyCardShadowStyle()
         return v
     }()
-
+    
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 24, weight: .bold)
@@ -30,7 +30,7 @@ final class AchievementTierCell: UICollectionViewCell {
         l.textColor = .label
         return l
     }()
-
+    
     private let progressRatioLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 16, weight: .regular)
@@ -38,7 +38,7 @@ final class AchievementTierCell: UICollectionViewCell {
         l.textColor = .secondaryLabel
         return l
     }()
-
+    
     private let chartView: PieChartView = {
         let chart = PieChartView()
         chart.legend.enabled = false
@@ -56,7 +56,7 @@ final class AchievementTierCell: UICollectionViewCell {
         chart.drawCenterTextEnabled = false
         return chart
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
@@ -68,11 +68,6 @@ final class AchievementTierCell: UICollectionViewCell {
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        progressRatioLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(8)
-            make.centerX.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
         chartView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.bottom.equalTo(progressRatioLabel.snp.top).offset(-8)
@@ -83,12 +78,17 @@ final class AchievementTierCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.center.equalTo(chartView)
         }
+        progressRatioLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(8)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         let b = containerView.bounds
@@ -97,7 +97,7 @@ final class AchievementTierCell: UICollectionViewCell {
         lastShadowBounds = b
         containerView.layer.shadowPath = UIBezierPath(roundedRect: b, cornerRadius: 12).cgPath
     }
-
+    
     func configure(section: AccountDetailAchievementSection) {
         titleLabel.text = section.title
         progressRatioLabel.text = section.progressRangeText

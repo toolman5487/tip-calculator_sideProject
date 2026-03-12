@@ -177,8 +177,8 @@ private extension AccountDetailOverviewUseCase {
     }
 
     private static func progressRangeText(targets: [Double], personalTotal: Double) -> String {
-        guard let (current, denom) = progressValues(targets: targets, personalTotal: personalTotal) else { return "0 / 0" }
-        return "\(current.progressFormatted) / \(denom.progressFormatted)"
+        guard let (_, denom) = progressValues(targets: targets, personalTotal: personalTotal) else { return "0 / 0" }
+        return "\(personalTotal.progressFormatted) / \(denom.progressFormatted)"
     }
 
     private static func gaugeProgress(targets: [Double], personalTotal: Double) -> Double {
