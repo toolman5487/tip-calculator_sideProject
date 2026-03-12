@@ -6,7 +6,7 @@
 import SnapKit
 import UIKit
 
-final class AccountDetailSectionTitleHeader: UICollectionReusableView {
+final class AccountDetailSectionTitleHeader: BaseBlurSectionHeaderView {
 
     static let reuseId = "AccountDetailSectionTitleHeader"
 
@@ -17,18 +17,12 @@ final class AccountDetailSectionTitleHeader: UICollectionReusableView {
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-        addSubview(titleLabel)
+    override func setupContent() {
+        contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     func configure(title: String) {

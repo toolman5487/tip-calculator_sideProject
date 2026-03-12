@@ -88,6 +88,10 @@ final class BillInputView: UIView {
         billSubject.send(0)
     }
 
+    func focusTextField() {
+        textField.becomeFirstResponder()
+    }
+
     // MARK: - Setup
 
     private func setupLayout() {

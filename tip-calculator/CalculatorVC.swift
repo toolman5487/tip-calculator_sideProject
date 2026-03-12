@@ -70,6 +70,7 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
         }
+        setupKeyboardAvoidance(for: tableView)
     }
 
     // MARK: - TabBarRefreshable
@@ -92,6 +93,9 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
 
         cells.confirmButton.onTap = { confirmTapSubject.send(()) }
         cells.categoriesInput.onMoreOptionsTap = { moreOptionsTapSubject.send(()) }
+        cells.result.onTap = { [weak self] in
+            self?.cells.billInput.focusInput()
+        }
 
         let input = CalculatorVM.Input(
             billPublisher: cells.billInput.billInputView.valuePublisher,

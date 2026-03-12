@@ -18,6 +18,7 @@ final class ResultDetailViewController: BaseViewController {
     private let viewModel: ResultDetailViewModel
     private var cancellables = Set<AnyCancellable>()
     private var headerAmountLabel: UILabel?
+    private var didSetupTableExtras = false
 
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
@@ -60,9 +61,15 @@ final class ResultDetailViewController: BaseViewController {
 
         setupNavigation()
         setupTableView()
+        bindViewModel()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !didSetupTableExtras, tableView.bounds.width > 0 else { return }
+        didSetupTableExtras = true
         setupHeaderView()
         setupFooterView()
-        bindViewModel()
     }
 
     // MARK: - Binding
@@ -111,7 +118,7 @@ final class ResultDetailViewController: BaseViewController {
 
     private func setupHeaderView() {
         let headerHeight: CGFloat = 160
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: headerHeight))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: headerHeight))
         headerView.backgroundColor = .clear
 
         let titleLabel = UILabel()
@@ -152,8 +159,7 @@ final class ResultDetailViewController: BaseViewController {
             return
         }
         let footerHeight: CGFloat = 88
-        let width = UIScreen.main.bounds.width
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: footerHeight))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: footerHeight))
         footerView.backgroundColor = .clear
 
         footerView.addSubview(deleteButton)

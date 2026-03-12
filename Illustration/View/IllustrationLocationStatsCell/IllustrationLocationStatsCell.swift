@@ -64,7 +64,8 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
         rowsStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(16)
+            make.top.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16).priority(.init(999))
         }
         emptyStateView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

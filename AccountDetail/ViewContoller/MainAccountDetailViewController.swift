@@ -195,9 +195,9 @@ extension MainAccountDetailViewController {
         case .carousel:
             return .zero
         case .categoryDistribution:
-            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         case .achievement:
-            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         case nil:
             return .zero
         }

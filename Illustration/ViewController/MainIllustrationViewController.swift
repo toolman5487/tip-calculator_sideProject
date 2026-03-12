@@ -88,8 +88,10 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
         viewModel.$dataVersion
             .dropFirst()
             .sink { [weak self] _ in
-                self?.applyNavigationBarTrendColor()
-                self?.collectionView.reloadData()
+                guard let self else { return }
+                self.applyNavigationBarTrendColor()
+                self.collectionView.collectionViewLayout.invalidateLayout()
+                self.collectionView.reloadData()
             }
             .store(in: &cancellables)
     }

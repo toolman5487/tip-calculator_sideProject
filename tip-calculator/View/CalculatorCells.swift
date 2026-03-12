@@ -40,6 +40,8 @@ final class ResultCell: UITableViewCell {
 
     static let reuseId = "ResultCell"
 
+    var onTap: (() -> Void)?
+
     // MARK: - UI Components
 
     private lazy var containerView: UIView = {
@@ -80,6 +82,13 @@ final class ResultCell: UITableViewCell {
             make.top.equalToSuperview().inset(8)
             make.right.left.bottom.equalToSuperview()
         }
+        let tap = UITapGestureRecognizer(target: self, action: #selector(resultViewTapped))
+        resultView.isUserInteractionEnabled = true
+        resultView.addGestureRecognizer(tap)
+    }
+
+    @objc private func resultViewTapped() {
+        onTap?()
     }
 }
 
@@ -136,6 +145,12 @@ final class BillInputCell: UITableViewCell {
 extension BillInputCell: Resettable {
     func reset() {
         billInputView.billReset()
+    }
+}
+
+extension BillInputCell {
+    func focusInput() {
+        billInputView.focusTextField()
     }
 }
 

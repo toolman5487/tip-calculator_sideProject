@@ -80,7 +80,8 @@ final class ResultDetailEditViewController: BaseViewController {
     }
 
     private func setupTableFooterView() {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 84))
+        let width = view.bounds.width > 0 ? view.bounds.width : UIScreen.main.bounds.width
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 84))
         footerView.backgroundColor = .clear
 
         let saveButton = UIButton(type: .system)

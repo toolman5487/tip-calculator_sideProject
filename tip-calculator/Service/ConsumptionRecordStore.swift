@@ -86,9 +86,16 @@ struct ConsumptionRecordStore: ConsumptionRecordStoring {
     @MainActor
     func fetchAll() -> [ConsumptionRecord] {
         let request = ConsumptionRecord.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \ConsumptionRecord.createdAt, ascending: false)]
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \ConsumptionRecord.consumptionTime, ascending: false),
+            NSSortDescriptor(keyPath: \ConsumptionRecord.createdAt, ascending: false)
+        ]
         do {
             let records = try CoreDataStack.viewContext.fetch(request)
+            let allHaveConsumptionTime = records.allSatisfy { $0.consumptionTime != nil }
+            if allHaveConsumptionTime {
+                return records
+            }
             return records.sorted { ($0.effectiveConsumptionTime ?? .distantPast) > ($1.effectiveConsumptionTime ?? .distantPast) }
         } catch {
             return []
