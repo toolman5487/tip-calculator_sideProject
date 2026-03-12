@@ -42,9 +42,9 @@ final class ResultDetailLocationCell: ResultDetailTableViewCell {
         mapView.snp.makeConstraints { make in
             make.top.equalTo(valueLabel.snp.bottom).offset(4)
             make.leading.equalTo(iconContainerView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-16)
-            mapHeightConstraint = make.height.equalTo(140).constraint
-            make.bottom.equalToSuperview().offset(-10)
+            make.trailing.equalToSuperview().inset(16)
+            mapHeightConstraint = make.height.equalTo(144).constraint
+            make.bottom.equalToSuperview().inset(10)
         }
         let tap = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
         mapView.addGestureRecognizer(tap)
