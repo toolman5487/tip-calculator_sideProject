@@ -125,8 +125,8 @@ extension MainAccountDetailViewController {
             return cell
         case .achievement:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailAchievementCell.reuseId, for: indexPath) as! AccountDetailAchievementCell
-            let items = viewModel.overviewItem?.achievementItems ?? []
-            cell.configure(items: items)
+            let sections = viewModel.overviewItem?.achievementSections ?? []
+            cell.configure(sections: sections)
             return cell
         case nil:
             fatalError("Invalid section")
@@ -180,9 +180,8 @@ extension MainAccountDetailViewController {
             let height = AccountDetailCategoryDistributionCell.preferredHeight(itemCount: itemCount)
             return CGSize(width: width, height: height)
         case .achievement:
-            let itemCount = viewModel.overviewItem?.achievementItems.count ?? 9
-            let height = AccountDetailAchievementCell.preferredHeight(itemCount: itemCount)
-            return CGSize(width: width, height: height)
+            let sections = viewModel.overviewItem?.achievementSections ?? []
+            return CGSize(width: width, height: AccountDetailAchievementCell.preferredHeight(sections: sections, width: width))
         case nil:
             return .zero
         }

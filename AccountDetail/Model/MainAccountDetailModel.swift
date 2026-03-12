@@ -19,7 +19,23 @@ struct AccountDetailOverviewItem {
     let topLocationName: String
     let statCardItems: [AccountDetailStatCardItem]
     let categoryDistributionItems: [AccountDetailCategoryDistributionItem]
-    let achievementItems: [AccountDetailAchievementItem]
+    let achievementSections: [AccountDetailAchievementSection]
+}
+
+struct AccountDetailAchievementSection: Equatable {
+    let title: String
+    let items: [AccountDetailAchievementItem]
+    let personalTotal: Double
+    let maxTarget: Double
+    let gaugeProgress: Double
+    let progressRangeText: String
+}
+
+struct AccountDetailAchievementItem: Equatable {
+    let displayName: String
+    let targetAmount: Double
+    let progress: Double
+    let isCompleted: Bool
 }
 
 // MARK: - Cell 1: Carousel
@@ -35,13 +51,6 @@ struct AccountDetailCategoryDistributionItem: Equatable {
     let amount: Double
     let percentage: Double
     let systemImageName: String?
-}
-
-struct AccountDetailAchievementItem: Equatable {
-    let displayName: String
-    let targetAmount: Double
-    let progress: Double
-    let isCompleted: Bool
 }
 
 // MARK: - Section

@@ -87,7 +87,7 @@ enum AccountDetailOverviewUseCase {
         }
 
         let categoryDistributionItems = buildCategoryDistributionItems(agg: agg)
-        let achievementItems = buildAchievementItems(personalTotal: agg.personalTotal)
+        let achievementSections = buildAchievementSections(personalTotal: agg.personalTotal)
         return AccountDetailOverviewItem(
             totalRecordCount: snapshots.count,
             totalRecordCountText: Double(snapshots.count).abbreviatedFormatted,
@@ -98,7 +98,7 @@ enum AccountDetailOverviewUseCase {
             topLocationName: topLocation ?? "—",
             statCardItems: statCardItems,
             categoryDistributionItems: categoryDistributionItems,
-            achievementItems: achievementItems
+            achievementSections: achievementSections
         )
     }
 }
@@ -109,11 +109,9 @@ private extension AccountDetailOverviewUseCase {
 
     struct AggregationResult {
         var personalTotal: Double = 0
-        var totalTip: Double = 0
         var minDate: Date?
         var maxDate: Date?
         var locationCounts: [String: Int] = [:]
-        var categoryCounts: [String: Int] = [:]
         var categoryAmounts: [String: Double] = [:]
         var maxAmount: Double?
         var minAmount: Double?
@@ -123,14 +121,12 @@ private extension AccountDetailOverviewUseCase {
         var agg = AggregationResult()
         for s in snapshots {
             agg.personalTotal += s.amountPerPerson
-            agg.totalTip += s.totalTip
             if let d = s.effectiveConsumptionTime {
                 if agg.minDate == nil || d < agg.minDate! { agg.minDate = d }
                 if agg.maxDate == nil || d > agg.maxDate! { agg.maxDate = d }
             }
             agg.locationCounts[s.districtKey, default: 0] += 1
             if let id = s.categoryIdentifier, !id.isEmpty {
-                agg.categoryCounts[id, default: 0] += 1
                 agg.categoryAmounts[id, default: 0] += s.amountPerPerson
             }
             if agg.maxAmount == nil || s.amountPerPerson > agg.maxAmount! { agg.maxAmount = s.amountPerPerson }
@@ -167,27 +163,68 @@ private extension AccountDetailOverviewUseCase {
         return Array(items.prefix(5))
     }
 
-    static func buildAchievementItems(personalTotal: Double) -> [AccountDetailAchievementItem] {
-        let milestones: [(displayName: String, target: Double)] = [
-            (String(localized: "achievement.milestone.10000"), 10_000),
-            (String(localized: "achievement.milestone.100000"), 100_000),
-            (String(localized: "achievement.milestone.1000000"), 1_000_000),
-            (String(localized: "achievement.milestone.10000000"), 10_000_000),
-            (String(localized: "achievement.milestone.100000000"), 100_000_000),
-            (String(localized: "achievement.milestone.1000000000"), 1_000_000_000),
-            (String(localized: "achievement.milestone.10000000000"), 10_000_000_000),
-            (String(localized: "achievement.milestone.100000000000"), 100_000_000_000),
-            (String(localized: "achievement.milestone.1000000000000"), 1_000_000_000_000)
+    static func buildAchievementSections(personalTotal: Double) -> [AccountDetailAchievementSection] {
+        let kTargets: [Double] = [10_000, 100_000, 1_000_000]
+        let mTargets: [Double] = [10_000_000, 100_000_000, 1_000_000_000]
+        let bTargets: [Double] = [10_000_000_000, 100_000_000_000, 1_000_000_000_000]
+        let tTargets: [Double] = [1_000_000_000_000, 10_000_000_000_000, 100_000_000_000_000]
+        return [
+            AccountDetailAchievementSection(title: "K Level", items: kTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000, gaugeProgress: gaugeProgress(targets: kTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: kTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "M Level", items: mTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000_000, gaugeProgress: gaugeProgress(targets: mTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: mTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "B Level", items: bTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 1_000_000_000_000, gaugeProgress: gaugeProgress(targets: bTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: bTargets, personalTotal: personalTotal)),
+            AccountDetailAchievementSection(title: "T Level", items: tTargets.map { makeAchievementItem(target: $0, personalTotal: personalTotal) }, personalTotal: personalTotal, maxTarget: 100_000_000_000_000, gaugeProgress: gaugeProgress(targets: tTargets, personalTotal: personalTotal), progressRangeText: progressRangeText(targets: tTargets, personalTotal: personalTotal))
         ]
-        return milestones.map { displayName, target in
-            let progress = target > 0 ? min(1, personalTotal / target) : 0
-            let isCompleted = personalTotal >= target
-            return AccountDetailAchievementItem(
-                displayName: displayName,
-                targetAmount: target,
-                progress: progress,
-                isCompleted: isCompleted
-            )
+    }
+
+    private static func progressRangeText(targets: [Double], personalTotal: Double) -> String {
+        guard let (current, denom) = progressValues(targets: targets, personalTotal: personalTotal) else { return "0 / 0" }
+        return "\(current.progressFormatted) / \(denom.progressFormatted)"
+    }
+
+    private static func gaugeProgress(targets: [Double], personalTotal: Double) -> Double {
+        guard let (current, denom) = progressValues(targets: targets, personalTotal: personalTotal) else { return 0 }
+        return min(1, current / denom)
+    }
+
+    private static func progressValues(targets: [Double], personalTotal: Double) -> (current: Double, denom: Double)? {
+        let sorted = targets.sorted()
+        guard let first = sorted.first, let last = sorted.last else { return nil }
+        let denom = max(1, last - 1)
+        let current: Double
+        if personalTotal < first {
+            current = 0
+        } else {
+            current = min(personalTotal, last)
+        }
+        return (current, denom)
+    }
+
+    private static func makeAchievementItem(target: Double, personalTotal: Double) -> AccountDetailAchievementItem {
+        let displayName = milestoneDisplayName(target: target)
+        let progress = target > 0 ? min(1, personalTotal / target) : 0
+        let isCompleted = personalTotal >= target
+        return AccountDetailAchievementItem(
+            displayName: displayName,
+            targetAmount: target,
+            progress: progress,
+            isCompleted: isCompleted
+        )
+    }
+
+    private static func milestoneDisplayName(target: Double) -> String {
+        switch target {
+        case 10_000: return "10K"
+        case 100_000: return "100K"
+        case 1_000_000: return "1M"
+        case 10_000_000: return "10M"
+        case 100_000_000: return "100M"
+        case 1_000_000_000: return "1B"
+        case 10_000_000_000: return "10B"
+        case 100_000_000_000: return "100B"
+        case 1_000_000_000_000: return "1T"
+        case 10_000_000_000_000: return "10T"
+        case 100_000_000_000_000: return "100T"
+        default: return target.currencyFormatted
         }
     }
 }

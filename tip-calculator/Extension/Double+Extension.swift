@@ -49,6 +49,14 @@ extension Double {
         return formatter.string(for: self) ?? "\(self)"
     }
 
+    var progressFormatted: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        return formatter.string(for: self) ?? "\(Int(self))"
+    }
+
     private static func abbrevValue(_ value: Double) -> String {
         let absVal = abs(value)
         if absVal >= 10 || absVal == absVal.rounded() {

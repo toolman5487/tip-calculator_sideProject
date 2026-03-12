@@ -10,110 +10,135 @@ final class AccountDetailAchievementCell: UICollectionViewCell {
 
     static let reuseId = "AccountDetailAchievementCell"
 
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 12
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowRadius = 8
-        return view
+    private var sections: [AccountDetailAchievementSection] = []
+
+    private static let insetH: CGFloat = 16
+    private static let spacing: CGFloat = 12
+
+    private lazy var flowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = Self.spacing
+        return layout
     }()
 
-    private let contentStackView: UIStackView = {
-        let v = UIStackView()
-        v.axis = .vertical
-        v.spacing = 12
-        v.alignment = .fill
-        v.distribution = .fillEqually
-        return v
+    private lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        cv.backgroundColor = .clear
+        cv.showsHorizontalScrollIndicator = false
+        cv.isScrollEnabled = true
+        cv.decelerationRate = .fast
+        cv.dataSource = self
+        cv.delegate = self
+        cv.register(AchievementTierCell.self, forCellWithReuseIdentifier: AchievementTierCell.reuseId)
+        return cv
     }()
 
-    private var lastDisplayedItems: [AccountDetailAchievementItem] = []
+    private let pageControl: UIPageControl = {
+        let pc = UIPageControl()
+        pc.currentPageIndicatorTintColor = .systemBlue
+        pc.pageIndicatorTintColor = .quaternaryLabel
+        pc.hidesForSinglePage = true
+        pc.isUserInteractionEnabled = true
+        return pc
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
-        contentView.addSubview(containerView)
-        containerView.addSubview(contentStackView)
-
-        containerView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(16)
+        contentView.addSubview(collectionView)
+        contentView.addSubview(pageControl)
+        collectionView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
         }
-        contentStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(16)
+        pageControl.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(8)
         }
+        pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(items: [AccountDetailAchievementItem]) {
-        guard items != lastDisplayedItems else { return }
-        lastDisplayedItems = items
-        contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for item in items {
-            let row = makeRow(item: item)
-            contentStackView.addArrangedSubview(row)
-        }
+    func configure(sections: [AccountDetailAchievementSection]) {
+        self.sections = sections
+        pageControl.numberOfPages = sections.count
+        pageControl.currentPage = 0
+        collectionView.reloadData()
     }
 
-
-    private func makeRow(item: AccountDetailAchievementItem) -> UIView {
-        let nameLabel = UILabel()
-        nameLabel.text = item.displayName
-        nameLabel.font = ThemeFont.regular(Ofsize: 14)
-        nameLabel.textColor = item.isCompleted ? ThemeColor.trendDown : .label
-        nameLabel.snp.makeConstraints { make in
-            make.width.equalTo(56)
-        }
-
-        let valueLabel = UILabel()
-        if item.isCompleted {
-            valueLabel.text = "達成"
-            valueLabel.textColor = ThemeColor.trendDown
-        } else {
-            let pct = Int(round(item.progress * 100))
-            valueLabel.text = "\(pct)%"
-            valueLabel.textColor = .secondaryLabel
-        }
-        valueLabel.font = ThemeFont.regular(Ofsize: 12)
-        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
-
-        let barBg = UIView()
-        barBg.backgroundColor = .quaternarySystemFill
-        barBg.layer.cornerRadius = 4
-        barBg.clipsToBounds = true
-
-        let barFill = UIView()
-        barFill.backgroundColor = item.isCompleted ? ThemeColor.trendDown : ThemeColor.trendFlat
-        barFill.layer.cornerRadius = 4
-        barBg.addSubview(barFill)
-        barFill.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            make.width.equalTo(barBg.snp.width).multipliedBy(min(1, item.progress))
-        }
-
-        let barStack = UIStackView(arrangedSubviews: [nameLabel, barBg, valueLabel])
-        barStack.axis = .horizontal
-        barStack.spacing = 8
-        barStack.alignment = .center
-        barStack.distribution = .fill
-        barBg.snp.makeConstraints { make in
-            make.height.equalTo(16)
-        }
-        return barStack
+    @objc private func pageControlValueChanged() {
+        let page = pageControl.currentPage
+        let (cellWidth, _) = Self.cellSize(containerWidth: collectionView.bounds.width)
+        let offsetX = CGFloat(page) * (cellWidth + Self.spacing)
+        collectionView.setContentOffset(CGPoint(x: max(0, offsetX), y: 0), animated: true)
     }
 
-    static func preferredHeight(itemCount: Int) -> CGFloat {
-        guard itemCount > 0 else {
-            return 16 * 2 + 120
+    private static func cellSize(containerWidth: CGFloat) -> (width: CGFloat, height: CGFloat) {
+        let available = containerWidth - insetH * 2 - spacing
+        let cellWidth = available / 1
+        return (cellWidth, cellWidth)
+    }
+
+    static func preferredHeight(sections: [AccountDetailAchievementSection], width: CGFloat) -> CGFloat {
+        guard !sections.isEmpty else { return 0 }
+        let (_, cellHeight) = cellSize(containerWidth: width)
+        return 16 + cellHeight + 8 + 20 + 8
+    }
+}
+
+extension AccountDetailAchievementCell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        sections.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AchievementTierCell.reuseId, for: indexPath) as! AchievementTierCell
+        let section = sections[indexPath.item]
+        cell.configure(section: section)
+        return cell
+    }
+}
+
+extension AccountDetailAchievementCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let (w, h) = Self.cellSize(containerWidth: collectionView.bounds.width)
+        return CGSize(width: w, height: h)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 8, left: Self.insetH, bottom: 8, right: Self.insetH)
+    }
+}
+
+extension AccountDetailAchievementCell: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updatePageControl()
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let (cellWidth, _) = Self.cellSize(containerWidth: collectionView.bounds.width)
+        let pageWidth = cellWidth + Self.spacing
+        guard pageWidth > 0 else { return }
+        var page = Int(round(targetContentOffset.pointee.x / pageWidth))
+        if velocity.x > 0.3 { page += 1 }
+        if velocity.x < -0.3 { page -= 1 }
+        page = min(max(0, page), max(0, sections.count - 1))
+        targetContentOffset.pointee.x = CGFloat(page) * pageWidth
+    }
+
+    private func updatePageControl() {
+        let (cellWidth, _) = Self.cellSize(containerWidth: collectionView.bounds.width)
+        let pageWidth = cellWidth + Self.spacing
+        guard pageWidth > 0 else { return }
+        let page = Int(round(collectionView.contentOffset.x / pageWidth))
+        let clamped = min(max(0, page), max(0, sections.count - 1))
+        if pageControl.currentPage != clamped {
+            pageControl.currentPage = clamped
         }
-        return 16 * 2
-            + CGFloat(itemCount) * 28
-            + CGFloat(max(0, itemCount - 1)) * 12
     }
 }

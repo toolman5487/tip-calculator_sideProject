@@ -254,6 +254,9 @@
 		15D8D9B52F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
 		15D8D9B62F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
 		15D8D9B72F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
+		15D8D9BC2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */; };
+		15D8D9BD2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */; };
+		15D8D9BE2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */; };
 		15F1A0112F5B0001005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
 		15F1A0122F5B0002005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
 		15F1A0132F5B0003005D8554 /* CustomTabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */; };
@@ -402,6 +405,7 @@
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAchievementCell.swift; sourceTree = "<group>"; };
+		15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementTierCell.swift; sourceTree = "<group>"; };
 		15F1A0012F5B0001005D8554 /* CustomTabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarDelegate.swift; sourceTree = "<group>"; };
 		15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		15F1A0042F5B0004005D8554 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
@@ -1183,6 +1187,7 @@
 			isa = PBXGroup;
 			children = (
 				15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */,
+				15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */,
 			);
 			path = AccountDetailAchievement;
 			sourceTree = "<group>";
@@ -1513,6 +1518,7 @@
 				156C51742F3DE20000F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
 				15B72E2A2F616FF300335DA1 /* AccountDetailCategoryDistributionCell.swift in Sources */,
 				156C51922F3E700000F0C0A9 /* KPICardCell.swift in Sources */,
+				15D8D9BD2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */,
 				156C51952F3E700000F0C0A9 /* KPICarouselCell.swift in Sources */,
 				156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
@@ -1623,6 +1629,7 @@
 				156CCFDD2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
 				150DB80A2F470EC0008209A1 /* ConsumptionBreakdownModel.swift in Sources */,
 				156C1AED2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
+				15D8D9BC2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */,
 				156C5C692F3ED5A500F0C0A9 /* ConsumptionBreakdownViewController.swift in Sources */,
 				156C6FAC2F35CABB00F0C0A9 /* ResultsFilterCell.swift in Sources */,
 				156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
@@ -1722,6 +1729,7 @@
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				150DBCD82F483E72008209A1 /* ConsumptionBreakdownPieChart.swift in Sources */,
 				159BB1242F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */,
+				15D8D9BE2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */,
 				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				15B72E332F6172FF00335DA1 /* AccountDetailOverviewUseCase.swift in Sources */,
 				159BB1AD2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
