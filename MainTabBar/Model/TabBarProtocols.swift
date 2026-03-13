@@ -1,9 +1,14 @@
 //
-//  CustomTabBarControllerDelegate.swift
+//  TabBarProtocols.swift
 //  tip-calculator
 //
 
 import UIKit
+
+@MainActor
+protocol CustomTabBarDelegate: AnyObject {
+    func didSelectTab(at index: Int)
+}
 
 @MainActor
 protocol CustomTabBarControllerDelegate: AnyObject {
@@ -15,4 +20,9 @@ extension CustomTabBarControllerDelegate {
     func tabBarController(_ tabBarController: CustomTabBarController, shouldSelectTabAt index: Int) -> Bool {
         true
     }
+}
+
+@MainActor
+protocol TabBarRefreshable: AnyObject {
+    func refreshContent()
 }
