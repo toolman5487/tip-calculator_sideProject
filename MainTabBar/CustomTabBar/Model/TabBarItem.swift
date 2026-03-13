@@ -5,6 +5,69 @@
 
 import UIKit
 
+// MARK: - TabIconProvider
+
+struct TabIconProvider: @unchecked Sendable {
+
+    let fallbackImage: UIImage?
+
+    private let factory: @MainActor () -> UIView
+    private let selectionHandler: @MainActor (UIView, Bool, UIColor) -> Void
+
+    @MainActor
+    func makeView() -> UIView { factory() }
+
+    @MainActor
+    func applySelection(to view: UIView, isSelected: Bool, tintColor: UIColor) {
+        selectionHandler(view, isSelected, tintColor)
+    }
+
+    static func sfSymbol(_ systemName: String) -> TabIconProvider {
+        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
+        let image = UIImage(systemName: systemName, withConfiguration: config)
+        return TabIconProvider(
+            fallbackImage: image,
+            factory: {
+                let iv = UIImageView(image: image)
+                iv.contentMode = .scaleAspectFit
+                iv.tintColor = TabBarAppearance.normalColor
+                return iv
+            },
+            selectionHandler: { view, isSelected, tintColor in
+                (view as? UIImageView)?.tintColor = isSelected ? tintColor : TabBarAppearance.normalColor
+            }
+        )
+    }
+
+    static func custom(
+        fallbackImage: UIImage? = nil,
+        makeView: @escaping @MainActor () -> UIView,
+        onSelection: @escaping @MainActor (UIView, Bool, UIColor) -> Void = { _, _, _ in }
+    ) -> TabIconProvider {
+        TabIconProvider(fallbackImage: fallbackImage, factory: makeView, selectionHandler: onSelection)
+    }
+
+    private init(
+        fallbackImage: UIImage?,
+        factory: @escaping @MainActor () -> UIView,
+        selectionHandler: @escaping @MainActor (UIView, Bool, UIColor) -> Void
+    ) {
+        self.fallbackImage = fallbackImage
+        self.factory = factory
+        self.selectionHandler = selectionHandler
+    }
+}
+
+// MARK: - TabItemConfig
+
+struct TabItemConfig {
+    let title: String
+    let iconProvider: TabIconProvider
+    let selectedTintColor: UIColor?
+    let badgeAnimation: TabBarAnimationStyle
+    let preferredIconSize: CGFloat?
+}
+
 // MARK: - Display Mode
 
 enum TabBarDisplayMode: Equatable, Sendable {
@@ -16,7 +79,6 @@ enum TabBarDisplayMode: Equatable, Sendable {
 
 enum TabBarAnimationKind: Equatable, Sendable {
     case pulse
-    case colorChange
 }
 
 enum TabBarAnimationStyle: Equatable, Sendable {
@@ -24,46 +86,28 @@ enum TabBarAnimationStyle: Equatable, Sendable {
     case animated(TabBarAnimationKind)
 }
 
-// MARK: - Tab Bar Item
+// MARK: - TabBarItem
 
-struct TabBarItem: Equatable, Sendable {
+struct TabBarItem: @unchecked Sendable {
     let title: String
-    let icon: UIImage?
-    let selectedIcon: UIImage?
+    let iconProvider: TabIconProvider
     let displayMode: TabBarDisplayMode
     let animationStyle: TabBarAnimationStyle
+    let selectedTintColor: UIColor?
+    let preferredIconSize: CGFloat?
 
+    init(from config: TabItemConfig, displayMode: TabBarDisplayMode = .iconOnly) {
+        self.title = config.title
+        self.iconProvider = config.iconProvider
+        self.displayMode = displayMode
+        self.animationStyle = config.badgeAnimation
+        self.selectedTintColor = config.selectedTintColor
+        self.preferredIconSize = config.preferredIconSize
+    }
+}
+
+extension TabBarItem: Equatable {
     static func == (lhs: TabBarItem, rhs: TabBarItem) -> Bool {
-        guard lhs.title == rhs.title && lhs.displayMode == rhs.displayMode && lhs.animationStyle == rhs.animationStyle else {
-            return false
-        }
-
-        if lhs.icon !== rhs.icon || lhs.selectedIcon !== rhs.selectedIcon {
-            return false
-        }
-
-        return true
-    }
-
-    init(
-        title: String,
-        iconName: String,
-        selectedIconName: String? = nil,
-        displayMode: TabBarDisplayMode = .iconWithText,
-        animationStyle: TabBarAnimationStyle = .none
-    ) {
-        self.title = title
-        self.icon = UIImage(systemName: iconName)
-        self.selectedIcon = selectedIconName.flatMap { UIImage(systemName: $0) } ?? self.icon
-        self.displayMode = displayMode
-        self.animationStyle = animationStyle
-    }
-
-    init(title: String, icon: UIImage?, selectedIcon: UIImage?, displayMode: TabBarDisplayMode = .iconWithText, animationStyle: TabBarAnimationStyle = .none) {
-        self.title = title
-        self.icon = icon
-        self.selectedIcon = selectedIcon ?? icon
-        self.displayMode = displayMode
-        self.animationStyle = animationStyle
+        lhs.title == rhs.title && lhs.displayMode == rhs.displayMode && lhs.animationStyle == rhs.animationStyle
     }
 }

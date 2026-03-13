@@ -3,7 +3,37 @@
 //  tip-calculator
 //
 
+import Lottie
 import UIKit
+
+// MARK: - Lottie icon support
+
+extension TabIconProvider {
+    static func lottie(_ name: String) -> TabIconProvider {
+        .custom(
+            fallbackImage: nil,
+            makeView: {
+                let av = LottieAnimationView(name: name)
+                av.contentMode = .scaleAspectFill
+                av.loopMode = .loop
+                av.isUserInteractionEnabled = false
+                av.clipsToBounds = true
+                av.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                av.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                return av
+            },
+            onSelection: { view, isSelected, tintColor in
+                guard let lottie = view as? LottieAnimationView else { return }
+                let color = isSelected ? tintColor : TabBarAppearance.normalColor
+                let provider = ColorValueProvider(color.lottieColorValue)
+                lottie.setValueProvider(provider, keypath: AnimationKeypath(keypath: "**.Color"))
+                isSelected ? lottie.play() : lottie.stop()
+            }
+        )
+    }
+}
+
+// MARK: - MainTabBarTab
 
 enum MainTabBarTab: CaseIterable {
     case calculator
@@ -11,32 +41,46 @@ enum MainTabBarTab: CaseIterable {
     case illustration
     case accountDetail
 
-    var title: String {
+    var tabItemConfig: TabItemConfig {
         switch self {
-        case .calculator: return "消費計算"
-        case .userInfo: return "消費紀錄"
-        case .illustration: return "資料分析"
-        case .accountDetail: return "資料總覽"
+        case .calculator:
+            return TabItemConfig(
+                title: "消費計算",
+                iconProvider: .lottie("Calculator"),
+                selectedTintColor: TabBarAppearance.selectedColor,
+                badgeAnimation: .none,
+                preferredIconSize: 48
+            )
+        case .userInfo:
+            return TabItemConfig(
+                title: "消費紀錄",
+                iconProvider: .sfSymbol("rectangle.stack.fill"),
+                selectedTintColor: nil,
+                badgeAnimation: .animated(.pulse),
+                preferredIconSize: nil
+            )
+        case .illustration:
+            return TabItemConfig(
+                title: "資料分析",
+                iconProvider: .sfSymbol("chart.bar.fill"),
+                selectedTintColor: nil,
+                badgeAnimation: .none,
+                preferredIconSize: nil
+            )
+        case .accountDetail:
+            return TabItemConfig(
+                title: "資料總覽",
+                iconProvider: .sfSymbol("square.grid.3x3.fill"),
+                selectedTintColor: nil,
+                badgeAnimation: .none,
+                preferredIconSize: nil
+            )
         }
     }
 
-    var image: UIImage? {
-        switch self {
-        case .calculator: return UIImage(systemName: "plus")
-        case .userInfo: return UIImage(systemName: "rectangle.stack.fill")
-        case .illustration: return UIImage(systemName: "chart.bar.fill")
-        case .accountDetail: return UIImage(systemName: "square.grid.3x3.fill")
-        }
-    }
-
-    var selectedImage: UIImage? {
-        switch self {
-        case .calculator: return UIImage(systemName: "plus")
-        case .userInfo: return UIImage(systemName: "rectangle.stack.fill")
-        case .illustration: return UIImage(systemName: "chart.bar.fill")
-        case .accountDetail: return UIImage(systemName: "square.grid.3x3.fill")
-        }
-    }
+    var title: String { tabItemConfig.title }
+    var image: UIImage? { tabItemConfig.iconProvider.fallbackImage }
+    var selectedImage: UIImage? { image }
 
     var viewController: UIViewController {
         switch self {
@@ -56,12 +100,6 @@ enum MainTabBarTab: CaseIterable {
     }
 
     var customTabBarItem: TabBarItem {
-        TabBarItem(
-            title: title,
-            icon: image,
-            selectedIcon: selectedImage,
-            displayMode: .iconOnly,
-            animationStyle: self == .userInfo ? .animated(.pulse) : .none
-        )
+        TabBarItem(from: tabItemConfig)
     }
 }
