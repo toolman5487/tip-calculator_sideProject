@@ -42,7 +42,7 @@ final class MainIllustrationViewController: MainBaseViewController, TabBarRefres
     }
 
     private func setupNavigation() {
-        title = "統計資料"
+        title = "資料分析"
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
             self?.triggerRefresh()
         }

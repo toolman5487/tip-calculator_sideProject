@@ -54,7 +54,7 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
     // MARK: - Setup
 
     private func setupNavigation() {
-        title = "帳戶總覽"
+        title = "資料總覽"
         navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
             self?.triggerRefresh()
         }
