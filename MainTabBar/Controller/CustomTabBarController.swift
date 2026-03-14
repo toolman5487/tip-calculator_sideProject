@@ -24,6 +24,7 @@ final class CustomTabBarController: UIViewController {
 
     private var viewControllerFactories: [() -> UIViewController] = []
     private var cachedViewControllers: [Int: UIViewController] = [:]
+    private var viewControllerIndex: [ObjectIdentifier: Int] = [:]
     private var currentViewController: UIViewController?
 
     // MARK: - UI Components
@@ -111,6 +112,7 @@ final class CustomTabBarController: UIViewController {
         let factory = viewControllerFactories[index]
         let newVC = factory()
         cachedViewControllers[index] = newVC
+        viewControllerIndex[ObjectIdentifier(newVC)] = index
 
         addChild(newVC)
         containerView.addSubview(newVC.view)
@@ -135,29 +137,30 @@ final class CustomTabBarController: UIViewController {
         viewController.view.isHidden = false
         containerView.bringSubviewToFront(viewController.view)
 
+        let incomingIndex = viewControllerIndex[ObjectIdentifier(viewController)]
+
         if animated,
-           let outgoingView = outgoingVC?.view,
-           let incomingView = viewController.view,
-           let fromIndex = cachedViewControllers.first(where: { $0.value === outgoingVC })?.key,
-           let toIndex = cachedViewControllers.first(where: { $0.value === viewController })?.key {
+           let outgoingVC,
+           let fromIndex = viewControllerIndex[ObjectIdentifier(outgoingVC)],
+           let toIndex = incomingIndex {
             prepareForTransition(outgoing: outgoingVC, incoming: viewController)
             TabBarContentTransition.performSlide(
                 from: fromIndex,
                 to: toIndex,
-                outgoingView: outgoingView,
-                incomingView: incomingView,
+                outgoingView: outgoingVC.view,
+                incomingView: viewController.view,
                 containerWidth: containerView.bounds.width,
                 duration: TabBarAppearance.tabTransitionDuration
             ) { [weak self] in
                 guard let self else { return }
                 guard self.currentViewController === viewController else { return }
-                outgoingView.transform = .identity
+                outgoingVC.view.transform = .identity
                 self.syncViewVisibilityToCurrent()
                 self.notifyDidSelect(viewController: viewController, at: toIndex)
             }
         } else {
             syncViewVisibilityToCurrent()
-            if let index = cachedViewControllers.first(where: { $0.value === viewController })?.key {
+            if let index = incomingIndex {
                 notifyDidSelect(viewController: viewController, at: index)
             }
         }
@@ -177,9 +180,12 @@ final class CustomTabBarController: UIViewController {
     private func prepareForTransition(outgoing: UIViewController?, incoming: UIViewController) {
         for vc in cachedViewControllers.values {
             guard let v = vc.viewIfLoaded else { continue }
-            v.layer.removeAllAnimations()
-            v.transform = .identity
-            v.isHidden = (vc !== outgoing && vc !== incoming)
+            let isParticipant = (vc === outgoing || vc === incoming)
+            if isParticipant {
+                v.layer.removeAllAnimations()
+                v.transform = .identity
+            }
+            v.isHidden = !isParticipant
         }
     }
 

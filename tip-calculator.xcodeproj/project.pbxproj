@@ -251,9 +251,6 @@
 		15C6A7622F6400DA008ABB94 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C6A7612F6400DA008ABB94 /* MainTabBarTab.swift */; };
 		15C6A7632F6400DA008ABB94 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C6A7612F6400DA008ABB94 /* MainTabBarTab.swift */; };
 		15C6A7642F6400DA008ABB94 /* MainTabBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C6A7612F6400DA008ABB94 /* MainTabBarTab.swift */; };
-		15C6A7672F6401AF008ABB94 /* Calculator.json in Resources */ = {isa = PBXBuildFile; fileRef = 15C6A7662F6401AF008ABB94 /* Calculator.json */; };
-		15C6A7682F6401AF008ABB94 /* Calculator.json in Resources */ = {isa = PBXBuildFile; fileRef = 15C6A7662F6401AF008ABB94 /* Calculator.json */; };
-		15C6A7692F6401AF008ABB94 /* Calculator.json in Resources */ = {isa = PBXBuildFile; fileRef = 15C6A7662F6401AF008ABB94 /* Calculator.json */; };
 		15D8D9B52F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
 		15D8D9B62F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
 		15D8D9B72F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */; };
@@ -395,7 +392,6 @@
 		15C22D812D95A29A00270813 /* tip-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C22D8B2D95A29A00270813 /* tip-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tip-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15C6A7612F6400DA008ABB94 /* MainTabBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarTab.swift; sourceTree = "<group>"; };
-		15C6A7662F6401AF008ABB94 /* Calculator.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Calculator.json; sourceTree = "<group>"; };
 		15D8D9B32F62578A00FD3B03 /* AccountDetailAchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAchievementCell.swift; sourceTree = "<group>"; };
 		15D8D9BB2F62AB1800FD3B03 /* AchievementTierCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementTierCell.swift; sourceTree = "<group>"; };
 		15F1A0032F5B0003005D8554 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
@@ -689,7 +685,6 @@
 		156C71202F39988600F0C0A9 /* BaseView */ = {
 			isa = PBXGroup;
 			children = (
-				15C6A7652F640193008ABB94 /* Calculator */,
 				159BB7EC2F4EFAE500572631 /* EmptyStateView */,
 				159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */,
 				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
@@ -1175,14 +1170,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		15C6A7652F640193008ABB94 /* Calculator */ = {
-			isa = PBXGroup;
-			children = (
-				15C6A7662F6401AF008ABB94 /* Calculator.json */,
-			);
-			path = Calculator;
-			sourceTree = "<group>";
-		};
 		15D8D9B42F62578A00FD3B03 /* AccountDetailAchievement */ = {
 			isa = PBXGroup;
 			children = (
@@ -1399,7 +1386,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				159BB7F02F4EFB0700572631 /* Not Found.json in Resources */,
-				15C6A7672F6401AF008ABB94 /* Calculator.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1407,7 +1393,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15C6A7692F6401AF008ABB94 /* Calculator.json in Resources */,
 				159BB7EE2F4EFB0700572631 /* Not Found.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1417,7 +1402,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				159BB7EF2F4EFB0700572631 /* Not Found.json in Resources */,
-				15C6A7682F6401AF008ABB94 /* Calculator.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

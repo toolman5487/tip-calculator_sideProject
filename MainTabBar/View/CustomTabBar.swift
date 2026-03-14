@@ -111,7 +111,7 @@ final class CustomTabBar: UIView {
                 let container = self.stackView.arrangedSubviews[index]
                 self.updateBadge(count: count, at: index)
                 guard let iconView = container.viewWithTag(IconTag.value) else { return }
-                if count > 0, case .animated(let kind) = tab.customTabBarItem.animationStyle {
+                if count > 0, case .animated(let kind) = tab.animationStyle {
                     self.startAnimation(for: kind, on: iconView, at: index)
                 } else {
                     self.stopAnimation(on: iconView, at: index)
@@ -128,9 +128,9 @@ final class CustomTabBar: UIView {
             make.edges.equalToSuperview()
         }
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(4)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-8)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(4)
         }
         let borderView = UIView()
         borderView.backgroundColor = TabBarAppearance.separatorColor
@@ -146,12 +146,27 @@ final class CustomTabBar: UIView {
     func configure(with items: [TabBarItem]) {
         guard self.items != items else { return }
         self.items = items
+        customHeight = 49
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         items.enumerated().forEach { index, item in
             stackView.addArrangedSubview(createContainer(for: item, at: index))
         }
-        if selectedIndex >= items.count { selectedIndex = 0 }
-        updateSelection(from: -1, to: selectedIndex)
+        let initialIndex = selectedIndex < items.count ? selectedIndex : 0
+        selectedIndex = initialIndex
+        applySelectionWithoutAnimation(at: initialIndex)
+    }
+
+    private func applySelectionWithoutAnimation(at index: Int) {
+        for (i, container) in stackView.arrangedSubviews.enumerated() {
+            guard i < items.count else { break }
+            let isSelected = (i == index)
+            guard let iconView = container.viewWithTag(IconTag.value),
+                  let button = container.subviews.first(where: { $0 is UIButton }) as? UIButton else { continue }
+            let tintColor = items[i].selectedTintColor ?? TabBarAppearance.selectedColor
+            items[i].iconProvider.applySelection(to: iconView, isSelected: isSelected, tintColor: tintColor)
+            button.isSelected = isSelected
+            iconView.transform = isSelected ? CGAffineTransform(scaleX: TabBarAppearance.selectionScale, y: TabBarAppearance.selectionScale) : .identity
+        }
     }
 
     // MARK: - Badge
@@ -172,13 +187,13 @@ final class CustomTabBar: UIView {
             label.textColor = .systemBackground
             label.font = .systemFont(ofSize: 12, weight: .bold)
             label.textAlignment = .center
-            label.layer.cornerRadius = 8
+            label.layer.cornerRadius = 6
             label.clipsToBounds = true
             container.addSubview(label)
             label.snp.makeConstraints { make in
                 make.centerX.equalTo(iconView.snp.trailing)
-                make.centerY.equalTo(iconView.snp.top)
-                make.width.height.greaterThanOrEqualTo(16)
+                make.centerY.equalTo(iconView.snp.bottom)
+                make.width.height.greaterThanOrEqualTo(12)
             }
             return label
         }()
@@ -225,21 +240,22 @@ final class CustomTabBar: UIView {
     @objc private func tabButtonTapped(_ sender: UIButton) {
         delegate?.didSelectTab(at: sender.tag)
         feedbackGenerator.impactOccurred()
+        feedbackGenerator.prepare()
     }
 
     private func updateSelection(from oldIndex: Int, to newIndex: Int) {
         let duration = TabBarAppearance.animationDuration
         let scale = TabBarAppearance.selectionScale
+        let indicesToUpdate = Set([oldIndex, newIndex]).filter { $0 >= 0 && $0 < items.count }
 
-        for (index, container) in stackView.arrangedSubviews.enumerated() {
-            guard index < items.count else { continue }
+        for index in indicesToUpdate {
+            let container = stackView.arrangedSubviews[index]
             let shouldBeSelected = (index == newIndex)
             guard let iconView = container.viewWithTag(IconTag.value),
-                  let button = container.subviews.compactMap({ $0 as? UIButton }).first,
+                  let button = container.subviews.first(where: { $0 is UIButton }) as? UIButton,
                   button.isSelected != shouldBeSelected else { continue }
 
             let tintColor = items[index].selectedTintColor ?? TabBarAppearance.selectedColor
-
             items[index].iconProvider.applySelection(to: iconView, isSelected: shouldBeSelected, tintColor: tintColor)
 
             UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState]) {

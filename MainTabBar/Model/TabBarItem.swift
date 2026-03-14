@@ -22,10 +22,8 @@ struct TabIconProvider: @unchecked Sendable {
         selectionHandler(view, isSelected, tintColor)
     }
 
-    static func sfSymbol(_ systemName: String) -> TabIconProvider {
-        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
-        let image = UIImage(systemName: systemName, withConfiguration: config)
-        return TabIconProvider(
+    static func image(_ image: UIImage) -> TabIconProvider {
+        TabIconProvider(
             fallbackImage: image,
             factory: {
                 let iv = UIImageView(image: image)
@@ -39,12 +37,10 @@ struct TabIconProvider: @unchecked Sendable {
         )
     }
 
-    static func custom(
-        fallbackImage: UIImage? = nil,
-        makeView: @escaping @MainActor () -> UIView,
-        onSelection: @escaping @MainActor (UIView, Bool, UIColor) -> Void = { _, _, _ in }
-    ) -> TabIconProvider {
-        TabIconProvider(fallbackImage: fallbackImage, factory: makeView, selectionHandler: onSelection)
+    static func sfSymbol(_ systemName: String) -> TabIconProvider {
+        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
+        let image = UIImage(systemName: systemName, withConfiguration: config)
+        return .image(image ?? UIImage())
     }
 
     private init(
@@ -61,18 +57,11 @@ struct TabIconProvider: @unchecked Sendable {
 // MARK: - TabItemConfig
 
 struct TabItemConfig {
-    let title: String
+    let id: Int
     let iconProvider: TabIconProvider
     let selectedTintColor: UIColor?
     let badgeAnimation: TabBarAnimationStyle
     let preferredIconSize: CGFloat?
-}
-
-// MARK: - Display Mode
-
-enum TabBarDisplayMode: Equatable, Sendable {
-    case iconOnly
-    case iconWithText
 }
 
 // MARK: - Animation
@@ -89,17 +78,15 @@ enum TabBarAnimationStyle: Equatable, Sendable {
 // MARK: - TabBarItem
 
 struct TabBarItem: @unchecked Sendable {
-    let title: String
+    let id: Int
     let iconProvider: TabIconProvider
-    let displayMode: TabBarDisplayMode
     let animationStyle: TabBarAnimationStyle
     let selectedTintColor: UIColor?
     let preferredIconSize: CGFloat?
 
-    init(from config: TabItemConfig, displayMode: TabBarDisplayMode = .iconOnly) {
-        self.title = config.title
+    init(from config: TabItemConfig) {
+        self.id = config.id
         self.iconProvider = config.iconProvider
-        self.displayMode = displayMode
         self.animationStyle = config.badgeAnimation
         self.selectedTintColor = config.selectedTintColor
         self.preferredIconSize = config.preferredIconSize
@@ -108,6 +95,6 @@ struct TabBarItem: @unchecked Sendable {
 
 extension TabBarItem: Equatable {
     static func == (lhs: TabBarItem, rhs: TabBarItem) -> Bool {
-        lhs.title == rhs.title && lhs.displayMode == rhs.displayMode && lhs.animationStyle == rhs.animationStyle
+        lhs.id == rhs.id && lhs.animationStyle == rhs.animationStyle
     }
 }

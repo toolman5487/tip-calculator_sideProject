@@ -3,57 +3,36 @@
 //  tip-calculator
 //
 
-import Lottie
 import UIKit
-
-// MARK: - Lottie icon support
-
-extension TabIconProvider {
-    static func lottie(_ name: String) -> TabIconProvider {
-        .custom(
-            fallbackImage: nil,
-            makeView: {
-                let av = LottieAnimationView(name: name)
-                av.contentMode = .scaleAspectFill
-                av.loopMode = .loop
-                av.isUserInteractionEnabled = false
-                av.clipsToBounds = true
-                av.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-                av.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-                return av
-            },
-            onSelection: { view, isSelected, tintColor in
-                guard let lottie = view as? LottieAnimationView else { return }
-                let color = isSelected ? tintColor : TabBarAppearance.normalColor
-                let provider = ColorValueProvider(color.lottieColorValue)
-                lottie.setValueProvider(provider, keypath: AnimationKeypath(keypath: "**.Color"))
-                isSelected ? lottie.play() : lottie.stop()
-            }
-        )
-    }
-}
 
 // MARK: - MainTabBarTab
 
-enum MainTabBarTab: CaseIterable {
-    case calculator
-    case userInfo
-    case illustration
-    case accountDetail
+enum MainTabBarTab: Int, CaseIterable {
+    case calculator = 0
+    case userInfo = 1
+    case illustration = 2
+    case accountDetail = 3
+
+    var animationStyle: TabBarAnimationStyle {
+        switch self {
+        case .userInfo: return .animated(.pulse)
+        default: return .none
+        }
+    }
 
     var tabItemConfig: TabItemConfig {
         switch self {
         case .calculator:
             return TabItemConfig(
-                title: "消費計算",
-                iconProvider: .lottie("Calculator"),
+                id: rawValue,
+                iconProvider: .sfSymbol("plus.forwardslash.minus"),
                 selectedTintColor: TabBarAppearance.selectedColor,
                 badgeAnimation: .none,
-                preferredIconSize: 48
+                preferredIconSize: nil
             )
         case .userInfo:
             return TabItemConfig(
-                title: "消費紀錄",
+                id: rawValue,
                 iconProvider: .sfSymbol("rectangle.stack.fill"),
                 selectedTintColor: nil,
                 badgeAnimation: .animated(.pulse),
@@ -61,7 +40,7 @@ enum MainTabBarTab: CaseIterable {
             )
         case .illustration:
             return TabItemConfig(
-                title: "資料分析",
+                id: rawValue,
                 iconProvider: .sfSymbol("chart.bar.fill"),
                 selectedTintColor: nil,
                 badgeAnimation: .none,
@@ -69,7 +48,7 @@ enum MainTabBarTab: CaseIterable {
             )
         case .accountDetail:
             return TabItemConfig(
-                title: "資料總覽",
+                id: rawValue,
                 iconProvider: .sfSymbol("square.grid.3x3.fill"),
                 selectedTintColor: nil,
                 badgeAnimation: .none,
@@ -77,10 +56,6 @@ enum MainTabBarTab: CaseIterable {
             )
         }
     }
-
-    var title: String { tabItemConfig.title }
-    var image: UIImage? { tabItemConfig.iconProvider.fallbackImage }
-    var selectedImage: UIImage? { image }
 
     var viewController: UIViewController {
         switch self {
@@ -93,10 +68,6 @@ enum MainTabBarTab: CaseIterable {
         case .accountDetail:
             return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainAccountDetailViewController())
         }
-    }
-
-    var tabBarItem: UITabBarItem {
-        UITabBarItem(title: title, image: image, selectedImage: selectedImage)
     }
 
     var customTabBarItem: TabBarItem {
