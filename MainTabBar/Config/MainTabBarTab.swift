@@ -25,7 +25,7 @@ enum MainTabBarTab: Int, CaseIterable {
         case .calculator:
             return TabItemConfig(
                 id: rawValue,
-                iconProvider: .sfSymbol("plus.forwardslash.minus"),
+                iconProvider: .sfSymbol("plus.circle.fill"),
                 selectedTintColor: TabBarAppearance.selectedColor,
                 badgeAnimation: .none,
                 preferredIconSize: nil
@@ -49,7 +49,7 @@ enum MainTabBarTab: Int, CaseIterable {
         case .accountDetail:
             return TabItemConfig(
                 id: rawValue,
-                iconProvider: .sfSymbol("square.grid.3x3.fill"),
+                iconProvider: .sfSymbol("square.stack.3d.up.fill"),
                 selectedTintColor: nil,
                 badgeAnimation: .none,
                 preferredIconSize: nil
