@@ -119,6 +119,9 @@
 		157A6E652F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
 		157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
 		157A6E672F347DDA005D8554 /* TotalResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A6E632F347DDA005D8554 /* TotalResultViewModel.swift */; };
+		157D92FC2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
+		157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
+		157D92FE2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
 		1590CAE22F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
 		1590CAE32F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
 		1590CAE42F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
@@ -347,6 +350,7 @@
 		157A6E712F4E0000005D8554 /* ConsumptionBreakdownViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownViewModel.swift; sourceTree = "<group>"; };
 		157A6E722F4E0000005D8554 /* ConsumptionBreakdownPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownPieChart.swift; sourceTree = "<group>"; };
 		157A6E732F4E0000005D8554 /* ConsumptionBreakdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownViewController.swift; sourceTree = "<group>"; };
+		157D92FB2F6558900014644B /* MainSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingViewController.swift; sourceTree = "<group>"; };
 		1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditViewController.swift; sourceTree = "<group>"; };
 		1590CAE62F582C00004C66B4 /* ResultDetailEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditViewModel.swift; sourceTree = "<group>"; };
 		1590CAEA2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditDatePickerCell.swift; sourceTree = "<group>"; };
@@ -411,7 +415,6 @@
 		155DA6262DA5174200ACDC05 /* Exceptions for "tip-calculator" folder in "tip-calculatorUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
 				Factory/ToastView.swift,
 				Model/ScreenIdentifier1.swift,
@@ -421,7 +424,6 @@
 		157A6E6C2F3483DD005D8554 /* Exceptions for "tip-calculator" folder in "tip-calculatorTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Config/APIKeyConfig.xcconfig,
 				Factory/BaseResultInfoCell.swift,
 				Factory/ToastView.swift,
 			);
@@ -430,6 +432,7 @@
 		15C22D932D95A29A00270813 /* Exceptions for "tip-calculator" folder in "tip-calculator" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Config/APIKeyConfig.xcconfig,
 				Info.plist,
 			);
 			target = 15C22D6A2D95A29900270813 /* tip-calculator */;
@@ -833,6 +836,46 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		157D92F92F65586F0014644B /* MainSetting */ = {
+			isa = PBXGroup;
+			children = (
+				157D93012F6564B60014644B /* Model */,
+				157D93002F6564B00014644B /* ViewModel */,
+				157D92FF2F6564A90014644B /* View */,
+				157D92FA2F6558760014644B /* ViewController */,
+			);
+			path = MainSetting;
+			sourceTree = "<group>";
+		};
+		157D92FA2F6558760014644B /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				157D92FB2F6558900014644B /* MainSettingViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		157D92FF2F6564A90014644B /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		157D93002F6564B00014644B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		157D93012F6564B60014644B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		1590CADF2F582ADB004C66B4 /* ResultDetailEdit */ = {
 			isa = PBXGroup;
 			children = (
@@ -1130,6 +1173,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				157D92F92F65586F0014644B /* MainSetting */,
 				15B7D7562F613DE800335DA1 /* AccountDetail */,
 				1590D6AC2F595459004C66B4 /* MapLocationPicker */,
 				1590CADF2F582ADB004C66B4 /* ResultDetailEdit */,
@@ -1335,7 +1379,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 2620;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					15C22D6A2D95A29900270813 = {
 						CreatedOnToolsVersion = 16.2;
@@ -1498,6 +1542,7 @@
 				15B7D76D2F614A9D00335DA1 /* AccountDetailCarouselCell.swift in Sources */,
 				15B7D76E2F614A9D00335DA1 /* AccountDetailStatCardCell.swift in Sources */,
 				1590CB042F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
+				157D92FC2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				1590CAE92F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF02F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				1590CAF42F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
@@ -1556,6 +1601,7 @@
 				1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEB2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
+				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
 				1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B32F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
@@ -1669,6 +1715,7 @@
 				15F1A1042F5B0001005D8554 /* TabBarProtocols.swift in Sources */,
 				15F1A1072F5B0001005D8554 /* TabBarTypes.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
+				157D92FE2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				15B7D76A2F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
 				15F1A0832F5B0008005D8554 /* TabBarItem.swift in Sources */,
 				15F1A0332F5B0003005D8554 /* TabBarViewModel.swift in Sources */,
