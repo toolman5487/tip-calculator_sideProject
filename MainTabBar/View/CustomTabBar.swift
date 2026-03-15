@@ -187,13 +187,13 @@ final class CustomTabBar: UIView {
             label.textColor = .systemBackground
             label.font = .systemFont(ofSize: 12, weight: .bold)
             label.textAlignment = .center
-            label.layer.cornerRadius = 6
+            label.layer.cornerRadius = 8
             label.clipsToBounds = true
             container.addSubview(label)
             label.snp.makeConstraints { make in
                 make.centerX.equalTo(iconView.snp.trailing)
-                make.centerY.equalTo(iconView.snp.bottom)
-                make.width.height.greaterThanOrEqualTo(12)
+                make.centerY.equalTo(iconView.snp.top)
+                make.width.height.equalTo(16)
             }
             return label
         }()
@@ -239,8 +239,10 @@ final class CustomTabBar: UIView {
 
     @objc private func tabButtonTapped(_ sender: UIButton) {
         delegate?.didSelectTab(at: sender.tag)
-        feedbackGenerator.impactOccurred()
-        feedbackGenerator.prepare()
+        if SettingKeys.isHapticEnabled {
+            feedbackGenerator.impactOccurred()
+            feedbackGenerator.prepare()
+        }
     }
 
     private func updateSelection(from oldIndex: Int, to newIndex: Int) {

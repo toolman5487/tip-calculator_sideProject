@@ -41,6 +41,7 @@ return CGFloat(itemCount) * 28 + CGFloat(max(0, itemCount - 1)) * 12
 - 遵循 [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - 觸控目標至少 44×44 pt
 - 間距、padding、尺寸以 **4** 或 **8** 的倍數設計
+- 文字字體大小（font size）以 **4** 的倍數設計
 
 ## 技術棧
 

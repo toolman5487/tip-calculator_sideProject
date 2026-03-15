@@ -122,6 +122,18 @@
 		157D92FC2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
 		157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
 		157D92FE2F6558900014644B /* MainSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D92FB2F6558900014644B /* MainSettingViewController.swift */; };
+		157D93042F665FE40014644B /* SettingRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93022F665FE30014644B /* SettingRowCell.swift */; };
+		157D93062F665FE40014644B /* SettingRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93022F665FE30014644B /* SettingRowCell.swift */; };
+		157D93082F665FE40014644B /* SettingRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93022F665FE30014644B /* SettingRowCell.swift */; };
+		157D930B2F665FEC0014644B /* MainSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930A2F665FEC0014644B /* MainSettingViewModel.swift */; };
+		157D930C2F665FEC0014644B /* MainSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930A2F665FEC0014644B /* MainSettingViewModel.swift */; };
+		157D930D2F665FEC0014644B /* MainSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930A2F665FEC0014644B /* MainSettingViewModel.swift */; };
+		157D930F2F665FF40014644B /* SettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930E2F665FF40014644B /* SettingItem.swift */; };
+		157D93102F665FF40014644B /* SettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930E2F665FF40014644B /* SettingItem.swift */; };
+		157D93112F665FF40014644B /* SettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D930E2F665FF40014644B /* SettingItem.swift */; };
+		157D93132F6695180014644B /* SettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93122F6695180014644B /* SettingToggleCell.swift */; };
+		157D93142F6695180014644B /* SettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93122F6695180014644B /* SettingToggleCell.swift */; };
+		157D93152F6695180014644B /* SettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157D93122F6695180014644B /* SettingToggleCell.swift */; };
 		1590CAE22F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
 		1590CAE32F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
 		1590CAE42F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */; };
@@ -351,6 +363,10 @@
 		157A6E722F4E0000005D8554 /* ConsumptionBreakdownPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownPieChart.swift; sourceTree = "<group>"; };
 		157A6E732F4E0000005D8554 /* ConsumptionBreakdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionBreakdownViewController.swift; sourceTree = "<group>"; };
 		157D92FB2F6558900014644B /* MainSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingViewController.swift; sourceTree = "<group>"; };
+		157D93022F665FE30014644B /* SettingRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRowCell.swift; sourceTree = "<group>"; };
+		157D930A2F665FEC0014644B /* MainSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingViewModel.swift; sourceTree = "<group>"; };
+		157D930E2F665FF40014644B /* SettingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingItem.swift; sourceTree = "<group>"; };
+		157D93122F6695180014644B /* SettingToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggleCell.swift; sourceTree = "<group>"; };
 		1590CAE12F582B0C004C66B4 /* ResultDetailEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditViewController.swift; sourceTree = "<group>"; };
 		1590CAE62F582C00004C66B4 /* ResultDetailEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditViewModel.swift; sourceTree = "<group>"; };
 		1590CAEA2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailEditDatePickerCell.swift; sourceTree = "<group>"; };
@@ -858,6 +874,8 @@
 		157D92FF2F6564A90014644B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				157D93122F6695180014644B /* SettingToggleCell.swift */,
+				157D93022F665FE30014644B /* SettingRowCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -865,6 +883,7 @@
 		157D93002F6564B00014644B /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				157D930A2F665FEC0014644B /* MainSettingViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -872,6 +891,7 @@
 		157D93012F6564B60014644B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				157D930E2F665FF40014644B /* SettingItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1486,6 +1506,7 @@
 				15B9F5002F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
 				15B9F5022F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
 				15B7D7752F614DA700335DA1 /* AccountDetailHeaderCell.swift in Sources */,
+				157D930B2F665FEC0014644B /* MainSettingViewModel.swift in Sources */,
 				15B9F5042F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 				156C6FB82F35EA7A00F0C0A9 /* ResultDetailTableViewCell.swift in Sources */,
 				156C6FBC2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
@@ -1496,6 +1517,7 @@
 				15F1A1052F5B0001005D8554 /* TabBarTypes.swift in Sources */,
 				157A6E562F343700005D8558 /* TabBarBadgePublisher.swift in Sources */,
 				15F1A0812F5B0008005D8554 /* TabBarItem.swift in Sources */,
+				157D930F2F665FF40014644B /* SettingItem.swift in Sources */,
 				15F1A0312F5B0001005D8554 /* TabBarViewModel.swift in Sources */,
 				15F1A0412F5B0001005D8554 /* CustomTabBar.swift in Sources */,
 				15F1A0512F5B0001005D8554 /* CustomTabBarController.swift in Sources */,
@@ -1527,6 +1549,8 @@
 				156C74B22F35853400F0C0A9 /* ResultsFilterModel.swift in Sources */,
 				157A6E602F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				156C1AF02F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				157D93062F665FE40014644B /* SettingRowCell.swift in Sources */,
+				157D93152F6695180014644B /* SettingToggleCell.swift in Sources */,
 				156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C747B2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
@@ -1584,11 +1608,13 @@
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				15B72E342F6172FF00335DA1 /* AccountDetailOverviewUseCase.swift in Sources */,
 				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
+				157D93082F665FE40014644B /* SettingRowCell.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C75002F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				15B7D7762F614DA700335DA1 /* AccountDetailHeaderCell.swift in Sources */,
 				1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */,
+				157D930C2F665FEC0014644B /* MainSettingViewModel.swift in Sources */,
 				15B7D7692F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
 				15F1A0932F5B0012005D8554 /* IllustrationShareButtonView.swift in Sources */,
 				15F1A0962F5B0013005D8554 /* IllustrationShareFooterView.swift in Sources */,
@@ -1601,6 +1627,7 @@
 				1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEB2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
+				157D93112F665FF40014644B /* SettingItem.swift in Sources */,
 				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
 				1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
@@ -1641,6 +1668,7 @@
 				159BB1B52F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */,
 				150DBCD72F483E72008209A1 /* ConsumptionBreakdownPieChart.swift in Sources */,
 				156C515A2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
+				157D93132F6695180014644B /* SettingToggleCell.swift in Sources */,
 				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
 				15B9F5092F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
@@ -1656,6 +1684,7 @@
 				156C6FB92F35EA7A00F0C0A9 /* ResultDetailTableViewCell.swift in Sources */,
 				156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
 				15B72E292F616FF300335DA1 /* AccountDetailCategoryDistributionCell.swift in Sources */,
+				157D93042F665FE40014644B /* SettingRowCell.swift in Sources */,
 				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				159BB1B62F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */,
 				156CCFDE2F3C889C00F0C0A9 /* MainIllustrationViewController.swift in Sources */,
@@ -1674,6 +1703,7 @@
 				159B35F62F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				15B7D76F2F614A9D00335DA1 /* AccountDetailCarouselCell.swift in Sources */,
 				15B7D7702F614A9D00335DA1 /* AccountDetailStatCardCell.swift in Sources */,
+				157D93142F6695180014644B /* SettingToggleCell.swift in Sources */,
 				159B35EC2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				1590D6B12F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B42F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
@@ -1712,6 +1742,7 @@
 				15B9F50E2F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
 				15B9F50F2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 				15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
+				157D93102F665FF40014644B /* SettingItem.swift in Sources */,
 				15F1A1042F5B0001005D8554 /* TabBarProtocols.swift in Sources */,
 				15F1A1072F5B0001005D8554 /* TabBarTypes.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
@@ -1727,6 +1758,7 @@
 				15B72E2E2F6170EC00335DA1 /* AccountDetailSectionTitleHeader.swift in Sources */,
 				157A6E662F347DDA005D8554 /* TotalResultViewModel.swift in Sources */,
 				150DBCD82F483E72008209A1 /* ConsumptionBreakdownPieChart.swift in Sources */,
+				157D930D2F665FEC0014644B /* MainSettingViewModel.swift in Sources */,
 				159BB1242F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */,
 				15D8D9BE2F62AB1800FD3B03 /* AchievementTierCell.swift in Sources */,
 				157A6E612F347B64005D8554 /* TotalResultsCell.swift in Sources */,
