@@ -24,7 +24,9 @@ final class MainSettingViewController: BaseViewController {
         tv.dataSource = self
         tv.delegate = self
         tv.register(SettingRowCell.self, forCellReuseIdentifier: SettingRowCell.reuseId)
-        tv.register(SettingToggleCell.self, forCellReuseIdentifier: SettingToggleCell.reuseId)
+        tv.register(HapticFeedbackSettingCell.self, forCellReuseIdentifier: HapticFeedbackSettingCell.cellReuseId)
+        tv.register(AboutAppSettingCell.self, forCellReuseIdentifier: AboutAppSettingCell.cellReuseId)
+        tv.register(OpenSystemSettingsCell.self, forCellReuseIdentifier: OpenSystemSettingsCell.cellReuseId)
         return tv
     }()
 
@@ -69,32 +71,50 @@ final class MainSettingViewController: BaseViewController {
 
 extension MainSettingViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.sections.count
+        2
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard section >= 0, section < viewModel.sections.count else { return 0 }
-        return viewModel.sections[section].items.count
+        switch section {
+        case 0: return 1
+        case 1: return max(0, viewModel.items.count - 1)
+        default: return 0
+        }
+    }
+
+    private func flatIndex(for indexPath: IndexPath) -> Int {
+        switch indexPath.section {
+        case 0: return 0
+        case 1: return indexPath.row + 1
+        default: return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let item = viewModel.item(at: indexPath) else {
+        let flatIndex = flatIndex(for: indexPath)
+        guard let item = viewModel.item(at: flatIndex) else {
             return tableView.dequeueReusableCell(withIdentifier: SettingRowCell.reuseId, for: indexPath)
         }
-        if case .toggle(let isOn) = item.accessory {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SettingToggleCell.reuseId, for: indexPath) as! SettingToggleCell
-            cell.configure(title: item.title, isOn: isOn) { [weak self] newValue in
+        switch item.id {
+        case .hapticFeedback:
+            let cell = tableView.dequeueReusableCell(withIdentifier: HapticFeedbackSettingCell.cellReuseId, for: indexPath) as! HapticFeedbackSettingCell
+            cell.configure(isOn: SettingKeys.isHapticEnabled) { [weak self] newValue in
                 self?.viewModel.setHapticEnabled(newValue)
             }
             return cell
+        case .about:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AboutAppSettingCell.cellReuseId, for: indexPath) as! AboutAppSettingCell
+            cell.configure()
+            return cell
+        case .openSystemSettings:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OpenSystemSettingsCell.cellReuseId, for: indexPath) as! OpenSystemSettingsCell
+            cell.configure()
+            return cell
+        case .version:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingRowCell.reuseId, for: indexPath) as! SettingRowCell
+            cell.configure(title: item.title, detail: item.detail)
+            return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: SettingRowCell.reuseId, for: indexPath) as! SettingRowCell
-        cell.textLabel?.text = item.title
-        cell.detailTextLabel?.text = item.detail
-        cell.detailTextLabel?.isHidden = (item.detail == nil || item.detail?.isEmpty == true)
-        cell.accessoryType = (item.accessory == .disclosure) ? .disclosureIndicator : .none
-        cell.selectionStyle = .default
-        return cell
     }
 }
 
@@ -103,8 +123,9 @@ extension MainSettingViewController: UITableViewDataSource {
 extension MainSettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let item = viewModel.item(at: indexPath) else { return }
-        if case .toggle = item.accessory { return }
+        let flatIndex = flatIndex(for: indexPath)
+        guard let item = viewModel.item(at: flatIndex) else { return }
+        if item.id == .hapticFeedback { return }
         handleSelect(item: item)
     }
 }

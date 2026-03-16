@@ -20,26 +20,20 @@ enum SettingKeys {
 @MainActor
 final class MainSettingViewModel {
 
-    private(set) var sections: [SettingSection] = []
+    private(set) var items: [SettingItem] = []
 
     func load() {
-        sections = [
-            SettingSection(items: [
-                SettingItem(id: .hapticFeedback, title: "觸覺回饋", accessory: .toggle(isOn: SettingKeys.isHapticEnabled))
-            ]),
-            SettingSection(items: [
-                SettingItem(id: .about, title: "關於 App", accessory: .disclosure),
-                SettingItem(id: .version, title: "版本", detail: appVersion, accessory: .none),
-                SettingItem(id: .openSystemSettings, title: "在系統設定中開啟", accessory: .disclosure)
-            ])
+        items = [
+            SettingItem(id: .hapticFeedback, title: "觸覺回饋"),
+            SettingItem(id: .about, title: "關於 App"),
+            SettingItem(id: .openSystemSettings, title: "在系統設定中開啟"),
+            SettingItem(id: .version, title: "版本", detail: appVersion)
         ]
     }
 
-    func item(at indexPath: IndexPath) -> SettingItem? {
-        guard indexPath.section >= 0, indexPath.section < sections.count else { return nil }
-        let section = sections[indexPath.section]
-        guard indexPath.item >= 0, indexPath.item < section.items.count else { return nil }
-        return section.items[indexPath.item]
+    func item(at index: Int) -> SettingItem? {
+        guard index >= 0, index < items.count else { return nil }
+        return items[index]
     }
 
     enum Action {

@@ -5,7 +5,7 @@
 
 import UIKit
 
-final class SettingRowCell: UITableViewCell {
+class SettingRowCell: UITableViewCell {
 
     static let reuseId = "SettingRowCell"
 
@@ -17,5 +17,13 @@ final class SettingRowCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(title: String, detail: String? = nil, showsDisclosureIndicator: Bool = false) {
+        textLabel?.text = title
+        detailTextLabel?.text = detail
+        detailTextLabel?.isHidden = (detail == nil || detail?.isEmpty == true)
+        accessoryType = showsDisclosureIndicator ? .disclosureIndicator : .none
+        selectionStyle = showsDisclosureIndicator ? .default : .none
     }
 }

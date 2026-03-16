@@ -303,6 +303,15 @@
 		15F1A1052F5B0001005D8554 /* TabBarTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A1012F5B0001005D8554 /* TabBarTypes.swift */; };
 		15F1A1062F5B0001005D8554 /* TabBarTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A1012F5B0001005D8554 /* TabBarTypes.swift */; };
 		15F1A1072F5B0001005D8554 /* TabBarTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F1A1012F5B0001005D8554 /* TabBarTypes.swift */; };
+		15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */; };
+		15F36A4C2F68007F00961666 /* AboutAppSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A482F68007F00961666 /* AboutAppSettingCell.swift */; };
+		15F36A4D2F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */; };
+		15F36A4E2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */; };
+		15F36A4F2F68007F00961666 /* AboutAppSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A482F68007F00961666 /* AboutAppSettingCell.swift */; };
+		15F36A502F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */; };
+		15F36A512F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */; };
+		15F36A522F68007F00961666 /* AboutAppSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A482F68007F00961666 /* AboutAppSettingCell.swift */; };
+		15F36A532F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,6 +434,9 @@
 		15F1A0B02F5B0030005D8554 /* UIBarButtonItem+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Factory.swift"; sourceTree = "<group>"; };
 		15F1A1002F5B0001005D8554 /* TabBarProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarProtocols.swift; sourceTree = "<group>"; };
 		15F1A1012F5B0001005D8554 /* TabBarTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarTypes.swift; sourceTree = "<group>"; };
+		15F36A482F68007F00961666 /* AboutAppSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppSettingCell.swift; sourceTree = "<group>"; };
+		15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackSettingCell.swift; sourceTree = "<group>"; };
+		15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSystemSettingsCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -704,6 +716,7 @@
 		156C71202F39988600F0C0A9 /* BaseView */ = {
 			isa = PBXGroup;
 			children = (
+				15F36A472F67FDBD00961666 /* SettingCell */,
 				159BB7EC2F4EFAE500572631 /* EmptyStateView */,
 				159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */,
 				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
@@ -874,8 +887,9 @@
 		157D92FF2F6564A90014644B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				157D93122F6695180014644B /* SettingToggleCell.swift */,
-				157D93022F665FE30014644B /* SettingRowCell.swift */,
+				15F36A482F68007F00961666 /* AboutAppSettingCell.swift */,
+				15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */,
+				15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1260,6 +1274,15 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		15F36A472F67FDBD00961666 /* SettingCell */ = {
+			isa = PBXGroup;
+			children = (
+				157D93122F6695180014644B /* SettingToggleCell.swift */,
+				157D93022F665FE30014644B /* SettingRowCell.swift */,
+			);
+			path = SettingCell;
+			sourceTree = "<group>";
+		};
 		15F3DE0B2F640A9200961666 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1491,6 +1514,9 @@
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				15B7D7682F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
+				15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
+				15F36A4C2F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
+				15F36A4D2F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */,
 				1590D6B22F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
 				15D8D9B72F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */,
 				1590D6C02F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
@@ -1668,6 +1694,9 @@
 				159BB1B52F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */,
 				150DBCD72F483E72008209A1 /* ConsumptionBreakdownPieChart.swift in Sources */,
 				156C515A2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
+				15F36A4E2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
+				15F36A4F2F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
+				15F36A502F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */,
 				157D93132F6695180014644B /* SettingToggleCell.swift in Sources */,
 				157A6E622F347B64005D8554 /* TotalResultsCell.swift in Sources */,
 				15B9F4DB2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
@@ -1740,6 +1769,9 @@
 				15B9F4DC2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
 				15B9F50D2F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
 				15B9F50E2F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
+				15F36A512F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
+				15F36A522F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
+				15F36A532F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */,
 				15B9F50F2F4D600000B0A364 /* CategoryOptionCell.swift in Sources */,
 				15B9F4E12F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				157D93102F665FF40014644B /* SettingItem.swift in Sources */,

@@ -16,14 +16,14 @@ enum MainTabBarTab: Int, CaseIterable {
 
     var animationStyle: TabBarAnimationStyle {
         switch self {
-        case .userInfo:
-            return .animated(.pulse)
+        case .accountDetail:
+            return .none
         case .illustration:
             return .none
         case .calculator:
             return .none
-        case .accountDetail:
-            return .none
+        case .userInfo:
+            return .animated(.pulse)
         case .setting:
             return .none
         }
@@ -39,14 +39,6 @@ enum MainTabBarTab: Int, CaseIterable {
                 badgeAnimation: .none,
                 preferredIconSize: nil
             )
-        case .userInfo:
-            return TabItemConfig(
-                id: rawValue,
-                iconProvider: .sfSymbol("magnifyingglass.circle.fill"),
-                selectedTintColor: nil,
-                badgeAnimation: .animated(.pulse),
-                preferredIconSize: nil
-            )
         case .illustration:
             return TabItemConfig(
                 id: rawValue,
@@ -58,9 +50,17 @@ enum MainTabBarTab: Int, CaseIterable {
         case .calculator:
             return TabItemConfig(
                 id: rawValue,
-                iconProvider: .sfSymbol("plus.circle.fill"),
+                iconProvider: .sfSymbol("plus.app.fill"),
                 selectedTintColor: TabBarAppearance.selectedColor,
                 badgeAnimation: .none,
+                preferredIconSize: nil
+            )
+        case .userInfo:
+            return TabItemConfig(
+                id: rawValue,
+                iconProvider: .sfSymbol("square.stack.3d.up.fill"),
+                selectedTintColor: nil,
+                badgeAnimation: .animated(.pulse),
                 preferredIconSize: nil
             )
         case .setting:
@@ -76,16 +76,26 @@ enum MainTabBarTab: Int, CaseIterable {
 
     var viewController: UIViewController {
         switch self {
-        case .userInfo:
-            return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainUserInfoViewController())
-        case .illustration:
-            return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainIllustrationViewController())
-        case .calculator:
-            return NavigationBarAppearance.wrapInNavigationController(rootViewController: CalculatorVC())
         case .accountDetail:
-            return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainAccountDetailViewController())
+            return NavigationBarAppearance.wrapInNavigationController(
+                rootViewController: MainAccountDetailViewController()
+            )
+        case .illustration:
+            return NavigationBarAppearance.wrapInNavigationController(
+                rootViewController: MainIllustrationViewController()
+            )
+        case .calculator:
+            return NavigationBarAppearance.wrapInNavigationController(
+                rootViewController: CalculatorVC()
+            )
+        case .userInfo:
+            return NavigationBarAppearance.wrapInNavigationController(
+                rootViewController: MainUserInfoViewController()
+            )
         case .setting:
-            return NavigationBarAppearance.wrapInNavigationController(rootViewController: MainSettingViewController())
+            return NavigationBarAppearance.wrapInNavigationController(
+                rootViewController: MainSettingViewController()
+            )
         }
     }
 

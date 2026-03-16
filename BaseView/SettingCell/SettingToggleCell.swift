@@ -6,7 +6,7 @@
 import SnapKit
 import UIKit
 
-final class SettingToggleCell: UITableViewCell {
+class SettingToggleCell: UITableViewCell {
 
     static let reuseId = "SettingToggleCell"
 
