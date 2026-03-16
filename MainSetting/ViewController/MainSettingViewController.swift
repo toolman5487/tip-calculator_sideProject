@@ -59,6 +59,10 @@ final class MainSettingViewController: BaseViewController {
         switch viewModel.action(for: item.id) {
         case .none:
             break
+        case .showAbout:
+            let vc = AppIndicatorViewController()
+            vc.title = "關於 App"
+            navigationController?.pushViewController(vc, animated: true)
         case .openSystemSettings:
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
@@ -70,9 +74,7 @@ final class MainSettingViewController: BaseViewController {
 // MARK: - UITableViewDataSource
 
 extension MainSettingViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        2
-    }
+    func numberOfSections(in tableView: UITableView) -> Int { 2 }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {

@@ -312,6 +312,9 @@
 		15F36A512F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */; };
 		15F36A522F68007F00961666 /* AboutAppSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A482F68007F00961666 /* AboutAppSettingCell.swift */; };
 		15F36A532F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */; };
+		15F36AD92F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
+		15F36ADA2F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
+		15F36ADB2F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -437,6 +440,7 @@
 		15F36A482F68007F00961666 /* AboutAppSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppSettingCell.swift; sourceTree = "<group>"; };
 		15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackSettingCell.swift; sourceTree = "<group>"; };
 		15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSystemSettingsCell.swift; sourceTree = "<group>"; };
+		15F36AD82F68119100961666 /* AppIndicatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -1207,6 +1211,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				15F36AD72F68113100961666 /* AppIndicator */,
 				157D92F92F65586F0014644B /* MainSetting */,
 				15B7D7562F613DE800335DA1 /* AccountDetail */,
 				1590D6AC2F595459004C66B4 /* MapLocationPicker */,
@@ -1281,6 +1286,14 @@
 				157D93022F665FE30014644B /* SettingRowCell.swift */,
 			);
 			path = SettingCell;
+			sourceTree = "<group>";
+		};
+		15F36AD72F68113100961666 /* AppIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				15F36AD82F68119100961666 /* AppIndicatorViewController.swift */,
+			);
+			path = AppIndicator;
 			sourceTree = "<group>";
 		};
 		15F3DE0B2F640A9200961666 /* View */ = {
@@ -1529,6 +1542,7 @@
 				15B9F2DC2F4C500000B0A364 /* CategoryPickerSheetViewModel.swift in Sources */,
 				15C6A7642F6400DA008ABB94 /* MainTabBarTab.swift in Sources */,
 				15B9F4E22F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
+				15F36AD92F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				15B9F5002F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
 				15B9F5022F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
 				15B7D7752F614DA700335DA1 /* AccountDetailHeaderCell.swift in Sources */,
@@ -1655,6 +1669,7 @@
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				157D93112F665FF40014644B /* SettingItem.swift in Sources */,
 				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
+				15F36ADA2F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
 				1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B32F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
@@ -1722,6 +1737,7 @@
 				156C51942F3E700000F0C0A9 /* KPICardCell.swift in Sources */,
 				150DBCD42F483CBD008209A1 /* ConsumptionBreakdownViewModel.swift in Sources */,
 				156C51972F3E700000F0C0A9 /* KPICarouselCell.swift in Sources */,
+				15F36ADB2F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				156C1AFE2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */,

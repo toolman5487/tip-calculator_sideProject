@@ -38,13 +38,15 @@ final class MainSettingViewModel {
 
     enum Action {
         case none
+        case showAbout
         case openSystemSettings
     }
 
     func action(for id: SettingItem.Id) -> Action {
         switch id {
+        case .about: return .showAbout
         case .openSystemSettings: return .openSystemSettings
-        case .hapticFeedback, .about, .version: return .none
+        case .hapticFeedback, .version: return .none
         }
     }
 
