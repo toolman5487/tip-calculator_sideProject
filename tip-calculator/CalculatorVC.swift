@@ -54,7 +54,7 @@ final class CalculatorVC: BaseViewController, TabBarRefreshable {
     // MARK: - Setup
 
     private func setupNavigation() {
-        title = "消費計算機"
+        title = "新增消費"
         navigationItem.backButtonDisplayMode = .minimal
         navigationItem.rightBarButtonItem = .refreshBarButton(
             onTap: { [weak self] in self?.logoViewTapSubject.send(()) },

@@ -22,6 +22,9 @@
 		1528F6A82F5A8F01003AE2E5 /* IllustrationResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */; };
 		1528F6A92F5A8F01003AE2E5 /* IllustrationResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */; };
 		1528F6AA2F5A8F01003AE2E5 /* IllustrationResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */; };
+		15437E812F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
+		15437E822F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
+		15437E832F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
 		1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F42F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F52F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
@@ -315,6 +318,24 @@
 		15F36AD92F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
 		15F36ADA2F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
 		15F36ADB2F68119100961666 /* AppIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36AD82F68119100961666 /* AppIndicatorViewController.swift */; };
+		15F36B6E2F68F37000961666 /* AppIndicatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B6D2F68F37000961666 /* AppIndicatorViewModel.swift */; };
+		15F36B6F2F68F37000961666 /* AppIndicatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B6D2F68F37000961666 /* AppIndicatorViewModel.swift */; };
+		15F36B702F68F37000961666 /* AppIndicatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B6D2F68F37000961666 /* AppIndicatorViewModel.swift */; };
+		15F36B732F68F42700961666 /* AppIndicatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B722F68F42700961666 /* AppIndicatorModel.swift */; };
+		15F36B742F68F42700961666 /* AppIndicatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B722F68F42700961666 /* AppIndicatorModel.swift */; };
+		15F36B752F68F42700961666 /* AppIndicatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36B722F68F42700961666 /* AppIndicatorModel.swift */; };
+		15F36BFD2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36BFC2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift */; };
+		15F36BFE2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36BFC2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift */; };
+		15F36BFF2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36BFC2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift */; };
+		15F36C012F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36C002F68FCD800961666 /* IndicatorCapsuleCell.swift */; };
+		15F36C022F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36C002F68FCD800961666 /* IndicatorCapsuleCell.swift */; };
+		15F36C032F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F36C002F68FCD800961666 /* IndicatorCapsuleCell.swift */; };
+		15F371272F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F371252F692D7400961666 /* AppIndicatorHeroHeaderView.swift */; };
+		15F371282F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F371252F692D7400961666 /* AppIndicatorHeroHeaderView.swift */; };
+		15F371292F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F371252F692D7400961666 /* AppIndicatorHeroHeaderView.swift */; };
+		15F3712B2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */; };
+		15F3712C2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */; };
+		15F3712D2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -337,6 +358,7 @@
 /* Begin PBXFileReference section */
 		150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationTimeChartCell.swift; sourceTree = "<group>"; };
 		1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationResultCell.swift; sourceTree = "<group>"; };
+		15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorItemCell.swift; sourceTree = "<group>"; };
 		1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationLocationStatsCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
 		156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -441,6 +463,12 @@
 		15F36A492F68007F00961666 /* HapticFeedbackSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackSettingCell.swift; sourceTree = "<group>"; };
 		15F36A4A2F68007F00961666 /* OpenSystemSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSystemSettingsCell.swift; sourceTree = "<group>"; };
 		15F36AD82F68119100961666 /* AppIndicatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorViewController.swift; sourceTree = "<group>"; };
+		15F36B6D2F68F37000961666 /* AppIndicatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorViewModel.swift; sourceTree = "<group>"; };
+		15F36B722F68F42700961666 /* AppIndicatorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorModel.swift; sourceTree = "<group>"; };
+		15F36BFC2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorFilterHeaderView.swift; sourceTree = "<group>"; };
+		15F36C002F68FCD800961666 /* IndicatorCapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCapsuleCell.swift; sourceTree = "<group>"; };
+		15F371252F692D7400961666 /* AppIndicatorHeroHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorHeroHeaderView.swift; sourceTree = "<group>"; };
+		15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorIntroSheetViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -578,6 +606,30 @@
 				1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */,
 			);
 			path = Result;
+			sourceTree = "<group>";
+		};
+		15437E842F694E02008CF5BD /* ItemCell */ = {
+			isa = PBXGroup;
+			children = (
+				15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */,
+			);
+			path = ItemCell;
+			sourceTree = "<group>";
+		};
+		15437E852F69530F008CF5BD /* AppIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				15F36AD82F68119100961666 /* AppIndicatorViewController.swift */,
+			);
+			path = AppIndicator;
+			sourceTree = "<group>";
+		};
+		15437E862F695322008CF5BD /* IndicatorIntroSheet */ = {
+			isa = PBXGroup;
+			children = (
+				15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */,
+			);
+			path = IndicatorIntroSheet;
 			sourceTree = "<group>";
 		};
 		1562E7F12F55E19900F4209E /* IllustrationLocationStatsCell */ = {
@@ -1291,9 +1343,64 @@
 		15F36AD72F68113100961666 /* AppIndicator */ = {
 			isa = PBXGroup;
 			children = (
-				15F36AD82F68119100961666 /* AppIndicatorViewController.swift */,
+				15F36B6C2F68F34F00961666 /* ViewModel */,
+				15F36B6A2F68F32A00961666 /* Model */,
+				15F36B692F68F32500961666 /* View */,
+				15F36B682F68F31100961666 /* ViewController */,
 			);
 			path = AppIndicator;
+			sourceTree = "<group>";
+		};
+		15F36B682F68F31100961666 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				15437E862F695322008CF5BD /* IndicatorIntroSheet */,
+				15437E852F69530F008CF5BD /* AppIndicator */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		15F36B692F68F32500961666 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15437E842F694E02008CF5BD /* ItemCell */,
+				15F371262F692D7400961666 /* Hero */,
+				15F36C872F68FF8600961666 /* Filter */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		15F36B6A2F68F32A00961666 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				15F36B722F68F42700961666 /* AppIndicatorModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		15F36B6C2F68F34F00961666 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				15F36B6D2F68F37000961666 /* AppIndicatorViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		15F36C872F68FF8600961666 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				15F36C002F68FCD800961666 /* IndicatorCapsuleCell.swift */,
+				15F36BFC2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift */,
+			);
+			path = Filter;
+			sourceTree = "<group>";
+		};
+		15F371262F692D7400961666 /* Hero */ = {
+			isa = PBXGroup;
+			children = (
+				15F371252F692D7400961666 /* AppIndicatorHeroHeaderView.swift */,
+			);
+			path = Hero;
 			sourceTree = "<group>";
 		};
 		15F3DE0B2F640A9200961666 /* View */ = {
@@ -1527,6 +1634,7 @@
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				15B7D7682F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
+				15F3712C2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
 				15F36A4C2F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
 				15F36A4D2F68007F00961666 /* OpenSystemSettingsCell.swift in Sources */,
@@ -1543,6 +1651,8 @@
 				15C6A7642F6400DA008ABB94 /* MainTabBarTab.swift in Sources */,
 				15B9F4E22F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				15F36AD92F68119100961666 /* AppIndicatorViewController.swift in Sources */,
+				15F36C032F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */,
+				15F36B6E2F68F37000961666 /* AppIndicatorViewModel.swift in Sources */,
 				15B9F5002F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
 				15B9F5022F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
 				15B7D7752F614DA700335DA1 /* AccountDetailHeaderCell.swift in Sources */,
@@ -1560,6 +1670,7 @@
 				157D930F2F665FF40014644B /* SettingItem.swift in Sources */,
 				15F1A0312F5B0001005D8554 /* TabBarViewModel.swift in Sources */,
 				15F1A0412F5B0001005D8554 /* CustomTabBar.swift in Sources */,
+				15F36B732F68F42700961666 /* AppIndicatorModel.swift in Sources */,
 				15F1A0512F5B0001005D8554 /* CustomTabBarController.swift in Sources */,
 				15F1A0612F5B0001005D8554 /* TipCalculatorTabBarConfiguration.swift in Sources */,
 				156C73F42F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
@@ -1576,6 +1687,7 @@
 				159BB1222F4DAF2000572631 /* ConsumptionBreakdownCategoryListCell.swift in Sources */,
 				159BB1AE2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
 				159BB1AF2F4E999900572631 /* RefreshBarButton.swift in Sources */,
+				15F36BFE2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */,
 				15F1A0B12F5B0030005D8554 /* UIBarButtonItem+Factory.swift in Sources */,
 				159BB7EE2F4EFB1000572631 /* EmptyStateView.swift in Sources */,
 				156C5C682F3ED5A500F0C0A9 /* ConsumptionBreakdownViewController.swift in Sources */,
@@ -1593,6 +1705,7 @@
 				157D93152F6695180014644B /* SettingToggleCell.swift in Sources */,
 				156C1AF12F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
 				156C747B2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
+				15F371292F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */,
 				157A6E5B2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				1528F6AA2F5A8F01003AE2E5 /* IllustrationResultCell.swift in Sources */,
 				156C71272F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
@@ -1601,6 +1714,7 @@
 				150DB80B2F470EC0008209A1 /* ConsumptionBreakdownModel.swift in Sources */,
 				156C71222F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				150DBCD32F483CBD008209A1 /* ConsumptionBreakdownViewModel.swift in Sources */,
+				15437E812F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */,
 				1590CAE22F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */,
 				1590CAE52F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				15B7D76D2F614A9D00335DA1 /* AccountDetailCarouselCell.swift in Sources */,
@@ -1628,6 +1742,7 @@
 				156C1AFD2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
 				156C1AE82F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				159BB1A72F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
+				15F36B742F68F42700961666 /* AppIndicatorModel.swift in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				156C516C2F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				150DB7F42F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
@@ -1638,6 +1753,7 @@
 				156C73F52F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C71282F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
 				15B72E2F2F6170EC00335DA1 /* AccountDetailSectionTitleHeader.swift in Sources */,
+				15F371282F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */,
 				156C6FBB2F35F28700F0C0A9 /* ResultDetailLocationCell.swift in Sources */,
 				156C6FB72F35EA7A00F0C0A9 /* ResultDetailTableViewCell.swift in Sources */,
 				159BB1AC2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */,
@@ -1645,12 +1761,14 @@
 				15B7D75A2F613E2300335DA1 /* MainAccountDetailViewController.swift in Sources */,
 				15F1A0B22F5B0030005D8554 /* UIBarButtonItem+Factory.swift in Sources */,
 				159BB7F02F4EFB1000572632 /* EmptyStateView.swift in Sources */,
+				15F36B6F2F68F37000961666 /* AppIndicatorViewModel.swift in Sources */,
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				15B72E342F6172FF00335DA1 /* AccountDetailOverviewUseCase.swift in Sources */,
 				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				157D93082F665FE40014644B /* SettingRowCell.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C75002F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
+				15F36C012F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */,
 				157A6E502F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				15B7D7762F614DA700335DA1 /* AccountDetailHeaderCell.swift in Sources */,
 				1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */,
@@ -1676,12 +1794,14 @@
 				1590D6C22F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
 				1590D6C62F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
 				1590D6CA2F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
+				15F3712D2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				1590D6D22F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				1590CAFA2F582C05004C66B4 /* ResultDetailEditSplitCell.swift in Sources */,
 				1590CAFE2F582C06004C66B4 /* ResultDetailEditCategoryCell.swift in Sources */,
 				1590CB022F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */,
 				159B35EE2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				15F1A1032F5B0001005D8554 /* TabBarProtocols.swift in Sources */,
+				15F36BFD2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */,
 				15F1A1062F5B0001005D8554 /* TabBarTypes.swift in Sources */,
 				15C6A7622F6400DA008ABB94 /* MainTabBarTab.swift in Sources */,
 				157A6E582F343700005D8559 /* TabBarBadgePublisher.swift in Sources */,
@@ -1705,6 +1825,7 @@
 				156C73FC2F39D99400F0C0A9 /* MainUserInfoViewModel.swift in Sources */,
 				15B9F4E02F4D54A600B0A364 /* CategoryPickerSheetModel.swift in Sources */,
 				156C51612F3DDAF700F0C0A9 /* MainIllustrationViewModel.swift in Sources */,
+				15437E832F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */,
 				150DBCD22F483CBD008209A1 /* ConsumptionBreakdownViewModel.swift in Sources */,
 				159BB1B52F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */,
 				150DBCD72F483E72008209A1 /* ConsumptionBreakdownPieChart.swift in Sources */,
@@ -1739,6 +1860,10 @@
 				156C51972F3E700000F0C0A9 /* KPICarouselCell.swift in Sources */,
 				15F36ADB2F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				156C1AFE2F34A39F00F0C0A9 /* ResultsFilterViewController.swift in Sources */,
+				15F36BFF2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */,
+				15F36B702F68F37000961666 /* AppIndicatorViewModel.swift in Sources */,
+				15F371272F692D7400961666 /* AppIndicatorHeroHeaderView.swift in Sources */,
+				15F36B752F68F42700961666 /* AppIndicatorModel.swift in Sources */,
 				157A6E5D2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C71262F3998E400F0C0A9 /* BaseViewController.swift in Sources */,
 				159B35E92F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */,
@@ -1761,12 +1886,14 @@
 				1590CB072F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEC2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
 				1590CAF32F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
+				15F3712B2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				1590CAF72F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
 				15B7D7602F6141C000335DA1 /* MainAccountDetailViewModel.swift in Sources */,
 				1590CAFB2F582C05004C66B4 /* ResultDetailEditSplitCell.swift in Sources */,
 				1590CAFF2F582C06004C66B4 /* ResultDetailEditCategoryCell.swift in Sources */,
 				1590CB032F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */,
 				156C75012F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
+				15F36C022F68FCD800961666 /* IndicatorCapsuleCell.swift in Sources */,
 				156C73F32F39D69600F0C0A9 /* PerCapitaRecordCell.swift in Sources */,
 				156C1AE92F348E2D00F0C0A9 /* TipCalculator.xcdatamodeld in Sources */,
 				159BB1A62F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
@@ -1782,6 +1909,7 @@
 				156C515C2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
 				156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				156C5C6A2F3ED5A500F0C0A9 /* ConsumptionBreakdownViewController.swift in Sources */,
+				15437E822F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */,
 				15B9F4DC2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
 				15B9F50D2F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
 				15B9F50E2F4D600000B0A364 /* CategorySectionCell.swift in Sources */,
