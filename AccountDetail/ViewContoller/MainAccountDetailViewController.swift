@@ -82,6 +82,10 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
             forCellWithReuseIdentifier: AccountDetailAchievementCell.reuseId
         )
         collectionView.register(
+            AccountDetailShareCell.self,
+            forCellWithReuseIdentifier: AccountDetailShareCell.reuseId
+        )
+        collectionView.register(
             AccountDetailSectionTitleHeader.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId
@@ -128,6 +132,13 @@ extension MainAccountDetailViewController {
             let sections = viewModel.overviewItem?.achievementSections ?? []
             cell.configure(sections: sections)
             return cell
+        case .share:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailShareCell.reuseId, for: indexPath) as! AccountDetailShareCell
+            cell.onTap = { [weak self] sourceView in
+                guard let self else { return }
+                self.presentOverviewExportShareSheet(sourceView: sourceView)
+            }
+            return cell
         case nil:
             fatalError("Invalid section")
         }
@@ -137,24 +148,16 @@ extension MainAccountDetailViewController {
         guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-        switch AccountDetailSection(rawValue: indexPath.section) {
-        case .categoryDistribution:
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
-                for: indexPath
-            ) as! AccountDetailSectionTitleHeader
-            header.configure(title: Self.categoryDistributionSectionTitle)
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
+            for: indexPath
+        ) as! AccountDetailSectionTitleHeader
+
+        if let title = viewModel.headerTitle(for: indexPath.section) {
+            header.configure(title: title)
             return header
-        case .achievement:
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId,
-                for: indexPath
-            ) as! AccountDetailSectionTitleHeader
-            header.configure(title: Self.achievementSectionTitle)
-            return header
-        default:
+        } else {
             return UICollectionReusableView()
         }
     }
@@ -182,6 +185,8 @@ extension MainAccountDetailViewController {
         case .achievement:
             let sections = viewModel.overviewItem?.achievementSections ?? []
             return CGSize(width: width, height: AccountDetailAchievementCell.preferredHeight(sections: sections, width: width))
+        case .share:
+            return CGSize(width: width, height: 84)
         case nil:
             return .zero
         }
@@ -197,6 +202,8 @@ extension MainAccountDetailViewController {
             return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         case .achievement:
             return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        case .share:
+            return .zero
         case nil:
             return .zero
         }
@@ -212,6 +219,8 @@ extension MainAccountDetailViewController {
             return CGSize(width: collectionView.bounds.width, height: 44)
         case .achievement:
             return CGSize(width: collectionView.bounds.width, height: 44)
+        case .share:
+            return .zero
         case nil:
             return .zero
         }
@@ -221,10 +230,17 @@ extension MainAccountDetailViewController {
 // MARK: - Private
 
 private extension MainAccountDetailViewController {
-    static let categoryDistributionSectionTitle = "消費分布"
-    static let achievementSectionTitle = "消費成就"
-
     func reloadOverviewContent() {
         collectionView.reloadSections(IndexSet(0..<viewModel.sectionCount))
+    }
+    
+    func presentOverviewExportShareSheet(sourceView: UIView) {
+        let text = viewModel.exportAllRecordsText()
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = activityVC.popoverPresentationController {
+            popover.sourceView = sourceView
+            popover.sourceRect = sourceView.bounds
+        }
+        present(activityVC, animated: true)
     }
 }

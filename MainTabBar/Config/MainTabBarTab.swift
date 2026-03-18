@@ -34,7 +34,7 @@ enum MainTabBarTab: Int, CaseIterable {
         case .accountDetail:
             return TabItemConfig(
                 id: rawValue,
-                iconProvider: .sfSymbol("square.grid.2x2.fill"),
+                iconProvider: .sfSymbol("person.fill"),
                 selectedTintColor: nil,
                 badgeAnimation: .none,
                 preferredIconSize: nil

@@ -249,4 +249,24 @@ extension ResultDetailViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension ResultDetailViewController: UITableViewDelegate {}
+extension ResultDetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let row = viewModel.rows[indexPath.row]
+        switch row {
+        case .value:
+            break
+        case .category:
+            break
+        case .location(_, let value, let lat, let lon):
+            guard let lat, let lon else { return }
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            let placemark = MKPlacemark(coordinate: coordinate)
+            let mapItem = MKMapItem(placemark: placemark)
+            mapItem.name = value
+            mapItem.openInMaps(launchOptions: [
+                MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
+            ])
+        }
+    }
+}

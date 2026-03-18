@@ -25,6 +25,9 @@
 		15437E812F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
 		15437E822F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
 		15437E832F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
+		1543D5B32F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
+		1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
+		1543D5B52F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
 		1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F42F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F52F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
@@ -359,6 +362,7 @@
 		150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationTimeChartCell.swift; sourceTree = "<group>"; };
 		1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationResultCell.swift; sourceTree = "<group>"; };
 		15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorItemCell.swift; sourceTree = "<group>"; };
+		1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailShareCell.swift; sourceTree = "<group>"; };
 		1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationLocationStatsCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
 		156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -630,6 +634,14 @@
 				15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */,
 			);
 			path = IndicatorIntroSheet;
+			sourceTree = "<group>";
+		};
+		1543D5B62F6A885F008CF5BD /* AccountDetailShare */ = {
+			isa = PBXGroup;
+			children = (
+				1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */,
+			);
+			path = AccountDetailShare;
 			sourceTree = "<group>";
 		};
 		1562E7F12F55E19900F4209E /* IllustrationLocationStatsCell */ = {
@@ -1199,6 +1211,7 @@
 		15B7D7612F61454500335DA1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1543D5B62F6A885F008CF5BD /* AccountDetailShare */,
 				15D8D9B42F62578A00FD3B03 /* AccountDetailAchievement */,
 				15B72E2C2F61700900335DA1 /* AccountDetailCategoryDistribution */,
 				15B72E262F6168AD00335DA1 /* Header */,
@@ -1634,6 +1647,7 @@
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				15B7D7682F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
+				1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				15F3712C2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
 				15F36A4C2F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
@@ -1784,6 +1798,7 @@
 				1590CAE72F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEB2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
+				1543D5B52F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				157D93112F665FF40014644B /* SettingItem.swift in Sources */,
 				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
@@ -1885,6 +1900,7 @@
 				1590CAE82F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				1590CB072F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEC2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
+				1543D5B32F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				1590CAF32F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				15F3712B2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				1590CAF72F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,

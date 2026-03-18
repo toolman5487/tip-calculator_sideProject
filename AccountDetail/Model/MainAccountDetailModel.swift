@@ -52,4 +52,5 @@ enum AccountDetailSection: Int, CaseIterable {
     case carousel
     case categoryDistribution
     case achievement
+    case share
 }

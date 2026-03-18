@@ -228,4 +228,30 @@ extension TotalResultViewController: UICollectionViewDelegateFlowLayout {
         case .save: return CGSize(width: width, height: 64)
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let row = viewModel.rows[indexPath.item]
+
+        switch row {
+        case .location:
+            showMapLocationPicker()
+        case .amountPerPerson:
+            break
+        case .totalBill:
+            break
+        case .totalTip:
+            break
+        case .bill:
+            break
+        case .tip:
+            break
+        case .split:
+            break
+        case .category:
+            break
+        case .save:
+            break
+        }
+    }
 }

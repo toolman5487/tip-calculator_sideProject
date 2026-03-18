@@ -34,6 +34,7 @@ final class AppIndicatorViewController: MainBaseViewController {
 
     private func setupNavigation() {
         title = "關於 App"
+        navigationItem.largeTitleDisplayMode = .never
     }
 
     override func setupUI() {
