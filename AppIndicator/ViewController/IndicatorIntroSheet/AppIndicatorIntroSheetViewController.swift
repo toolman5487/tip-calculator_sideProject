@@ -11,8 +11,12 @@ import SnapKit
 @MainActor
 final class AppIndicatorIntroSheetViewController: UIViewController {
 
+    // MARK: - View Model & State
+
     private let headerTitle: String
     private let introText: String
+
+    // MARK: - UI Components
 
     private let textView: UITextView = {
         let tv = UITextView()
@@ -26,6 +30,8 @@ final class AppIndicatorIntroSheetViewController: UIViewController {
         return tv
     }()
 
+    // MARK: - Initialization
+
     init(headerTitle: String, introText: String) {
         self.headerTitle = headerTitle
         self.introText = introText
@@ -36,20 +42,22 @@ final class AppIndicatorIntroSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupNavigationBar()
-
-        textView.text = introText
-        view.addSubview(textView)
-        textView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            make.leading.trailing.bottom.equalToSuperview().inset(16)
-        }
+        setupIntroSheetContent()
     }
 
-    private func setupNavigationBar() {
+    // MARK: - Setup
+
+    private func setupIntroSheetContent() {
+        view.backgroundColor = .systemBackground
+        setupNavigation()
+        setupTextView()
+    }
+
+    private func setupNavigation() {
         let titleLabel = UILabel()
         titleLabel.attributedText = makeTitleAttributedString()
         titleLabel.sizeToFit()
@@ -63,6 +71,17 @@ final class AppIndicatorIntroSheetViewController: UIViewController {
             action: #selector(dismissTapped)
         )
     }
+
+    private func setupTextView() {
+        textView.text = introText
+        view.addSubview(textView)
+        textView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.leading.trailing.bottom.equalToSuperview().inset(16)
+        }
+    }
+
+    // MARK: - Helpers
 
     private func makeTitleAttributedString() -> NSAttributedString {
         let font = ThemeFont.bold(Ofsize: 20)
@@ -86,6 +105,8 @@ final class AppIndicatorIntroSheetViewController: UIViewController {
         result.append(textAttr)
         return result
     }
+
+    // MARK: - Actions
 
     @objc private func dismissTapped() {
         dismiss(animated: true)

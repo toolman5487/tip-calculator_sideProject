@@ -189,6 +189,11 @@ final class CustomTabBarController: UIViewController {
         }
     }
 
+    func select(tab: MainTabBarTab) {
+        guard let index = viewModel.index(for: tab) else { return }
+        handleSelection(at: index)
+    }
+
     // MARK: - Layout
 
     private func updateChildContentInsetIfNeeded() {
@@ -223,11 +228,26 @@ final class CustomTabBarController: UIViewController {
     }
 }
 
+extension CustomTabBarController {
+    func focus(on tab: MainTabBarTab) {
+        guard let index = viewModel.index(for: tab) else { return }
+        handleSelection(at: index)
+    }
+}
+
 // MARK: - CustomTabBarDelegate
 
 extension CustomTabBarController: CustomTabBarDelegate {
     func didSelectTab(at index: Int) {
         guard delegate?.tabBarController(self, shouldSelectTabAt: index) ?? true else { return }
+        handleSelection(at: index)
+    }
+}
+
+// MARK: - Selection Handling
+
+private extension CustomTabBarController {
+    func handleSelection(at index: Int) {
         guard let viewController = getOrCreateViewController(at: index) else { return }
 
         if index < MainTabBarTab.allCases.count {

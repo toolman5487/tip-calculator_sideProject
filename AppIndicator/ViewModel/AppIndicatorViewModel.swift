@@ -78,14 +78,20 @@ final class AppIndicatorViewModel {
         return rows[index]
     }
 
+    func mainTabForContentRow(at index: Int) -> MainTabBarTab? {
+        guard selectedSectionIndex == 0 else { return nil }
+        switch index {
+        case 0: return .accountDetail
+        case 1: return .illustration
+        case 2: return .calculator
+        case 3: return .userInfo
+        case 4: return .setting
+        default: return nil
+        }
+    }
+
     private func makeSections() -> [AppIndicatorSection] {
         return [
-            AppIndicatorSection(
-                pillTitle: "App 介紹",
-                rows: [
-                    .item(title: "你可以用它做什麼", body: "專案目前由 5 個主要分頁組成，每一頁都對應一段清楚的使用流程。")
-                ]
-            ),
             AppIndicatorSection(
                 pillTitle: "核心分頁",
                 rows: [

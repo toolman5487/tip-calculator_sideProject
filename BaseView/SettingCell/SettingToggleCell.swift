@@ -31,11 +31,11 @@ class SettingToggleCell: UITableViewCell {
         contentView.addSubview(switchControl)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(12)
         }
         switchControl.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(titleLabel)
         }
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
     }

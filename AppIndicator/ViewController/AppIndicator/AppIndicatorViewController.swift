@@ -11,7 +11,7 @@ import UIKit
 @MainActor
 final class AppIndicatorViewController: MainBaseViewController {
 
-    // MARK: - View Model
+    // MARK: - View Model & State
 
     private let viewModel = AppIndicatorViewModel()
     private var cancellables = Set<AnyCancellable>()
@@ -20,16 +20,19 @@ final class AppIndicatorViewController: MainBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
+        setupAppIndicatorContent()
+    }
+
+    // MARK: - Setup
+
+    private func setupAppIndicatorContent() {
+        setupNavigation()
         setupCollectionView()
         bind()
         collectionView.reloadData()
     }
 
-    // MARK: - Setup
-
-    override func setupNavigationBar() {
-        super.setupNavigationBar()
+    private func setupNavigation() {
         title = "關於 App"
     }
 
@@ -53,6 +56,8 @@ final class AppIndicatorViewController: MainBaseViewController {
         collectionView.register(AppIndicatorItemCell.self, forCellWithReuseIdentifier: AppIndicatorItemCell.reuseId)
     }
 
+    // MARK: - Binding
+
     private func bind() {
         viewModel.$selectedSectionIndex
             .dropFirst()
@@ -61,6 +66,8 @@ final class AppIndicatorViewController: MainBaseViewController {
             }
             .store(in: &cancellables)
     }
+
+    // MARK: - Navigation
 
     private func presentIntroSheet() {
         let content = AppIndicatorIntroSheetViewController(headerTitle: viewModel.heroHeaderTitle, introText: viewModel.heroHeaderIntro)
@@ -71,6 +78,19 @@ final class AppIndicatorViewController: MainBaseViewController {
             sheet.prefersGrabberVisible = true
         }
         present(nav, animated: true)
+    }
+
+    // MARK: - Helpers
+
+    private func findCustomTabBarController() -> CustomTabBarController? {
+        var parentVC = parent
+        while let current = parentVC {
+            if let tab = current as? CustomTabBarController {
+                return tab
+            }
+            parentVC = current.parent
+        }
+        return view.window?.rootViewController as? CustomTabBarController
     }
 }
 
@@ -121,6 +141,17 @@ extension AppIndicatorViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AppIndicatorItemCell.reuseId, for: indexPath) as! AppIndicatorItemCell
         cell.configure(title: title, body: body)
         return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension AppIndicatorViewController {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard viewModel.isContentSection(indexPath.section),
+              let tab = viewModel.mainTabForContentRow(at: indexPath.item),
+              let tabController = findCustomTabBarController() else { return }
+        tabController.focus(on: tab)
     }
 }
 
