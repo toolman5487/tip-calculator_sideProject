@@ -23,24 +23,23 @@ final class AppIndicatorViewController: MainBaseViewController {
         setupAppIndicatorContent()
     }
 
+    override func setupNavigationBar() {
+        title = "關於 App"
+        navigationItem.backButtonDisplayMode = .minimal
+        navigationItem.largeTitleDisplayMode = .never
+    }
+
     // MARK: - Setup
 
     private func setupAppIndicatorContent() {
-        setupNavigation()
         setupCollectionView()
         bind()
         collectionView.reloadData()
     }
 
-    private func setupNavigation() {
-        title = "關於 App"
-        navigationItem.largeTitleDisplayMode = .never
-    }
-
     override func setupUI() {
         super.setupUI()
         view.backgroundColor = .systemGroupedBackground
-        collectionView.backgroundColor = .clear
     }
 
     private func setupCollectionView() {
@@ -193,7 +192,7 @@ extension AppIndicatorViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         switch AppIndicatorViewModel.Section(rawValue: section) {
         case .hero:
-            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+            return UIEdgeInsets(top: 0, left: 16, bottom: 8, right: 16)
         case .content:
             return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         case .none:

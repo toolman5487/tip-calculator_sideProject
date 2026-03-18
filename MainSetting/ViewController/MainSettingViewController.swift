@@ -51,6 +51,7 @@ final class MainSettingViewController: BaseViewController {
 
     private func setupNavigation() {
         title = "設定"
+        navigationItem.largeTitleDisplayMode = .never
     }
 
     // MARK: - Actions
@@ -61,7 +62,6 @@ final class MainSettingViewController: BaseViewController {
             break
         case .showAbout:
             let vc = AppIndicatorViewController()
-            vc.title = "關於 App"
             navigationController?.pushViewController(vc, animated: true)
         case .openSystemSettings:
             if let url = URL(string: UIApplication.openSettingsURLString) {
