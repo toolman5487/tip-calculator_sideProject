@@ -10,14 +10,6 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
 
     static let reuseId = "AccountDetailCategoryDistributionCell"
 
-    private static let barColors: [UIColor] = [
-        ThemeColor.trendUp,
-        ThemeColor.trendDown,
-        ThemeColor.trendFlat,
-        UIColor(hexString: "D97706"),
-        UIColor(hexString: "6366F1")
-    ]
-
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -86,66 +78,26 @@ final class AccountDetailCategoryDistributionCell: UICollectionViewCell {
         for (index, item) in displayItems.enumerated() {
             let row = makeRow(
                 item: item,
-                color: Self.barColors[index % Self.barColors.count]
+                color: BarChartRowBuilder.barColor(at: index)
             )
             rowsStackView.addArrangedSubview(row)
         }
     }
 
     private func makeRow(item: AccountDetailCategoryDistributionItem, color: UIColor) -> UIView {
-        let iconView = UIImageView()
-        iconView.tintColor = ThemeColor.selected
-        iconView.contentMode = .scaleAspectFit
-        if let name = item.systemImageName {
-            iconView.image = UIImage(systemName: name)
-            iconView.isHidden = false
-        } else {
-            iconView.isHidden = true
-        }
-
-        let nameLabel = UILabel()
-        nameLabel.text = item.displayName
-        nameLabel.font = ThemeFont.regular(Ofsize: 14)
-        nameLabel.textColor = .label
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.minimumScaleFactor = 0.8
-        nameLabel.lineBreakMode = .byTruncatingTail
-        nameLabel.snp.makeConstraints { make in
-            make.width.equalTo(80)
-        }
-
-        let valueLabel = UILabel()
-        valueLabel.text = "\(Int(round(item.percentage)))%"
-        valueLabel.font = ThemeFont.regular(Ofsize: 12)
-        valueLabel.textColor = .secondaryLabel
-        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
-
-        let barBg = UIView()
-        barBg.backgroundColor = .quaternarySystemFill
-        barBg.layer.cornerRadius = 4
-        barBg.clipsToBounds = true
-
-        let barFill = UIView()
-        barFill.backgroundColor = color
-        barFill.layer.cornerRadius = 4
-        barBg.addSubview(barFill)
-        barFill.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            make.width.equalTo(barBg.snp.width).multipliedBy(min(1, item.percentage / 100))
-        }
-
-        let barStack = UIStackView(arrangedSubviews: [iconView, nameLabel, barBg, valueLabel])
-        barStack.axis = .horizontal
-        barStack.spacing = 8
-        barStack.alignment = .center
-        barStack.distribution = .fill
-        iconView.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-        }
-        barBg.snp.makeConstraints { make in
-            make.height.equalTo(16)
-        }
-        return barStack
+        BarChartRowBuilder.makeRow(
+            iconSystemName: item.systemImageName,
+            iconTintColor: ThemeColor.selected,
+            iconSize: 20,
+            title: item.displayName,
+            titleFont: ThemeFont.regular(Ofsize: 14),
+            titleWidth: 80,
+            valueText: "\(Int(round(item.percentage)))%",
+            valueFont: ThemeFont.regular(Ofsize: 12),
+            barHeight: 16,
+            barFillColor: color,
+            fillRatio: item.percentage / 100
+        )
     }
 
     static func preferredHeight(itemCount: Int) -> CGFloat {

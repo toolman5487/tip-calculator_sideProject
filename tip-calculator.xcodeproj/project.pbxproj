@@ -28,6 +28,9 @@
 		1543D5B32F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
 		1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
 		1543D5B52F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
+		1543D6C42F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
+		1543D6C52F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
+		1543D6C62F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
 		1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F42F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F52F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
@@ -361,6 +364,7 @@
 		1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationResultCell.swift; sourceTree = "<group>"; };
 		15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorItemCell.swift; sourceTree = "<group>"; };
 		1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailShareCell.swift; sourceTree = "<group>"; };
+		1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartRowBuilder.swift; sourceTree = "<group>"; };
 		1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationLocationStatsCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
 		156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -640,6 +644,26 @@
 			path = AccountDetailShare;
 			sourceTree = "<group>";
 		};
+		1543D6C32F6AA399008CF5BD /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				159BB1B02F4E999900572631 /* RefreshBarButton.swift */,
+				1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */,
+				15F1A0B02F5B0030005D8554 /* UIBarButtonItem+Factory.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		1543D6C72F6AA3D4008CF5BD /* MainBaseView */ = {
+			isa = PBXGroup;
+			children = (
+				159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */,
+				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
+				156C71252F3998E400F0C0A9 /* BaseViewController.swift */,
+			);
+			path = MainBaseView;
+			sourceTree = "<group>";
+		};
 		1562E7F12F55E19900F4209E /* IllustrationLocationStatsCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -780,13 +804,10 @@
 		156C71202F39988600F0C0A9 /* BaseView */ = {
 			isa = PBXGroup;
 			children = (
+				1543D6C72F6AA3D4008CF5BD /* MainBaseView */,
+				1543D6C32F6AA399008CF5BD /* Shared */,
 				15F36A472F67FDBD00961666 /* SettingCell */,
 				159BB7EC2F4EFAE500572631 /* EmptyStateView */,
-				159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */,
-				156C71212F3998A700F0C0A9 /* MainBaseViewcontroller.swift */,
-				156C71252F3998E400F0C0A9 /* BaseViewController.swift */,
-				159BB1B02F4E999900572631 /* RefreshBarButton.swift */,
-				15F1A0B02F5B0030005D8554 /* UIBarButtonItem+Factory.swift */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -1639,6 +1660,7 @@
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				15B7D7682F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
+				1543D6C52F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */,
 				1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				15F3712C2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
@@ -1808,6 +1830,7 @@
 				1590CB022F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */,
 				159B35EE2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				15F1A1032F5B0001005D8554 /* TabBarProtocols.swift in Sources */,
+				1543D6C62F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */,
 				15F36BFD2F68FC5200961666 /* AppIndicatorFilterHeaderView.swift in Sources */,
 				15F1A1062F5B0001005D8554 /* TabBarTypes.swift in Sources */,
 				15C6A7622F6400DA008ABB94 /* MainTabBarTab.swift in Sources */,
@@ -1881,6 +1904,7 @@
 				15B7D76F2F614A9D00335DA1 /* AccountDetailCarouselCell.swift in Sources */,
 				15B7D7702F614A9D00335DA1 /* AccountDetailStatCardCell.swift in Sources */,
 				157D93142F6695180014644B /* SettingToggleCell.swift in Sources */,
+				1543D6C42F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */,
 				159B35EC2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
 				1590D6B12F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B42F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,

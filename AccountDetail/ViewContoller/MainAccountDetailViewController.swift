@@ -70,6 +70,11 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
             forCellWithReuseIdentifier: AccountDetailHeaderCell.reuseId
         )
         collectionView.register(
+            AccountDetailSectionTitleHeader.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId
+        )
+        collectionView.register(
             AccountDetailCarouselCell.self,
             forCellWithReuseIdentifier: AccountDetailCarouselCell.reuseId
         )
@@ -84,11 +89,6 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
         collectionView.register(
             AccountDetailShareCell.self,
             forCellWithReuseIdentifier: AccountDetailShareCell.reuseId
-        )
-        collectionView.register(
-            AccountDetailSectionTitleHeader.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: AccountDetailSectionTitleHeader.reuseId
         )
     }
 

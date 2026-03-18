@@ -11,9 +11,8 @@ import SnapKit
 final class IllustrationLocationStatsCell: UICollectionViewCell {
 
     static let reuseId = "IllustrationLocationStatsCell"
-
+    private var lastSignature: String?
     private static let emptyHeight: CGFloat = 260
-
     private static let threshold = 0.01
 
     static func displayItems(from data: [LocationStatItem]) -> [LocationStatItem] {
@@ -79,6 +78,7 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         emptyStateView.stop()
+        lastSignature = nil
     }
 
     func configure(data: [LocationStatItem]) {
@@ -95,9 +95,9 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
 
         let displayItems = Self.displayItems(from: data)
         let totalCount = max(1, data.reduce(0) { $0 + $1.count })
-        let colors: [UIColor] = [
-            .systemBlue, .systemGreen, .systemPurple, .systemOrange, .systemTeal
-        ]
+        let signature = displayItems.map { "\($0.name)=\($0.count)" }.joined(separator: "|") + "|\(totalCount)"
+        guard signature != lastSignature else { return }
+        lastSignature = signature
 
         rowsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
@@ -106,55 +106,25 @@ final class IllustrationLocationStatsCell: UICollectionViewCell {
                 name: item.name,
                 count: item.count,
                 totalCount: totalCount,
-                color: colors[index % colors.count]
+                color: BarChartRowBuilder.barColor(at: index)
             )
             rowsStackView.addArrangedSubview(row)
         }
     }
 
     private func makeRow(name: String, count: Int, totalCount: Int, color: UIColor) -> UIView {
-        let nameLabel = UILabel()
-        nameLabel.text = name
-        nameLabel.font = .systemFont(ofSize: 12)
-        nameLabel.textColor = .label
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.minimumScaleFactor = 0.8
-        nameLabel.lineBreakMode = .byTruncatingTail
-        nameLabel.snp.makeConstraints { make in
-            make.width.equalTo(90)
-        }
-
-        let valueLabel = UILabel()
-        valueLabel.text = "\(count) 筆"
-        valueLabel.font = .systemFont(ofSize: 12)
-        valueLabel.textColor = .secondaryLabel
-        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
-
-        let barBg = UIView()
-        barBg.backgroundColor = .quaternarySystemFill
-        barBg.layer.cornerRadius = 4
-        barBg.clipsToBounds = true
-
-        let barFill = UIView()
-        barFill.backgroundColor = color
-        barFill.layer.cornerRadius = 4
-
-        barBg.addSubview(barFill)
-        barFill.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
-            make.width.equalTo(barBg.snp.width).multipliedBy(CGFloat(count) / CGFloat(totalCount))
-        }
-
-        let row = UIStackView(arrangedSubviews: [nameLabel, barBg, valueLabel])
-        row.axis = .horizontal
-        row.spacing = 8
-        row.alignment = .center
-        row.distribution = .fill
-
-        barBg.snp.makeConstraints { make in
-            make.height.equalTo(20)
-        }
-
-        return row
+        BarChartRowBuilder.makeRow(
+            iconSystemName: nil,
+            iconTintColor: .clear,
+            iconSize: 0,
+            title: name,
+            titleFont: .systemFont(ofSize: 12),
+            titleWidth: 90,
+            valueText: "\(count) 筆",
+            valueFont: .systemFont(ofSize: 12),
+            barHeight: 20,
+            barFillColor: color,
+            fillRatio: totalCount > 0 ? CGFloat(count) / CGFloat(totalCount) : 0
+        )
     }
 }
