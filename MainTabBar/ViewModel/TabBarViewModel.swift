@@ -28,6 +28,9 @@ final class TabBarViewModel: ObservableObject {
     // MARK: - Selection (Single Source of Truth)
 
     func loadInitialTab(validRange: Range<Int>) -> MainTabBarTab? {
+        if tabTypes.contains(.calculator) {
+            return .calculator
+        }
         return tabTypes.first
     }
 
