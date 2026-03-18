@@ -28,14 +28,12 @@ final class TabBarViewModel: ObservableObject {
     // MARK: - Selection (Single Source of Truth)
 
     func loadInitialTab(validRange: Range<Int>) -> MainTabBarTab? {
-        let index = TabBarRestoration.loadSelectedIndex(validRange: validRange)
-        return tab(at: index)
+        return tabTypes.first
     }
 
     func selectTab(at index: Int) {
         guard let tab = tab(at: index) else { return }
         selectedTab = tab
-        TabBarRestoration.saveSelectedIndex(index)
     }
 
     func setSelectedTab(_ tab: MainTabBarTab?) {

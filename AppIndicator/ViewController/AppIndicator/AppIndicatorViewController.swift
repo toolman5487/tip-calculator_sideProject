@@ -179,26 +179,29 @@ extension AppIndicatorViewController {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = collectionView.bounds.width
-        switch section {
-        case AppIndicatorViewModel.heroSectionIndex:
+        switch AppIndicatorViewModel.Section(rawValue: section) {
+        case .hero:
             return CGSize(width: width, height: 160)
-        case AppIndicatorViewModel.contentSectionIndex:
+        case .content:
             return CGSize(width: width, height: 56)
-        default:
+        case .none:
             return .zero
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        switch section {
-        case AppIndicatorViewModel.heroSectionIndex: return .zero
-        case AppIndicatorViewModel.contentSectionIndex: return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        default: return .zero
+        switch AppIndicatorViewModel.Section(rawValue: section) {
+        case .hero:
+            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        case .content:
+            return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        case .none:
+            return .zero
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        section == AppIndicatorViewModel.contentSectionIndex ? 8 : 0
+        AppIndicatorViewModel.Section(rawValue: section) == .content ? 8 : 0
     }
 }
 

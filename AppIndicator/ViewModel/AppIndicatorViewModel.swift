@@ -17,26 +17,45 @@ struct AppIndicatorFilterHeaderViewModel {
 @MainActor
 final class AppIndicatorViewModel {
 
-    static let heroSectionIndex = 0
-    static let contentSectionIndex = 1
+    // MARK: - Section Index
+
+    enum Section: Int {
+        case hero = 0
+        case content = 1
+    }
+
+    // MARK: - Published State
 
     @Published private(set) var selectedSectionIndex: Int = 0
+
+    // MARK: - Data Source
 
     private(set) lazy var sections: [AppIndicatorSection] = makeSections()
 
     var numberOfSections: Int { 2 }
 
     func numberOfItems(in section: Int) -> Int {
+        guard let section = Section(rawValue: section) else { return 0 }
         switch section {
-        case Self.heroSectionIndex: return 0
-        case Self.contentSectionIndex: return selectedSectionRows.count
-        default: return 0
+        case .hero: return 0
+        case .content: return selectedSectionRows.count
         }
     }
 
-    func isHeroSection(_ section: Int) -> Bool { section == Self.heroSectionIndex }
+    func isHeroSection(_ section: Int) -> Bool {
+        Section(rawValue: section) == .hero
+    }
 
-    func isContentSection(_ section: Int) -> Bool { section == Self.contentSectionIndex }
+    func isContentSection(_ section: Int) -> Bool {
+        Section(rawValue: section) == .content
+    }
+
+    var selectedSectionRows: [AppIndicatorRow] {
+        guard selectedSectionIndex >= 0, selectedSectionIndex < sections.count else { return [] }
+        return sections[selectedSectionIndex].rows
+    }
+
+    // MARK: - Derived View Models
 
     var filterHeaderViewModel: AppIndicatorFilterHeaderViewModel {
         let options = sections.map(\.pillTitle)
@@ -46,6 +65,8 @@ final class AppIndicatorViewModel {
             onSelect: { [weak self] index in self?.selectSection(at: index) }
         )
     }
+
+    // MARK: - Hero Header Content
 
     private static let heroHeaderIntroText = [
         "LazyTrack是一款整合消費計算、地點紀錄、歷史查詢與統計分析的個人理財管理工具，其核心功能涵蓋了從即時帳務處理到深度數據剖析的完整流程。",
@@ -62,10 +83,7 @@ final class AppIndicatorViewModel {
 
     var heroHeaderIntro: String { Self.heroHeaderIntroText }
 
-    var selectedSectionRows: [AppIndicatorRow] {
-        guard selectedSectionIndex >= 0, selectedSectionIndex < sections.count else { return [] }
-        return sections[selectedSectionIndex].rows
-    }
+    // MARK: - Public API
 
     func selectSection(at index: Int) {
         guard index >= 0, index < sections.count, index != selectedSectionIndex else { return }
@@ -89,6 +107,8 @@ final class AppIndicatorViewModel {
         default: return nil
         }
     }
+
+    // MARK: - Sections Factory
 
     private func makeSections() -> [AppIndicatorSection] {
         return [
