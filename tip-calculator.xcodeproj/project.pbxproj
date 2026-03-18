@@ -207,13 +207,11 @@
 		159BB1AD2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
 		159BB1AE2F4E998700572631 /* BaseBlurSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1AB2F4E998700572631 /* BaseBlurSectionHeaderView.swift */; };
 		159BB1AF2F4E999900572631 /* RefreshBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B02F4E999900572631 /* RefreshBarButton.swift */; };
-		159BB1B12F4EC5C800572631 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 159BB1B02F4EC5C800572631 /* Algorithms */; };
 		159BB1B42F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B32F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift */; };
 		159BB1B52F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B32F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift */; };
 		159BB1B62F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B32F4EDC3F00572631 /* ConsumptionBreakdownRankListCell.swift */; };
 		159BB1B72F4E999900572631 /* RefreshBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B02F4E999900572631 /* RefreshBarButton.swift */; };
 		159BB1B82F4E999900572632 /* RefreshBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB1B02F4E999900572631 /* RefreshBarButton.swift */; };
-		159BB4BA2F4EF10B00572631 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 159BB4B92F4EF10B00572631 /* SDWebImage */; };
 		159BB7EB2F4EFAD400572631 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 159BB7EA2F4EFAD400572631 /* Lottie */; };
 		159BB7EE2F4EFB0700572631 /* Not Found.json in Resources */ = {isa = PBXBuildFile; fileRef = 159BB7ED2F4EFB0700572631 /* Not Found.json */; };
 		159BB7EE2F4EFB1000572631 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BB7EF2F4EFB1000572631 /* EmptyStateView.swift */; };
@@ -531,11 +529,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				159BB1B12F4EC5C800572631 /* Algorithms in Frameworks */,
 				15C22DA12D95A2B300270813 /* CombineCocoa in Frameworks */,
 				156C51562F3DD78E00F0C0A9 /* DGCharts in Frameworks */,
 				15C22DA42D95A2CE00270813 /* SnapKit in Frameworks */,
-				159BB4BA2F4EF10B00572631 /* SDWebImage in Frameworks */,
 				159BB7EB2F4EFAD400572631 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1490,8 +1486,6 @@
 				15C22DA02D95A2B300270813 /* CombineCocoa */,
 				15C22DA32D95A2CE00270813 /* SnapKit */,
 				156C51552F3DD78E00F0C0A9 /* DGCharts */,
-				159BB1B02F4EC5C800572631 /* Algorithms */,
-				159BB4B92F4EF10B00572631 /* SDWebImage */,
 				159BB7EA2F4EFAD400572631 /* Lottie */,
 			);
 			productName = "tip-calculator";
@@ -1584,8 +1578,6 @@
 				15C22DA22D95A2CE00270813 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				15C22DA82D95A32E00270813 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				156C51542F3DD78E00F0C0A9 /* XCRemoteSwiftPackageReference "Charts" */,
-				159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
-				159BB4B82F4EF10B00572631 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				159BB7E92F4EFAD400572631 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -2290,22 +2282,6 @@
 				minimumVersion = 5.1.0;
 			};
 		};
-		159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-algorithms.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.1;
-			};
-		};
-		159BB4B82F4EF10B00572631 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.21.6;
-			};
-		};
 		159BB7E92F4EFAD400572631 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -2345,16 +2321,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 156C51542F3DD78E00F0C0A9 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
-		};
-		159BB1B02F4EC5C800572631 /* Algorithms */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 159BB1AF2F4EC5C800572631 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
-			productName = Algorithms;
-		};
-		159BB4B92F4EF10B00572631 /* SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 159BB4B82F4EF10B00572631 /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
 		};
 		159BB7EA2F4EFAD400572631 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
