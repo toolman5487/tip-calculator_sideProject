@@ -12,49 +12,50 @@ final class CategoryOptionCell: UICollectionViewCell {
 
     private static let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .bold)
 
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.applyCardShadowStyle()
+        return view
+    }()
+
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = .systemBackground
+        iv.tintColor = ThemeColor.primary
         return iv
-    }()
-
-    private let iconContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = ThemeColor.primary
-        view.layer.cornerRadius = 16
-        view.layer.masksToBounds = true
-        return view
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .label
+        label.textColor = ThemeColor.primary
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 1
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
-        contentView.addSubview(iconContainerView)
-        iconContainerView.addSubview(iconImageView)
-        contentView.addSubview(titleLabel)
-        iconContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(56)
+        contentView.addSubview(containerView)
+        containerView.addSubview(iconImageView)
+        containerView.addSubview(titleLabel)
+
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(4)
         }
         iconImageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.top.equalToSuperview().offset(12)
+            make.centerX.equalToSuperview()
             make.size.equalTo(32)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(iconContainerView.snp.bottom).offset(4)
-            make.leading.trailing.equalTo(iconContainerView)
-            make.bottom.equalToSuperview()
+            make.top.equalTo(iconImageView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(4)
+            make.bottom.equalToSuperview().inset(4)
         }
     }
 
@@ -66,6 +67,7 @@ final class CategoryOptionCell: UICollectionViewCell {
         let imageName = category.systemImageName ?? "xmark.circle"
         iconImageView.image = UIImage(systemName: imageName, withConfiguration: Self.iconConfig)
         titleLabel.text = category.displayName
-        iconContainerView.backgroundColor = isSelected ? ThemeColor.selected : ThemeColor.primary
+        iconImageView.tintColor = isSelected ? ThemeColor.selected : ThemeColor.primary
+        titleLabel.textColor = isSelected ? ThemeColor.selected : ThemeColor.primary
     }
 }

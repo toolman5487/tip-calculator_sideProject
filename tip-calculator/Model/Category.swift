@@ -11,6 +11,7 @@ enum Category: Int, CaseIterable {
     case food
     case clothing
     case housing
+    case furniture
     case transport
     case drink
     case education
@@ -69,6 +70,7 @@ enum Category: Int, CaseIterable {
         .food: .init("食物", icon: "fork.knife"),
         .clothing: .init("服飾", icon: "tshirt.fill"),
         .housing: .init("居住", icon: "house.fill"),
+        .furniture: .init("居家用品", icon: "sofa.fill", section: "家庭"),
         .transport: .init("交通", icon: "figure.walk"),
         .drink: .init("飲料", icon: "cup.and.saucer.fill", section: "飲食"),
         .education: .init("教育", icon: "book.fill", section: "教育"),
@@ -97,7 +99,7 @@ enum Category: Int, CaseIterable {
         .airplane: .init("飛機", icon: "airplane", section: "交通"),
         .metro: .init("地鐵/捷運", icon: "tram.fill.tunnel", section: "交通"),
         .ferry: .init("航運", icon: "ferry", section: "交通"),
-        .motorcycle: .init("摩托車", icon: "motorcycle.fill", iconFallback: "scooter", section: "交通"),
+        .motorcycle: .init("摩托車", icon: "scooter", iconFallback: "scooter", section: "交通"),
         .fuel: .init("加油", icon: "fuelpump.fill", section: "交通"),
     ]
 

@@ -49,10 +49,7 @@ final class MainSettingViewController: BaseViewController {
         }
     }
 
-    private func setupNavigation() {
-        title = "設定"
-        navigationItem.largeTitleDisplayMode = .never
-    }
+    private func setupNavigation() {title = "設定"}
 
     // MARK: - Actions
 
