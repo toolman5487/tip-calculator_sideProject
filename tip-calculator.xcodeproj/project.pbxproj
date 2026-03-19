@@ -25,9 +25,6 @@
 		15437E812F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
 		15437E822F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
 		15437E832F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */; };
-		1543D5B32F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
-		1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
-		1543D5B52F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */; };
 		1543D6C42F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
 		1543D6C52F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
 		1543D6C62F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
@@ -188,6 +185,18 @@
 		1590D6D02F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
 		1590D6D22F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
 		1590D6D32F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */; };
+		15998AAC2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AAB2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift */; };
+		15998AAD2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AAB2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift */; };
+		15998AAE2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AAB2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift */; };
+		15998AB22F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB12F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift */; };
+		15998AB32F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB12F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift */; };
+		15998AB42F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB12F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift */; };
+		15998AB92F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB82F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift */; };
+		15998ABA2F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB82F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift */; };
+		15998ABB2F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998AB82F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift */; };
+		15998ABD2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998ABC2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift */; };
+		15998ABE2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998ABC2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift */; };
+		15998ABF2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15998ABC2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift */; };
 		159B35E92F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
 		159B35EA2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
 		159B35EB2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */; };
@@ -363,7 +372,6 @@
 		150DB7F22F459FE8008209A1 /* IllustrationTimeChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationTimeChartCell.swift; sourceTree = "<group>"; };
 		1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationResultCell.swift; sourceTree = "<group>"; };
 		15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorItemCell.swift; sourceTree = "<group>"; };
-		1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailShareCell.swift; sourceTree = "<group>"; };
 		1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartRowBuilder.swift; sourceTree = "<group>"; };
 		1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationLocationStatsCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
@@ -422,6 +430,10 @@
 		1590D6C52F5954A0004C66B4 /* SelectedLocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationAnnotation.swift; sourceTree = "<group>"; };
 		1590D6C92F5954A0004C66B4 /* LocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
 		1590D6D12F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerSearchResultCell.swift; sourceTree = "<group>"; };
+		15998AAB2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAIAnalysisCell.swift; sourceTree = "<group>"; };
+		15998AB12F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAnalysisViewController.swift; sourceTree = "<group>"; };
+		15998AB82F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAnalysisViewModel.swift; sourceTree = "<group>"; };
+		15998ABC2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAnalysisModel.swift; sourceTree = "<group>"; };
 		159B35E62F57DA1D00572631 /* LocatioinDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocatioinDetailViewController.swift; sourceTree = "<group>"; };
 		159B35ED2F57DA1D00572631 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		159B35F12F57DA1E00572631 /* LocationRecordsSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRecordsSheetViewController.swift; sourceTree = "<group>"; };
@@ -634,14 +646,6 @@
 				15F3712A2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift */,
 			);
 			path = IndicatorIntroSheet;
-			sourceTree = "<group>";
-		};
-		1543D5B62F6A885F008CF5BD /* AccountDetailShare */ = {
-			isa = PBXGroup;
-			children = (
-				1543D5B22F6A8847008CF5BD /* AccountDetailShareCell.swift */,
-			);
-			path = AccountDetailShare;
 			sourceTree = "<group>";
 		};
 		1543D6C32F6AA399008CF5BD /* Shared */ = {
@@ -1088,6 +1092,48 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		15998AAA2F6BCAF700E11137 /* AccountDetailAI */ = {
+			isa = PBXGroup;
+			children = (
+				15998AAB2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift */,
+			);
+			path = AccountDetailAI;
+			sourceTree = "<group>";
+		};
+		15998AAF2F6BD2A000E11137 /* AccountDetailAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				15998AB62F6BDC6600E11137 /* Model */,
+				15998AB52F6BDC5B00E11137 /* ViewModel */,
+				15998AB02F6BD2BA00E11137 /* ViewController */,
+			);
+			path = AccountDetailAnalysis;
+			sourceTree = "<group>";
+		};
+		15998AB02F6BD2BA00E11137 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				15998AB12F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		15998AB52F6BDC5B00E11137 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				15998AB82F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		15998AB62F6BDC6600E11137 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				15998ABC2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		159B35E72F57DA1D00572631 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1228,7 +1274,7 @@
 		15B7D7612F61454500335DA1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1543D5B62F6A885F008CF5BD /* AccountDetailShare */,
+				15998AAA2F6BCAF700E11137 /* AccountDetailAI */,
 				15D8D9B42F62578A00FD3B03 /* AccountDetailAchievement */,
 				15B72E2C2F61700900335DA1 /* AccountDetailCategoryDistribution */,
 				15B72E262F6168AD00335DA1 /* Header */,
@@ -1293,6 +1339,7 @@
 		15C22D622D95A29900270813 = {
 			isa = PBXGroup;
 			children = (
+				15998AAF2F6BD2A000E11137 /* AccountDetailAnalysis */,
 				15F36AD72F68113100961666 /* AppIndicator */,
 				157D92F92F65586F0014644B /* MainSetting */,
 				15B7D7562F613DE800335DA1 /* AccountDetail */,
@@ -1656,12 +1703,14 @@
 				157A6E4F2F343658005D8554 /* MainUserInfoViewController.swift in Sources */,
 				156C515B2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
 				159B35EB2F57DA1D00572631 /* LocatioinDetailViewController.swift in Sources */,
+				15998ABE2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */,
+				15998AB92F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */,
+				15998AAC2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */,
 				159B35F42F57DA1E00572631 /* LocationRecordsSheetViewController.swift in Sources */,
 				159B35F82F57DA1F00572631 /* LocationRecordsSheetViewModel.swift in Sources */,
 				1590D6AF2F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				15B7D7682F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
 				1543D6C52F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */,
-				1543D5B42F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				15F3712C2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				15F36A4B2F68007F00961666 /* HapticFeedbackSettingCell.swift in Sources */,
 				15F36A4C2F68007F00961666 /* AboutAppSettingCell.swift in Sources */,
@@ -1670,6 +1719,7 @@
 				15D8D9B72F62578A00FD3B03 /* AccountDetailAchievementCell.swift in Sources */,
 				1590D6C02F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
 				1590D6C42F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
+				15998AB22F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */,
 				1590D6C82F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
 				1590D6D02F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				159B35EF2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
@@ -1772,6 +1822,7 @@
 				159BB1A72F4E94DE00572631 /* ConsumptionBreakdownSectionTitleHeader.swift in Sources */,
 				15F36B742F68F42700961666 /* AppIndicatorModel.swift in Sources */,
 				156C6F192F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
+				15998AB32F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */,
 				156C516C2F3DDB0000F0C0A9 /* IllustrationSectionHeaderView.swift in Sources */,
 				150DB7F42F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
 				156C5BEA2F3ED53500F0C0A9 /* IllustrationFilterHeaderView.swift in Sources */,
@@ -1793,6 +1844,7 @@
 				156C6FB02F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,
 				15B72E342F6172FF00335DA1 /* AccountDetailOverviewUseCase.swift in Sources */,
 				156C71232F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
+				15998ABA2F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */,
 				157D93082F665FE40014644B /* SettingRowCell.swift in Sources */,
 				157A6E5C2F347015005D8554 /* TotalResultViewController.swift in Sources */,
 				156C75002F3C000100F0C0A9 /* RecordSectionHeaderView.swift in Sources */,
@@ -1812,12 +1864,12 @@
 				1590CAE72F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				1590CB062F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEB2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
-				1543D5B52F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				157D93112F665FF40014644B /* SettingItem.swift in Sources */,
 				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				15F36ADA2F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
+				15998AAD2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */,
 				1590D6B02F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B32F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
 				1590D6C22F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
@@ -1826,6 +1878,7 @@
 				15F3712D2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				1590D6D22F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
 				1590CAFA2F582C05004C66B4 /* ResultDetailEditSplitCell.swift in Sources */,
+				15998ABF2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */,
 				1590CAFE2F582C06004C66B4 /* ResultDetailEditCategoryCell.swift in Sources */,
 				1590CB022F582C07004C66B4 /* ResultDetailEditAddressCell.swift in Sources */,
 				159B35EE2F57DA1D00572631 /* LocationDetailViewModel.swift in Sources */,
@@ -1878,6 +1931,7 @@
 			files = (
 				156C6FB92F35EA7A00F0C0A9 /* ResultDetailTableViewCell.swift in Sources */,
 				156C1AEE2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift in Sources */,
+				15998ABD2F6BDC9900E11137 /* AccountDetailAnalysisModel.swift in Sources */,
 				15B72E292F616FF300335DA1 /* AccountDetailCategoryDistributionCell.swift in Sources */,
 				157D93042F665FE40014644B /* SettingRowCell.swift in Sources */,
 				156C1AEF2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataProperties.swift in Sources */,
@@ -1909,6 +1963,7 @@
 				1590D6B12F595481004C66B4 /* MapLocationPickerViewController.swift in Sources */,
 				1590D6B42F595490004C66B4 /* MapLocationPickerViewModel.swift in Sources */,
 				1590D6C32F5954A0004C66B4 /* MapLocationPickerModel.swift in Sources */,
+				15998AAE2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */,
 				1590D6C72F5954A0004C66B4 /* SelectedLocationAnnotation.swift in Sources */,
 				1590D6CB2F5954A0004C66B4 /* LocationSearchService.swift in Sources */,
 				1590D6D32F5954A0004C66B4 /* MapLocationPickerSearchResultCell.swift in Sources */,
@@ -1916,7 +1971,6 @@
 				1590CAE82F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				1590CB072F582C08004C66B4 /* ResultDetailEditBaseCell.swift in Sources */,
 				1590CAEC2F582C01004C66B4 /* ResultDetailEditDatePickerCell.swift in Sources */,
-				1543D5B32F6A8847008CF5BD /* AccountDetailShareCell.swift in Sources */,
 				1590CAF32F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				15F3712B2F69366A00961666 /* AppIndicatorIntroSheetViewController.swift in Sources */,
 				1590CAF72F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
@@ -1953,6 +2007,7 @@
 				157D93102F665FF40014644B /* SettingItem.swift in Sources */,
 				15F1A1042F5B0001005D8554 /* TabBarProtocols.swift in Sources */,
 				15F1A1072F5B0001005D8554 /* TabBarTypes.swift in Sources */,
+				15998ABB2F6BDC8E00E11137 /* AccountDetailAnalysisViewModel.swift in Sources */,
 				157A6E592F343700005D855A /* TabBarBadgePublisher.swift in Sources */,
 				157D92FE2F6558900014644B /* MainSettingViewController.swift in Sources */,
 				15B7D76A2F61463F00335DA1 /* MainAccountDetailModel.swift in Sources */,
@@ -1976,6 +2031,7 @@
 				15F1A0B32F5B0030005D8554 /* UIBarButtonItem+Factory.swift in Sources */,
 				159BB7F12F4EFB1000572633 /* EmptyStateView.swift in Sources */,
 				150DB7F82F459FE8008209A1 /* IllustrationTimeChartCell.swift in Sources */,
+				15998AB42F6BD2CE00E11137 /* AccountDetailAnalysisViewController.swift in Sources */,
 				156C6F172F3581FF00F0C0A9 /* ResultsFilterViewModel.swift in Sources */,
 				150DB80C2F470EC0008209A1 /* ConsumptionBreakdownModel.swift in Sources */,
 				156C6FB22F35CB4C00F0C0A9 /* ResultDetailViewController.swift in Sources */,

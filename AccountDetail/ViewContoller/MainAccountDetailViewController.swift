@@ -55,9 +55,10 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
 
     private func setupNavigation() {
         title = "用戶總覽"
-        navigationItem.rightBarButtonItem = .refreshBarButton { [weak self] in
-            self?.triggerRefresh()
-        }
+        navigationItem.rightBarButtonItems = [
+            .shareButton { [weak self] in self?.shareButtonTapped() },
+            .refreshBarButton { [weak self] in self?.triggerRefresh() }
+        ]
     }
 
     private func setupCollectionView() {
@@ -87,8 +88,8 @@ final class MainAccountDetailViewController: MainBaseViewController, TabBarRefre
             forCellWithReuseIdentifier: AccountDetailAchievementCell.reuseId
         )
         collectionView.register(
-            AccountDetailShareCell.self,
-            forCellWithReuseIdentifier: AccountDetailShareCell.reuseId
+            AccountDetailAIAnalysisCell.self,
+            forCellWithReuseIdentifier: AccountDetailAIAnalysisCell.reuseId
         )
     }
 
@@ -111,7 +112,7 @@ extension MainAccountDetailViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch AccountDetailSection(rawValue: indexPath.section) {
+        switch AccountDetailSection.effectiveSection(at: indexPath.section) {
         case .header:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailHeaderCell.reuseId, for: indexPath) as! AccountDetailHeaderCell
             let text = viewModel.overviewItem?.personalConsumptionTotalText ?? "—"
@@ -132,11 +133,10 @@ extension MainAccountDetailViewController {
             let sections = viewModel.overviewItem?.achievementSections ?? []
             cell.configure(sections: sections)
             return cell
-        case .share:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailShareCell.reuseId, for: indexPath) as! AccountDetailShareCell
-            cell.onTap = { [weak self] sourceView in
-                guard let self else { return }
-                self.presentOverviewExportShareSheet(sourceView: sourceView)
+        case .aiAnalysis:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountDetailAIAnalysisCell.reuseId, for: indexPath) as! AccountDetailAIAnalysisCell
+            cell.onTap = { [weak self] in
+                self?.aiAnalysisCellTapped()
             }
             return cell
         case nil:
@@ -168,7 +168,7 @@ extension MainAccountDetailViewController {
 extension MainAccountDetailViewController {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
-        switch AccountDetailSection(rawValue: indexPath.section) {
+        switch AccountDetailSection.effectiveSection(at: indexPath.section) {
         case .header:
             return CGSize(width: width, height: 160)
         case .carousel:
@@ -185,15 +185,15 @@ extension MainAccountDetailViewController {
         case .achievement:
             let sections = viewModel.overviewItem?.achievementSections ?? []
             return CGSize(width: width, height: AccountDetailAchievementCell.preferredHeight(sections: sections, width: width))
-        case .share:
-            return CGSize(width: width, height: 84)
+        case .aiAnalysis:
+            return CGSize(width: width, height: 72)
         case nil:
             return .zero
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        switch AccountDetailSection(rawValue: section) {
+        switch AccountDetailSection.effectiveSection(at: section) {
         case .header:
             return .zero
         case .carousel:
@@ -201,8 +201,8 @@ extension MainAccountDetailViewController {
         case .categoryDistribution:
             return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         case .achievement:
-            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        case .share:
+            return UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
+        case .aiAnalysis:
             return .zero
         case nil:
             return .zero
@@ -210,7 +210,7 @@ extension MainAccountDetailViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch AccountDetailSection(rawValue: section) {
+        switch AccountDetailSection.effectiveSection(at: section) {
         case .header:
             return .zero
         case .carousel:
@@ -219,7 +219,7 @@ extension MainAccountDetailViewController {
             return CGSize(width: collectionView.bounds.width, height: 44)
         case .achievement:
             return CGSize(width: collectionView.bounds.width, height: 44)
-        case .share:
+        case .aiAnalysis:
             return .zero
         case nil:
             return .zero
@@ -233,14 +233,26 @@ private extension MainAccountDetailViewController {
     func reloadOverviewContent() {
         collectionView.reloadSections(IndexSet(0..<viewModel.sectionCount))
     }
-    
-    func presentOverviewExportShareSheet(sourceView: UIView) {
+
+    func shareButtonTapped() {
         let text = viewModel.exportAllRecordsText()
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        if let popover = activityVC.popoverPresentationController {
-            popover.sourceView = sourceView
-            popover.sourceRect = sourceView.bounds
+        if let popover = activityVC.popoverPresentationController,
+           let shareItem = navigationItem.rightBarButtonItems?.first {
+            popover.barButtonItem = shareItem
         }
         present(activityVC, animated: true)
+    }
+
+    func aiAnalysisCellTapped() {
+        let recordsText = viewModel.exportAllRecordsText()
+        let vc = AccountDetailAnalysisViewController(recordsText: recordsText)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 }

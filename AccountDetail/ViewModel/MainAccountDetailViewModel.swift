@@ -20,7 +20,7 @@ final class MainAccountDetailViewModel {
     // MARK: - Published State
 
     @Published private(set) var overviewItem: AccountDetailOverviewItem?
-    @Published private(set) var sectionCount: Int = AccountDetailSection.allCases.count
+    var sectionCount: Int { AccountDetailSection.effectiveCases.count }
     @Published private(set) var dataVersion: UInt = 0
 
     // MARK: - Init
@@ -105,13 +105,14 @@ final class MainAccountDetailViewModel {
         }
     }
 
-    func headerTitle(for section: Int) -> String? {
-        switch AccountDetailSection(rawValue: section) {
+    func headerTitle(for sectionIndex: Int) -> String? {
+        guard let section = AccountDetailSection.effectiveSection(at: sectionIndex) else { return nil }
+        switch section {
         case .categoryDistribution:
             return "消費分布"
         case .achievement:
             return "消費成就"
-        default:
+        case .header, .carousel, .aiAnalysis:
             return nil
         }
     }

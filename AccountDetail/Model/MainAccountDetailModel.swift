@@ -52,5 +52,18 @@ enum AccountDetailSection: Int, CaseIterable {
     case carousel
     case categoryDistribution
     case achievement
-    case share
+    case aiAnalysis
+
+    static var effectiveCases: [AccountDetailSection] {
+        if #available(iOS 18, *) {
+            return allCases
+        } else {
+            return allCases.filter { $0 != .aiAnalysis }
+        }
+    }
+
+    static func effectiveSection(at index: Int) -> AccountDetailSection? {
+        guard index >= 0, index < effectiveCases.count else { return nil }
+        return effectiveCases[index]
+    }
 }
