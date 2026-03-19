@@ -23,7 +23,7 @@ final class AccountDetailAnalysisViewModel {
     }
 
     func startAnalysis() {
-        guard case .idle = state else { return }
+        if case .loading = state { return }
 
         guard #available(iOS 26.0, *) else {
             state = .unavailable("此功能需要 iOS 26 或更新版本")
@@ -38,21 +38,21 @@ final class AccountDetailAnalysisViewModel {
 
     @available(iOS 26.0, *)
     private func performAnalysis() async {
-        let model = SystemLanguageModel.default
-        switch model.availability {
-        case .available:
+        let readiness = await waitForModelReadiness()
+        switch readiness {
+        case .ready:
             break
-        case .unavailable(.deviceNotEligible):
-            state = .unavailable("此裝置不支援此功能")
+        case .deviceNotEligible:
+            state = .unavailable("此裝置不支援裝置端 AI 分析")
             return
-        case .unavailable(.appleIntelligenceNotEnabled):
-            state = .unavailable("請在設定中開啟 Apple Intelligence")
+        case .appleIntelligenceNotEnabled:
+            state = .unavailable("請至「設定」中啟用 Apple Intelligence")
             return
-        case .unavailable(.modelNotReady):
-            state = .unavailable("模型正在準備中，請稍後再試")
+        case .modelNotReady:
+            state = .unavailable("裝置端模型尚在準備中，請確認已啟用 Apple Intelligence，保持裝置閒置一段時間或重新開機後再試")
             return
         case .unavailable:
-            state = .unavailable("目前無法使用，請稍後再試")
+            state = .unavailable("裝置端 AI 暫時無法使用，請稍後再試")
             return
         }
 
@@ -78,10 +78,46 @@ final class AccountDetailAnalysisViewModel {
             state = .error("分析逾時（超過 60 秒），請稍後再試")
         } catch {
             if String(describing: error).contains("exceededContextWindowSize") {
-                state = .error("資料過多，請減少紀錄後再試")
+                state = .error("資料量過大，請減少消費紀錄後再試")
             } else {
                 state = .error("分析失敗，請稍後再試")
             }
         }
+    }
+
+    @available(iOS 26.0, *)
+    private enum ModelReadinessStatus {
+        case ready
+        case deviceNotEligible
+        case appleIntelligenceNotEnabled
+        case modelNotReady
+        case unavailable
+    }
+
+    @available(iOS 26.0, *)
+    private func waitForModelReadiness() async -> ModelReadinessStatus {
+        for attempt in 0..<6 {
+            let availability = SystemLanguageModel.default.availability
+
+            switch availability {
+            case .available:
+                return .ready
+            case .unavailable(.deviceNotEligible):
+                return .deviceNotEligible
+            case .unavailable(.appleIntelligenceNotEnabled):
+                return .appleIntelligenceNotEnabled
+            case .unavailable(.modelNotReady):
+                if attempt < 5 {
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    continue
+                } else {
+                    return .modelNotReady
+                }
+            case .unavailable:
+                return .unavailable
+            }
+        }
+
+        return .modelNotReady
     }
 }
