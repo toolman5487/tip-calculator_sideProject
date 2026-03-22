@@ -28,6 +28,12 @@
 		1543D6C42F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
 		1543D6C52F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
 		1543D6C62F6AA399008CF5BD /* BarChartRowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */; };
+		154485D12F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CF2F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift */; };
+		154485D22F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CE2F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift */; };
+		154485D32F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CF2F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift */; };
+		154485D42F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CE2F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift */; };
+		154485D52F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CF2F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift */; };
+		154485D62F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154485CE2F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift */; };
 		1562E7F32F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F42F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
 		1562E7F52F55E1DB00F4209E /* IllustrationLocationStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */; };
@@ -373,6 +379,8 @@
 		1528F6A72F5A8F01003AE2E5 /* IllustrationResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationResultCell.swift; sourceTree = "<group>"; };
 		15437E802F694DE6008CF5BD /* AppIndicatorItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIndicatorItemCell.swift; sourceTree = "<group>"; };
 		1543D6C12F6AA399008CF5BD /* BarChartRowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartRowBuilder.swift; sourceTree = "<group>"; };
+		154485CE2F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAnalysisFilterCapsuleCell.swift; sourceTree = "<group>"; };
+		154485CF2F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailAnalysisFilterHeaderView.swift; sourceTree = "<group>"; };
 		1562E7F22F55E1DB00F4209E /* IllustrationLocationStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationLocationStatsCell.swift; sourceTree = "<group>"; };
 		156C1AE62F348E2D00F0C0A9 /* TipCalculator.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TipCalculator.xcdatamodel; sourceTree = "<group>"; };
 		156C1AEA2F348F2C00F0C0A9 /* ConsumptionRecord+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConsumptionRecord+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -666,6 +674,23 @@
 				156C71252F3998E400F0C0A9 /* BaseViewController.swift */,
 			);
 			path = MainBaseView;
+			sourceTree = "<group>";
+		};
+		154485CD2F703ED800E1638A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				154485D02F70405800E1638A /* Filter */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		154485D02F70405800E1638A /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				154485CE2F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift */,
+				154485CF2F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift */,
+			);
+			path = Filter;
 			sourceTree = "<group>";
 		};
 		1562E7F12F55E19900F4209E /* IllustrationLocationStatsCell */ = {
@@ -1103,6 +1128,7 @@
 		15998AAF2F6BD2A000E11137 /* AccountDetailAnalysis */ = {
 			isa = PBXGroup;
 			children = (
+				154485CD2F703ED800E1638A /* View */,
 				15998AB62F6BDC6600E11137 /* Model */,
 				15998AB52F6BDC5B00E11137 /* ViewModel */,
 				15998AB02F6BD2BA00E11137 /* ViewController */,
@@ -1793,6 +1819,8 @@
 				156C71222F3998A700F0C0A9 /* MainBaseViewcontroller.swift in Sources */,
 				150DBCD32F483CBD008209A1 /* ConsumptionBreakdownViewModel.swift in Sources */,
 				15437E812F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */,
+				154485D52F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */,
+				154485D62F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */,
 				1590CAE22F582B0C004C66B4 /* ResultDetailEditViewController.swift in Sources */,
 				1590CAE52F582C00004C66B4 /* ResultDetailEditViewModel.swift in Sources */,
 				15B7D76D2F614A9D00335DA1 /* AccountDetailCarouselCell.swift in Sources */,
@@ -1867,6 +1895,8 @@
 				1590CAF22F582C03004C66B4 /* ResultDetailEditAmountCell.swift in Sources */,
 				157D93112F665FF40014644B /* SettingItem.swift in Sources */,
 				157D92FD2F6558900014644B /* MainSettingViewController.swift in Sources */,
+				154485D12F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */,
+				154485D22F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */,
 				15F36ADA2F68119100961666 /* AppIndicatorViewController.swift in Sources */,
 				1590CAF62F582C04004C66B4 /* ResultDetailEditTipCell.swift in Sources */,
 				15998AAD2F6BCB4E00E11137 /* AccountDetailAIAnalysisCell.swift in Sources */,
@@ -1995,6 +2025,8 @@
 				156C515C2F3DD8F500F0C0A9 /* MainIllustrationModel.swift in Sources */,
 				156C747C2F3B38CE00F0C0A9 /* ResultDetailViewModel.swift in Sources */,
 				156C5C6A2F3ED5A500F0C0A9 /* ConsumptionBreakdownViewController.swift in Sources */,
+				154485D32F70405800E1638A /* AccountDetailAnalysisFilterHeaderView.swift in Sources */,
+				154485D42F70405800E1638A /* AccountDetailAnalysisFilterCapsuleCell.swift in Sources */,
 				15437E822F694DE6008CF5BD /* AppIndicatorItemCell.swift in Sources */,
 				15B9F4DC2F4D4D0800B0A364 /* CategoryPickerSheetViewController.swift in Sources */,
 				15B9F50D2F4D600000B0A364 /* CategorySectionHeaderView.swift in Sources */,
