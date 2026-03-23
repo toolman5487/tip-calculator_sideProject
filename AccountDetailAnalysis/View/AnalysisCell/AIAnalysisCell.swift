@@ -10,12 +10,13 @@ import UIKit
 
 final class AIAnalysisCell: UICollectionViewCell {
 
+    // MARK: - Static
+
     static let reuseId = "AIAnalysisCell"
 
-    private let loadingContainerView: UIView = {
-        let v = UIView()
-        return v
-    }()
+    // MARK: - UI Components
+
+    private let loadingContainerView = UIView()
 
     private let loadingIndicator: UIActivityIndicatorView = {
         let v = UIActivityIndicatorView(style: .medium)
@@ -49,6 +50,8 @@ final class AIAnalysisCell: UICollectionViewCell {
         l.textAlignment = .center
         return l
     }()
+
+    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -86,6 +89,8 @@ final class AIAnalysisCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Configuration
+
     func configure(state: AccountDetailAnalysisState, filterTitle: String? = nil) {
         switch state {
         case .idle:
@@ -96,7 +101,7 @@ final class AIAnalysisCell: UICollectionViewCell {
         case .loading:
             loadingIndicator.startAnimating()
             loadingContainerView.isHidden = false
-            loadingLabel.text = [filterTitle, "分析中"].compactMap { $0 }.joined()
+            loadingLabel.text = (filterTitle ?? "") + "分析中"
             resultTextView.isHidden = true
             messageLabel.isHidden = true
         case .loaded(let text):

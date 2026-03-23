@@ -9,14 +9,15 @@ import Combine
 import SnapKit
 import UIKit
 
-// MARK: -
-
 @MainActor
 final class AccountDetailAnalysisViewController: MainBaseViewController {
 
+    // MARK: - Properties
+
     private let viewModel: AccountDetailAnalysisViewModel
-    private var selectedFilterIndex = 0
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - Lifecycle
 
     init(recordsText: String) {
         self.viewModel = AccountDetailAnalysisViewModel(recordsText: recordsText)
@@ -29,12 +30,23 @@ final class AccountDetailAnalysisViewController: MainBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupAnalysisContent()
+    }
+
+    // MARK: - Setup
+
+    private func setupAnalysisContent() {
         setupCollectionView()
         bind()
-        viewModel.analyze(filterIndex: selectedFilterIndex)
+
+        collectionView.dataSource = self
+        collectionView.delegate = self
+
+        viewModel.startInitialAnalysis()
     }
 
     override func setupNavigationBar() {
+        super.setupNavigationBar()
         title = "AI 智能消費分析"
         navigationItem.largeTitleDisplayMode = .never
     }
@@ -52,6 +64,8 @@ final class AccountDetailAnalysisViewController: MainBaseViewController {
         )
         collectionView.register(AIAnalysisCell.self, forCellWithReuseIdentifier: AIAnalysisCell.reuseId)
     }
+
+    // MARK: - Binding
 
     private func bind() {
         viewModel.$state
@@ -74,8 +88,9 @@ extension AccountDetailAnalysisViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AIAnalysisCell.reuseId, for: indexPath) as! AIAnalysisCell
-        let titles = AccountDetailAnalysisModel.filterOptionTitles
-        let filterTitle = selectedFilterIndex >= 0 && selectedFilterIndex < titles.count ? titles[selectedFilterIndex] : nil
+        let titles = viewModel.filterOptionTitles
+        let idx = viewModel.selectedFilterIndex
+        let filterTitle = idx >= 0 && idx < titles.count ? titles[idx] : nil
         cell.configure(state: viewModel.state, filterTitle: filterTitle)
         return cell
     }
@@ -89,17 +104,7 @@ extension AccountDetailAnalysisViewController {
             withReuseIdentifier: AccountDetailAnalysisFilterHeaderView.reuseId,
             for: indexPath
         ) as! AccountDetailAnalysisFilterHeaderView
-        let vm = AccountDetailAnalysisFilterHeaderViewModel(
-            selectedIndex: selectedFilterIndex,
-            options: AccountDetailAnalysisModel.filterOptionTitles,
-            onSelect: { [weak self] index in
-                guard let self else { return }
-                guard index != self.selectedFilterIndex else { return }
-                self.selectedFilterIndex = index
-                self.viewModel.analyze(filterIndex: index)
-            }
-        )
-        header.configure(with: vm)
+        header.configure(with: filterHeaderViewModel)
         return header
     }
 }
@@ -119,5 +124,19 @@ extension AccountDetailAnalysisViewController {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 52)
+    }
+}
+
+// MARK: - Private
+
+private extension AccountDetailAnalysisViewController {
+    var filterHeaderViewModel: AccountDetailAnalysisFilterHeaderViewModel {
+        AccountDetailAnalysisFilterHeaderViewModel(
+            selectedIndex: viewModel.selectedFilterIndex,
+            options: viewModel.filterOptionTitles,
+            onSelect: { [weak self] index in
+                self?.viewModel.selectFilter(index)
+            }
+        )
     }
 }

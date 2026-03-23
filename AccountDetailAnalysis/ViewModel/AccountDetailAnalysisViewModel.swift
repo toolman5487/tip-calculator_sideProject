@@ -14,15 +14,39 @@ import FoundationModels
 @MainActor
 final class AccountDetailAnalysisViewModel {
 
+    // MARK: - Published State
+
     @Published private(set) var state: AccountDetailAnalysisState = .idle
+    @Published private(set) var selectedFilterIndex: Int = 0
+
+    var filterOptionTitles: [String] { AccountDetailAnalysisModel.filterOptionTitles }
+
+    // MARK: - Private
 
     private let recordsText: String
+
+    // MARK: - Init
 
     init(recordsText: String) {
         self.recordsText = recordsText
     }
 
-    func analyze(filterIndex: Int) {
+    // MARK: - Public API
+
+    func selectFilter(_ index: Int) {
+        let options = AccountDetailAnalysisModel.filterOptions
+        guard index >= 0, index < options.count, index != selectedFilterIndex else { return }
+        selectedFilterIndex = index
+        analyze(filterIndex: index)
+    }
+
+    func startInitialAnalysis() {
+        analyze(filterIndex: selectedFilterIndex)
+    }
+
+    // MARK: - Analysis
+
+    private func analyze(filterIndex: Int) {
         guard #available(iOS 26.0, *) else {
             state = .unavailable("此功能需要 iOS 26 或更新版本")
             return
