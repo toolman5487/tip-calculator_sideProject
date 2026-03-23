@@ -8,12 +8,6 @@
 import Foundation
 import Combine
 
-struct AppIndicatorFilterHeaderViewModel {
-    let selectedIndex: Int
-    let options: [String]
-    let onSelect: (Int) -> Void
-}
-
 @MainActor
 final class AppIndicatorViewModel {
 

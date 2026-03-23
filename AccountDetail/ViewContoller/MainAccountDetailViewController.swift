@@ -247,12 +247,6 @@ private extension MainAccountDetailViewController {
     func aiAnalysisCellTapped() {
         let recordsText = viewModel.exportAllRecordsText()
         let vc = AccountDetailAnalysisViewController(recordsText: recordsText)
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(nav, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
